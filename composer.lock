@@ -1,18 +1,148 @@
 {
-    "hash": "65cffa390c6903afc29a1f6270bba111",
+    "hash": "7463353fd9db45cdb6e0f661427bf3e7",
     "packages": [
         {
+            "name": "Respect/Validation",
+            "version": "dev-develop",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Respect/Validation.git",
+                "reference": "06224c04369eec63777da2ce9acf4afee6b92a5d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Respect/Validation/zipball/06224c04369eec63777da2ce9acf4afee6b92a5d",
+                "reference": "06224c04369eec63777da2ce9acf4afee6b92a5d",
+                "shasum": ""
+            },
+            "require-dev": {
+                "symfony/validator": "2.*",
+                "zendframework/zend-validator": "2.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Respect\\Validation": "library/"
+                }
+            },
+            "notification-url": "http://packagist.org/downloads/",
+            "license": [
+                "BSD Style"
+            ],
+            "authors": [
+                {
+                    "name": "Henrique Moody",
+                    "email": "henriquemoody@gmail.com",
+                    "homepage": "http://henriquemoody.com/"
+                },
+                {
+                    "name": "Alexandre Gaigalas",
+                    "email": "alexandre@gaigalas.net"
+                },
+                {
+                    "name": "Carlos André Ferrari",
+                    "email": "caferrari@gmail.com"
+                },
+                {
+                    "name": "Devin Torres",
+                    "email": "devin@devintorres.com"
+                },
+                {
+                    "name": "Emerson Carvalho",
+                    "email": "emerson.broga@gmail.com"
+                },
+                {
+                    "name": "Fábio da Silva Ribeiro",
+                    "email": "fabiorphp@gmail.com"
+                },
+                {
+                    "name": "Jair Henrique",
+                    "email": "jair.henrique@gmail.com"
+                },
+                {
+                    "name": "Jayson Reis",
+                    "email": "santosdosreis@gmail.com"
+                },
+                {
+                    "name": "Jean Pimentel",
+                    "email": "jeanfap@gmail.com"
+                },
+                {
+                    "name": "Kleber Hamada Sato",
+                    "email": "kleberhs007@yahoo.com"
+                },
+                {
+                    "name": "Leandro",
+                    "email": "lleitep3@gmail.com"
+                },
+                {
+                    "name": "Marcelo Araujo",
+                    "email": "msaraujo@php.net"
+                },
+                {
+                    "name": "Michael Klishin",
+                    "email": "michaelklishin@me.com"
+                },
+                {
+                    "name": "Morf",
+                    "email": "i@morfi.ru"
+                },
+                {
+                    "name": "Rogerio Prado de Jesus",
+                    "email": "rogeriopradoj@gmail.com"
+                },
+                {
+                    "name": "Torben Brodt",
+                    "email": "t.brodt@gmail.com"
+                },
+                {
+                    "name": "Kinn Coelho Julião",
+                    "email": "kinncj@gmail.com",
+                    "homepage": "http://kinncj.com.br",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Augusto Pascutti",
+                    "email": "augusto@phpsp.org.br"
+                }
+            ],
+            "description": "The most awesome validation engine ever created for PHP",
+            "time": "2013-02-26 00:46:46"
+        },
+        {
+            "name": "jamie/idiorm",
+            "version": "1.0.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/j4mie/idiorm/zipball/master",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
+        },
+        {
+            "name": "jamie/paris",
+            "version": "1.0.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/j4mie/paris/zipball/master",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
+        },
+        {
             "name": "slim/extras",
-            "version": "2.0.3",
+            "version": "dev-develop",
             "target-dir": "Slim/Extras",
             "source": {
                 "type": "git",
-                "url": "https://github.com/codeguy/Slim-Extras",
+                "url": "https://github.com/codeguy/Slim-Extras.git",
                 "reference": "2.0.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/codeguy/Slim-Extras/archive/2.0.3.zip",
+                "url": "https://api.github.com/repos/codeguy/Slim-Extras/zipball/2.0.3",
                 "reference": "2.0.3",
                 "shasum": ""
             },
@@ -20,7 +150,6 @@
                 "php": ">=5.3.0",
                 "slim/slim": ">=2.0.0"
             },
-            "time": "2013-01-07 17:56:10",
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -50,7 +179,8 @@
                 "extensions",
                 "middleware",
                 "templating"
-            ]
+            ],
+            "time": "2013-01-07 17:56:10"
         },
         {
             "name": "slim/slim",
@@ -69,7 +199,6 @@
             "require": {
                 "php": ">=5.3.0"
             },
-            "time": "2012-12-13 02:15:50",
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -93,30 +222,77 @@
                 "microframework",
                 "rest",
                 "router"
-            ]
+            ],
+            "time": "2012-12-13 02:15:50"
         },
         {
-            "name": "twig/twig",
-            "version": "v1.12.1",
+            "name": "slim/strong",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git://github.com/fabpot/Twig.git",
-                "reference": "v1.12.1"
+                "url": "https://github.com/silentworks/Strong.git",
+                "reference": "1af2dc2f49f14521bda280a3b91c8fef54f67fc0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Twig/archive/v1.12.1.zip",
-                "reference": "v1.12.1",
+                "url": "https://api.github.com/repos/silentworks/Strong/zipball/1af2dc2f49f14521bda280a3b91c8fef54f67fc0",
+                "reference": "1af2dc2f49f14521bda280a3b91c8fef54f67fc0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Strong": "src/"
+                }
+            },
+            "notification-url": "http://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andrew Smith",
+                    "email": "a.smith@silentworks.co.uk",
+                    "homepage": "http://www.silentworks.co.uk/"
+                },
+                {
+                    "name": "Jakub Westfalewski",
+                    "email": "jwest@jwest.pl",
+                    "homepage": "http://jwest.pl/"
+                }
+            ],
+            "description": "Authentication Library with multiple drivers",
+            "homepage": "http://github.com/silentworks/Strong",
+            "keywords": [
+                "Authentication",
+                "extensions"
+            ],
+            "time": "2012-12-31 10:57:13"
+        },
+        {
+            "name": "twig/twig",
+            "version": "v1.8.3",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/fabpot/Twig.git",
+                "reference": "v1.8.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/fabpot/Twig/zipball/v1.8.3",
+                "reference": "v1.8.3",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "2013-01-15 20:03:52",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.12-dev"
+                    "dev-master": "1.8-dev"
                 }
             },
             "autoload": {
@@ -142,7 +318,8 @@
             "homepage": "http://twig.sensiolabs.org",
             "keywords": [
                 "templating"
-            ]
+            ],
+            "time": "2012-06-17 11:48:16"
         }
     ],
     "packages-dev": null,
@@ -150,7 +327,9 @@
 
     ],
     "minimum-stability": "stable",
-    "stability-flags": [
-
-    ]
+    "stability-flags": {
+        "slim/extras": 20,
+        "slim/strong": 20,
+        "respect/validation": 20
+    }
 }
