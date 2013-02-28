@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+{% block head %}
+	<title>{% block title %}{% endblock %} - openEssayist</title> 
+	
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="Nicolas Van Labeke (IET - Open University)">
+	
+	<!-- Le styles -->
+	<link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+	<link href="/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+	<link href="/bootstrap/css/docs.css" rel="stylesheet">
+	<link href="/bootstrap/jquery-ui-1.9.2.custom/css/bootstrap/jquery-ui-1.9.2.custom.css" rel="stylesheet">
+	{% block injectCSS %}
+	{% endblock %}
+	
+	<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+      	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+	<!-- Le fav and touch icons -->
+	<link rel="shortcut icon" href="/bootstrap/ico/favicon.ico">
+{% endblock %}
+</head>
+<body>
+	{% block navbar %}
+		
+	{% endblock %}
+
+	<!-- Subhead ================================================== -->
+	<header class=subdhead id="overview">
+		{% block subheader %}{% endblock %}
+	</header>
+	
+	<!-- Content ================================================== -->
+	<div class="container">
+	
+		{% block breadcrumb %}{% endblock %}
+	
+		<div class="row-fluid">
+			<div class="span12" style="min-height: 150px;">
+			{% block content %}{% endblock %}
+			</div>
+		</div>
+		
+		{% block debug %}{% endblock %}
+		
+	</div>
+	
+	<!-- Footer ================================================== -->
+	<footer class="footer">
+		<div class="container">
+		{% block footer %}
+			<p class="pull-right">
+				<a href="#">Back to top</a>
+			</p>
+			<p>
+				Designed and built with all the love in the world by <a
+					href="https://github.com/vanch3d" target="_blank"><img
+					src="/bootstrap/img/github.jpg">vanch3d</a>.
+			</p>
+			<p>
+				Code licensed under <a
+					href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache
+					License v2.0</a>, documentation under <a
+					href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.
+			</p>
+			<ul class="footer-links">
+				<li><a href="http://blog.getbootstrap.com">Blog</a></li>
+				<li class="muted">&middot;</li>
+				<li><a href="https://github.com/SAFeSEA/openEssayist-epi/wiki">Documentation</a>
+				</li>
+			</ul>
+		{% endblock %}			
+		</div>
+	</footer>
+	
+	
+	
+		<!-- Le javascript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script src="/bootstrap/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.min.js"></script>
+	<script src="/bootstrap/js/bootstrap.js"></script>
+	<!-- <script src="/bootstrap/openEssayist.js"></script> -->
+	{% block injectJS %}
+	{% endblock %}
+	
+</body>
+</html>
