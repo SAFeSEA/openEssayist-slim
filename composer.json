@@ -1,4 +1,10 @@
 {
+    "minimum-stability": "dev",
+    "autoload":{
+        "psr-0":{
+            "Requests":"library/"
+        }
+    },
     "repositories":[
         {
             "type":"package",
@@ -30,6 +36,7 @@
         "twig/twig":"1.8.*",
         "jamie/paris":"1.0.*",
         "jamie/idiorm":"1.0.*",
-        "respect/validation":"dev-develop"
+        "respect/validation":"dev-develop",
+        "rmccue/requests":">=1.0"
     }
 }

@@ -1,5 +1,5 @@
 {
-    "hash": "7463353fd9db45cdb6e0f661427bf3e7",
+    "hash": "886cb39a323dc43346a831b650807e41",
     "packages": [
         {
             "name": "Respect/Validation",
@@ -132,18 +132,64 @@
             "type": "library"
         },
         {
+            "name": "rmccue/requests",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rmccue/Requests.git",
+                "reference": "b84798066e9e448de24e18193c436e2652b91087"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rmccue/Requests/zipball/b84798066e9e448de24e18193c436e2652b91087",
+                "reference": "b84798066e9e448de24e18193c436e2652b91087",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Requests": "library/"
+                }
+            },
+            "notification-url": "http://packagist.org/downloads/",
+            "license": [
+                "ISC"
+            ],
+            "authors": [
+                {
+                    "name": "Ryan McCue",
+                    "homepage": "http://ryanmccue.info"
+                }
+            ],
+            "description": "A HTTP library written in PHP, for human beings.",
+            "homepage": "http://github.com/rmccue/Requests",
+            "keywords": [
+                "curl",
+                "fsockopen",
+                "http",
+                "idna",
+                "ipv6",
+                "iri",
+                "sockets"
+            ],
+            "time": "2013-02-14 02:20:35"
+        },
+        {
             "name": "slim/extras",
             "version": "dev-develop",
             "target-dir": "Slim/Extras",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeguy/Slim-Extras.git",
-                "reference": "2.0.3"
+                "reference": "83615926d0500dd8805907d8b778c9fe61970572"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeguy/Slim-Extras/zipball/2.0.3",
-                "reference": "2.0.3",
+                "url": "https://api.github.com/repos/codeguy/Slim-Extras/zipball/83615926d0500dd8805907d8b778c9fe61970572",
+                "reference": "83615926d0500dd8805907d8b778c9fe61970572",
                 "shasum": ""
             },
             "require": {
@@ -180,7 +226,7 @@
                 "middleware",
                 "templating"
             ],
-            "time": "2013-01-07 17:56:10"
+            "time": "2013-02-28 23:49:02"
         },
         {
             "name": "slim/slim",
@@ -322,14 +368,22 @@
             "time": "2012-06-17 11:48:16"
         }
     ],
-    "packages-dev": null,
+    "packages-dev": [
+
+    ],
     "aliases": [
 
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
         "slim/extras": 20,
         "slim/strong": 20,
         "respect/validation": 20
-    }
+    },
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
 }

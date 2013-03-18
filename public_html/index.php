@@ -37,6 +37,11 @@ $app->get('/hello/:name', function ($name) use ($app) {
 	echo "Hello, $name";
 });
 
+
+$app->get('/hello/', function () use ($app) {
+		echo "Hello, dd";
+});
+	
 $app->get('/', function () use ($app) {
 	echo "Hello XXXX";
 	$app->render('site' . EXT, array());
