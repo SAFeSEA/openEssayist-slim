@@ -368,9 +368,7 @@
             "time": "2012-06-17 11:48:16"
         }
     ],
-    "packages-dev": [
-
-    ],
+    "packages-dev": null,
     "aliases": [
 
     ],
@@ -379,11 +377,5 @@
         "slim/extras": 20,
         "slim/strong": 20,
         "respect/validation": 20
-    },
-    "platform": [
-
-    ],
-    "platform-dev": [
-
-    ]
+    }
 }

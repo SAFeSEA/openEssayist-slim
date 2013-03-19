@@ -1,0 +1,55 @@
+<!-- Navbar ================================================== -->
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container-fluid">
+			<button type="button" class="btn btn-navbar" data-toggle="collapse"
+				data-target=".nav-collapse">
+				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
+			</button>
+
+			<a class="brand" href="/"><img class="brand-ico"
+				src="/assets/openessayist/img/openEssayist-icon.png">openEssayist</a> 
+				
+			{% if user %}	
+			<div class="btn-group pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown"
+					title="dfsdf sdfs df sadf sdf sad" href="#"> <i class="icon-user"></i>
+					{{ user.username }} <span class="caret"></span>
+				</a>
+				<ul class="dropdown-menu">
+					<li><a href="#">Profile</a></li>
+					<li class="divider"></li>
+					<li><a href="/logout">Sign Out</a></li>
+				</ul>
+			</div>
+
+			<div class="nav-collapse collapse">
+				<ul class="nav">
+					<li class=""><a href="/me" rel="tooltip" data-placement="bottom"
+						title="Overview of your essays and feedback"><i class="icon-tasks"></i>
+							Dashboard</a>
+					</li> 
+					{% if user.isAdmin %}	
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-placement="bottom" rel="tooltip"
+						title="Restricted access to administrative tools"
+						data-toggle="dropdown"><i class="icon-cog"></i> Admin<b
+							class="caret"></b> </a>
+						<ul class="dropdown-menu">
+							<li class="nav-header">Configuration</li>
+							<li><a href="/admin">Administation</a></li>
+							<li class="divider"></li>
+							<li class="nav-header">Documentation</li>
+							<li><a href="/admin/api">RESTful APIs</a></li>
+							<li><a href="/admin/service">Web Services</a></li>
+						</ul>
+					</li> 
+					{% endif %}
+				</ul>
+			</div>
+			{% endif %}
+
+		</div>
+	</div>
+</div>

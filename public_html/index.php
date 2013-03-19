@@ -5,9 +5,9 @@ require_once '../vendor/jamie/paris/paris.php';
 
 require_once "../app/application.php";
 
-use Slim\Slim;
-use Slim\Extras\Views\Twig as TwigView;
-use Slim\Extras\Middleware\StrongAuth;
+use \Slim\Slim;
+use \Slim\Extras\Views\Twig as TwigView;
+use \Slim\Extras\Middleware\StrongAuth;
 
 define('APPLICATION', 'openEssayist');
 define('VERSION', '1.0.0');
@@ -27,8 +27,9 @@ TwigView::$twigOptions = array(
 );
 
 
-$app = new Slim(array(
+$app = new \Slim\Slim(array(
 	'view' => new TwigView,
+	'debug' => true
 ));
 
 $c = new Application($app);
@@ -39,12 +40,12 @@ $app->get('/hello/:name', function ($name) use ($app) {
 
 
 $app->get('/hello/', function () use ($app) {
-		echo "Hello, dd";
+		$app->render('site' . EXT, array());
 });
 	
 $app->get('/', function () use ($app) {
-	echo "Hello XXXX";
-	$app->render('site' . EXT, array());
+	//echo "Hello XXXX";
+	$app->render('pages/welcome' . EXT, array());
 });
 		
 
