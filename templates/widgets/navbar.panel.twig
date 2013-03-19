@@ -11,11 +11,11 @@
 			<a class="brand" href="/"><img class="brand-ico"
 				src="/assets/openessayist/img/openEssayist-icon.png">openEssayist</a> 
 				
-			{% if user %}	
+			{% if auth.loggedIn() %}	
 			<div class="btn-group pull-right">
 				<a class="btn dropdown-toggle" data-toggle="dropdown"
 					title="dfsdf sdfs df sadf sdf sad" href="#"> <i class="icon-user"></i>
-					{{ user.username }} <span class="caret"></span>
+					{{ auth.user.isadmin }} <span class="caret"></span>
 				</a>
 				<ul class="dropdown-menu">
 					<li><a href="#">Profile</a></li>
@@ -30,7 +30,7 @@
 						title="Overview of your essays and feedback"><i class="icon-tasks"></i>
 							Dashboard</a>
 					</li> 
-					{% if user.isAdmin %}	
+					{% if auth.user.isadmin %}	
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-placement="bottom" rel="tooltip"
 						title="Restricted access to administrative tools"

@@ -19,4 +19,12 @@
 		</div>
 	</div>
 </div>
+
+<div id="notification">
+	{% if flash.info %}<div class="alert-box success">{{ flash.info }}</div>{% endif %}
+	{% if flash.error %}<div class="alert-box alert">{{ flash.error }}</div>{% endif %}
+</div>
+
+
 {% endblock %}
+	
