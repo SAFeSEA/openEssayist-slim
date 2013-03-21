@@ -1,0 +1,39 @@
+{% extends "site.twig" %} 
+
+{% block title %}Check Configuration{% endblock %}
+
+{% block content %}
+<div class="row-fluid">
+	<div class="span10 offset1">
+			
+		{% for item in configres %}
+			<h4>{{ item.msg }}</h4>
+			<div >
+				<pre class="{{ item.code? "alert-success" : "alert-error" }}">
+{{ item.res ? item.res : "OK"  }}</pre>
+			</div>
+		{% endfor %}
+		
+	</div>
+</div>
+
+<div id="notification">
+	{% if flash.info %}<div class="alert-box success">{{ flash.info }}</div>{% endif %}
+	{% if flash.error %}<div class="alert-box alert">{{ flash.error }}</div>{% endif %}
+</div>
+
+
+{% endblock %}
+
+
+{% block injectCSS %}
+<style>
+<!--
+pre.alert-success, pre.alert-error 
+{   max-height: 200px;
+    overflow-y: auto;
+}
+
+-->
+</style>
+{% endblock %}

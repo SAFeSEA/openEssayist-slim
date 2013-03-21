@@ -12,6 +12,12 @@ class Application {
 	 */	
 	public $app;
 
+	/**
+	 * 
+	 * @var PDO
+	 */
+	public $db;
+
 	public function __construct(\Slim\Slim $slim = null)
 	{
 		$this->app = !empty($slim) ? $slim : \Slim\Slim::getInstance();
@@ -25,6 +31,7 @@ class Application {
 		* initialize connection and database name
 		*/
 		$this->db = ORM::get_db();
+		
 		
 		// Users Table
 		$this->db->exec("
@@ -54,8 +61,8 @@ class Application {
 		}
 		catch (\PDOException  $e) {
 			//$this->app->flashNow('error', $e->getMessage());
-			//$this->render('login/signup');
-			var_dump($e->getMessage()); 
+			//$this->app->redirect('config');
+			//var_dump($e->getMessage()); 
 		}
 		
 	}

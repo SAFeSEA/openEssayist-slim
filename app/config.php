@@ -7,12 +7,12 @@ $activeGroup = 'local';
 
 $db['local']['hostname'] = 'localhost';
 $db['local']['username'] = 'root';
-$db['local']['password'] = '';
+$db['local']['password'] = 'root';
 $db['local']['database'] = 'openessayist';
 $db['local']['dbProvider'] = 'mysql';
 
 
-/*try {
+try {
 	//echo "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'DBName'";
 	$host = $db['local']['hostname'];
 	$root = $db['local']['username'];
@@ -26,7 +26,7 @@ $db['local']['dbProvider'] = 'mysql';
 
 } catch (PDOException $e) {
 	die("DB ERROR: ". $e->getMessage());
-}*/
+}
 
 $providerString = sprintf('mysql:host=%s;dbname=%s', $db[$activeGroup]['hostname'], $db[$activeGroup]['database']);
 ORM::configure($providerString);

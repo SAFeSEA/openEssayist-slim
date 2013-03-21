@@ -35,15 +35,16 @@ $app = new \Slim\Slim(array(
 
 // Asset Management
 TwigView::$twigExtensions = array(
-'Twig_Extensions_Slim',
+	'Twig_Extensions_Slim',
+	'Twig_Extension_Debug'
 );
 
 TwigView::$twigTemplateDirs = array(
-'../templates',
+	'../templates',
 );
 TwigView::$twigOptions = array(
-'cache' => '../.cache',
-'debug'=> true,
+	'cache' => '../.cache',
+	'debug'=> true,
 );
 
 // Configuration for Idiom & StrongAuth
@@ -72,6 +73,7 @@ $loginController = new LoginController();
 
 // Define the routes
 $c->app->get('/', array($appController, 'index'))->name('home');
+$c->app->get('/config', array($appController, 'testConfig'))->name('config');
 $c->app->get('/login', array($loginController, 'index'))->via('GET', 'POST')->name('login');
 $c->app->get('/logout', array($loginController, 'logout'))->name('logout');
 
