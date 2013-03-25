@@ -1,16 +1,16 @@
 {% extends "site.twig" %} 
 
-{% block title %}Welcome{% endblock %} 
+{% block title %}Login{% endblock %} 
 
 {% block content %}
 
 <div id="notification">
 	{% if flash.info %}
-	<div class="alert-box success">{{ flash.info }}</div>
+	<div class="alert-box alert alert-info">{{ flash.info }}</div>
 	{% endif %} 
 	
 	{% if flash.error %}
-	<div class="alert-box alert">{{ flash.error }}</div>
+	<div class="alert-box alert alert-error">{{ flash.error }}</div>
 	{% endif %}
 </div>
 

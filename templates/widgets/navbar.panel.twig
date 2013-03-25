@@ -13,9 +13,9 @@
 				
 			{% if auth.loggedIn() %}	
 			<div class="btn-group pull-right">
-				<a class="btn dropdown-toggle" data-toggle="dropdown"
-					title="dfsdf sdfs df sadf sdf sad" href="#"> <i class="icon-user"></i>
-					{{ auth.user.isadmin }} <span class="caret"></span>
+				<a class="btn {{ auth.user.isadmin ? "btn-inverse" : ""}} dropdown-toggle" data-toggle="dropdown"
+					title="dfsdf sdfs df sadf sdf sad" href="#"> <i class="icon-user {{ auth.user.isadmin ? "icon-white" : ""}}"></i>
+					{{ auth.user.username }} <span class="caret"></span>
 				</a>
 				<ul class="dropdown-menu">
 					<li><a href="#">Profile</a></li>

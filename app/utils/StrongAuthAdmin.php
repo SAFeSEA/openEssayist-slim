@@ -49,6 +49,7 @@ class StrongAuthAdmin extends StrongAuth
 				if (preg_match($patternAsRegex, $req->getPathInfo())) {
 					if (!$auth->loggedIn()) {
 						if ($req->getPath() !== $config['login.url']) {
+							$app->flash("error", "XXXXXXXXXXXXXXXXXXX");
 							$app->redirect($config['login.url']);
 						}
 					}

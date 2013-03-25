@@ -16,11 +16,19 @@ require_once "../app/application.php";
 require_once "../app/utils/PDOAdmin.php";
 require_once "../app/utils/StrongAuthAdmin.php";
 require_once "../app/controller.php";
+require_once "../app/controllers/admin.controller.php";
 require_once "../app/controllers/home.controller.php";
 require_once "../app/controllers/login.controller.php";
 
 // Models
 require_once "../app/models/users.model.php";
+
+// Very basic ways of simulating "first-run" for initial configuration
+if (false && !file_exists('./setup/config.ini'))
+{
+	require_once "setup/index.php";
+	die("Configuration ");
+}
 
 // System's constants
 define('APPLICATION', 'openEssayist');
@@ -59,6 +67,8 @@ $config = array(
 		'security.urls' => array(
 				array('path' => '/account/'),
 				array('path' => '/api/'),
+				array('path' => '/admin/'),
+				array('path' => '/admin/.+'),
 		),
 );
 
@@ -70,12 +80,17 @@ $c = new Application($app);
 //$loginController = new LoginController();
 $appController = new HomeController();
 $loginController = new LoginController();
+$adminCtrl = new AdminController();
 
 // Define the routes
 $c->app->get('/', array($appController, 'index'))->name('home');
 $c->app->get('/config', array($appController, 'testConfig'))->name('config');
 $c->app->get('/login', array($loginController, 'index'))->via('GET', 'POST')->name('login');
 $c->app->get('/logout', array($loginController, 'logout'))->name('logout');
+
+$c->app->get('/admin/', array($adminCtrl, 'index'))->name('admin.home');
+$c->app->get('/admin/users/', array($adminCtrl, 'index'))->name('admin.users');
+
 
 // Run the application
 $c->run();

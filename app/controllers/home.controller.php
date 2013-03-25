@@ -91,9 +91,9 @@ class HomeController extends Controller
 			$u->name = "user".rand(0,50);
 			$u->email = "nicolas.vanlabeke@open.ac.uk";
 			$u->username = $u->name;
-			$u->password =  Strong\Strong::getInstance()->getProvider()->hashPassword("admin1");
+			$u->password =  Strong\Strong::getInstance()->getProvider()->hashPassword("user1");
 			$u->ip_address = $this->app->request()->getIp();
-			$u->isadmin = 1;
+			$u->isadmin = 0;
 			unset($res);
 				
 			$ret = $u->save();
@@ -109,7 +109,7 @@ class HomeController extends Controller
 				'code' => $code, 
 				'res' => $res);
 
-		try {
+		/*try {
 			$u = Model::factory('Users')->find_one($u->id());
 			unset($res);
 		
@@ -125,7 +125,7 @@ class HomeController extends Controller
 				'msg' =>  "Use IDIORM to delete the last user (" . $u->name . ")",
 				'code' => $code,
 				'res' => $res);
-		
+		*/
 		try {
 		$request = Requests::get('http://localhost:8062/');
 						unset($res);
