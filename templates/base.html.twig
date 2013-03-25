@@ -50,7 +50,13 @@
 		{% block debug %}{% endblock %}
 		
 	</div>
-	
+	{% block notification %}
+	{% if flash %}
+	<div id="notification">
+		{{ dump(flash.messages) }}
+	</div>
+	{% endif %}
+	{% endblock %}
 	
 	<!-- Footer ================================================== -->
 	<footer class="footer">

@@ -1,6 +1,7 @@
 <?php
 use Slim\Extras\Middleware\StrongAuthAdmin;
 
+
 require_once '../vendor/autoload.php';
 require_once '../vendor/jamie/idiorm/idiorm.php';
 require_once '../vendor/jamie/paris/paris.php';
@@ -23,12 +24,12 @@ require_once "../app/controllers/login.controller.php";
 // Models
 require_once "../app/models/users.model.php";
 
-// Very basic ways of simulating "first-run" for initial configuration
-if (false && !file_exists('./setup/config.ini'))
-{
-	require_once "setup/index.php";
-	die("Configuration ");
-}
+#// Very basic ways of simulating "first-run" for initial configuration
+#if (false && !file_exists('./setup/config.ini'))
+#{
+#	require_once "setup/index.php";
+#	die("Configuration ");
+#}
 
 // System's constants
 define('APPLICATION', 'openEssayist');
@@ -38,7 +39,13 @@ define('EXT', '.twig');
 // Create main Slim application
 $app = new \Slim\Slim(array(
 	'view' => new TwigView,
-	'debug' => true
+	'debug' => false,
+    'log.level' => 4,
+    'log.enabled' => true,
+    'log.writer' => new \Slim\Extras\Log\DateTimeFileWriter(array(
+        'path' => '../.logs',
+        'name_format' => 'y-m-d'
+    ))
 ));
 
 // Asset Management
@@ -91,6 +98,7 @@ $c->app->get('/logout', array($loginController, 'logout'))->name('logout');
 $c->app->get('/admin/', array($adminCtrl, 'index'))->name('admin.home');
 $c->app->get('/admin/users/', array($adminCtrl, 'index'))->name('admin.users');
 
+$c->app->error(array($appController, 'error'));
 
 // Run the application
 $c->run();

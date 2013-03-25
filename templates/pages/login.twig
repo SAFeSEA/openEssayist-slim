@@ -4,15 +4,7 @@
 
 {% block content %}
 
-<div id="notification">
-	{% if flash.info %}
-	<div class="alert-box alert alert-info">{{ flash.info }}</div>
-	{% endif %} 
-	
-	{% if flash.error %}
-	<div class="alert-box alert alert-error">{{ flash.error }}</div>
-	{% endif %}
-</div>
+
 
 <div class="row-fluid">
 	<div class="span6 offset3">
@@ -32,4 +24,17 @@
 
 
 
+{% endblock %}
+
+
+{% block notification %}
+<div id="notification">
+	{% if flash.info %}
+	<div class="alert-box alert alert-info">{{ flash.info }}</div>
+	{% endif %} 
+	
+	{% if flash.error %}
+	<div class="alert-box alert alert-error">{{ flash.error }}</div>
+	{% endif %}
+</div>
 {% endblock %}

@@ -13,16 +13,29 @@ class HomeController extends Controller
 	 */
 	public function index()
 	{
+		//throw new Exception("fddf");
+		//$this->app->flashNow('error', 'dffdfd');
+		//$this->app->flashNow('error2', 'ddddddddd');
 		$this->render('pages/welcome');
 		
 	}
 	
+	public function error(Exception $e)
+	{
+		$log = $this->app->getLog();
+		$w = $log->getWriter();
+		
+		$this->app->flashNow('error', $e->getMessage());
+		$this->render('site');
+	
+	}
 	
 	public function testConfig()
 	{
 		$configres = array();
 		$this->db = ORM::get_db();
 
+		$time_start = microtime(true);
 		$code = true;
 		try {
 			$this->db->exec("CREATE DATABASE IF NOT EXISTS `openessayist`;");
@@ -30,7 +43,9 @@ class HomeController extends Controller
 			$res = $e->getMessage();
 			$code = false;
 		}
+		//var_dump(microtime(true)-$time_start);
 		$configres[] = array(
+				'time' => microtime(true)-$time_start,
 				'msg' =>  "Try creating openessayist database if not exist",
 				'code' => $code, 
 				'res' => $res);
@@ -59,6 +74,7 @@ class HomeController extends Controller
 				
 		}
 		$configres[] = array(
+				'time' => microtime(true) - $time_start,
 				'msg' =>  "Try creating the users table if not exist", 
 				'code' => $code, 
 				'res' => $res);
@@ -82,7 +98,8 @@ class HomeController extends Controller
 				
 		}
 		$configres[] = array(
-				'msg' =>  "Use IDIORM to recreate an existing user",
+				'time' => microtime(true) - $time_start,
+								'msg' =>  "Use IDIORM to recreate an existing user",
 				'code' => $code, 
 				'res' => $res);
 
@@ -105,7 +122,8 @@ class HomeController extends Controller
 			$code = false;
 		}
 		$configres[] = array(
-				'msg' =>  "Use IDIORM to create a new user (" . $u->name . ")",
+				'time' => microtime(true) - $time_start,
+								'msg' =>  "Use IDIORM to create a new user (" . $u->name . ")",
 				'code' => $code, 
 				'res' => $res);
 
@@ -127,7 +145,9 @@ class HomeController extends Controller
 				'res' => $res);
 		*/
 		try {
-		$request = Requests::get('http://localhost:8062/');
+		$request = Requests::get('http://localhost:8062/',
+								array(), 
+								array('timeout' => 1));
 						unset($res);
 		
 			$res = $request->body;
@@ -138,7 +158,8 @@ class HomeController extends Controller
 			$code = false;
 		}
 		$configres[] = array(
-				'msg' =>  "Use REQUESTS to send a GET to pyEssayAnaliser",
+				'time' => microtime(true) - $time_start,
+								'msg' =>  "Use REQUESTS to send a GET to pyEssayAnaliser",
 				'code' => $code, 
 				'res' => $res);
 		
@@ -158,7 +179,8 @@ embossing printer to give a Braille written document.
 EOF;
 			$request = Requests::post('http://localhost:8062/api/analysis',
 					array(), 
-					array('text' => $data));
+					array('text' => $data),
+					array('timeout' => 1));
 			unset($res);
 		
 			$res = $request->body;
@@ -170,7 +192,8 @@ EOF;
 			$code = false;
 		}
 		$configres[] = array(
-				'msg' =>  "Use REQUESTS to send a POST to pyEssayAnaliser",
+				'time' => microtime(true) - $time_start,
+								'msg' =>  "Use REQUESTS to send a POST to pyEssayAnaliser",
 				'code' => $code,
 				'res' => $res);
 		

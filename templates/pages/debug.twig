@@ -8,8 +8,9 @@
 			
 		{% for item in configres %}
 			<h4>{{ item.msg }}</h4>
-			<div >
-				<pre class="{{ item.code? "alert-success" : "alert-error" }}">
+			<div class="yim" data-time="{{ item.time|number_format(4) }}"  >
+				<pre 
+					 class="alert {{ item.code? "alert-success" : "alert-error" }}">
 {{ item.res ? item.res : "OK"  }}</pre>
 			</div>
 		{% endfor %}
@@ -29,10 +30,15 @@
 {% block injectCSS %}
 <style>
 <!--
-pre.alert-success, pre.alert-error 
+pre.alert
 {   max-height: 200px;
     overflow-y: auto;
 }
+
+div.yim:before
+{
+content: "t: " attr(data-time) " (s)";
+} 
 
 -->
 </style>
