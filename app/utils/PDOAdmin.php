@@ -48,8 +48,7 @@ class PDOAdmin extends \Strong\Provider
     }
 
     /**
-     * To authenticate user based on username or email
-     * and password
+     * To authenticate user based on username or email and password
      *
      * @param string $usernameOrEmail
      * @param string $password
@@ -81,7 +80,9 @@ class PDOAdmin extends \Strong\Provider
 
     /**
      * Login and store user details in Session
-     *
+     * Added 'isadmin' to the userinfo structure. Relies on 'isadmin' being present and set 
+     * in the user table
+     * 
      * @param object $user
      * @return boolean
      */

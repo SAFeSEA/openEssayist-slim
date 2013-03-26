@@ -3,10 +3,10 @@
 {% block title %}Login{% endblock %} 
 
 {% block content %}
-
-
-
 <div class="row-fluid">
+
+
+
 	<div class="span6 offset3">
 		<form class="form-signin" action="{{ urlFor('login') }}" method='POST'>
 			<h2 class="form-signin-heading">Please sign in</h2>
@@ -20,15 +20,11 @@
 		</form>
 	</div>
 </div>
-
-
-
-
 {% endblock %}
 
-
 {% block notification %}
-<div id="notification">
+<div class="row-fluid">
+<div class="span8 offset2" id="notification">
 	{% if flash.info %}
 	<div class="alert-box alert alert-info">{{ flash.info }}</div>
 	{% endif %} 
@@ -36,5 +32,6 @@
 	{% if flash.error %}
 	<div class="alert-box alert alert-error">{{ flash.error }}</div>
 	{% endif %}
+</div>
 </div>
 {% endblock %}

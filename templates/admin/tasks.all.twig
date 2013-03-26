@@ -1,0 +1,66 @@
+{% extends "site.twig" %} 
+
+{% block title %}Admin / Tasks {% endblock %} 
+
+{% block content %}
+
+
+<div class="row-fluid">
+	<div class="span3">
+	<div class="widget">
+		<div class="widget-header">
+		<h3>Tasks</h3>
+		</div>
+		<div class="widget-content"> 
+				<p> </p>
+			</div> 
+	</div>
+	</div>
+
+<div class="span9">
+	
+	{% for item in data %}
+		<div class="widget">
+			<div class="widget-header">
+				<h3>{{ item.group.name }}</h3>
+			</div>
+			<div class="widget-content"> 
+
+				<table class="table table-condensed table-striped table-bordered">
+				<thead>
+					<tr>
+						<th width="5%">#</th>
+						<th>Name</th>
+						<th>Assignment Question</th>
+						<th>Word Limit</th>
+						<th>Deadline</th>
+						<th>Open</th>
+						<th class="td-actions">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for task in item.tasks %}
+					
+					<tr>
+					<td><code>{{ task.id }}</code></td>
+					<td>{{ task.name }}</td>
+					<td>
+					<p data-toggle="collapse" data-target="#long{{ task.id }}">{{ task.short()|escape }} ...</p>
+					<p id="long{{ task.id }}" class="collapse">{{ task.long()|escape }}</p>
+					</td>
+					<td>{{ task.wordcount }} </td>
+					<td>{{ task.deadline }}</td>
+					<td>{{ task.isopen }}</td>
+					<td></td>
+					</tr>
+					{% endfor %}
+				</tbody>
+				</table>
+			
+			</div> 
+		</div>
+	{% endfor %}
+	</div>
+</div>
+
+{% endblock %}

@@ -52,9 +52,9 @@ abstract class Controller extends Application {
 
 	public function render($template, $data = array(), $status = null)
 	{
-		if ($len = strpos(strrev($template), '.')) {
-			$template = substr( $template, 0, -($len+1) );
-		}
+		//if ($len = strpos(strrev($template), '.')) {
+		//	$template = substr( $template, 0, -($len+1) );
+		//}
 		$this->app->view()->appendData(array('auth' => $this->auth));
 		$this->app->render($template . EXT, $data, $status);
 	}

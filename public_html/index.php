@@ -20,6 +20,7 @@ require_once "../app/controller.php";
 require_once "../app/controllers/admin.controller.php";
 require_once "../app/controllers/home.controller.php";
 require_once "../app/controllers/login.controller.php";
+require_once "../app/controllers/user.controller.php";
 
 // Models
 require_once "../app/models/users.model.php";
@@ -39,7 +40,7 @@ define('EXT', '.twig');
 // Create main Slim application
 $app = new \Slim\Slim(array(
 	'view' => new TwigView,
-	'debug' => false,
+	'debug' => true,
     'log.level' => 4,
     'log.enabled' => true,
     'log.writer' => new \Slim\Extras\Log\DateTimeFileWriter(array(
@@ -74,20 +75,26 @@ $config = array(
 		'security.urls' => array(
 				array('path' => '/account/'),
 				array('path' => '/api/'),
-				array('path' => '/admin/'),
-				array('path' => '/admin/.+'),
+				array('path' => '/admin/','admin'=> true),
+				array('path' => '/admin/.+', 'admin' => true),
 		),
 );
 
-// Define the StringAuth middleware
+// Define the StrongAuth middleware
 $app->add(new StrongAuthAdmin($config, new Strong\Strong($config)));
+//$app->hook('slim.before', function () use ($app)
+//{
+//});
 
-// Create the openEssaysit application and controllers
+// Create the openEssaysit application core
 $c = new Application($app);
-//$loginController = new LoginController();
-$appController = new HomeController();
+// Create the controllers
 $loginController = new LoginController();
+$appController = new HomeController();
 $adminCtrl = new AdminController();
+$userCtrl = new UserController();
+
+
 
 // Define the routes
 $c->app->get('/', array($appController, 'index'))->name('home');
@@ -95,8 +102,13 @@ $c->app->get('/config', array($appController, 'testConfig'))->name('config');
 $c->app->get('/login', array($loginController, 'index'))->via('GET', 'POST')->name('login');
 $c->app->get('/logout', array($loginController, 'logout'))->name('logout');
 
+$c->app->get('/me/', array($userCtrl, 'me'))->name('me.home');
+$c->app->get('/me/task/(:id)', array($userCtrl, 'task'))->name('me.tasks');
+
 $c->app->get('/admin/', array($adminCtrl, 'index'))->name('admin.home');
-$c->app->get('/admin/users/', array($adminCtrl, 'index'))->name('admin.users');
+$c->app->get('/admin/users/', array($adminCtrl, 'allUsers'))->name('admin.users');
+$c->app->get('/admin/tasks/', array($adminCtrl, 'allTasks'))->name('admin.tasks');
+$c->app->get('/admin/task/(:id)', array($adminCtrl, 'editTask'))->name('admin.taskid');
 
 $c->app->error(array($appController, 'error'));
 

@@ -8,6 +8,8 @@ use \Slim\Extras\Middleware\StrongAuth;
  * Redefinition of StrongAuth for admin role in user
  * @author Nicolas Van Labeke (https://github.com/vanch3d)
  *
+ * the configuration array for each 'security.urls' path contains an extra parameter, 'admin', to 
+ * restrict access to these routes to user that have admin rights
  */
 class StrongAuthAdmin extends StrongAuth
 {
@@ -29,6 +31,7 @@ class StrongAuthAdmin extends StrongAuth
 
 	/**
 	 * Form based authentication
+	 * Added verification of user admin rights against admin parameter of 'security.urls' paths
 	 *
 	 * @param \Strong\Strong $auth
 	 * @param object $req
@@ -48,8 +51,21 @@ class StrongAuthAdmin extends StrongAuth
 
 				if (preg_match($patternAsRegex, $req->getPathInfo())) {
 					if (!$auth->loggedIn()) {
+						// User is not logged in; redirect
 						if ($req->getPath() !== $config['login.url']) {
-							$app->flash("error", "XXXXXXXXXXXXXXXXXXX");
+							$app->flash("error", "You need to log in to access these pages");
+							$app->redirect($config['login.url']);
+						}
+					}
+					else {
+						// User is logged in; check for admin rights and path priviledge
+						$user = $auth->getUser();
+						$isuseradmin = $user['isadmin']?: false;
+						$ispathadmin = $surl['admin']?: false;
+						if ($ispathadmin && !$isuseradmin)
+						{
+							// route is admin-only but user is not admon; redirect
+							$app->flash("error", "You don't have the rights to access these pages");
 							$app->redirect($config['login.url']);
 						}
 					}
@@ -57,7 +73,7 @@ class StrongAuthAdmin extends StrongAuth
 			}
 		});
 
-			$this->next->call();
+		$this->next->call();
 	}
 
 }

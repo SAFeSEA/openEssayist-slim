@@ -6,3 +6,4 @@ extras/documentation
 
 /vendor
 /.cache
+/.logs

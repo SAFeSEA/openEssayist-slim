@@ -17,7 +17,7 @@ class Application {
 	 * @var PDO
 	 */
 	public $db;
-
+	
 	public function __construct(\Slim\Slim $slim = null)
 	{
 		$this->app = !empty($slim) ? $slim : \Slim\Slim::getInstance();
@@ -26,13 +26,7 @@ class Application {
 
 	public function setup()
 	{
-		/*
-		 * ORM
-		* initialize connection and database name
-		*/
 		$this->db = ORM::get_db();
-		//$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-		
 		
 		// Create Users Table
 		try {
@@ -51,66 +45,123 @@ class Application {
 				  UNIQUE (`username`)
 				) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 			");
-			//var_dump("Table 'users' created");
+			//
 		}
 		catch (\PDOException $e)
 		{
-			//var_dump($e->errorInfo[2]);
-			$this->app->flash("error", $e->errorInfo[2]);
-			$this->app->flashNow("error", $e->errorInfo[2]);
-			$this->app->flashKeep();
-			//$this->app->flashKeep();
-			//throw new Exception("FGFDGFG");
+			// Table exists, assume all the rest is fine
+			return;
 		}
-		
-		// Users Table
+
+		// Group Table
 		$this->db->exec("
 			CREATE TABLE IF NOT EXISTS `group` (
 			  `id` int(11) NOT NULL AUTO_INCREMENT,
 			  `name` varchar(120) DEFAULT NULL,
-			  PRIMARY KEY (`id`)
+			  PRIMARY KEY (`id`),
+			  UNIQUE (`name`)
 			) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 		");
+
+		// Task Table
+		$this->db->exec("
+			CREATE TABLE IF NOT EXISTS `task` (
+				`id` int(11) NOT NULL AUTO_INCREMENT,
+				`name` varchar(120) DEFAULT NULL,
+				`assignment` TEXT,
+				`deadline` DATE,
+				`wordcount` int(11) DEFAULT '0',
+				`isopen` int(11) DEFAULT '0',
+				`group_id` int(11) NOT NULL,
+				PRIMARY KEY (`id`)
+			) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+		");
+		var_dump("Table 'task' created");
+		
+		// Draft Table
+		$this->db->exec("
+			CREATE TABLE IF NOT EXISTS `draft` (
+				`id` int(11) NOT NULL AUTO_INCREMENT,
+				`task_id` int(11) NOT NULL,
+				`user_id` int(11) NOT NULL,
+				`type` int(11) DEFAULT '0',
+				`analysis` TEXT,
+				PRIMARY KEY (`id`)
+			) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+		");
+		
 		//var_dump($ret);
+		$this->createGroup("H810");
+		$this->createGroup("H817");
+		$this->createGroup("H100");
+
+		$inc=0;
+		$this->createUser($inc++,0,true);
+		$this->createUser($inc++,0);
+		$this->createUser($inc++,0);
+		$this->createUser($inc++,0);
+		$this->createUser($inc++,1);
+		$this->createUser($inc++,1);
+		$this->createUser($inc++,2);
 		
-		$gs = Model::factory('Group')->where('name', 'H810')->find_one();
-		if ($gs===false)
-		{
-			/* @var $g Group */
-			$gs = Model::factory('Group')->create();
-			$gs->name = "H810";
-			$gs->save();
-			
-		}
+		$inc=1;
+		$this->createTasks($inc++,0);
+		$this->createTasks($inc++,0);
+		$this->createTasks($inc++,0);
+		$inc=1;
+		$this->createTasks($inc,1);
+		$this->createTasks($inc,2);
 		
-		//var_dump("Group:",$gs->as_array());
-		
+	}
+	
+	private function createUser($id,$gid=0,$isadmin=false)
+	{
+		$gs = Model::factory('Group')->find_many();
 		
 		$u = Model::factory('Users')->create();
-		$u->name = "admin";
+		$u->name = ($isadmin) ? "admin" : "user".$id;
 		$u->email = "nicolas.vanlabeke@open.ac.uk";
-		$u->username = "admin";
-		$u->password =  Strong\Strong::getInstance()->getProvider()->hashPassword("admin1");
+		$u->username = $u->name;
+		$u->password =  Strong\Strong::getInstance()->getProvider()->hashPassword($u->name . "1");
 		$u->ip_address = $this->app->request()->getIp();
-		$u->isadmin = 1;
-		$u->group_id = $gs->id;
+		$u->isadmin = ($isadmin)? 1:0;
+		$u->group_id = $gs[$gid]->id;
 		
 		try {
 			$u->save();
 		}
 		catch (\PDOException  $e) {
-			//$this->app->flashNow('error', $e->getMessage());
-			//$this->app->redirect('config');
-			//var_dump($e->getMessage()); 
+			//var_dump($e->getMessage());
 		}
 		
-		$gs = Model::factory('Users')
-			->where('name', 'admin')
-			->find_many();
-			
-			//var_dump($gs[0]->as_array());
-		$tt = $gs[0]->group()->find_one();
-		//var_dump($tt->as_array());
+	}
+	
+	private function createGroup($name)
+	{
+		$gs = Model::factory('Group')->create();
+		$gs->name = $name;
+		try {
+			$gs->save();
+		}
+		catch (\PDOException  $e) {}
+	}
+	
+	private function createTasks($id,$gid)
+	{
+		$gs = Model::factory('Group')->find_many();
+		
+		/* @var $task Task */
+		$task = Model::factory('Task')->create();
+		//`name` varchar(120) DEFAULT NULL,
+		//`assignment` TEXT,
+		//`group_id` int(11) NOT NULL,
+		$task->name = "TMA0".$id;
+		$task->assignment = "";
+		$task->group_id = $gs[$gid]->id;
+		try {
+			$task->save();
+		}
+		catch (\PDOException  $e) {}
 	}
 
 	public function run()
