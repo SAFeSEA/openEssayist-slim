@@ -24,6 +24,7 @@ require_once "../app/controllers/user.controller.php";
 
 // Models
 require_once "../app/models/users.model.php";
+require_once "../app/models/draft.model.php";
 
 #// Very basic ways of simulating "first-run" for initial configuration
 #if (false && !file_exists('./setup/config.ini'))
@@ -104,8 +105,12 @@ $c->app->get('/logout', array($loginController, 'logout'))->name('logout');
 
 $c->app->get('/me/', array($userCtrl, 'me'))->name('me.home');
 $c->app->get('/me/essay/(:id(/))', array($userCtrl, 'tasks'))->conditions(array('id' => '[0-9]+'))->name('me.tasks');
-$c->app->get('/me/essay/:idt/draft/(:idd)', array($userCtrl, 'drafts'))->name('me.drafts');
+$c->app->get('/me/essay/:idt/draft/(:idd(/))', array($userCtrl, 'drafts'))->name('me.drafts');
 $c->app->get('/me/essay/:idt/submit/', array($userCtrl, 'submitDraft'))->via('GET', 'POST')->name('me.draft.submit');
+
+$c->app->get('/me/draft/:draft/show/', array($userCtrl, 'showDraft'))->name('me.draft.show');
+$c->app->get('/me/draft/:draft/keyword/', array($userCtrl, 'showKeyword'))->name('me.draft.keywords');
+
 
 $c->app->get('/admin/', array($adminCtrl, 'index'))->name('admin.home');
 $c->app->get('/admin/reset', array($adminCtrl, 'reset'))->name('admin.reset');

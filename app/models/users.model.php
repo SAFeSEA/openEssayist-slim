@@ -90,25 +90,3 @@ class Task extends Model {
 	}
 	
 }
-
-class Draft extends Model {
-	/**
-	 * 
-	 * @key		Draft/task_id
-	 * @return 	Task
-	 * @see 	ORMWrapper
-	 */
-	public function task() {
-		return $this->belongs_to('Task');
-	}
-
-	/**
-	 * @key		Draft/user_id
-	 * @return 	Users
-	 * @see 	ORMWrapper
-	 */
-	public function user() {
-		return $this->belongs_to('Users');
-	}
-	
-}

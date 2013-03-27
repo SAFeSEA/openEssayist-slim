@@ -94,7 +94,7 @@ class Application {
 			CREATE TABLE IF NOT EXISTS `draft` (
 				`id` int(11) NOT NULL AUTO_INCREMENT,
 				`task_id` int(11) NOT NULL,
-				`user_id` int(11) NOT NULL,
+				`users_id` int(11) NOT NULL,
 				`type` int(11) DEFAULT '0',
 				`analysis` TEXT,
 				PRIMARY KEY (`id`)

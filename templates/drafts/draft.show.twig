@@ -1,0 +1,16 @@
+{% extends "site.twig" %} 
+
+{% block title %}Draft -Show{% endblock %} 
+
+{% block content %}
+
+<div>
+{% for par in parasenttok %}
+	<p>{% for sent in par %}
+			<span data-index="{{ sent.id }}" data-tag="{{ sent.tag }}" {{ (sent.rank)? "data-rank="~sent.rank:"" }}>{{ sent.text }}</span>
+		{% endfor %}
+	</p>
+{% endfor %}
+</div>
+
+{% endblock %} 
