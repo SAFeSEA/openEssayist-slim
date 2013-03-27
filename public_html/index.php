@@ -103,9 +103,12 @@ $c->app->get('/login', array($loginController, 'index'))->via('GET', 'POST')->na
 $c->app->get('/logout', array($loginController, 'logout'))->name('logout');
 
 $c->app->get('/me/', array($userCtrl, 'me'))->name('me.home');
-$c->app->get('/me/task/(:id)', array($userCtrl, 'task'))->name('me.tasks');
+$c->app->get('/me/essay/(:id(/))', array($userCtrl, 'tasks'))->conditions(array('id' => '[0-9]+'))->name('me.tasks');
+$c->app->get('/me/essay/:idt/draft/(:idd)', array($userCtrl, 'drafts'))->name('me.drafts');
+$c->app->get('/me/essay/:idt/submit/', array($userCtrl, 'submitDraft'))->via('GET', 'POST')->name('me.draft.submit');
 
 $c->app->get('/admin/', array($adminCtrl, 'index'))->name('admin.home');
+$c->app->get('/admin/reset', array($adminCtrl, 'reset'))->name('admin.reset');
 $c->app->get('/admin/users/', array($adminCtrl, 'allUsers'))->name('admin.users');
 $c->app->get('/admin/tasks/', array($adminCtrl, 'allTasks'))->name('admin.tasks');
 $c->app->get('/admin/task/(:id)', array($adminCtrl, 'editTask'))->name('admin.taskid');

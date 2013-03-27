@@ -12,6 +12,13 @@ class AdminController extends Controller
 	
 	}
 	
+	public function reset()
+	{
+		$this->setup(true);
+		$this->app->flash("error", "The database have been reset to default values.");
+		$this->redirect('admin.home');
+	}
+	
 	public function allUsers()
 	{
 		$data = array();

@@ -37,13 +37,11 @@
 						data-toggle="dropdown"><i class="icon-cog"></i> Admin<b
 							class="caret"></b> </a>
 						<ul class="dropdown-menu">
-							<li class="nav-header">Configuration</li>
-							<li><a href="{{ urlFor('admin.users') }}">Users</a></li>
-							<li><a href="{{ urlFor('admin.tasks') }}">Assignments</a></li>
+								<li><a href="{{ urlFor('admin.home') }}">openEssayist</a></li>
 							<li class="divider"></li>
-							<li class="nav-header">Documentation</li>
-							<li><a href="/admin/api">RESTful APIs</a></li>
-							<li><a href="/admin/service">Web Services</a></li>
+								<li class="nav-header visible-desktop">Configuration</li>
+								<li><a href="{{ urlFor('admin.users') }}">Users</a></li>
+								<li><a href="{{ urlFor('admin.tasks') }}">Assignments</a></li>
 						</ul>
 					</li> 
 					{% endif %}

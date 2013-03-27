@@ -1,0 +1,61 @@
+{% extends "site.twig" %} 
+
+{% block title %}Assignments{% endblock %} 
+
+{% block breadcrumb %}
+	{% include "widgets/breadcrumb.panel.twig" %}
+{% endblock %}
+
+{% block content %}
+
+<div class="row-fluid">
+	<div class="span2">
+	<div class="widget">
+		<div class="widget-header">
+		<h3> Group: {{ group.name }}</h3>
+		</div>
+		<div class="widget-content"> 
+				<p> </p>
+			</div> 
+	</div>
+	</div>
+
+	<div class="span10">
+		<div class="widget">
+			<div class="widget-header">
+				<h3>{{ group.name }}</h3>
+			</div>
+			<div class="widget-content"> 
+
+				<table class="table table-condensed table-striped table-bordered">
+				<thead>
+					<tr>
+						<th width="5%">#</th>
+						<th>Name</th>
+						<th>Deadline</th>
+						<th>Open</th>
+						<th class="td-actions">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for task in tasks %}
+					
+					<tr>
+					<td><code>{{ task.id }}</code></td>
+					<td><a class="btn {{ (task.isopen==0)? "disabled": "" }}" 
+							href="{{ urlFor('me.drafts',{"idt":task.id}) }}">{{ task.name }}</a></td>
+					<td>{{ task.deadline }}</td>
+					<td>{{ task.isopen }}</td>
+					<td></td>
+					</tr>
+					{% endfor %}
+				</tbody>
+				</table>
+			
+			</div> 
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}

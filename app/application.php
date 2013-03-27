@@ -24,10 +24,21 @@ class Application {
 		if (!empty($slim)) $this->setup();
 	}
 
-	public function setup()
+	public function setup($reset=false)
 	{
+		
+		// Create .logs dir if it does not exists
+		$logWriter = $this->app->config('log.writer');
+		if (!is_dir('../.logs')) {
+			mkdir('../.logs');
+		}
 		$this->db = ORM::get_db();
 		
+		if ($reset)
+		{
+			$this->db->exec('DROP DATABASE `openessayist`');
+			$this->db->exec('CREATE DATABASE `openessayist`');
+		}
 		// Create Users Table
 		try {
 			$ret = $this->db->exec("
@@ -43,7 +54,7 @@ class Application {
 				  `isadmin` int(11) DEFAULT '0',
 				  PRIMARY KEY (`id`),
 				  UNIQUE (`username`)
-				) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+				) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 			");
 			//
 		}
@@ -60,7 +71,7 @@ class Application {
 			  `name` varchar(120) DEFAULT NULL,
 			  PRIMARY KEY (`id`),
 			  UNIQUE (`name`)
-			) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+			) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 		");
 
 		// Task Table
@@ -74,9 +85,9 @@ class Application {
 				`isopen` int(11) DEFAULT '0',
 				`group_id` int(11) NOT NULL,
 				PRIMARY KEY (`id`)
-			) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+			)  AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 		");
-		var_dump("Table 'task' created");
+		//var_dump("Table 'task' created");
 		
 		// Draft Table
 		$this->db->exec("
@@ -87,7 +98,7 @@ class Application {
 				`type` int(11) DEFAULT '0',
 				`analysis` TEXT,
 				PRIMARY KEY (`id`)
-			) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+			)  AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 		");
 		
 		//var_dump($ret);

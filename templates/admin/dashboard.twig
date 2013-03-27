@@ -3,5 +3,50 @@
 {% block title %}Admin Dashboard{% endblock %} 
 
 {% block content %}
+<div class="row-fluid">
+	<div class="span4">
+		<div class="widget">
+			<div class="widget-header">
+				<h3>Database</h3>
+			</div>
+			<div class="widget-content"> 
+				<p><a id="db.reset" class="btn btn-danger" href="#modal-reset" role="button" data-toggle="modal">
+					<i class="icon-warning-sign icon-white"></i>
+					<span>Hard-Reset</span>
+				</a></p>
+				<p><div class="btn-group">
+    				<button class="btn disabled "><i class="icon-upload"></i> Import</button>
+    				<button class="btn"><i class="icon-download"></i> Export</button>
+    			</div></p>
+			</div> 
+			<div class="widget-content"> 
+				<p><a class="btn" href="{{ urlFor('admin.users') }}">
+					<i class="icon-cog"></i>
+					<span>Manage Users & Groups</span>
+				</a></p>
+				<p><a class="btn" href="{{ urlFor('admin.tasks') }}">
+					<i class="icon-cog"></i>
+					<span>Manage Assignments</span>
+				</a></p>
+			</div> 
+		</div>
+	</div>
+</div>
 
+    <div id="modal-reset" tabindex="-1" class="modal hide fade" role="dialog" data-keyboard="true" >
+    <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Database Hard Reset</h3>
+    </div>
+    <div class="modal-body">
+    	<p>This will clear all the databases in the system and reset them to default values. <br>
+       	This operation cannot be undone.</p>
+       	<p>Are you sure you want to reset the database?</p>
+    	</div>
+    <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <a href="{{ urlFor('admin.reset') }}" class="btn  btn-danger btn-primary">Reset</a>
+    
+    </div>
+    </div>
 {% endblock %}

@@ -7,7 +7,7 @@ $activeGroup = 'local';
 
 $db['local']['hostname'] = 'localhost';
 $db['local']['username'] = 'root';
-$db['local']['password'] = '';
+$db['local']['password'] = 'root';
 $db['local']['database'] = 'openessayist';
 $db['local']['dbProvider'] = 'mysql';
 

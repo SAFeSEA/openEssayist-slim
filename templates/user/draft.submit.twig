@@ -1,0 +1,60 @@
+{% extends "site.twig" %} 
+
+{% block title %}Add a new draft {% endblock %} 
+
+{% block content %}
+
+
+<div class="row-fluid">
+
+<div class="span9">
+
+	<div class="widget">
+		<div class="widget-header">
+			<i class="icon-pencil"></i>
+			<h3>Submit a new draft</h3>
+		</div> <!-- /widget-header -->
+					
+	<div class="widget-content">
+
+<form name="post_essay" method="post" class="form-horizontal">
+
+
+<fieldset><div class="control-group">
+	<label for="text" class="control-label">Text</label>
+	<div class="controls">
+		<textarea style="max-width: 90%; width: 90%; resize: vertical;" rows="15" 
+			name="text" id="text" placeholder="paste the text of your essay"
+			required="required"></textarea>
+			<p class="help-block">Copy and paste the complete text of your essay (it will be cleaned)</p>
+		</div>
+</div></fieldset>
+
+<div class="form-actions">
+	<button class="btn btn-primary" type="submit" name="action" value="Submit">Submit</button> 
+</div>
+								
+</form>
+	
+	</div> <!-- /widget-content -->
+</div><!-- /widget -->
+	
+</div>
+<div class="span3">
+
+	<div class="widget">
+					<div class="widget-header">
+						<i class="icon-question-sign"></i>
+						<h3>Help</h3>
+					</div> <!-- /widget-header -->
+					
+					<div class="widget-content">
+						
+					</div> <!-- /widget-content -->
+				
+				</div>
+</div>
+
+</div>
+
+{% endblock %} 
