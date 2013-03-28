@@ -37,6 +37,7 @@ class HomeController extends Controller
 
 		$time_start = microtime(true);
 		$code = true;
+		$res = null;
 		try {
 			$this->db->exec("CREATE DATABASE IF NOT EXISTS `openessayist`;");
 		} catch (PDOException $e) {
@@ -51,7 +52,7 @@ class HomeController extends Controller
 				'res' => $res);
 		try {
 			$config = "Try creating dfd database if not exist";
-			unset($res);
+			$res = null;//unset($res);
 			$this->db->exec("
 				CREATE TABLE IF NOT EXISTS `users` (
 				  `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -88,7 +89,7 @@ class HomeController extends Controller
 			$u->password =  Strong\Strong::getInstance()->getProvider()->hashPassword("admin1");
 			$u->ip_address = $this->app->request()->getIp();
 			$u->isadmin = 1;
-			unset($res);
+			$res = null;//unset($res);
 				
 			$u->save();
 		}
@@ -111,7 +112,7 @@ class HomeController extends Controller
 			$u->password =  Strong\Strong::getInstance()->getProvider()->hashPassword("user1");
 			$u->ip_address = $this->app->request()->getIp();
 			$u->isadmin = 0;
-			unset($res);
+			$res = null;//unset($res);
 				
 			$ret = $u->save();
 			$res = "ID: " . $u->id();
@@ -129,7 +130,7 @@ class HomeController extends Controller
 
 		/*try {
 			$u = Model::factory('Users')->find_one($u->id());
-			unset($res);
+			$ret = null;//unset($res);
 		
 			
 			$res =$u->delete(); 
@@ -148,7 +149,7 @@ class HomeController extends Controller
 		$request = Requests::get('http://localhost:8062/',
 								array(), 
 								array('timeout' => 1));
-						unset($res);
+						$res = null;//unset($res);
 		
 			$res = $request->body;
 			$code = true;
@@ -180,8 +181,8 @@ EOF;
 			$request = Requests::post('http://localhost:8062/api/analysis',
 					array(), 
 					array('text' => $data),
-					array('timeout' => 1));
-			unset($res);
+					array('timeout' => 30));
+			$res = null;//unset($res);
 		
 			$res = $request->body;
 			

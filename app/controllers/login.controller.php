@@ -18,21 +18,23 @@ class LoginController extends Controller {
 			try {
 				$usernameValidator = v::alnum()
 				->noWhitespace()
-				->notEmpty()
-				->length(4,22);
+				->notEmpty();
+				//->length(4,22);
 				 
 				$usernameValidator->check($this->post('username'));
 	
 				try {
 					v::alnum()
 					->notEmpty()
-					->length(3,11)
+					//->length(3,11)
 					->check($this->post('password'));
 	
 					if ($this->auth->login($this->post('username'), $this->post('password'))) {
 						$this->app->flash('info', 'Your login was successfull');
 						$this->redirect('home');
 					}
+					else 
+						$this->app->flashNow('error', "Username or password is incorrect. Check your details again.");
 				} catch (\InvalidArgumentException $e) {
 					$this->app->flashNow('error', $e->setName('Password')->getMainMessage());
 				}
