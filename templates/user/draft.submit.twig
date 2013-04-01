@@ -4,8 +4,12 @@
 
 {% block bccontainer %}		
 	{% include "widgets/breadcrumb.panel.twig" %}
+	    <li><div class="btn-group">
+    	<button class="btn btn-small active disabled" >
+    			<i class="icon-pencil"></i><span class="hidden-phone hidden-tablet"> {{ task.name }}</span></btn>
+	</div></li>
+	
 {% endblock %}
-
 
 {% block content %}
 

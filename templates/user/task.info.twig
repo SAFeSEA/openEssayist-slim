@@ -77,7 +77,7 @@
 				{% for draft in drafts %}
 				<tr>
 					<td><code>{{ draft.id }}</code></td>
-					<td>{{ draft.date | date("Y-m-d")}}</td>
+					<td style="white-space: nowrap;">{{ draft.date | date("Y-m-d")}}<br><small>({{ draft.datesince }} ago)</small></td>
 					<td>{{ draft.wordcount }}</td>
 					<td>{% for item in draft.keywords[0:7] %} 
 						{{ ngram.toBtn(item) }}
@@ -88,6 +88,9 @@
 				
 				</tbody>
 				</table>
+			</div>
+			<div class="widget-content">
+			<a class="btn btn-success"  href="{{ urlFor('me.draft.submit',{"idt":task.id}) }}">Submit a new draft...</a>
 			</div>
 		</div>
 	</div>

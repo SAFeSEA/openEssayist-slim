@@ -77,8 +77,8 @@ class UserController extends Controller
 			$this->app->flash("error", "Cannot find the group data");
 			$this->redirect('me.home');
 		}
-		
-		$d = $u->drafts()->where_equal('task_id',$taskId)->order_by_desc('date')->find_array();
+
+		$d = $u->drafts()->where_equal('task_id',$taskId)->order_by_desc('id')->find_array();
 		foreach ($d as $key => &$draft)
 		{
 			$analysis = json_decode($draft['analysis'],true);
@@ -89,6 +89,8 @@ class UserController extends Controller
 				$draft['keywords'] = array_merge($k['quadgrams'],$k['trigrams'],$k['bigrams']);
 			//var_dump($draft['keywords']);
 			unset($draft['analysis']);
+			$gg = $this->timeSince(strtotime($draft['date']));
+			$draft['datesince'] = $gg;
 		}
 		/* @var $d Draft */
 		$ap = $g->tasks()->find_one($taskId);
@@ -106,7 +108,8 @@ class UserController extends Controller
 	public function submitDraft($taskId)
 	{
 		$req = $this->app->request();
-		
+		/* @var $d Draft */
+		$ap = Model::factory('Task')->find_one($taskId);
 		if ($req && $req->isPost())
 		{
 			$post = $req->post();
@@ -133,6 +136,7 @@ class UserController extends Controller
 					$draft->analysis = $json;
 					$draft->task_id = $taskId;
 					$draft->users_id = $this->user['id'];
+					$draft->date = date('Y-m-d H:i:s e');
 					$draft->save();
 						
 				}
@@ -152,7 +156,9 @@ class UserController extends Controller
 			//$this->redirect($r,false);
 		}
 		
-		$this->render('user/draft.submit');
+		$this->render('user/draft.submit',array(
+				'task' => $ap->as_array(),
+				));
 	}
 	
 	/**
@@ -202,6 +208,7 @@ class UserController extends Controller
 		}
 		$this->render('drafts/draft.show',array(
 				'task' => $tsk->as_array(),
+				'draft' => $dr	->as_array(),
 				'parasenttok' => $parasenttok,
 				'keywords' => $analysis->nvl_data->keywords,
 				'ngrams' => $nagrams
@@ -223,12 +230,15 @@ class UserController extends Controller
 	public function showKeyword($draft)
 	{
 		$dr = $this->getDraft($draft);
+		$tsk = $dr->task()->find_one();
 		
 		$data = $dr->as_array();
 		$analysis = $dr->getAnalysis();
 		
 		
 		$this->render('drafts/draft.keyword',array(
+				'task' => $tsk->as_array(),
+				'draft' => $dr	->as_array(),
 				'keywords' => array(
 						'quadgrams' => $analysis->nvl_data->quadgrams,
 						'trigrams' => $analysis->nvl_data->trigrams,
