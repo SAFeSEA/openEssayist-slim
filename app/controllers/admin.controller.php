@@ -53,7 +53,20 @@ class AdminController extends Controller
 
 	public function editTask($id)
 	{
-		$this->render('admin/dashboard');
+		$req = $this->app->request();
+		$task = Model::factory('Task')->find_one($id);
+		
+		if ($req && $req->isPost())
+		{
+			$post = $req->post();
+			$task->name = $post['name'];
+			$task->assignment = $post['assignment'];
+			$task->wordcount = $post['wordcount'];
+			$task->deadline = $post['date'];
+			$task->save();
+		}
+		
+		$this->render('admin/task.edit',array('task' => $task));
 	
 	}
 }
