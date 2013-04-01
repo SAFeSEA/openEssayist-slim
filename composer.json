@@ -33,7 +33,7 @@
         "slim/slim":"2.*",
         "slim/extras":"dev-develop",
         "slim/strong":"dev-master",
-        "twig/twig":"1.8.*",
+        "twig/twig":"dev-master",
         "jamie/paris":"1.0.*",
         "jamie/idiorm":"1.0.*",
         "respect/validation":"dev-develop",
