@@ -2,7 +2,8 @@
 
 {% block title %}Assignments{% endblock %} 
 
-{% block breadcrumb %}
+
+{% block bccontainer %}		
 	{% include "widgets/breadcrumb.panel.twig" %}
 {% endblock %}
 
@@ -42,7 +43,7 @@
 					
 					<tr>
 					<td><code>{{ task.id }}</code></td>
-					<td><a class="btn {{ (task.isopen==0)? "disabled": "" }}" 
+					<td><a class="btn" 
 							href="{{ urlFor('me.drafts',{"idt":task.id}) }}">{{ task.name }}</a></td>
 					<td>{{ task.deadline }}</td>
 					<td>{{ task.isopen }}</td>

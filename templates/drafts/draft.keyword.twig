@@ -1,0 +1,65 @@
+{% extends "site.twig" %} 
+
+{% block title %}Draft - Keywords{% endblock %} 
+
+{% block content %}
+
+<div class="row-fluid">
+	{% for key,items in keywords %}
+	<div class="span3">
+	
+		<div class="widget">
+			<div class="widget-header">
+				<h3> {{ key|title }}</h3>
+			</div>
+			<div class="widget-content"> 
+				{% for item in items %}
+					<p> 
+						<span class="label label-info">{{ item.count }}</span>
+						<span>{{ item.ngram|join(" ") }}</span>
+						<span class="inlinebar">{{ item.score|join(',') }}</span>
+					</p>
+					
+				{% endfor %}
+			</div> 
+		</div>
+	</div>
+	{%  endfor %}
+</div>
+{% endblock %}
+
+
+{% block injectCSS %}
+<style>
+.inlinebar, .sparkbullet {
+	float: right;
+	}
+</style>
+{% endblock %}
+
+{% block injectJS %}
+<script src="/assets/jquery.sparkline/jquery.sparkline.min.js"></script>
+<script>
+$(document).ready(function() {
+	// initialise the code highlighting
+	// define the sparkline for the keyword's ranking
+	$('.inlinebar').sparkline('html', {
+		type : 'bar',
+		chartRangeMin : 0,
+		chartRangeMax : .25,
+		tooltipPrefix : '',
+		tooltipSuffix : '',
+		disableHiddenCheck : true,
+		height : '18px',
+		width : '100px',
+		barColor : 'red',
+		numberDigitGroupCount : 5,
+		colorMap : {
+			'.25:1' : 'green',
+			'.1:.2499999' : 'red',
+			'0:.0999999' : 'lightblue'
+		}
+	});
+});
+</script>
+{% endblock %} 

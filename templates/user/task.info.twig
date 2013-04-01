@@ -1,0 +1,96 @@
+{% extends "site.twig" %} 
+{% import "widgets/ngram.macro.twig" as ngram %}
+
+{% block title %}Assignments{% endblock %} 
+
+
+{% block bccontainer %}		
+	{% include "widgets/breadcrumb.panel.twig" %}
+	    <li><div class="btn-group">
+    	<button class="btn btn-small active disabled" >
+    			<i class="icon-pencil"></i><span class="hidden-phone hidden-tablet"> {{ task.name }}</span></btn>
+	</div></li>
+	
+{% endblock %}
+
+{% block content %}
+<div class="row-fluid">
+	<div class="span2">
+		<div class="widget">
+			<div class="widget-header">
+			<h3> Group: {{ group.name }}</h3>
+			</div>
+			<div class="widget-content"> 
+					<p> </p>
+				</div> 
+		</div>
+	</div>
+	<div class="span8">
+		<div class="widget">
+			<div class="widget-header">
+			<h3> Assignment</h3>
+			</div>
+			<div class="widget-content"> 
+					<p>{{ task.assignment|nl2br}} </p>
+				</div> 
+		</div>
+	</div>
+	<div class="span2">
+		<div class="widget">
+			<div class="widget-header">
+			<h3> Deadline </h3>
+			</div>
+			<div class="widget-content"> 
+					<p>{{ task.deadline}}</p>
+			</div> 
+		</div>
+		<div class="widget">
+			<div class="widget-header">
+				<h3> Word Limit</h3>
+			</div>
+			<div class="widget-content"> 
+				<p>{{ task.wordcount}}</p>
+			</div> 
+		</div>
+	</div>	
+</div>
+
+<div class="row-fluid">
+<div class="span12">
+		<div class="widget">
+			<div class="widget-header">
+				<h3>Drafts</h3>
+			</div>
+			<div class="widget-content"> 
+
+				<table class="table table-condensed table-striped table-bordered">
+				<thead>
+					<tr>
+						<th width="5%">#</th>
+						<th>Date</th>
+						<th>Word Count</th>
+						<th>Key Words</th>
+						<th class="td-actions">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for draft in drafts %}
+				<tr>
+					<td><code>{{ draft.id }}</code></td>
+					<td>{{ draft.date | date("Y-m-d")}}</td>
+					<td>{{ draft.wordcount }}</td>
+					<td>{% for item in draft.keywords[0:7] %} 
+						{{ ngram.toBtn(item) }}
+					{% endfor %}</td>
+					<td><a class="btn btn-primary"  href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}">Show</a></td>
+				</tr>
+				{% endfor %}
+				
+				</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

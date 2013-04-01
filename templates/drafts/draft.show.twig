@@ -1,16 +1,283 @@
 {% extends "site.twig" %} 
 
-{% block title %}Draft -Show{% endblock %} 
+{% block title %}Draft - Overview{% endblock %} 
+
+
+{% block bccontainer %}		
+	{% include "widgets/breadcrumb.panel.twig" %}
+	    <li><div class="btn-group">
+    	<a href="{{ urlFor('me.drafts',{"idt":task.id}) }}" class="btn btn-small" >
+    		<i class="icon-pencil"></i><span class="hidden-phone hidden-tablet"> {{ task.name }}</span></a>
+	</div></li>
+	
+{% endblock %}
 
 {% block content %}
+<div class="row-fluid"><div class="span12">
 
-<div>
+<div class="widget">
+			<div class="widget-header" data-toggle="collapse" data-target="#demo">
+				<h3> Display Options </h3>
+				<div class="box-icon">
+					<a class="btn-setting" href="#"><i class="icon-chevron-down"></i></a>
+				</div>
+			</div>
+			<div class="widget-content collapse" id="demo" > 
+				<div class="widget-content span3"> 
+				   
+						<legend>Structure</legend>
+    					
+									<label class="checkbox"> 
+										<input  type="checkbox" value="#-s:h#;#-s:t#;#-s:q#;#-s:n#" class="cStructure" checked="checked"> 
+										Headings
+									</label>
+									<label class="checkbox"> 
+										<input  type="checkbox" value="#+s:i#" class="cStructure" checked="checked"> 
+										Introduction
+									</label>
+									<label class="checkbox"> 
+										<input  type="checkbox" value="#+s#" class="cStructure" checked="checked"> 
+										Body
+									</label>
+									<label class="checkbox"> 
+										<input type="checkbox" value="#+s:c#" class="cStructure" checked="checked"> 
+										Conclusion
+									</label>
+
+				</div>
+					<div class="widget-content span3"> 
+											<legend> Sentences </legend>
+
+							<div class="controls controls-row">
+								<div class="control-group">
+									<label class="">Show range: <span id="amount" class="input unedidtable-input">0 - 0</span> </label>
+									<div id="slider-range"></div>
+									<span class="help-block">Set the priority of keywords to
+									display.</span> 
+								</div>
+								
+							</div>
+			
+			</div> <div class="widget-content span3"> 
+				<legend> Keywords </legend>
+
+							<div class="controls controls-row">
+								<div class="controls">
+									<label class="checkbox inline"> <input type="checkbox"
+										value="1" id="cKeyword1" onchange="checkAddress(this)"
+										checked="checked"> 1
+									</label><label class="checkbox inline"> <input type="checkbox"
+										value="2" id="cKeyword2" onchange="checkAddress(this)"
+										checked="checked"> 2
+									</label><label class="checkbox inline"> <input type="checkbox"
+										value="3" id="cKeyword3" onchange="checkAddress(this)"
+										checked="checked"> 3
+									</label>
+
+								</div>
+								<span class="help-block">Set the priority of keywords to
+									display.</span> 
+							</div>
+			</div> <div class="widget-content span3"> 
+				<legend> Essay </legend>
+
+							<div class="controls controls-row">
+								<div class="controls">
+									<label class="checkbox inline"> <input type="checkbox"
+										value="1" class="cTaskQuestion"> Show assignment question
+									</label>
+
+								</div>
+							
+							</div>
+			</div> 
+			</div> 
+		</div>
+
+
+</div></div>
+
+<div class="row-fluid"><div class="span12">
+
+<div class="myessay openessay">
+
+<div class="widget widget-content assignment">
+	<p>{{ task.assignment | raw | nl2br }}</p>
+</div>
+<div class="widget widget-content">
 {% for par in parasenttok %}
-	<p>{% for sent in par %}
-			<span data-index="{{ sent.id }}" data-tag="{{ sent.tag }}" {{ (sent.rank)? "data-rank="~sent.rank:"" }}>{{ sent.text }}</span>
-		{% endfor %}
+	<p id="{{ loop.index0 }}" class='oe-par'>
+	{% for sent in par %}
+			<span class="oe-snt" data-index="{{ sent.id }}" data-tag="{{ sent.tag }}" {{ (sent.rank)? "data-rank="~sent.rank:"" }}>
+				  {{ sent.text }}</span>
+	{% endfor %}
 	</p>
 {% endfor %}
-</div>
+</div></div>
 
-{% endblock %} 
+</div></div>
+
+{% endblock %}
+
+
+{% block injectCSS %}
+<link href="/assets/openessayist/css/hljs.css" rel="stylesheet">
+<style type="text/css">
+p.oe-par {
+	margin: 1em 0 1em 0;
+	white-space: inherit;
+	border-left: 10px solid #D5D5D5;
+	margin-left: -5px;
+    padding-left: 10px;
+}
+
+p.oe-par:before
+{
+	content: "";
+}
+
+
+span.oe-snt {
+	white-space: normal;
+	display: inline;
+}
+
+span.oe-snt[data-tag='#-s:t#']{
+	font-weight: bold;
+}
+        			
+span.oe-snt[data-tag='#-s:h#']{
+	font-weight: bold;
+}
+
+span.oe-snt[data-rank].showmu:before {
+	content:	attr(data-rank);
+	background-color: #3A87AD;
+	border-radius: 9px 9px 9px 9px;
+	color: #FFFFFF;
+	
+	margin-right: 10px;
+	padding-left: 9px;
+	padding-right: 9px;
+	text-shadow: none;
+}
+
+span.oe-snt[data-rank].showmu{
+	background-color: #D3E3D3;
+}
+
+.widget.assignment
+{
+	display: none;
+}
+
+.widget-content legend
+{    font-size: 12px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    line-height: 18px;
+}
+
+.widget-content.collapse.in
+{
+	padding: 10px;
+}
+.widget-content.collapse
+{
+	padding: 0px;
+}
+
+.widget-header[data-target]
+{
+	cursor: pointer;
+}
+
+label.checkbox:before
+{
+	content: "";
+}
+
+.openessay .keyword:before {
+	/*content: "-";
+	float: left;
+	width: 0px;
+	position: relative;
+	left: -15px;*/
+	
+}
+
+</style>
+{% endblock %}
+
+{% block injectJS %}
+	<script src="/assets/highlight.js/highlight.pack.js"></script>
+	<script src="/assets/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.js"></script>
+	{% include "javascript/hljs.keywords.js.twig" %}
+	<script>
+	$(document).ready(function() {
+		// initialise the code highlighting
+		$('div.openessay').each(function(i, e) {
+			hljs.highlightBlock(e)
+		});
+
+		$('.cTaskQuestion').change(function() {
+			var cbox = this;
+			var classname = ".widget.assignment";
+			if (cbox.checked)
+				//$(classname).show("fast");
+				$(classname).css({'display':'block'});
+			else
+				$(classname).css({'display':'none'});
+		
+		});
+		
+		$('.cStructure').change(function() {
+			var cbox = this;
+			var indicators = cbox.value.split(";");
+			indicators.forEach(function(elt, idx, arr) {
+				var classname = "span.oe-snt[data-tag='" + elt + "']";
+				if (cbox.checked)
+					//$(classname).show("fast");
+					$(classname).css({'display':'inline'});
+				else
+					$(classname).css({'display':'none'});
+					//$(classname).hide("fast");
+			});
+
+		});
+		
+		// set the sentence slider
+		$("#slider-range").slider({
+			range : true,
+			min : 0,
+			max : 15,
+			values : [ 0, 1 ],
+			slide : function(event, ui) {
+				$("#amount").text(ui.values[0] + " - " + ui.values[1]);
+
+				$('span.oe-snt[data-rank]').each(function() {
+					var tt = parseInt($(this).attr('data-rank'));
+					var mina = ui.values[0];
+					var maxa = ui.values[1];
+					//alert(tt);
+					$(this).removeClass('showmu');
+					$(this).removeClass('dimshowmu');
+					if (mina <= tt && tt <= maxa) {
+						// if (tt == maxa)
+						$(this).addClass('showmu');
+						
+						//console.log("show" + tt);
+						// else
+						// $(this).addClass('dimshow');
+
+					}
+				});
+
+
+
+			}
+		});
+	});
+	</script>
+	
+{% endblock %}

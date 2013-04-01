@@ -39,21 +39,20 @@
 	<!-- Content ================================================== -->
 	<div class="container" id="main">
 	
-		{% block breadcrumb %}{% endblock %}
+		{% block breadcrumb %}
+			<ul class="breadcrumb">{% block bccontainer %}{% endblock %}</ul>
+		{% endblock %}
 	
 		<div class="row-fluid">
 			<div class="span12" style="min-height: 150px;">
 			
 			{% block notification %}
 				<div class="row-fluid">
-					<div class="span10 offset1" id="notification">
-					{% if flash.info %}
+					<div class="span10 offset1" id="notification">{% if flash.info %}
 						<div class="alert-box alert alert-info">{{ flash.info|raw }}</div>
-					{% endif %} 
-					{% if flash.error %}
+					{% endif %}{% if flash.error %}
 						<div class="alert-box alert alert-error">{{ flash.error|raw }}</div>
-					{% endif %}
-					</div>
+					{% endif %}</div>
 				</div>
 			{% endblock %}
 			

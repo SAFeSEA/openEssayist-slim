@@ -43,7 +43,7 @@
 					
 					<tr>
 					<td><code>{{ task.id }}</code></td>
-					<td>{{ task.name }}</td>
+					<td><a class="btn"  href="{{ urlFor('admin.task.edit',{"taskid":task.id}) }}">{{ task.name }}</a></td>
 					<td>
 					<p data-toggle="collapse" data-target="#long{{ task.id }}">{{ task.short()|escape }} ...</p>
 					<p id="long{{ task.id }}" class="collapse">{{ task.long()|escape }}</p>

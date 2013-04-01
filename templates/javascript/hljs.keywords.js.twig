@@ -1,0 +1,59 @@
+{# #}
+
+{% set GGG = [] %}
+{% for keyword in keywords %}
+	{% set GGG = GGG|merge(keyword.source) %}
+{% endfor %}
+{% set GGG = GGG|join(" ") %}
+
+
+<script type="text/javascript">
+<!--
+
+/**
+ * Split an array in chunks of equal size
+ * 
+ */
+ Array.prototype.chunk = function(chunkSize) {
+    var array=this;
+    return [].concat.apply([],
+        array.map(function(elem,i) {
+            return i%chunkSize ? [] : [array.slice(i,i+chunkSize)];
+        })
+    );
+};
+
+/**
+ * Define the pseudo language for the openEssayist keywords, as used by HighlightJS
+ * @see HighlightJS
+ */
+hljs.LANGUAGES['openessay'] = function(hljs) {
+
+	// define the formatters, based on pattern matching
+	var formatters = [];
+	{% for ngram in ngrams %}
+	formatters.push({
+		className: "ngram ngram{{ ngram.source|length }}",
+		begin: "\\b({{ ngram.source|join(')\\\\b\\\\s*\\\\b(') }})\\b",
+        keywords: {"keyword":"{{ ngram.source|join(' ') }}"},
+        relevance: 0
+	});
+	
+	{% endfor %}
+
+
+	// return the "language" definition
+	return {
+		keywords: { 'keyword': "{{ GGG }}"},
+		contains: formatters
+	};
+	
+}(hljs);
+
+
+$(document).ready(function() {
+	//alert("{{ parasenttok[0][0].text }}");
+});
+
+//-->
+</script>

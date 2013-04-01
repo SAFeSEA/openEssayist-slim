@@ -1,0 +1,69 @@
+{% extends "site.twig" %} 
+
+{% block title %}Admin / Task {% endblock %} 
+
+{% block content %}
+
+<div class="row-fluid">
+<div class="span9">
+
+	<div class="widget">
+		<div class="widget-header">
+			<i class="icon-pencil"></i>
+			<h3>{{ task.name }}</h3>
+		</div>
+					
+		<div class="widget-content">
+		
+		<form name="post_task" method="post" class="form-horizontal">
+		 <div class="control-group">
+			<label class="control-label" for="name">Name</label>
+			<div class="controls">
+				<input type="text" id="name" name="name" placeholder="name" value="{{ task.name }}">
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="assignment">Assignment</label>
+			<div class="controls">
+				<textarea style="max-width: 90%; width: 90%; resize: vertical;" rows="15" name="assignment" id="assignment" placeholder="description">{{ task.assignment }}</textarea> 
+			</div>
+		</div>
+		<div class="control-group">
+		 	<label class="control-label" for="date">Deadline</label>
+		 	<div class="controls">
+			<div class="input-append  date" id="dp3" data-date="{{ task.deadline }}" data-date-format="yyyy-mm-dd">
+				<input class="" id="date" name="date" type="text" value="{{ task.deadline }}" >
+				<span class="add-on"><i class="icon-calendar"></i></span>
+			  </div>
+		 	</div>
+		</div>
+		 <div class="control-group">
+			<label class="control-label" for="wordcount">Word Limit</label>
+			<div class="controls">
+				<input type="text" id="wordcount" name="wordcount" placeholder="number of words" value="{{ task.wordcount }}">
+			</div>
+		</div>
+		<div class="form-actions">
+			<button class="btn btn-primary" type="submit" name="action" value="Submit">Save</button> 
+		</div>
+		</form>
+		</div>
+	</div>
+</div>
+</div>
+
+{% endblock %} 
+
+{% block injectCSS %}
+<link href="/assets/bootstrap.datepicker/css/datepicker.css" rel="stylesheet">
+{% endblock %}
+
+{% block injectJS %}
+<script src="/assets/bootstrap.datepicker/js/bootstrap-datepicker.js"></script>
+<script>
+	$(document).ready(function() {
+		// initialise the code highlighting
+		$('#dp3').datepicker();
+	});
+	</script>
+{% endblock %} 
