@@ -64,6 +64,25 @@ TwigView::$twigOptions = array(
 	'debug'=> true,
 );
 
+// Set custom Twig filters
+$view = $app->view();
+if ($view instanceof TwigView)
+{
+	/* @var $twig Twig_Environment */
+	$twig = $view->getEnvironment();
+	
+	
+	$filter = new Twig_SimpleFilter('boolean', function ($var) {
+		if (is_bool($var))
+			return ($var) ? "True":"False"; 
+		else 
+			return $var;
+	});
+	
+	$twig->addFilter($filter);
+}
+
+
 // Configuration for Idiom & StrongAuth
 $config = array(
 		'provider' => 'PDOAdmin',
@@ -75,7 +94,8 @@ $config = array(
 		'login.url' => '/login',
 		'security.urls' => array(
 				array('path' => '/account/'),
-				array('path' => '/api/'),
+				array('path' => '/me/'),
+				array('path' => '/me/.+'),
 				array('path' => '/admin/','admin'=> true),
 				array('path' => '/admin/.+', 'admin' => true),
 		),
@@ -110,13 +130,15 @@ $c->app->get('/me/essay/:idt/submit/', array($userCtrl, 'submitDraft'))->via('GE
 
 $c->app->get('/me/draft/:draft/show/', array($userCtrl, 'showDraft'))->name('me.draft.show');
 $c->app->get('/me/draft/:draft/keyword/', array($userCtrl, 'showKeyword'))->name('me.draft.keywords');
+$c->app->get('/me/draft/:draft/stats/', array($userCtrl, 'showStats'))->name('me.draft.stats');
+$c->app->get('/me/draft/:draft/sentence/', array($userCtrl, 'showSentence'))->name('me.draft.sentence');
 
 
 $c->app->get('/admin/', array($adminCtrl, 'index'))->name('admin.home');
 $c->app->get('/admin/reset', array($adminCtrl, 'reset'))->name('admin.reset');
 $c->app->get('/admin/users/', array($adminCtrl, 'allUsers'))->name('admin.users');
 $c->app->get('/admin/tasks/', array($adminCtrl, 'allTasks'))->name('admin.tasks');
-$c->app->get('/admin/task/(:id)', array($adminCtrl, 'editTask'))->name('admin.taskid');
+$c->app->get('/admin/task/:taskid', array($adminCtrl, 'editTask'))->via('GET', 'POST')->name('admin.task.edit');
 
 $c->app->error(array($appController, 'error'));
 
