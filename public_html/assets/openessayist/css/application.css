@@ -179,6 +179,22 @@ color: #555555;
     background: none repeat scroll 0 0 #FFFFFF;
 }
 
+.widget-header .box-icon {
+    float: right;
+    margin-top: 1px;
+     margin-right: 5px;
+}
+
+.widget-header .box-icon a {
+    margin: 0px;
+}
+
+.widget-header .box-icon i {
+	margin: 0px;
+    opacity: 0.4;
+    transition: all 0.1s ease-in-out 0s;
+}
+
 
 .widget-content-allcat
 {
@@ -202,12 +218,26 @@ color: #555555;
 }
 
 .breadcrumb{
-	box-shadow: 0 0 1px 1px #C2C2C2;
+	box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+	background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #D5D5D5;
+    border-radius: 5px 5px 5px 5px;
+    overflow: hidden;
+}
+
+.breadcrumb:empty
+{
+	display: none;
 }
 
 .breadcrumb .dropdown-menu li
 {
 	display: list-item;
+}
+
+#notification:empty
+{
+	display: none;
 }
 
 /* Responsive
