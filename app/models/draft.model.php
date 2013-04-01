@@ -33,31 +33,14 @@ class Draft extends Model {
 	{
 		$data = array();
 		$json = $this->analysis;
-		$rr = json_decode($json);
-		//var_dump($rr->se_stats);
-		//var_dump($rr->se_reotg_array);
-
-		$rank = array();
-		foreach ($rr->se_ranked as $i => $item)
-			$rank[$item[1]] = $i;
-
-		$inc = 0;
-		foreach ($rr->parasenttok as $i => &$par)
-		{
-			foreach ($par as $j => &$sent)
-			{	
-				$sent = array(
-					'id' => $inc,
-					'text' => $sent,
-					'tag' => $rr->se_reotg_array[$inc][2]
-				);
-				if ($rank[$inc]!=null)
-					$sent['rank'] = $rank[$inc];
-				$inc++;
-				
-			}
-			
-		}
-		return $rr->parasenttok;
+		$rr = json_decode($json,true);
+		return $rr['se_data']['se_parasenttok'];
+	}
+	
+	public function getAnalysis($assoc=false)
+	{
+		$json = $this->analysis;
+		$rr = json_decode($json,$assoc);
+		return $rr;
 	}
 }
