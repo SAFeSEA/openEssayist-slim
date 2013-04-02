@@ -94,7 +94,7 @@ class UserController extends Controller
 		}
 		/* @var $d Draft */
 		$ap = $g->tasks()->find_one($taskId);
-
+			
 		$this->render('user/task.info',array(
 				'group' => $g->as_array(),
 				'task' => $ap->as_array(),
@@ -284,6 +284,11 @@ class UserController extends Controller
 		$this->render('drafts/stats',array(
 				'stats' => $tttt
 		));
+	}
+	
+	public function actionKeyword($draft)
+	{
+		$this->render('drafts/action.keyword');
 	}
 	
 	

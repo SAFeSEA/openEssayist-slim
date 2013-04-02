@@ -5,8 +5,8 @@
 {% block bccontainer %}		
 	{% include "widgets/breadcrumb.panel.twig" %}
 	    <li><div class="btn-group">
-    	<button class="btn btn-small active disabled" >
-    			<i class="icon-pencil"></i><span class="hidden-phone hidden-tablet"> {{ task.name }}</span></btn>
+    	<a href="{{ urlFor('me.drafts',{"idt":task.id}) }}" class="btn btn-small" >
+    		<i class="icon-pencil"></i><span class="hidden-phone hidden-tablet"> {{ task.name }}</span></a>
 	</div></li>
 	
 {% endblock %}
