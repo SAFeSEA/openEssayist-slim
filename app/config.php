@@ -11,6 +11,10 @@ $db['local']['password'] = 'root';
 $db['local']['database'] = 'openessayist';
 $db['local']['dbProvider'] = 'mysql';
 
+/**
+ * Needed in the RHEL distribution of Apache/PHP for the use of date();
+ */
+date_default_timezone_set('Europe/London');
 
 try {
 	//echo "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'DBName'";
