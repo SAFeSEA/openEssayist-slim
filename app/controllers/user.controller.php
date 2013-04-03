@@ -221,6 +221,35 @@ class UserController extends Controller
 	 */
 	public function showSentence($draft)
 	{
+		$dr = $this->getDraft($draft);
+		$tsk = $dr->task()->find_one();
+		
+		$parasenttok = $dr->getParasenttok();
+		$data = $dr->as_array();
+		$analysis = $dr->getAnalysis();
+		
+		
+		// unpack senteces from structure
+		$parasenttok = call_user_func_array('array_merge', $parasenttok);
+		$sort = array();
+		// extract ranks as key and remove sentence wihthout
+		foreach($parasenttok as $k=>&$v)
+		{
+			if (isset($v['rank']))
+				$sort['rank'][$k] = $v['rank'];
+			else
+				unset($parasenttok[$k]);
+		}
+		// sort remaining sentences accordingly
+		array_multisort($sort['rank'], SORT_ASC, $parasenttok);
+		
+		$this->render('drafts/draft.sentence',array(
+				'task' => $tsk->as_array(),
+				'draft' => $dr->as_array(),
+				'sentences' => $parasenttok
+			));
+		
+		//var_dump($parasenttok);
 	}
 	
 	/**

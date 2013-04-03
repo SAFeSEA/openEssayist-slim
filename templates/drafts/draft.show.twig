@@ -12,7 +12,7 @@
 	<li><div class="btn-group">
     	<button class="btn btn-small active disabled">Overview</button>
     	<a href="{{ urlFor('me.draft.keywords',{"draft":draft.id}) }}" class="btn btn-small" >Keywords</a>
-    	<button class="btn btn-small">Sentences</button>
+    	<a href="{{ urlFor('me.draft.sentence',{"draft":draft.id}) }}" class="btn btn-small" >Sentences</a>
     	<button class="btn btn-small">Stats</button>
     </div></li>
 {% endblock %}
@@ -168,7 +168,7 @@ span.oe-snt[data-rank].showmu:before {
 }
 
 span.oe-snt[data-rank].showmu{
-	background-color: #D3E3D3;
+	background-color: #D3E3D3 !important;
 }
 
 .widget.assignment

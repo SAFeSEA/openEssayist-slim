@@ -1,5 +1,5 @@
 {% macro toBtn(ngram,showScore=false) %}
-	<button class="btn btn-mini">
+	<button class="btn btn-mini btn-ngram">
 	<span class="label label-info">{{ ngram.count }}</span>
 		<span>{{ ngram.ngram|join(" ") }}</span>
 		{% if showScore %}

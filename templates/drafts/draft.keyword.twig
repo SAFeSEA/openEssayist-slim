@@ -1,4 +1,5 @@
 {% extends "site.twig" %} 
+{% import "widgets/ngram.macro.twig" as ngram %}
 
 {% block title %}Draft - Keywords{% endblock %} 
 
@@ -11,17 +12,17 @@
 	<li><div class="btn-group">
     	<a href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}" class="btn btn-small" >Overview</a>
 		<button class="btn btn-small active disabled">Keywords</button>
-    	<button class="btn btn-small">Sentences</button>
-    	<button class="btn btn-small">Stats</button>
+    	<a href="{{ urlFor('me.draft.sentence',{"draft":draft.id}) }}" class="btn btn-small" >Sentences</a>
+		<button class="btn btn-small">Stats</button>
     </div></li>
 {% endblock %}
 
 
 {% block content %}
 
-<div class="row-fluid">
 	{% for key,items in keywords %}
-	<div class="span3">
+<div class="row-fluid">
+	<div class="span12">
 	
 		<div class="widget">
 			<div class="widget-header">
@@ -29,25 +30,22 @@
 			</div>
 			<div class="widget-content"> 
 				{% for item in items %}
-					<p> 
-						<span class="label label-info">{{ item.count }}</span>
-						<span>{{ item.ngram|join(" ") }}</span>
-						<span class="inlinebar">{{ item.score|join(',') }}</span>
-					</p>
-					
+					 {{ ngram.toBtn(item,true) }}
 				{% endfor %}
 			</div> 
 		</div>
 	</div>
-	{%  endfor %}
-</div>
+</div>	{%  endfor %}
+
 {% endblock %}
 
 
 {% block injectCSS %}
 <style>
+.btn-ngram { white-space: nowrap; padding:2px; margin:0 0 2px 5px; }
 .inlinebar, .sparkbullet {
-	float: right;
+	/*float: right;*/
+	margin-left:25px;
 	}
 </style>
 {% endblock %}

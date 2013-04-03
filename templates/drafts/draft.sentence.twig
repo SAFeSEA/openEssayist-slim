@@ -1,0 +1,40 @@
+{% extends "site.twig" %} 
+
+{% block title %}Draft - Sentences{% endblock %} 
+
+{% block bccontainer %}		
+	{% include "widgets/breadcrumb.panel.twig" %}
+	    <li><div class="btn-group">
+    	<a href="{{ urlFor('me.drafts',{"idt":task.id}) }}" class="btn btn-small" >
+    		<i class="icon-pencil"></i><span class="hidden-phone hidden-tablet"> {{ task.name }}</span></a>
+	</div></li>
+	<li><div class="btn-group">
+    	<a href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}" class="btn btn-small" >Overview</a>
+    	<a href="{{ urlFor('me.draft.keywords',{"draft":draft.id}) }}" class="btn btn-small" >Keywords</a>
+    	<button class="btn btn-small active disabled">Sentences</button>
+    	<button class="btn btn-small">Stats</button>
+    </div></li>
+{% endblock %}
+
+{% block content %}
+
+
+<div class="row-fluid"><div class="span12">
+	<div class="widget">
+			<div class="widget-header">
+				<h3> Sentences </h3>
+			</div>
+			<div class="widget-content">
+				<table class="table table-condensed table-striped table-bordered">
+				<tbody>
+				{% for sentence in sentences %}
+					<tr><td>{{ sentence.text  }}</td>	</tr>
+				{% endfor %}
+				</tbody>
+				</table> 
+				
+			</div> 
+		</div>
+	</div>
+</div></div>
+{% endblock %}
