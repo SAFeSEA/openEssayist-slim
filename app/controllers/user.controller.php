@@ -319,6 +319,54 @@ class UserController extends Controller
 	{
 		$this->render('drafts/action.keyword');
 	}
+
+	public function viewGraph($draft,$graph=null)
+	{
+		$graphlist = array(
+				'graphse' => array(
+						'name'	=> 'Sentence network',
+						'path'	=> 'drafts/view.graph',
+						'data'	=> 'se_sample_graph'),
+				'graphke' => array(
+						'name'	=> 'Keyword network',
+						'path'	=> 'drafts/view.graph',
+						'data'	=> 'ke_sample_graph'),
+		);
+		
+		if (!isset($graph))
+		{
+			$this->render('base.html');
+			return;
+		}
+		
+		if (!array_key_exists($graph,$graphlist))
+		{
+			$this->app->flash("error", "This view does not exist. Try one of the following.");
+			//$this->redirect('me.home');
+			$url = $this->app->urlFor('me.draft.view.graph',array('draft'=>$draft));
+			var_dump($url);
+
+			$this->app->redirect($url);
+			return;
+		}
+		
+		$path = $graphlist[$graph]['path']; 
+		$data = $graphlist[$graph]['data']; 
+		
+		$dr = $this->getDraft($draft);
+		$tsk = $dr->task()->find_one();
+		
+		$analysis = $dr->getAnalysis(true);
+		$gr = json_decode($analysis[$data],true);
+		
+		$this->render($path,array(
+				'task' => $tsk->as_array(),
+				'draft' => $dr->as_array(),
+				'views' => $graphlist,
+				'view' => $graph,
+				'graph' => $gr
+			));
+	}
 	
 	
 }

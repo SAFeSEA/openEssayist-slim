@@ -133,6 +133,7 @@ $c->app->get('/me/draft/:draft/keyword/', array($userCtrl, 'showKeyword'))->name
 $c->app->get('/me/draft/:draft/stats/', array($userCtrl, 'showStats'))->name('me.draft.stats');
 $c->app->get('/me/draft/:draft/sentence/', array($userCtrl, 'showSentence'))->name('me.draft.sentence');
 $c->app->get('/me/draft/:draft/action/keyword', array($userCtrl, 'actionKeyword'))->name('me.draft.act.keyword');
+$c->app->get('/me/draft/:draft/view/(:graph)', array($userCtrl, 'viewGraph'))->name('me.draft.view.graph');
 
 
 $c->app->get('/admin/', array($adminCtrl, 'index'))->name('admin.home');
