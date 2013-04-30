@@ -86,7 +86,8 @@
 	    	<a class="btn btn-success"  href="{{ urlFor('me.draft.submit',{"idt":task.id}) }}">Submit a new draft...</a>
 	    	</p>		    	
 	    </div>			
-    {% else %}
+    {% elseif drafts[0].processed == 1 %}
+
     	<div class="alert alert-success">
     		<button type="button" class="close" data-dismiss="alert">&times;</button>
 	    	<h4>Draft submitted & reviewed</h4>
@@ -112,12 +113,18 @@
 	    	<h4>Submit a new draft</h4>
 	    	<p>There are still a few issues above that need to be closed before being able to submit the next draft.</p>
 	    	<p>
-	    	<button class="btn disabled"  href="{{ urlFor('me.draft.submit',{"idt":task.id}) }}">Submit a new draft...</a>
+	    	<a class="btn btn-success"  href="{{ urlFor('me.draft.submit',{"idt":task.id}) }}">Submit a new draft...</a>
 	    	</p>		    	
 	    </div>			
 	    		
-    {% endif %}
-	    {% endif %}
+    {% endif %}    
+    {% else %}
+        	<div class="alert alert-error">
+	    	<h4>Draft is being analysed</h4>
+    		Draft has been submitted and is being analysed. check this page again in a few seconds. 
+	    </div>			
+    
+	{% endif %}
 			
 			
 			</div>
@@ -152,7 +159,11 @@
 					<td>{% for item in draft.keywords[0:7] %} 
 						{{ ngram.toBtn(item) }}
 					{% endfor %}</td>
-					<td><a class="btn btn-primary"  href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}">Show</a></td>
+					<td>
+						{% if draft.processed != -1 %}				
+						<a class="btn btn-primary"  href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}">Show</a>
+						{% endif %}
+					</td>
 				</tr>
 				{% endfor %}
 				

@@ -96,6 +96,7 @@ class Application {
 				`task_id` int(11) NOT NULL,
 				`users_id` int(11) NOT NULL,
 				`type` int(11) DEFAULT '0',
+				`processed` int(11) DEFAULT '1',
 				`analysis` LONGBLOB,
 				`date` DATETIME,
 				PRIMARY KEY (`id`)

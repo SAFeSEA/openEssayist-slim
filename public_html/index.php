@@ -40,6 +40,7 @@ define('EXT', '.twig');
 
 // Create main Slim application
 $app = new \Slim\Slim(array(
+	'openEssayist.async' => true,
 	'view' => new TwigView,
 	'debug' => true,
     'log.level' => 4,
@@ -127,6 +128,8 @@ $c->app->get('/me/', array($userCtrl, 'me'))->name('me.home');
 $c->app->get('/me/essay/(:id(/))', array($userCtrl, 'tasks'))->conditions(array('id' => '[0-9]+'))->name('me.tasks');
 $c->app->get('/me/essay/:idt/draft/(:idd(/))', array($userCtrl, 'drafts'))->name('me.drafts');
 $c->app->get('/me/essay/:idt/submit/', array($userCtrl, 'submitDraft'))->via('GET', 'POST')->name('me.draft.submit');
+
+$c->app->post('/api/process/:idt', array($userCtrl, 'processDraft'))->name('me.draft.process');
 
 $c->app->get('/me/draft/:draft/show/', array($userCtrl, 'showDraft'))->name('me.draft.show');
 $c->app->get('/me/draft/:draft/keyword/', array($userCtrl, 'showKeyword'))->name('me.draft.keywords');
