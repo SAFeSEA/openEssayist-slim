@@ -24,9 +24,49 @@
 
 	<!-- Le fav and touch icons -->
 	<link rel="shortcut icon" href="/assets/openessayist/img/favicon.ico">
+	<style>
+	/* Sticky footer styles
+      -------------------------------------------------- */
+	html,body {
+        height: 100%;
+        /* The html and body elements cannot have any padding or margin. */
+      }
+
+      /* Wrapper for page content to push down footer */
+      #wrap {
+        min-height: 100%;
+        height: auto !important;
+        height: 100%;
+        /* Negative indent footer by it's height */
+        margin: 0 auto -40px;
+      }
+
+      /* Set the fixed height of the footer here */
+      #push {
+        height: 30px;
+      }
+      
+      footer.footer {
+        height: 29px;
+      }
+      
+      /* Custom page CSS
+      -------------------------------------------------- */
+      /* Not required for template or sticky footer method. */
+
+      .container .credit {
+        margin: 20px 0;
+      }
+
+      code {
+        font-size: 80%;
+      }
+      
+	</style>
 {% endblock %}
 </head>
 <body>
+	<div id="wrap">
 	{% block navbar %}
 		{% include "widgets/navbar.panel.twig" %}
 	{% endblock %}
@@ -58,12 +98,15 @@
 			
 			{% block content %}{% endblock %}
 			</div>
+			
+			
 		</div>
 		
 		{% block debug %}{% endblock %}
 		
 	</div>
-
+	<div id="push"></div>
+</div>
 	
 	<!-- Footer ================================================== -->
 	<footer class="footer">
@@ -92,6 +135,6 @@
 	<!-- <script src="/bootstrap/openEssayist.js"></script> -->
 	{% block injectJS %}
 	{% endblock %}
-
+	
 </body>
 </html>

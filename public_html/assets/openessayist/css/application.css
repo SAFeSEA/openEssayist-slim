@@ -6,9 +6,14 @@
 
 body {
     background: url("../img/bgnoise.png") repeat scroll 0 0 #EEEEEE;
-    padding-top: 60px;
+    /*padding-top: 60px;*/
     position: relative;
 }
+
+      #wrap > .container {
+        padding-top: 60px;
+      }
+
 
 .container#main
 {
@@ -18,9 +23,13 @@ body {
 
 footer {
     background-color: #F5F5F5;
-    margin-top: 70px;
+    /*margin-top: 70px;*/
 	border-top: 1px solid #D4D4D4;
     box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+   	padding-left: 10px;
+   	padding-right: 10px;
+   	padding-top: 4px;
+   	padding-bottom: 4px;
 }
 
 footer p {
@@ -261,6 +270,10 @@ color: #555555;
 		padding-right: 10px;
 	}
 	
+	#wrap > .container {
+        padding-top: 0px;
+      }
+	
 	/* Inline-block quick links for more spacing */
 	.quick-links li {
 		display: inline-block;
@@ -276,6 +289,8 @@ color: #555555;
 		padding-top: 0;
 	}
 	
+
+	
 }
 
 /* Tablet
@@ -286,7 +301,10 @@ color: #555555;
 	body {
 		padding-top: 0;
 	}
-	
+		footer.footer {
+    margin-right: -20px;
+    margin-left: -20px;
+  }
 }
 
 /* Landscape phones
