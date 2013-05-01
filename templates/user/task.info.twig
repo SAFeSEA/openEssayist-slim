@@ -158,11 +158,15 @@
 					<td>{{ draft.wordcount }}</td>
 					<td>{% for item in draft.keywords[0:7] %} 
 						{{ ngram.toBtn(item) }}
-					{% endfor %}</td>
+						{% endfor %}</td>
 					<td>
-						{% if draft.processed != -1 %}				
+					{% if draft.processed == -1 %}				
+						<a class="btn btn-danger"  href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}">Try Again</a>
+					{% elseif draft.processed == 0 %}				
+						<a class="btn  btn-warning"  href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}">Waiting</a>
+					{% else %}				
 						<a class="btn btn-primary"  href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}">Show</a>
-						{% endif %}
+					{% endif %}
 					</td>
 				</tr>
 				{% endfor %}
