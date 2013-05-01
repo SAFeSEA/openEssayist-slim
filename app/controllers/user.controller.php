@@ -433,7 +433,13 @@ class UserController extends Controller
 
 	public function actionKeyword($draft)
 	{
-		$this->render('drafts/action.keyword');
+		$dr = $this->getDraft($draft);
+		$tsk = $dr->task()->find_one();
+		
+		$this->render('drafts/action.keyword',array(
+				'task' => $tsk->as_array(),
+				'draft' => $dr->as_array(),
+		));
 	}
 
 	public function viewGraph($draft,$graph=null)
