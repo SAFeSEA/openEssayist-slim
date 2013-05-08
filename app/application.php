@@ -102,6 +102,16 @@ class Application {
 				PRIMARY KEY (`id`)
 			)  AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 		");
+
+		// Draft Table
+		$this->db->exec("
+			CREATE TABLE IF NOT EXISTS `kwcategory` (
+				`id` int(11) NOT NULL AUTO_INCREMENT,
+				`draft_id` int(11) NOT NULL,
+				`category` LONGBLOB,
+				PRIMARY KEY (`id`)
+			)  AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+		");
 		
 		$iUser=0;
 		//var_dump($ret);

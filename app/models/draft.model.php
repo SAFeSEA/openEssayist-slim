@@ -24,6 +24,15 @@ class Draft extends Model {
 	public function user() {
 		return $this->belongs_to('Users');
 	}
+	
+	/**
+	 *
+	 * @key		KWCategory/draft_id
+	 * @return 	ORMWrapper
+	 */
+	public function kwCategories() {
+		return $this->has_one('KWCategory');
+	}
 
 	/**
 	 * 
@@ -42,5 +51,17 @@ class Draft extends Model {
 		$json = $this->analysis;
 		$rr = json_decode($json,$assoc);
 		return $rr;
+	}
+}
+
+class KWCategory extends Model {
+	/**
+	 *
+	 * @key		KWCategory/draft_id
+	 * @return 	Task
+	 * @see 	ORMWrapper
+	 */
+	public function task() {
+		return $this->belongs_to('Draft');
 	}
 }
