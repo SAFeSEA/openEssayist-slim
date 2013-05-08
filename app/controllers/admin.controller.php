@@ -69,4 +69,19 @@ class AdminController extends Controller
 		$this->render('admin/task.edit',array('task' => $task));
 	
 	}
+	
+	public function showEssayData()
+	{
+		$draft = Model::factory('Draft')->find_one();
+		$data = $draft->as_array();
+		$analysis = $draft->getAnalysis(true);
+		
+		$this->render('admin/data.json',array(
+				'keys' => array_keys($analysis),
+				'json' => $analysis
+		));
+		var_dump($analysis);
+		
+	}
+	
 }

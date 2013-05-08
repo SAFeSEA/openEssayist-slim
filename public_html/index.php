@@ -144,6 +144,7 @@ $c->app->get('/admin/reset', array($adminCtrl, 'reset'))->name('admin.reset');
 $c->app->get('/admin/users/', array($adminCtrl, 'allUsers'))->name('admin.users');
 $c->app->get('/admin/tasks/', array($adminCtrl, 'allTasks'))->name('admin.tasks');
 $c->app->get('/admin/task/:taskid', array($adminCtrl, 'editTask'))->via('GET', 'POST')->name('admin.task.edit');
+$c->app->get('/admin/analyser/', array($adminCtrl, 'showEssayData'))->name('admin.json');
 
 $c->app->error(array($appController, 'error'));
 

@@ -16,7 +16,7 @@
 				</a></p>
 				<p><div class="btn-group">
     				<button class="btn disabled "><i class="icon-upload"></i> Import</button>
-    				<button class="btn"><i class="icon-download"></i> Export</button>
+    				<button class="btn disabled"><i class="icon-download"></i> Export</button>
     			</div></p>
 			</div> 
 			<div class="widget-content"> 
@@ -27,6 +27,22 @@
 				<p><a class="btn" href="{{ urlFor('admin.tasks') }}">
 					<i class="icon-cog"></i>
 					<span>Manage Assignments</span>
+				</a></p>
+			</div> 
+		</div>
+	</div>
+</div>
+
+<div class="row-fluid">
+	<div class="span4">
+		<div class="widget">
+			<div class="widget-header">
+				<h3>Analyser</h3>
+			</div>
+			<div class="widget-content"> 
+				<p><a class="btn" href="{{ urlFor('admin.json') }}">
+					<i class="icon-cog"></i>
+					<span>Show JSON structure</span>
 				</a></p>
 			</div> 
 		</div>

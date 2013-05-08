@@ -1,0 +1,79 @@
+{% extends "site.twig" %} 
+
+{% block title %}Admin / JSON Structure {% endblock %} 
+
+{% block content %}
+
+<div class="row-fluid">
+	<div class="span3">
+		<div class="widget">
+			<div class="widget-header">
+				<h3>Database</h3>
+			</div>
+			<div class="widget-content">
+				{% for key in keys %}
+				<p><div class="btn-group">
+    				<a class="btn" href="#{{ key }}">{{ key }}</a>
+    			</div></p>
+				
+				{% endfor %}
+			</div> 
+		</div>
+	</div>
+	
+	<div class="span9">
+	<div class="widget-content">
+	<div><ul>
+		{% for key,item in json %}
+		<li><code><a id="{{ key }}">{{ key }}</a></code> => 
+			
+			{% for key2,item2 in item %}
+			<ul><li><code>{{ key2 }}</code> =>
+			
+
+				{% for key3,item3 in item2 %}
+				<ul><li><code>{{ key3 }}</code> =>
+				
+	
+					{% for key4,item4 in item3 %}
+					<ul><li><code>{{ key4 }}</code> =>
+					
+					
+						{% for key5,item5 in item4 %}
+						<ul><li><code>{{ key5 }}</code> =>
+						
+			
+						
+						
+						</li></ul>
+						{% else %}
+							{{ item4 }}
+						{%  endfor %}
+					
+					
+					</li></ul>
+					{% else %}
+						{{ item3 }}
+					{%  endfor %}
+				
+				
+				
+				</li></ul>
+				{% else %}
+					{{ item2 }}
+				{%  endfor %}
+			
+			
+			
+			</li></ul>
+			{% else %}
+				{{ item }}
+			{%  endfor %}
+		</li>
+		{% endfor %}
+		
+	</ul></div>
+	</div>
+	</div>
+</div>
+{% endblock %}
