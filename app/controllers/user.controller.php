@@ -436,10 +436,28 @@ class UserController extends Controller
 		$dr = $this->getDraft($draft);
 		$tsk = $dr->task()->find_one();
 		
+		$tt = $dr->kwCategories()->find_array();
+		$analysis = $dr->getAnalysis();
+		
+		//$cat = Model::factory('KWCategory')->create();
+		//$cat->draft_id = $dr->id;
+		//$cat->category = "THIS IS A TEST";
+		//$cat->save();
+		
+		$allkw = array_merge(array(),
+			$analysis->nvl_data->quadgrams,
+			$analysis->nvl_data->trigrams,
+			$analysis->nvl_data->bigrams,
+			$analysis->nvl_data->keywords
+		);
+		
 		$this->render('drafts/action.keyword',array(
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
+				'keywords' => $allkw
 		));
+		
+		//var_dump($tt);
 	}
 
 	public function viewGraph($draft,$graph=null)

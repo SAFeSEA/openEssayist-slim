@@ -1,4 +1,5 @@
 {% extends "site.twig" %} 
+{% import "widgets/ngram.macro.twig" as ngram %}
 
 {% block title %}Draft - Overview{% endblock %} 
 
@@ -8,7 +9,15 @@
 	min-height: 10px;
 }
 
+.ui-state-highlight
+{
+	min-height: 2em;
+	margin-bottom: 0px;
+}
+
+
 </style>
+<link href="/assets/jquery.minicolors/jquery.minicolors.css" rel="stylesheet">
 {% endblock %}
 
 {% block bccontainer %}		
@@ -51,10 +60,10 @@
 			<div class="widget-header"><h3>All</h3></div>
 			
 			<div class="widget-content">
-				<ul class="droptrue connectedSortable ui-sortable" id="category_all">
-					<li>fdfdfdfd</li>
-					<li>fdfdfdfd</li>
-					<li>fdfdfdfd</li>
+				<ul class="droptrue connectedSortable ui-sortable unstyled" id="category_all">
+					{% for key,item in keywords %}
+						<li class="" id="{{ key }}">{{ ngram.toBtn(item,false) }}</li>
+					{% endfor %}
 				</ul>
 			</div>
 		</div>
@@ -63,27 +72,7 @@
 		<div class="span9 widget-content-cats" id="widget-content-cats">
 			
 			<div class="row-fluid">
-			{% for nitem in 0..(random(1)+2)  %}
-			{% if nitem!=0 and nitem%2 == 0 %}
-				</div>
-				<div class="row-fluid">
-				{% endif %}
-				<div class="span6">
-					<div class="widget-header"><h3>Cat. {{ nitem }}</h3>
-						<div class="box-icon">
-							<a href="#" class="btn-setting"><i class="icon-wrench"></i></a>
-							<a href="#" class="btn-close"><i class="icon-remove"></i></a>
-						</div>
-					</div>
-					<div class="widget-content">
-						<ul class="droptrue connectedSortable ui-sortable" id="category_{{ nitem }}">
-							<li>fdfdfdfd</li>
-							<li>fdfdfdfd</li>
-							<li>fdfdfdfd</li>
-						</ul>
-					</div>
-				</div>
-			{% endfor %}
+
 			</div>
 				
 		</div>	
@@ -98,16 +87,44 @@
 </div>
 </div></div>
 
+<!-- Template for Keyword group -->
 <div class="span6 hide" id="cat_template">
 	<div class="widget-header"><h3></h3>
 		<div class="box-icon">
-			<a href="#" class="btn-setting"><i class="icon-wrench"></i></a>
-			<a href="#" class="btn-close"><i class="icon-remove"></i></a>
+			<a href="#" class="btn-setting" data-toggle="modal" data-target="#dlgSetting" data-category="ref_template"><i class="icon-wrench"></i></a>
+			<a href="#" class="btn-close" data-toggle="modal" data-target="#dlgClose" data-category="ref_template"><i class="icon-remove"></i></a>
 		</div>
 		</div>
 	<div class="widget-content" id="">
-		<ul class="droptrue connectedSortable ui-sortable" id="">
+		<ul class="droptrue connectedSortable ui-sortable unstyled" id="sort_template" style="min-height: 50px">
 		</ul>
+	</div>
+	<div class="widget-content info" id="">
+		<input class="grp_name" type="text" placeholder="Type something...">
+		<input class="grp_color" type="text" value="#3b98bd">
+		<textarea class=grp_desc" placeholder="Type something..."></textarea>
+	</div>
+</div>
+
+<!-- Modal -->
+<div id="dlgSetting" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
+		<h3 id="myModalLabel">Group Properties</h3>
+	</div>
+	<div class="modal-body">
+	    <form>
+    		<label>Name</label>
+    		<input id="dlg_name" type="text" placeholder="Type something...">
+    		<label>Color</label>
+    		<input class="minicolors" id="dlg_color" type="text" value="#3b98bd">
+		    <label>Description</label>
+    		<textarea placeholder="Type something..."></textarea>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		<button class="btn btn-primary">Save changes</button>
 	</div>
 </div>
 
@@ -115,21 +132,56 @@
 
 
 {% block injectJS %}
+<script src="/assets/d3.js/d3.v3.min.js"></script>
+<script src="/assets/jquery.minicolors/jquery.minicolors.js"></script>
 <script>
 $(document).ready(function() {
+	$('input.minicolors').minicolors({animationSpeed: 100});
+    $('#dlgSetting').on('hidden', function () {
+        //tt = $(this).find('.minicolors');
+        //if (tt) tt.minicolors('destroy');
+        console.log("hide");
+	});
+
+    var color = d3.scale.category10().range(); 
+	console.log(color);
+	
+	updateSortable = function()
+	{
+		// set the dropable widgets
+		$(".droptrue").sortable({
+			connectWith : ".connectedSortable",
+			placeholder : "ui-state-highlight",
+			update : function(event, ui) {
+				var order = $(this).sortable('toArray');
+				order=order.toString();
+				console.log(this.id + " " + order);
+			}
+		});
+		$(".droptrue").disableSelection();
+		$(".btn-setting").unbind('click');
+		$(".btn-setting").click(function(e) {
+			var myBookId = $(this).data('category');
+			console.log(myBookId);
+			var tp = $("#"+ myBookId);
+			if (tp)
+			{
+				g = tp.find('.grp_name');
+				if (g) $('#dlg_name').val(g.val()); 
+				g = tp.find('.grp_color');
+				if (g) $('#dlg_dlg').val(g.val()); 
+				$('#dlg_color').minicolors('value',g.val());
+							
+			}
+			//$('#dlg_color').val(dd);
+			//$('#dlg_color').minicolors('value',dd);
+		});
+	};
+	
 	//initialise the blockUI widget on AJAX calls
 	$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
+	updateSortable();
 
-	// set the dropable widgets
-	$(".droptrue").sortable({
-		connectWith : ".connectedSortable",
-		placeholder : "ui-state-highlight",
-		update : function(event, ui) {
-			var order = $(this).sortable('toArray').toString();
-			console.log(this.id + " " + order);
-		}
-	});
-	$(".droptrue").disableSelection();
 	
 	$("#catg-New").click(function(e) {
 		console.log("new category...");
@@ -137,30 +189,47 @@ $(document).ready(function() {
 		var holder = $('.widget-content-cats > .row-fluid :last');
 		var n = holder.children().length;
 		
-		var cat = $('#cat_template').clone();
-		cat.removeClass('hide');
-		if (n==1)
+		var template = $('#cat_template').clone();
+
+		var title = template.find("div.widget-header > h3");
+		if (title) title.text("New Category");
+		template.removeClass('hide');
+		template.removeAttr('id');
+		
+		if (n!=2)
 		{
-			cat.appendTo(holder);
+			template.appendTo(holder);
 		}
 		else
 		{
 			var newElement = $('<div class="row-fluid"></div>');
-			cat.appendTo(newElement);
+			template.appendTo(newElement);
 			
 			newElement.appendTo("#widget-content-cats");
 			// set the dropable widgets
-			$(".droptrue").sortable({
-				connectWith : ".connectedSortable",
-				placeholder : "ui-state-highlight",
-				update : function(event, ui) {
-					var order = $(this).sortable('toArray').toString();
-					console.log(this.id + " " + order);
-				}
-			});
-			$(".droptrue").disableSelection();
-			
 		}
+
+		var info = template.find('.grp_name');
+		if (info) info.val('New Category');
+
+		var clr = color.shift();
+		info = template.find('.grp_color');
+		if (info) info.val(clr);
+				
+		holder = $('.widget-content-cats');
+		var allcats = holder.find(".span6");
+		var nCats = allcats.length;
+		allcats.each(function(index)
+			{
+				$(this).attr('id','cat_'+index); 
+				var setting = $(this).find(".btn-setting");
+				if (setting) setting.attr('data-category','cat_'+index);
+				var close = $(this).find(".btn-close");
+				if (close) close.attr('data-category','cat_'+index);
+			});
+
+		
+		updateSortable();
 	});
 });
 
