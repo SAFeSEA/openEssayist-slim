@@ -1,7 +1,7 @@
 {% extends "site.twig" %} 
 {% import "widgets/ngram.macro.twig" as ngram %}
 
-{% block title %}Draft - Overview{% endblock %} 
+{% block title %}Draft - Keyword Categories{% endblock %} 
 
 {% block injectCSS %}
 <style>
@@ -14,6 +14,16 @@
 	min-height: 2em;
 	margin-bottom: 0px;
 }
+
+h3 > .cat_color
+{
+    border: 1px solid #D5D5D5;
+    margin-right: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    white-space: inherit;
+}
+
 
 
 </style>
@@ -89,20 +99,20 @@
 
 <!-- Template for Keyword group -->
 <div class="span6 hide" id="cat_template">
-	<div class="widget-header"><h3></h3>
+	<div class="widget-header"><h3><span class="cat_color"></span><span class="cat_name"></span></h3>
 		<div class="box-icon">
 			<a href="#" class="btn-setting" data-toggle="modal" data-target="#dlgSetting" data-category="ref_template"><i class="icon-wrench"></i></a>
-			<a href="#" class="btn-close" data-toggle="modal" data-target="#dlgClose" data-category="ref_template"><i class="icon-remove"></i></a>
+			<a href="#" class="btn-close disabled" data-toggle="modal" data-target="#dlgClose" data-category="ref_template"><i class="icon-remove"></i></a>
 		</div>
 		</div>
 	<div class="widget-content" id="">
-		<ul class="droptrue connectedSortable ui-sortable unstyled" id="sort_template" style="min-height: 50px">
+		<ul class="dropfalse connectedSortable ui-sortable unstyled" id="sort_template" style="min-height: 50px">
 		</ul>
 	</div>
-	<div class="widget-content info" id="">
+	<div class="widget-content info hide" id="">
 		<input class="grp_name" type="text" placeholder="Type something...">
 		<input class="grp_color" type="text" value="#3b98bd">
-		<textarea class=grp_desc" placeholder="Type something..."></textarea>
+		<textarea class="grp_desc" placeholder="Type something..."></textarea>
 	</div>
 </div>
 
@@ -114,17 +124,26 @@
 	</div>
 	<div class="modal-body">
 	    <form>
-    		<label>Name</label>
-    		<input id="dlg_name" type="text" placeholder="Type something...">
-    		<label>Color</label>
-    		<input class="minicolors" id="dlg_color" type="text" value="#3b98bd">
-		    <label>Description</label>
-    		<textarea placeholder="Type something..."></textarea>
+	    	<div class="controls controls-row">
+		    	<div class="controls span6">
+	    			<label>Name</label>
+	    			<input id="dlg_name" type="text" placeholder="Type something...">
+	    		</div>
+	    		<div class="controls span6">
+	    			<label>Color</label>
+	    			<input class="minicolors" id="dlg_color" type="text" value="#3b98bd">
+	    		</div>
+	    	</div>
+    		<div class="controls controls-row">
+		    	<label>Description</label>
+    			<textarea id="dlg_desc" class="input-block-level" placeholder="Type something..." rows="5" style="resize: vertical;"></textarea>
+    		</div>
+    		<input type="hidden" id="dlg_category" value="">
 		</form>
 	</div>
 	<div class="modal-footer">
-		<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-		<button class="btn btn-primary">Save changes</button>
+		<button id="dlg_close" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		<button id="dlg_save" class="btn btn-primary" data-dismiss="modal">Save changes</button>
 	</div>
 </div>
 
@@ -132,17 +151,44 @@
 
 
 {% block injectJS %}
+<script src="/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
 <script src="/assets/d3.js/d3.v3.min.js"></script>
 <script src="/assets/jquery.minicolors/jquery.minicolors.js"></script>
 <script>
 $(document).ready(function() {
-	$('input.minicolors').minicolors({animationSpeed: 100});
+	$('input.minicolors').minicolors({animationSpeed: 100,control: "wheel"});
     $('#dlgSetting').on('hidden', function () {
         //tt = $(this).find('.minicolors');
         //if (tt) tt.minicolors('destroy');
         console.log("hide");
 	});
 
+    $("#dlg_save").click(function(e) {
+    	var myBookId = $('#dlg_category').val() ;
+        console.log("save > " + myBookId);
+        var tp = $("#"+ myBookId);
+        if (tp)
+        {
+            var name = $('#dlg_name').val();
+            var color = $('#dlg_color').val();
+            var desc = $('#dlg_desc').val();
+            console.log(name + " " + color + " " + desc );
+			g = tp.find('.grp_name');
+			if (g) g.val(name); 
+			g = tp.find('.grp_color');
+			if (g) g.val(color); 
+			g = tp.find('.grp_desc');
+			if (g) g.val(desc); 
+
+			g = tp.find('h3 > .cat_name');
+			if (g) g.text(name);
+			g = tp.find('h3 > .cat_color');
+			if (g) g.css('background-color',color);
+					
+		}
+    });
+
+    	    
     var color = d3.scale.category10().range(); 
 	console.log(color);
 	
@@ -168,9 +214,13 @@ $(document).ready(function() {
 			{
 				g = tp.find('.grp_name');
 				if (g) $('#dlg_name').val(g.val()); 
+				g = tp.find('.grp_desc');
+				if (g) $('#dlg_desc').val(g.val()); 
+
 				g = tp.find('.grp_color');
 				if (g) $('#dlg_dlg').val(g.val()); 
 				$('#dlg_color').minicolors('value',g.val());
+				$('#dlg_category').val(myBookId); 
 							
 			}
 			//$('#dlg_color').val(dd);
@@ -179,9 +229,64 @@ $(document).ready(function() {
 	};
 	
 	//initialise the blockUI widget on AJAX calls
+	$.blockUI.defaults.baseZ = 1100; 
 	$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
 	updateSortable();
 
+	$("#catg-Save").click(function(e) {
+		
+		var json = {};
+		
+		var allcats = $('.droptrue');
+		allcats.each(function(index) {
+			var setting = $(this).sortable('toArray');
+			var id = $(this).attr('id');
+			json[id] = { 
+				'keywords': setting,
+				'id': id
+			};
+		});
+
+		holder = $('.widget-content-cats');
+		var allcats = holder.find(".span6");
+		allcats.each(function(index)
+		{
+			id = $(this).find('.droptrue').attr('id');
+			nm = $(this).find('.grp_name').val();
+			desc = $(this).find('.grp_desc').val();
+			clr = $(this).find('.grp_color').val();
+			json[id].attr = {
+					'name' : nm,
+					'desc' : desc,
+					'color': clr 
+				};
+		});
+		console.log(json);
+		$.ajax({
+			type : "POST",
+			method: "post",
+			url : "{{ urlFor('profile.save.keyword',{"idt":task.id}) }}", // URL and function to call
+			data : {	
+					"user": "{{  auth.user.id }}",
+					"task" : "{{ task.id }}", 
+					"draft": "{{ draft.id }}",
+					"data" : JSON.stringify(json)
+			}, 
+			//contentType : "application/json; charset=utf-8",
+			//processData : true,
+			dataType : "json",
+			success : function(msg, status) {
+				// Set Response outcome
+				console.log(msg);
+			},
+			error : function(xhr, msg, e) {
+				// this should only fire if the ajax call did not happen or
+				// there was an unhandled exception
+				console.log(msg);
+			}
+		});	
+
+	});
 	
 	$("#catg-New").click(function(e) {
 		console.log("new category...");
@@ -191,10 +296,17 @@ $(document).ready(function() {
 		
 		var template = $('#cat_template').clone();
 
-		var title = template.find("div.widget-header > h3");
+		var title = template.find("div.widget-header > h3 > .cat_name  ");
 		if (title) title.text("New Category");
 		template.removeClass('hide');
 		template.removeAttr('id');
+
+		var info = template.find('.dropfalse');
+		if (info)
+			{	info.removeClass('dropfalse');
+				info.addClass('droptrue');
+			}
+				
 		
 		if (n!=2)
 		{
@@ -215,7 +327,9 @@ $(document).ready(function() {
 		var clr = color.shift();
 		info = template.find('.grp_color');
 		if (info) info.val(clr);
-				
+		g = template.find('.cat_color');
+		if (g) g.css('background-color',clr);
+		
 		holder = $('.widget-content-cats');
 		var allcats = holder.find(".span6");
 		var nCats = allcats.length;
@@ -226,6 +340,8 @@ $(document).ready(function() {
 				if (setting) setting.attr('data-category','cat_'+index);
 				var close = $(this).find(".btn-close");
 				if (close) close.attr('data-category','cat_'+index);
+				var dropz = $(this).find(".droptrue");
+				dropz.attr('id','category_'+index); 
 			});
 
 		

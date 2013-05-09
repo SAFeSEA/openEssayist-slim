@@ -508,5 +508,69 @@ class UserController extends Controller
 		));
 	}
 
+	public function saveKeywords()
+	{
+		$req = $this->app->request();
+		$post = null;
+		if ($req && $req->isPost())
+			$post = $req->post();
+	
+		sleep(10);
+		//var_dump( $post);
+		header("Content-Type: application/json");
+		echo json_encode($post);
+		
+	}
 
+	
+	public function getExhibitJSON($draftid)
+	{
+		$json = array('items'=> array());
+
+		$dr = $this->getDraft($draftid);
+		$tsk = $dr->task()->find_one();
+		
+		date_default_timezone_set('UTC');
+		
+		$date = new DateTime();
+		$inc = $date;
+		$data = $dr->as_array();
+		$parasenttok = $dr->getParasenttok();
+		$analysis = $dr->getAnalysis();
+		foreach ($parasenttok as $key=>$tt)
+		{
+			$par = array(
+					'label' => 'paragraph'.$key,
+					'type' => 'paragraph',
+					'start' => $inc->format('M d Y'),
+					'sentence' => array()
+			);
+			foreach ($tt as $key=>$hh)
+			{
+				$inc->modify('+1 day');
+				$sen = array(
+						'label' => $hh['id'],
+						'type' => 'sentence',
+						'tag' => $hh['tag'],
+						'start' => $inc->format('M d Y'),
+						'text' => ''//$hh['text']
+				);
+				
+				
+				$par['sentence'][]=$hh['id'];
+				$json['items'][]=$sen;
+			}
+			$json['items'][]=$par;
+		}
+		
+		$response = $this->app->response();
+		$response['Content-Type'] = 'application/json';
+		$response['X-Powered-By'] = 'openEssayist';
+		$response->status(200);
+		
+		//$response->body(json_encode($parasenttok));
+		$response->body(json_encode($json));
+		
+	}
+	
 }

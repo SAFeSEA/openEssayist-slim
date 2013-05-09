@@ -130,6 +130,7 @@ $c->app->get('/me/essay/:idt/draft/(:idd(/))', array($userCtrl, 'drafts'))->name
 $c->app->get('/me/essay/:idt/submit/', array($userCtrl, 'submitDraft'))->via('GET', 'POST')->name('me.draft.submit');
 
 $c->app->post('/api/process/:idt', array($userCtrl, 'processDraft'))->name('me.draft.process');
+$c->app->get('/api/draft/:id/exhibit', array($userCtrl, 'getExhibitJSON'))->conditions(array('id' => '[0-9]+'))->name('api.draft.exhibit');
 
 $c->app->get('/me/draft/:draft/show/', array($userCtrl, 'showDraft'))->name('me.draft.show');
 $c->app->get('/me/draft/:draft/keyword/', array($userCtrl, 'showKeyword'))->name('me.draft.keywords');
@@ -137,6 +138,8 @@ $c->app->get('/me/draft/:draft/stats/', array($userCtrl, 'showStats'))->name('me
 $c->app->get('/me/draft/:draft/sentence/', array($userCtrl, 'showSentence'))->name('me.draft.sentence');
 $c->app->get('/me/draft/:draft/action/keyword', array($userCtrl, 'actionKeyword'))->name('me.draft.act.keyword');
 $c->app->get('/me/draft/:draft/view/(:graph)', array($userCtrl, 'viewGraph'))->name('me.draft.view.graph');
+
+$c->app->post('/profile/savedata/keywords', array($userCtrl, 'saveKeywords'))->name('profile.save.keyword');
 
 
 $c->app->get('/admin/', array($adminCtrl, 'index'))->name('admin.home');
