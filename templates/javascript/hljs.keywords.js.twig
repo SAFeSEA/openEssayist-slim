@@ -27,13 +27,14 @@
  * Define the pseudo language for the openEssayist keywords, as used by HighlightJS
  * @see HighlightJS
  */
-hljs.LANGUAGES['openessay'] = function(hljs) {
+hljs.LANGUAGES['openessayOLD'] = function(hljs) {
 
 	// define the formatters, based on pattern matching
 	var formatters = [];
 	{% for ngram in ngrams %}
 	formatters.push({
 		className: "ngram ngram{{ ngram.source|length }}",
+		dataContent: "data-keyword='1'",
 		begin: "\\b({{ ngram.source|join(')\\\\b\\\\s*\\\\b(') }})\\b",
         keywords: {"keyword":"{{ ngram.source|join(' ') }}"},
         relevance: 0
@@ -45,6 +46,39 @@ hljs.LANGUAGES['openessay'] = function(hljs) {
 	// return the "language" definition
 	return {
 		keywords: { 'keyword': "{{ GGG }}"},
+		contains: formatters
+	};
+	
+}(hljs);
+
+
+/**
+ * Define the pseudo language for the openEssayist keywords, as used by HighlightJS
+ * @see HighlightJS
+ */
+hljs.LANGUAGES['openessay'] = function(hljs) {
+
+	// define the formatters, based on pattern matching
+	var formatters = [];
+
+
+	{% for item in ngrams[1:] %}
+		{% set kw = item.kw %}
+		
+
+			formatters.push({
+				className: "ngram {{ item.id }}",
+				dataContent: "data-keyword='1'",
+				beginWithKeyword: true,
+		        keywords: {"keyword":"{{ kw|join(' ') }}"},
+		        relevance: 0
+			});
+			
+	{% endfor %}
+
+	// return the "language" definition
+	return {
+		
 		contains: formatters
 	};
 	

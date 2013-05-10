@@ -243,6 +243,11 @@ label.checkbox:before
 	cursor: help;
 }
 
+{% for key,item in groups[1:] %}
+.ngram.{{item.id}} .keyword {
+	color: {{ item.attr.color }} !important
+}
+{% endfor %}
 
 </style>
 {% endblock %}

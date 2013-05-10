@@ -312,12 +312,19 @@ class UserController extends Controller
 		$data = $dr->as_array();
 		$parasenttok = $dr->getParasenttok();
 		$analysis = $dr->getAnalysis();
-		if (isset($analysis))
+		/*if (isset($analysis))
 		{
 			$nagrams = $analysis->nvl_data->quadgrams;
 			$nagrams = array_merge($nagrams,$analysis->nvl_data->trigrams);
 			$nagrams = array_merge($nagrams,$analysis->nvl_data->bigrams);
-		}
+		}*/
+		
+		$allkw = array_merge(array(),
+				$analysis->nvl_data->quadgrams,
+				$analysis->nvl_data->trigrams,
+				$analysis->nvl_data->bigrams,
+				$analysis->nvl_data->keywords
+		);
 
 		$tt = $dr->kwCategories()->find_one();
 		$groups = array();
@@ -326,13 +333,29 @@ class UserController extends Controller
 			$groups = $tt->getGroups();
 		}
 		
+		$highlight = array();
 		
+		foreach ($groups as $key=>$group){
+			$format = array();
+			$format['id'] = $group['id'];
+			
+			$kw = $group['keywords'];
+			$nkw = array();
+			foreach($kw as $i=>$ref){
+				$ngram = $allkw[$ref];
+				$nkw = array_merge($nkw,$ngram->source);
+			}
+			//$group['keywords'] = $nkw;
+			$format['kw'] = array_unique($nkw);
+			$highlight[] = $format;
+		}
 		$this->render('drafts/draft.show',array(
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
 				'parasenttok' => $parasenttok,
-				'keywords' => $analysis->nvl_data->keywords,
-				'ngrams' => $nagrams,
+				//'keywords' => $analysis->nvl_data->keywords,
+				'keywords' => $allkw,
+				'ngrams' => $highlight,
 				'groups' => $groups
 		));
 	}
