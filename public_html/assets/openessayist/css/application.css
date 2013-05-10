@@ -85,8 +85,8 @@ img.brand-ico
 .widget {
     clear: both;
     margin-bottom: 2em;
-    overflow: hidden;
-    position: relative;
+    /*overflow: hidden;
+    position: relative;*/
     width: auto;
         box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
 }
@@ -194,6 +194,13 @@ color: #555555;
     margin-top: 1px;
      margin-right: 5px;
 }
+
+legend .box-icon{
+	 float: right;
+    margin-right: 1px;
+     margin-left: 5px;
+}
+
 
 .widget-header .box-icon a {
     margin: 0px;
