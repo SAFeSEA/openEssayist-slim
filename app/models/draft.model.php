@@ -64,4 +64,11 @@ class KWCategory extends Model {
 	public function task() {
 		return $this->belongs_to('Draft');
 	}
+	
+	public function getGroups($assoc=true)
+	{
+		$json = $this->category;
+		$rr = json_decode($json,$assoc);
+		return $rr;
+	}
 }

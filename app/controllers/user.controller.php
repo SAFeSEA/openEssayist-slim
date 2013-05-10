@@ -318,12 +318,22 @@ class UserController extends Controller
 			$nagrams = array_merge($nagrams,$analysis->nvl_data->trigrams);
 			$nagrams = array_merge($nagrams,$analysis->nvl_data->bigrams);
 		}
+
+		$tt = $dr->kwCategories()->find_one();
+		$groups = array();
+		if ($tt!=false)
+		{
+			$groups = $tt->getGroups();
+		}
+		
+		
 		$this->render('drafts/draft.show',array(
 				'task' => $tsk->as_array(),
-				'draft' => $dr	->as_array(),
+				'draft' => $dr->as_array(),
 				'parasenttok' => $parasenttok,
 				'keywords' => $analysis->nvl_data->keywords,
-				'ngrams' => $nagrams
+				'ngrams' => $nagrams,
+				'groups' => $groups
 		));
 	}
 
@@ -444,6 +454,13 @@ class UserController extends Controller
 		//$cat->category = "THIS IS A TEST";
 		//$cat->save();
 		
+		$tt = $dr->kwCategories()->find_one();
+		$groups = array();
+		if ($tt!=false)
+		{
+			$groups = $tt->getGroups();
+		}
+		
 		$allkw = array_merge(array(),
 			$analysis->nvl_data->quadgrams,
 			$analysis->nvl_data->trigrams,
@@ -454,10 +471,12 @@ class UserController extends Controller
 		$this->render('drafts/action.keyword',array(
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
-				'keywords' => $allkw
+				'keywords' => $allkw,
+				'groups' => $groups
 		));
+
 		
-		//var_dump($tt);
+		
 	}
 
 	public function viewGraph($draft,$graph=null)
@@ -512,13 +531,33 @@ class UserController extends Controller
 	{
 		$req = $this->app->request();
 		$post = null;
-		if ($req && $req->isPost())
-			$post = $req->post();
-	
-		sleep(10);
-		//var_dump( $post);
+		//if ($req && $req->isPost())
+		$post = $req->post();
+		$draftid = $post['draft'];
+
+		$dr = $this->getDraft($draftid);
+		$tt = $dr->kwCategories()->find_one();
+		if ($tt==false)
+		{
+			$cat = Model::factory('KWCategory')->create();
+			$cat->draft_id = $dr->id;
+			$cat->category = json_encode($post['data']);
+			$cat->save();
+			$tt = $cat;
+			//var_dump( $tt->category );
+					
+		}
+		else
+		{
+			$tt->category = json_encode($post['data']);
+			$tt->save();
+			//var_dump( $tt->category );
+		}
+		//sleep(10);
+		//var_dump( $tt);
 		header("Content-Type: application/json");
-		echo json_encode($post);
+		echo json_encode($tt->category);
+		//echo json_encode(array());
 		
 	}
 

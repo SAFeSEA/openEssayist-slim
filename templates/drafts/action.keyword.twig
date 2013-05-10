@@ -24,6 +24,13 @@ h3 > .cat_color
     white-space: inherit;
 }
 
+.ajax.alert
+{
+	margin-bottom: 0px;
+	font-weight: bolder;
+}
+
+
 
 
 </style>
@@ -37,11 +44,11 @@ h3 > .cat_color
     		<i class="icon-pencil"></i><span class="hidden-phone hidden-tablet"> {{ task.name }}</span></a>
 	</div></li>
 	<li><div class="btn-group">
-    	<button class="btn btn-small active disabled">Overview</button>
-    	<a href="{{ urlFor('me.draft.keywords',{"draft":draft.id}) }}" class="btn btn-small" >Keywords</a>
-    	<button class="btn btn-small">Sentences</button>
-    	<button class="btn btn-small">Stats</button>
-    </div></li>
+    	<a href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}" class="btn btn-small" >Overview</a>
+	   	<a href="{{ urlFor('me.draft.keywords',{"draft":draft.id}) }}" class="btn btn-small" >Keywords</a>
+    	<a href="{{ urlFor('me.draft.sentence',{"draft":draft.id}) }}" class="btn btn-small" >Sentences</a>
+    	<a href="{{ urlFor('me.draft.stats',{"draft":draft.id}) }}" class="btn btn-small" >Stats</a>
+	   	    </div></li>
 {% endblock %}
 
 {% block content %}
@@ -70,21 +77,57 @@ h3 > .cat_color
 			<div class="widget-header"><h3>All</h3></div>
 			
 			<div class="widget-content">
+				
 				<ul class="droptrue connectedSortable ui-sortable unstyled" id="category_all">
-					{% for key,item in keywords %}
-						<li class="" id="{{ key }}">{{ ngram.toBtn(item,false) }}</li>
-					{% endfor %}
+					{% if groups['category_all'] is defined %}
+						
+						{% for key2,item2 in groups['category_all']['keywords']  %}
+							<li class="" id="{{ item2 }}">{{ ngram.toBtn(keywords[item2],false) }}</li>
+						{% endfor %}
+					{% else %}
+						{% for key,item in keywords %}
+							<li class="" id="{{ key }}">{{ ngram.toBtn(item,false) }}</li>
+						{% endfor %}
+					{% endif %}
 				</ul>
 			</div>
 		</div>
 	
 
 		<div class="span9 widget-content-cats" id="widget-content-cats">
-			
 			<div class="row-fluid">
-
+			{% for key,item in groups[1:] %}
+				{% if loop.index0!=0 and loop.index0%2 == 0 %}
 			</div>
+			<div class="row-fluid">
+				{% endif %}
+				<div class="span6" id="cat_{{ loop.index0 }}">
+					
+					<div class="widget-header"><h3>
+								<span class="cat_color" style="background-color: {{ item.attr.color }};"></span>
+								<span class="cat_name">{{ item.attr.name }}</span></h3>
+						<div class="box-icon">
+							<a href="#" class="btn-setting" data-toggle="modal" data-target="#dlgSetting" data-category="cat_{{ loop.index0 }}"><i class="icon-wrench"></i></a>
+							<a href="#" class="btn-close disabled" data-toggle="modal" data-target="#dlgClose" data-category="cat_{{ loop.index0 }}"><i class="icon-remove"></i></a>
+						</div>
+						</div>
+					<div class="widget-content" id="">
+						<ul class="droptrue connectedSortable ui-sortable unstyled" id="{{ key }}" style="min-height: 50px">
+							{% for key2,item2 in item.keywords  %}
+								<li class="" id="{{ item2 }}">{{ ngram.toBtn(keywords[item2],false) }}</li>
+							{% endfor %}
+						</ul>
+					</div>
+					<div class="widget-content info hide" >
+							<input class="grp_name" type="text" placeholder="Type something..." value="{{ item.attr.name }}">
+							<input class="grp_color" type="text" value="{{ item.attr.color }}">
+							<textarea class="grp_desc" placeholder="Type something...">{{ item.attr.desc }}</textarea>
+					</div>
+				</div>
+			{% else %}
 				
+			{% endfor %}
+			</div>
 		</div>	
 	
 	
@@ -143,7 +186,7 @@ h3 > .cat_color
 	</div>
 	<div class="modal-footer">
 		<button id="dlg_close" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-		<button id="dlg_save" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+		<button id="dlg_save" class="btn btn-primary" data-dismiss="modal">OK</button>
 	</div>
 </div>
 
@@ -156,6 +199,13 @@ h3 > .cat_color
 <script src="/assets/jquery.minicolors/jquery.minicolors.js"></script>
 <script>
 $(document).ready(function() {
+	var is_dirty = false;
+
+	$(window).bind('beforeunload', function(){
+			if (is_dirty == true)
+		  		return 'Are you sure you want to leave?';
+		});
+	
 	$('input.minicolors').minicolors({animationSpeed: 100,control: "wheel"});
     $('#dlgSetting').on('hidden', function () {
         //tt = $(this).find('.minicolors');
@@ -184,12 +234,14 @@ $(document).ready(function() {
 			if (g) g.text(name);
 			g = tp.find('h3 > .cat_color');
 			if (g) g.css('background-color',color);
-					
+			is_dirty = true;		
 		}
     });
 
     	    
     var color = d3.scale.category10().range(); 
+    
+    color = color.slice({{ groups|length ? groups|length-1:0  }});
 	console.log(color);
 	
 	updateSortable = function()
@@ -202,6 +254,7 @@ $(document).ready(function() {
 				var order = $(this).sortable('toArray');
 				order=order.toString();
 				console.log(this.id + " " + order);
+				is_dirty = true;
 			}
 		});
 		$(".droptrue").disableSelection();
@@ -230,11 +283,11 @@ $(document).ready(function() {
 	
 	//initialise the blockUI widget on AJAX calls
 	$.blockUI.defaults.baseZ = 1100; 
-	$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
+	$(document).ajaxStop($.unblockUI);
 	updateSortable();
 
 	$("#catg-Save").click(function(e) {
-		
+		$.blockUI({ message: '<div class="ajax alert alert-info"><img src="/assets/openessayist/img/ajax-loader" /> Saving User Data ...</div>' }); 
 		var json = {};
 		
 		var allcats = $('.droptrue');
@@ -270,7 +323,7 @@ $(document).ready(function() {
 					"user": "{{  auth.user.id }}",
 					"task" : "{{ task.id }}", 
 					"draft": "{{ draft.id }}",
-					"data" : JSON.stringify(json)
+					"data" : json
 			}, 
 			//contentType : "application/json; charset=utf-8",
 			//processData : true,
@@ -278,6 +331,7 @@ $(document).ready(function() {
 			success : function(msg, status) {
 				// Set Response outcome
 				console.log(msg);
+				is_dirty = false;
 			},
 			error : function(xhr, msg, e) {
 				// this should only fire if the ajax call did not happen or
