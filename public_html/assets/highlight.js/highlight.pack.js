@@ -169,7 +169,9 @@ var hljs = new function() {
       }
       if (parent) {
         if (mode.beginWithKeyword) {
-          mode.begin = '\\b(' + keywords.join('|') + ')\\b\\s*';
+        	// NVL: fixed bug for keyword at end-of-line
+            //mode.begin = '\\b(' + keywords.join('|') + ')\\b\\s*';
+            mode.begin = '\\b(' + keywords.join('|') + ')\\b';
         }
         mode.beginRe = langRe(mode.begin ? mode.begin : '\\B|\\b');
         if (!mode.end && !mode.endsWithParent)
