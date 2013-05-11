@@ -88,15 +88,15 @@
 							{% for key,item in groups %}
 								<div class="controls controls-row">	
 									<label class="checkbox inline"> <input type="checkbox"
-										value="1" id="{{ item.id }}" class="cKeyword"
-										checked="checked"> {{ item.attr.name ? item.attr.name : "Default Group" }}
+										value="{{ item.id }}" class="cKeyword"
+										> {{ item.attr.name ? item.attr.name : "Default Group" }}
 									</label>
 								</div>								
 							{% else %}
 								<div class="controls controls-row">	
 									<label class="checkbox inline"> <input type="checkbox"
-										value="1" id="category_all" class="cKeyword"
-										checked="checked"> Default Group
+										value="category_all" class="cKeyword"
+										> Default Group
 									</label>
 								</div>
 							{% endfor %}
@@ -229,23 +229,38 @@ label.checkbox:before
 	content: "";
 }
 
-.openessay .keyword:before {
-	/*content: "-";
-	float: left;
-	width: 0px;
-	position: relative;
-	left: -15px;*/
-	
-}
 
 .openessay .keyword
 {
 	cursor: help;
 }
 
+.ngram.showKW .keyword {
+	text-shadow: none;
+	font-weight: bold;
+}
+
+.ngram.showKW {
+	border-style: dotted;
+	border-width: 1px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.ngram.category_all.showKW .keyword {
+	color: #880000 !important;
+}
+
 {% for key,item in groups[1:] %}
 .ngram.{{item.id}} .keyword {
-	color: {{ item.attr.color }} !important
+}
+
+.ngram.{{item.id}}.showKW {
+	border-color: {{ item.attr.color }} !important;
+}
+
+.ngram.{{item.id}}.showKW .keyword {
+	color: {{ item.attr.color }} !important;
 }
 {% endfor %}
 
@@ -270,8 +285,8 @@ label.checkbox:before
 
 		$("span.keyword").popover({
 			animation: true,
-			content: "ffdfddffddfdf",
-			title: "FDFDDFFDFD",
+			content: function(){ return "ffdfddffddfdf"},
+			title: "keyword",
 			trigger: 'hover'
 				});
 		
@@ -280,8 +295,8 @@ label.checkbox:before
 			console.log("DFDFFDDFFDFDFDFD");
 			$(this).popover({
 				animation: true,
-				content: "ffdfddffddfdf",
-				title: "FDFDDFFDFD",
+				content: function(){ return "ffdfddffddfdf"},
+				title: "keyword",
 				trigger: 'hover'
 					});
 			$(this).popover('show');
@@ -296,6 +311,14 @@ label.checkbox:before
 				$(classname).css({'display':'block'});
 			else
 				$(classname).css({'display':'none'});
+		
+		});
+
+		$('.cKeyword').change(function() {
+			var cbox = this;
+			var indicator = cbox.value;
+			var classname = ".ngram."+indicator;
+			$(classname).toggleClass("showKW");
 		
 		});
 		
