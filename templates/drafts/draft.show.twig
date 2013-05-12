@@ -22,17 +22,12 @@
 {% endblock %}
 
 {% block content %}
-<div class="row-fluid"><div class="span12">
-
-<div class="widget">
-			<div class="widget-header" data-toggle="collapse" data-target="#demo">
-				<h3> Display Options </h3>
-				<div class="box-icon">
-					<a class="btn-setting" href="#"><i class="icon-chevron-down"></i></a>
-				</div>
-			</div>
-			<div class="widget-content collapse" id="demo" > 
-				<div class="widget-content span3"> 
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<h3> Display Options </h3>
+	</div>
+	<div class="modal-body">
+	<div class="widget-content span3"> 
 				   
 						<legend>Structure</legend>
     					
@@ -114,11 +109,21 @@
 							
 							</div>
 			</div> 
-			</div> 
-		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">OK</button>
+	</div>
+</div>
+
+<div class="row-fluid">
+
+<div class="widget widget-content">
+<button data-target="#myModal" role="button" class="btn btn-primary pull-right" data-toggle="modal">
+		Display Options <i class="icon-check icon-white"></i></button>
+</div>
 
 
-</div></div>
+</div>
 
 <div class="row-fluid"><div class="span12">
 
@@ -147,6 +152,13 @@
 {% block injectCSS %}
 <link href="/assets/openessayist/css/hljs.css" rel="stylesheet">
 <style type="text/css">
+.modal-backdrop,
+.modal-backdrop.fade.in {
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+
+
 p.oe-par {
 	margin: 1em 0 1em 0;
 	white-space: inherit;
