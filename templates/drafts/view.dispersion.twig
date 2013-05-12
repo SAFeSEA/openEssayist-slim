@@ -1,0 +1,135 @@
+{% extends "site.twig" %} 
+
+{% block title %}Draft - Visualisation (Dispersion){% endblock %} 
+
+
+{% block bccontainer %}		
+	{% include "widgets/breadcrumb.panel.twig" %}
+	    <li><div class="btn-group">
+    	<a href="{{ urlFor('me.drafts',{"idt":task.id}) }}" class="btn btn-small" >
+    		<i class="icon-pencil"></i><span class="hidden-phone hidden-tablet"> {{ task.name }}</span></a>
+	</div></li>
+	<li><div class="btn-group">
+    	<a href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}" class="btn btn-small" >Overview</a>
+	   	<a href="{{ urlFor('me.draft.keywords',{"draft":draft.id}) }}" class="btn btn-small" >Keywords</a>
+    	<a href="{{ urlFor('me.draft.sentence',{"draft":draft.id}) }}" class="btn btn-small" >Sentences</a>
+    	<a href="{{ urlFor('me.draft.stats',{"draft":draft.id}) }}" class="btn btn-small" >Stats</a>
+    </div></li>
+{% endblock %}
+
+{% block content %}
+
+<div class="row-fluid"><div class="span12">
+
+<div class="widget">
+<div class="widget-header" data-toggle="collapse" data-target="#demo">
+	<h3>Keyword Dispersion</h3>
+	
+</div>
+<div class="widget-content">
+	<div id="container" style="height: 800px;margin: 0 auto">
+	<div id="resizer" >
+		<div id="inner-resizer">
+	    	
+	    	</div>
+	    </div>
+	</div>
+</div>
+</div></div>
+
+{% endblock %}
+
+{% block injectJS %}
+<script src="/assets/highcharts/js/highcharts.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	var chart = null;
+	
+	$('#resizer').resizable({
+		ghost: false,
+		animate: false,
+	    // On resize, set the chart size to that of the 
+	    // resizer minus padding. If your chart has a lot of data or other
+	    // content, the redrawing might be slow. In that case, we recommend 
+	    // that you use the 'stop' event instead of 'resize'.
+	    resize: function() {
+	        if (chart) chart.setSize(
+	            this.offsetWidth - 20, 
+	            this.offsetHeight - 20,
+	            false
+	        );
+	    }
+	});
+
+
+	chart = new Highcharts.Chart({
+		chart: {
+			renderTo: 'container',
+			type: 'scatter',
+			zoomType: 'xy',
+			reflow: true
+		},
+		title: {
+			text: 'Keyword Dispersion'
+		},
+		xAxis: {
+			min: 0,
+	    	title: {
+		    	enabled: true,
+		        text: 'word count'
+			},
+			startOnTick: true,
+			endOnTick: true,
+			showLastLabel: true
+		},
+		yAxis: {
+			min: 0,
+			title: {
+				enabled: false,
+				text: null
+			},
+			startOnTick: false,
+			endOnTick: true,
+			categories: {{ categories|json_encode|raw }},
+			labels: {}
+		},
+		plotOptions: {
+			series: {
+				stickyTracking: false
+			},
+			scatter: {
+				marker: {
+					symbol: 'square',
+					radius: 5,
+					states: {
+						hover: {
+							enabled: true,
+							lineColor: 'rgb(100,100,100)'
+						}
+					}
+				},
+				states: {
+					hover: {
+						marker: {
+							enabled: false
+						}
+					}
+				}
+			}
+		},
+		series: {{ series|json_encode|raw }}
+			
+	});
+
+
+
+	
+});
+
+</script>
+{% endblock %}
+
+{% block injectCSS %}
+<style type="text/css">
+</style>
+{% endblock %}

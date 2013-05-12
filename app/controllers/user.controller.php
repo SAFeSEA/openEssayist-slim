@@ -327,6 +327,13 @@ class UserController extends Controller
 		{
 			$groups = $tt->getGroups();
 		}
+		else {
+			$kw = array();
+			foreach ($allkw as $key=>$item)
+				$kw[] = $key; 
+			$groups = array(array('id' => 'category_all','keywords' => $kw));
+		}
+		
 		
 		$highlighjs = array();
 		
@@ -337,8 +344,10 @@ class UserController extends Controller
 				
 			$kw = $group['keywords'];
 			$nkw2 = array();
+			
+			if (!$kw) $kw=array();
 
-			foreach($kw as $i=>$ref){
+			foreach($kw as $ref){
 				$ngram = $allkw[$ref];
 				$nkw2[] = $allkw[$ref];
 			}
@@ -349,6 +358,8 @@ class UserController extends Controller
 			$formatter['kw'] = $nkw2;
 			$highlighjs[] = $formatter;
 		}
+		
+		
 	
 		$this->render('drafts/draft.show',array(
 				'task' => $tsk->as_array(),
@@ -502,6 +513,85 @@ class UserController extends Controller
 		
 	}
 
+	public function viewDispersion($draft)
+	{
+		// Get request object
+		//$req = $this->app->request();
+		//$env = $this->app->environment();
+		//$a = $env['PATH_INFO'];
+		//$this->app->etag('12345'.$draft);
+		//$this->app->expires('+1 week');
+		
+		
+		$dr = $this->getDraft($draft);
+		$tsk = $dr->task()->find_one();
+		
+		$analysis = $dr->getAnalysis();
+		$text = $dr->getParasenttok();
+		
+		// Join the array into a single string
+		foreach ($text as $index => &$par)
+		{	
+			foreach ($par as $index2 => &$sent)
+				$sent = $sent['text'];
+			$par = "" . join(" ", $par);
+		}
+		$text = "" . join(" ", $text);
+		$count = str_word_count($text, 1);
+		$count = array_map('strtolower', $count);
+		//$ret = array_search(strtolower("learners"), array_map('strtolower', $count));
+		
+		
+		
+		$allkw = array_merge(array(),
+				//$analysis->nvl_data->quadgrams,
+				//$analysis->nvl_data->trigrams,
+				$analysis->nvl_data->bigrams,
+				$analysis->nvl_data->keywords
+		);
+		
+		$categories=array();
+		$series=array();
+		$series2= array(
+					'name' => "TEST",
+					'data' => array()
+					);
+		foreach ($allkw as  $key=>$kw)
+		{	
+			$cnt = $kw->count;
+			$src = $kw->source;
+			$ngram = $kw->ngram;
+			$score = $kw->score;
+			//var_dump($kw);
+			$dispers=array();
+			foreach ($src as $infform)
+			{	
+				$ret = array_keys($count,strtolower($infform));
+				$dispers = array_merge($dispers,$ret);
+			}
+			//var_dump($dispers);
+			sort($dispers,SORT_NUMERIC);
+			//var_dump($dispers);
+			array_walk($dispers,function (&$item1, $key, $prefix) { $item1 = array($item1,$prefix); },$key);
+			//var_dump($dispers);
+			
+			$series[] = array(
+					'name' => "".join($ngram," "),
+					'data' => $dispers
+					);
+			$series2['data'] = array_merge($series2['data'],$dispers);
+			$categories[] = "".join($ngram," ");
+		}
+		$series2['data'] = array_slice($series2['data'],0, 1000);
+		
+		$this->render('drafts/view.dispersion',array(
+				'task' => $tsk->as_array(),
+				'draft' => $dr->as_array(),
+				'series' => array($series2),
+				'categories' => $categories
+		));		
+	}
+	
 	public function viewGraph($draft,$graph=null)
 	{
 		$graphlist = array(
@@ -557,6 +647,8 @@ class UserController extends Controller
 		//if ($req && $req->isPost())
 		$post = $req->post();
 		$draftid = $post['draft'];
+		
+		
 
 		$dr = $this->getDraft($draftid);
 		$tt = $dr->kwCategories()->find_one();
