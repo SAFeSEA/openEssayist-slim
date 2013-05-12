@@ -75,12 +75,13 @@ class AdminController extends Controller
 		$draft = Model::factory('Draft')->find_one();
 		$data = $draft->as_array();
 		$analysis = $draft->getAnalysis(true);
+		ksort($analysis);
 		
 		$this->render('admin/data.json',array(
 				'keys' => array_keys($analysis),
 				'json' => $analysis
 		));
-		var_dump($analysis);
+		
 		
 	}
 	

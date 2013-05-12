@@ -26,49 +26,21 @@
 	<div><ul>
 		{% for key,item in json %}
 		<li><code><a id="{{ key }}">{{ key }}</a></code> => 
-			
-			{% for key2,item2 in item %}
-			<ul><li><code>{{ key2 }}</code> =>
-			
-
-				{% for key3,item3 in item2 %}
-				<ul><li><code>{{ key3 }}</code> =>
-				
-	
-					{% for key4,item4 in item3 %}
-					<ul><li><code>{{ key4 }}</code> =>
-					
-					
-						{% for key5,item5 in item4 %}
-						<ul><li><code>{{ key5 }}</code> =>
-						
-			
-						
-						
-						</li></ul>
-						{% else %}
-							{{ item4 }}
-						{%  endfor %}
-					
-					
-					</li></ul>
-					{% else %}
-						{{ item3 }}
-					{%  endfor %}
-				
-				
-				
-				</li></ul>
-				{% else %}
-					{{ item2 }}
-				{%  endfor %}
-			
-			
-			
-			</li></ul>
-			{% else %}
-				{{ item }}
-			{%  endfor %}
+		{% if key in ['version'] %}
+			{{ item |json_encode|raw }}
+		{% elseif key in ['body','ke_stats','refs','concl','intro','appendix','se_stats'] %}
+		<ul>
+			{% for  key2,item2 in item %}
+			    <li> <code>{{ key2 }}</code> =>  {{ item2 |json_encode|raw }}
+			{% endfor %}
+		</ul>
+		{% elseif key in ['ke_data'] %}
+		<ul>
+			{% for  key2,item2 in item %}
+			    <li> <code>{{ key2 }}</code> =>  {{ item2 |json_encode|raw }}
+			{% endfor %}
+		</ul>
+		{% endif %}
 		</li>
 		{% endfor %}
 		
