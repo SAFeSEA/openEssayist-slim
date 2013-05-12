@@ -16,8 +16,14 @@
     	<a href="{{ urlFor('me.draft.stats',{"draft":draft.id}) }}" class="btn btn-small" >Stats</a>
     </div></li>
 	<li><div class="btn-group">
-    	<a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id}) }}" class="btn btn-small" >Keywords</a>
-    </div></li>
+		<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">Views <span class="caret"></span></a>
+    	<ul class="dropdown-menu">
+			<li><a href="{{ urlFor('me.draft.view.dispersion',{"draft":draft.id}) }}">Keyword Dispersion</a>
+			<li class="divider"></li>
+    	  	<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphke"}) }}">Keyword Graph</a>
+    	  	<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphse"}) }}">Sentence Graph</a>
+		</ul></div>
+    </li>
     
 {% endblock %}
 
