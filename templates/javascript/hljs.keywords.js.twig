@@ -24,22 +24,20 @@ hljs.LANGUAGES['openessay'] = function(hljs) {
 	var formatters = [];
 	
 	{% for item in ngrams[0:] %}
-		{% set kw = item.kw %}
-		{% set id = item.id %}
-		{% for ss in kw %}
-			formatters.push({
-				className: "ngram {{ id }}",
-				dataContent: "data-keyword='1'",
-			{% if (ss.ngram|length) == 1 %}
-				beginWithKeyword: true, 
-				keywords: '{{ ss.source|join(' ') }}',
-			{% else %}
-				begin: "\\b({{ ss.source|join(')\\\\b\\\\s*\\\\b(') }})\\b",
-			    keywords: '{{ ss.source|join(' ') }}',
-			{% endif %}
-		        relevance: 0
-			});
-		{% endfor %}
+		{% set id = item.groupid %}
+	formatters.push({
+		className: "ngram {{ id }}",
+		dataContent: "data-keyword='1'",
+		{% if (item.ngram|length) == 1 %}
+		beginWithKeyword: true, 
+		keywords: '{{ item.source|join(' ') }}',
+		{% else %}
+		begin: "\\b({{ item.source|join(')\\\\b\\\\s*\\\\b(') }})\\b",
+		keywords: '{{ item.source|join(' ') }}',
+		{% endif %}
+		relevance: 0
+	});
+	
 	{% endfor %}
 	// return the "language" definition
 	return {

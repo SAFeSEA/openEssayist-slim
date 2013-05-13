@@ -82,7 +82,12 @@ $(document).ready(function() {
 		title: {
 			text: 'Keyword Dispersion'
 		},
-		xAxis: {
+		tooltip: {
+			formatter: function() {
+				return this.series.name + ' ' + this.x;
+	                }
+	    },
+	    xAxis: {
 			min: 0,
 	    	title: {
 		    	enabled: true,
@@ -90,7 +95,17 @@ $(document).ready(function() {
 			},
 			startOnTick: true,
 			endOnTick: true,
-			showLastLabel: true
+			showLastLabel: true,
+			plotBands: [
+				{% for key,band in structure %}
+					/* {{ dump(key) }}*/
+					{
+						from: {{ band.from }},
+						to: {{ band.to }},
+						color: '{{ band.color }}'
+					},
+				{% endfor %}
+				]
 		},
 		yAxis: {
 			min: 0,

@@ -339,27 +339,34 @@ class UserController extends Controller
 		
 		foreach ($groups as $key=>$group){
 			
-			$formatter = array();
-			$formatter['id'] = $group['id'];
+			//$formatter = array();
+			//$formatter['id'] = $group['id'];
 				
 			$kw = $group['keywords'];
 			$nkw2 = array();
 			
-			if (!$kw) $kw=array();
+	//		if (!$kw) $kw=array();
 
-			foreach($kw as $ref){
+			if ($kw) foreach($kw as $ref){
 				$ngram = $allkw[$ref];
-				$nkw2[] = $allkw[$ref];
+				
+				$ngram->groupid =  $group['id'];
+				
+				$highlighjs[] = $ngram;
+				//$nkw2[] = $allkw[$ref];
 			}
-			usort($nkw2,function($a,$b)
-			{
-				return count($b->ngram)-count($a->ngram);
-			});
-			$formatter['kw'] = $nkw2;
-			$highlighjs[] = $formatter;
+			//usort($nkw2,function($a,$b)
+			//{
+			//	return count($b->ngram)-count($a->ngram);
+			//});
+			//$formatter['kw'] = $nkw2;
+			//$highlighjs[] = $formatter;
 		}
-		
-		
+		usort($highlighjs,function($a,$b)
+		{
+			return count($b->ngram)-count($a->ngram);
+		});
+	
 	
 		$this->render('drafts/draft.show',array(
 				'task' => $tsk->as_array(),
@@ -502,7 +509,8 @@ class UserController extends Controller
 			$analysis->nvl_data->keywords
 		);
 		
-		$this->render('drafts/action.keyword',array(
+		$tmpl = array('drag'=>'drafts/action.keyword','table'=>'drafts/action.keyword.table');
+		$this->render($tmpl['drag'],array(
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
 				'keywords' => $allkw,
@@ -529,15 +537,41 @@ class UserController extends Controller
 		$analysis = $dr->getAnalysis();
 		$text = $dr->getParasenttok();
 		
-		// Join the array into a single string
+		
+		$struct = array(
+				$analysis->intro->i_first,
+				$analysis->intro->i_last,
+				$analysis->concl->c_first,
+				$analysis->concl->c_last);
+		
+		$struct2 = array();
+		$count = array();
+		// Join the array into a single string and count words
 		foreach ($text as $index => &$par)
 		{	
 			foreach ($par as $index2 => &$sent)
 				$sent = $sent['text'];
 			$par = "" . join(" ", $par);
+			$count2 = str_word_count($par, 1);
+			$struct2[] = count($count2);
+			$count = array_merge($count,$count2);
+			//var_dump($struct2,$count);
 		}
+		
+		$limit= array(
+			'Introduction'=> array(
+					'color' => 'rgba(255, 0, 0, 0.1)',
+					'from' => array_sum(array_slice($struct2,0,$analysis->intro->i_first)),
+					'to' => array_sum(array_slice($struct2,0,$analysis->intro->i_last+1))),
+			'Conclusion'=> array(
+					'color' => 'rgba(0, 255, 0, 0.1)',
+					'from' => array_sum(array_slice($struct2,0,$analysis->concl->c_first)),
+					'to' => array_sum(array_slice($struct2,0,$analysis->concl->c_last+1))),
+
+			);
+
 		$text = "" . join(" ", $text);
-		$count = str_word_count($text, 1);
+// 		/$count = str_word_count($text, 1);
 		$count = array_map('strtolower', $count);
 		//$ret = array_search(strtolower("learners"), array_map('strtolower', $count));
 		
@@ -545,9 +579,10 @@ class UserController extends Controller
 		
 		$allkw = array_merge(array(),
 				//$analysis->nvl_data->quadgrams,
-				//$analysis->nvl_data->trigrams,
+				$analysis->nvl_data->trigrams,
 				$analysis->nvl_data->bigrams,
-				$analysis->nvl_data->keywords
+				$analysis->nvl_data->keywords,
+				array()
 		);
 		
 		$categories=array();
@@ -556,25 +591,61 @@ class UserController extends Controller
 					'name' => "TEST",
 					'data' => array()
 					);
+		
+		//var_dump($count);
+		$yaxis=0;
 		foreach ($allkw as  $key=>$kw)
 		{	
 			$cnt = $kw->count;
 			$src = $kw->source;
 			$ngram = $kw->ngram;
 			$score = $kw->score;
-			//var_dump($kw);
+			
 			$dispers=array();
-			foreach ($src as $infform)
+			if (count($ngram)>1)
+			{	
+				$temp = array();
+				// find occurences of all individal terms and merge indexes
+				foreach ($src as $infform)
+				{	
+					$ret = array_keys($count,strtolower($infform));
+					$temp = array_merge($temp,$ret);
+				}
+				// sort indexes numerially
+				sort($temp);
+				$res = array();
+				$prev = -1000;
+				// find indexes that are consecutive (definition of ngram)
+				foreach ($temp as $key=>$val)
+				{ 	
+					$diff = $val-$prev;
+					if ($diff==1)
+					{
+						$res[] = $prev;
+						$res[] = $val;
+					}
+					$prev = $val;
+				}
+				
+				// remove duplicates
+				$res = array_unique($res);
+				// if needed, get only the first index of each ngram
+				//$res = array_chunk($res,count($ngram));
+				
+				// merge the indexes into the dispersion array
+				$dispers = array_merge($dispers,$res);
+			}
+			else foreach ($src as $infform)
 			{	
 				$ret = array_keys($count,strtolower($infform));
 				$dispers = array_merge($dispers,$ret);
 			}
-			//var_dump($dispers);
+			//sort the indexes
 			sort($dispers,SORT_NUMERIC);
-			//var_dump($dispers);
-			array_walk($dispers,function (&$item1, $key, $prefix) { $item1 = array($item1,$prefix); },$key);
-			//var_dump($dispers);
-			
+			// add the y-axis values
+			array_walk($dispers,function (&$item1, $key, $yaxis) { $item1 = array($item1,$yaxis); },$yaxis);
+			$yaxis++;
+
 			$series[] = array(
 					'name' => "".join($ngram," "),
 					'data' => $dispers
@@ -582,13 +653,17 @@ class UserController extends Controller
 			$series2['data'] = array_merge($series2['data'],$dispers);
 			$categories[] = "".join($ngram," ");
 		}
+		
 		$series2['data'] = array_slice($series2['data'],0, 1000);
+		//var_dump($series2);
 		
 		$this->render('drafts/view.dispersion',array(
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
 				'series' => array($series2),
-				'categories' => $categories
+				//'series' => ($series),
+				'categories' => $categories,
+				'structure' => $limit
 		));		
 	}
 	

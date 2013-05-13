@@ -1,0 +1,384 @@
+{% extends "site.twig" %} 
+{% import "widgets/ngram.macro.twig" as ngram %}
+
+{% block title %}Draft - Keyword Categories{% endblock %} 
+
+{% block injectCSS %}
+<style>
+.droptrue {
+	min-height: 10px;
+}
+
+.ui-state-highlight
+{
+	min-height: 2em;
+	margin-bottom: 0px;
+}
+
+h3 > .cat_color
+{
+    border: 1px solid #D5D5D5;
+    margin-right: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    white-space: inherit;
+}
+
+.ajax.alert
+{
+	margin-bottom: 0px;
+	font-weight: bolder;
+}
+
+
+
+
+</style>
+<link href="/assets/jquery.minicolors/jquery.minicolors.css" rel="stylesheet">
+<link href="/assets/jquery.dataTables/css/jquery.dataTables.css" rel="stylesheet">
+
+
+{% endblock %}
+
+{% block bccontainer %}		
+	{% include "widgets/breadcrumb.panel.twig" %}
+	    <li><div class="btn-group">
+    	<a href="{{ urlFor('me.drafts',{"idt":task.id}) }}" class="btn btn-small" >
+    		<i class="icon-pencil"></i><span class="hidden-phone hidden-tablet"> {{ task.name }}</span></a>
+	</div></li>
+	<li><div class="btn-group">
+    	<a href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}" class="btn btn-small" >Overview</a>
+	   	<a href="{{ urlFor('me.draft.keywords',{"draft":draft.id}) }}" class="btn btn-small" >Keywords</a>
+    	<a href="{{ urlFor('me.draft.sentence',{"draft":draft.id}) }}" class="btn btn-small" >Sentences</a>
+    	<a href="{{ urlFor('me.draft.stats',{"draft":draft.id}) }}" class="btn btn-small" >Stats</a>
+	   	    </div></li>
+	<li><div class="btn-group">
+		<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">Views <span class="caret"></span></a>
+    	<ul class="dropdown-menu">
+			<li><a href="{{ urlFor('me.draft.view.dispersion',{"draft":draft.id}) }}">Keyword Dispersion</a>
+			<li class="divider"></li>
+    	  	<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphke"}) }}">Keyword Graph</a>
+    	  	<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphse"}) }}">Sentence Graph</a>
+		</ul></div>
+    </li>	   	    
+{% endblock %}
+
+{% block content %}
+<div class="row-fluid"><div class="span12">
+
+<div class="widget">
+<div class="widget-header"><i class="icon-list-alt"></i><h3>Keywords</h3></div>	
+
+<div class="widget-toolbar">
+	<div class="btn-toolbar">    
+	<div class="btn-group">
+    				<button id="catg-Save" class="btn btn-mini btn-primary">Save</button>
+    				<button id="catg-Reset" class="btn btn-mini disabled">Reset</button>
+    				</div>
+
+    				<div class="btn-group">
+    				<button id="catg-New" class="btn btn-mini">New Category...</button>
+    			</div>
+    		</div>
+</div>
+
+
+<div class="widget-content">
+	<div class="row-fluid">
+	
+	
+	<table id="table_id">
+	<thead>
+		<tr>
+			<th>Column 1</th>
+
+		</tr>
+	</thead>
+	<tbody>
+		{% for key,item in keywords %}
+		<tr>
+		<td>{{ ngram.toBtn(item,false) }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+
+</table>
+	
+	
+	</div>		
+</div>
+	
+			
+		
+</div>
+</div></div>
+
+<!-- Template for Keyword group -->
+<div class="span6 hide" id="cat_template">
+	<div class="widget-header"><h3><span class="cat_color"></span><span class="cat_name"></span></h3>
+		<div class="box-icon">
+			<a href="#" class="btn-setting" data-toggle="modal" data-target="#dlgSetting" data-category="ref_template"><i class="icon-wrench"></i></a>
+			<a href="#" class="btn-close disabled" data-toggle="modal" data-target="#dlgClose" data-category="ref_template"><i class="icon-remove"></i></a>
+		</div>
+		</div>
+	<div class="widget-content" id="">
+		<ul class="dropfalse connectedSortable ui-sortable unstyled" id="sort_template" style="min-height: 50px">
+		</ul>
+	</div>
+	<div class="widget-content info hide" id="">
+		<input class="grp_name" type="text" placeholder="Type something...">
+		<input class="grp_color" type="text" value="#3b98bd">
+		<textarea class="grp_desc" placeholder="Type something..."></textarea>
+	</div>
+</div>
+
+<!-- Modal -->
+<div id="dlgSetting" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
+		<h3 id="myModalLabel">Group Properties</h3>
+	</div>
+	<div class="modal-body">
+	    <form>
+	    	<div class="controls controls-row">
+		    	<div class="controls span6">
+	    			<label>Name</label>
+	    			<input id="dlg_name" type="text" placeholder="Type something...">
+	    		</div>
+	    		<div class="controls span6">
+	    			<label>Color</label>
+	    			<input class="minicolors" id="dlg_color" type="text" value="#3b98bd">
+	    		</div>
+	    	</div>
+    		<div class="controls controls-row">
+		    	<label>Description</label>
+    			<textarea id="dlg_desc" class="input-block-level" placeholder="Type something..." rows="5" style="resize: vertical;"></textarea>
+    		</div>
+    		<input type="hidden" id="dlg_category" value="">
+		</form>
+	</div>
+	<div class="modal-footer">
+		<button id="dlg_close" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		<button id="dlg_save" class="btn btn-primary" data-dismiss="modal">OK</button>
+	</div>
+</div>
+
+{% endblock %}
+
+
+{% block injectJS %}
+<script src="/assets/jquery.dataTables/js/jquery.dataTables.min.js"></script>
+<script src="/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
+<script src="/assets/d3.js/d3.v3.min.js"></script>
+<script src="/assets/jquery.minicolors/jquery.minicolors.js"></script>
+<script>
+$(document).ready(function() {
+	var is_dirty = false;
+
+	$('#table_id').dataTable();
+
+	$(window).bind('beforeunload', function(){
+			if (is_dirty == true)
+		  		return 'Are you sure you want to leave?';
+		});
+	
+	$('input.minicolors').minicolors({animationSpeed: 100,control: "wheel"});
+    $('#dlgSetting').on('hidden', function () {
+        //tt = $(this).find('.minicolors');
+        //if (tt) tt.minicolors('destroy');
+        console.log("hide");
+	});
+
+    $("#dlg_save").click(function(e) {
+    	var myBookId = $('#dlg_category').val() ;
+        console.log("save > " + myBookId);
+        var tp = $("#"+ myBookId);
+        if (tp)
+        {
+            var name = $('#dlg_name').val();
+            var color = $('#dlg_color').val();
+            var desc = $('#dlg_desc').val();
+            console.log(name + " " + color + " " + desc );
+			g = tp.find('.grp_name');
+			if (g) g.val(name); 
+			g = tp.find('.grp_color');
+			if (g) g.val(color); 
+			g = tp.find('.grp_desc');
+			if (g) g.val(desc); 
+
+			g = tp.find('h3 > .cat_name');
+			if (g) g.text(name);
+			g = tp.find('h3 > .cat_color');
+			if (g) g.css('background-color',color);
+			is_dirty = true;		
+		}
+    });
+
+    	    
+    var color = d3.scale.category10().range(); 
+    
+    color = color.slice({{ groups|length ? groups|length-1:0  }});
+	console.log(color);
+	
+	updateSortable = function()
+	{
+		// set the dropable widgets
+		$(".droptrue").sortable({
+			connectWith : ".connectedSortable",
+			placeholder : "ui-state-highlight",
+			update : function(event, ui) {
+				var order = $(this).sortable('toArray');
+				order=order.toString();
+				console.log(this.id + " " + order);
+				is_dirty = true;
+			}
+		});
+		$(".droptrue").disableSelection();
+		$(".btn-setting").unbind('click');
+		$(".btn-setting").click(function(e) {
+			var myBookId = $(this).data('category');
+			console.log(myBookId);
+			var tp = $("#"+ myBookId);
+			if (tp)
+			{
+				g = tp.find('.grp_name');
+				if (g) $('#dlg_name').val(g.val()); 
+				g = tp.find('.grp_desc');
+				if (g) $('#dlg_desc').val(g.val()); 
+
+				g = tp.find('.grp_color');
+				if (g) $('#dlg_dlg').val(g.val()); 
+				$('#dlg_color').minicolors('value',g.val());
+				$('#dlg_category').val(myBookId); 
+							
+			}
+			//$('#dlg_color').val(dd);
+			//$('#dlg_color').minicolors('value',dd);
+		});
+	};
+	
+	//initialise the blockUI widget on AJAX calls
+	$.blockUI.defaults.baseZ = 1100; 
+	$(document).ajaxStop($.unblockUI);
+	updateSortable();
+
+	$("#catg-Save").click(function(e) {
+		$.blockUI({ message: '<div class="ajax alert alert-info"><img src="/assets/openessayist/img/ajax-loader.gif" /> Saving User Data ...</div>' }); 
+		var json = {};
+		
+		var allcats = $('.droptrue');
+		allcats.each(function(index) {
+			var setting = $(this).sortable('toArray');
+			var id = $(this).attr('id');
+			json[id] = { 
+				'keywords': setting,
+				'id': id
+			};
+		});
+
+		holder = $('.widget-content-cats');
+		var allcats = holder.find(".span6");
+		allcats.each(function(index)
+		{
+			id = $(this).find('.droptrue').attr('id');
+			nm = $(this).find('.grp_name').val();
+			desc = $(this).find('.grp_desc').val();
+			clr = $(this).find('.grp_color').val();
+			json[id].attr = {
+					'name' : nm,
+					'desc' : desc,
+					'color': clr 
+				};
+		});
+		console.log(json);
+		$.ajax({
+			type : "POST",
+			method: "post",
+			url : "{{ urlFor('profile.save.keyword',{"idt":task.id}) }}", // URL and function to call
+			data : {	
+					"user": "{{  auth.user.id }}",
+					"task" : "{{ task.id }}", 
+					"draft": "{{ draft.id }}",
+					"data" : json
+			}, 
+			//contentType : "application/json; charset=utf-8",
+			//processData : true,
+			dataType : "json",
+			success : function(msg, status) {
+				// Set Response outcome
+				console.log(msg);
+				is_dirty = false;
+			},
+			error : function(xhr, msg, e) {
+				// this should only fire if the ajax call did not happen or
+				// there was an unhandled exception
+				console.log(msg);
+			}
+		});	
+
+	});
+	
+	$("#catg-New").click(function(e) {
+		console.log("new category...");
+
+		var holder = $('.widget-content-cats > .row-fluid :last');
+		var n = holder.children().length;
+		
+		var template = $('#cat_template').clone();
+
+		var title = template.find("div.widget-header > h3 > .cat_name  ");
+		if (title) title.text("New Category");
+		template.removeClass('hide');
+		template.removeAttr('id');
+
+		var info = template.find('.dropfalse');
+		if (info)
+			{	info.removeClass('dropfalse');
+				info.addClass('droptrue');
+			}
+				
+		
+		if (n!=2)
+		{
+			template.appendTo(holder);
+		}
+		else
+		{
+			var newElement = $('<div class="row-fluid"></div>');
+			template.appendTo(newElement);
+			
+			newElement.appendTo("#widget-content-cats");
+			// set the dropable widgets
+		}
+
+		var info = template.find('.grp_name');
+		if (info) info.val('New Category');
+
+		var clr = color.shift();
+		info = template.find('.grp_color');
+		if (info) info.val(clr);
+		g = template.find('.cat_color');
+		if (g) g.css('background-color',clr);
+		
+		holder = $('.widget-content-cats');
+		var allcats = holder.find(".span6");
+		var nCats = allcats.length;
+		allcats.each(function(index)
+			{
+				$(this).attr('id','cat_'+index); 
+				var setting = $(this).find(".btn-setting");
+				if (setting) setting.attr('data-category','cat_'+index);
+				var close = $(this).find(".btn-close");
+				if (close) close.attr('data-category','cat_'+index);
+				var dropz = $(this).find(".droptrue");
+				dropz.attr('id','category_'+index); 
+			});
+
+		
+		updateSortable();
+	});
+});
+
+</script>
+
+{% endblock %}
