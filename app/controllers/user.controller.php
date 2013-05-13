@@ -502,6 +502,9 @@ class UserController extends Controller
 			$groups = $tt->getGroups();
 		}
 		
+		
+		$alllema = array_keys(get_object_vars($analysis->ke_data->myarray_ke));
+		
 		$allkw = array_merge(array(),
 			$analysis->nvl_data->quadgrams,
 			$analysis->nvl_data->trigrams,
@@ -514,7 +517,8 @@ class UserController extends Controller
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
 				'keywords' => $allkw,
-				'groups' => $groups
+				'groups' => $groups,
+				'lemmas' => $alllema
 		));
 
 		
