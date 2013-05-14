@@ -3,6 +3,16 @@ use Respect\Validation\Validator as v;
 
 class UserController extends Controller
 {
+	private $STRUCT = array(
+			'#-s:t#'=>'Title',
+			'#+s#'=>'Body',
+			'#-s:h#'=>'Heading',
+			'#+s:i#'=>'Introduction',
+			'#-s:n#'=>'Number',
+			'#-s:p#'=>'Others',
+			'#+s:c#'=>'Conclusion',
+	);
+	
 	public function me()
 	{
 		$this->render('user/dashboard');
@@ -523,6 +533,67 @@ class UserController extends Controller
 
 		
 		
+	}
+	
+	public function viewStructure($draft)
+	{
+		$dr = $this->getDraft($draft);
+		$tsk = $dr->task()->find_one();
+	
+		$analysis = $dr->getAnalysis();
+		$text = $dr->getParasenttok();
+		
+		
+		$breakdown = array();
+		foreach ($text as $index => &$par)
+		{
+			foreach ($par as $index2 => $sent)
+			{
+				$tt = $sent['text'];
+				$tag = $sent['tag'];
+				$count = str_word_count($tt, 0);
+				if (!isset($breakdown[$tag]))
+					$breakdown[$tag] = 0;
+				$breakdown[$tag] += $count;
+			}
+		}
+		
+		
+		$distribution = array();
+		$bullet = array();
+		foreach ($breakdown as $id => $count)
+		{
+			$tt = array(
+					'name' => $this->STRUCT[$id],
+					'y'=>$count);
+			if (in_array($id, array('#+s:c#','#+s:i#')))
+			{
+				$tt['sliced'] = true;
+				$tt['selected'] = true;
+				
+			}
+			$distribution[] = $tt;
+			$bullet[] = array(
+					'name' => $this->STRUCT[$id],
+					'data'=> array($count),
+					'grouping' => false,'stack' => 'structure');
+			
+		}
+		$bullet[] = array(
+				'name' => 'target',
+				'data' => array(intval($tsk->wordcount)),
+				'pointWidth' => 50,
+				'stack' => 'target','grouping' => false);
+		
+	
+		$this->render('drafts/view.structure',array(
+				'task' => $tsk->as_array(),
+				'draft' => $dr->as_array(),
+				'breakdown' => $distribution,
+				'bullet' => $bullet
+
+		));
+		var_dump($this->STRUCT);
 	}
 
 	public function viewDispersion($draft)

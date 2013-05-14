@@ -1,0 +1,123 @@
+{% extends "site.twig" %} 
+
+{% block title %}Draft - Visualisation (Strucutre){% endblock %} 
+
+
+{% block bccontainer %}		
+	{% include "widgets/breadcrumb.panel.twig" %}
+	    <li><div class="btn-group">
+    	<a href="{{ urlFor('me.drafts',{"idt":task.id}) }}" class="btn btn-small" >
+    		<i class="icon-pencil"></i><span class="hidden-phone hidden-tablet"> {{ task.name }}</span></a>
+	</div></li>
+	<li><div class="btn-group">
+    	<a href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}" class="btn btn-small" >Overview</a>
+	   	<a href="{{ urlFor('me.draft.keywords',{"draft":draft.id}) }}" class="btn btn-small" >Keywords</a>
+    	<a href="{{ urlFor('me.draft.sentence',{"draft":draft.id}) }}" class="btn btn-small" >Sentences</a>
+    	<a href="{{ urlFor('me.draft.stats',{"draft":draft.id}) }}" class="btn btn-small" >Stats</a>
+   	</div></li>
+	<li><div class="btn-group">
+		<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">Views <span class="caret"></span></a>
+    	<ul class="dropdown-menu">
+			<li><a href="{{ urlFor('me.draft.view.dispersion',{"draft":draft.id}) }}">Keyword Dispersion</a>
+			<li class="divider"></li>
+    	  	<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphke"}) }}">Keyword Graph</a>
+    	  	<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphse"}) }}">Sentence Graph</a>
+		</ul></div>
+    </li>    	
+{% endblock %}
+
+{% block content %}
+
+<div class="row-fluid">
+
+<div class="span6"><div class="widget">
+	<div class="widget-header">
+		<h3>Structure Distribution</h3>
+	</div>
+	<div class="widget-content">
+		<div id="struct_pie" style="height: 400px;margin: 0 auto"></div>
+	</div>
+</div></div>
+
+<div class="span6"><div class="widget">
+	<div class="widget-header">
+		<h3>Target</h3>
+	</div>
+	<div class="widget-content">
+		<div id="struct_bullet" style="height: 400px;margin: 0 auto"></div>
+	</div>
+</div></div>
+</div>
+{% endblock %}
+
+{% block injectJS %}
+<script src="/assets/highcharts/js/highcharts.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	
+    $('#struct_pie').highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
+        },
+        title: {
+        	text: null
+        },
+        tooltip: {
+			formatter: function () {
+                 return this.point.name + "<br>" +  this.series.name  
+                 + ': <b>' + Highcharts.numberFormat(this.percentage, 1) + '%</b>';
+             }
+    	   
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                showInLegend: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false,
+                    color: '#000000',
+                    connectorColor: '#000000',
+                    formatter: function() {
+                        return '<b>'+ this.point.name +'</b>: '+ this.percentage +' %';
+                    }
+                }
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: 'Structure share',
+            data: {{ breakdown|json_encode|raw }}
+        	
+        }]
+    });
+
+
+    $('#struct_bullet').highcharts({
+		chart: {	
+			type: 'bar'	},
+		title: {
+        	text: null },
+		xAxis: {},
+		yAxis: {
+			min: 0,
+			title: {text: null}},
+		legend: {
+			backgroundColor: '#FFFFFF',
+			reversed: true}, plotOptions: {
+                bar: {
+                    stacking: 'normal'
+                }
+            },
+		tooltip: {
+			formatter: function() {
+				return ''+ this.series.name +': '+ this.y +'';}
+			},
+		/* */
+		series: {{ bullet|json_encode|raw }}
+	});
+});
+</script>
+{% endblock %}
