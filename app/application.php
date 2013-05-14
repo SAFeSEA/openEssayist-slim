@@ -69,6 +69,7 @@ class Application {
 			CREATE TABLE IF NOT EXISTS `group` (
 			  `id` int(11) NOT NULL AUTO_INCREMENT,
 			  `name` varchar(120) DEFAULT NULL,
+			  `description` TEXT,
 			  PRIMARY KEY (`id`),
 			  UNIQUE (`name`)
 			) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -116,16 +117,14 @@ class Application {
 		$iUser=0;
 		//var_dump($ret);
 		$idx = $this->createGroup("H810");
-		$this->createUser($iUser++,$idx,true);
-		$this->createUser($iUser++,$idx);
-		$this->createUser($iUser++,$idx);
 		$this->createUser($iUser++,$idx);
 		
 		$this->createTasks(1,$idx);
 		$this->createTasks(2,$idx);
 		$this->createTasks(3,$idx);
 		
-		$idx = $this->createGroup("H817");
+		$idx = $this->createGroup("UserTesting");
+		$this->createUser($iUser++,$idx,true);
 		$this->createUser($iUser++,$idx);
 		$this->createUser($iUser++,$idx);
 		$this->createTasks(1,$idx);

@@ -10,21 +10,21 @@
 {% block content %}
 
 <div class="row-fluid">
-	<div class="span2">
+	<div class="span4">
 	<div class="widget">
 		<div class="widget-header">
-		<h3> Group: {{ group.name }}</h3>
+		<h3>Course</h3>
 		</div>
 		<div class="widget-content"> 
-				<p> </p>
+				<p> {{ group.description }}</p>
 			</div> 
 	</div>
 	</div>
 
-	<div class="span10">
+	<div class="span8">
 		<div class="widget">
 			<div class="widget-header">
-				<h3>{{ group.name }}</h3>
+				<h3>Assignments in the course {{ group.name }}</h3>
 			</div>
 			<div class="widget-content"> 
 
@@ -35,7 +35,7 @@
 						<th>Name</th>
 						<th>Deadline</th>
 						<th>Open</th>
-						<th class="td-actions">Actions</th>
+						
 					</tr>
 				</thead>
 				<tbody>
@@ -47,7 +47,7 @@
 							href="{{ urlFor('me.drafts',{"idt":task.id}) }}">{{ task.name }}</a></td>
 					<td>{{ task.deadline }}</td>
 					<td>{{ task.isopen }}</td>
-					<td></td>
+				
 					</tr>
 					{% endfor %}
 				</tbody>
