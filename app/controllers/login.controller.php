@@ -15,6 +15,18 @@ class LoginController extends Controller {
 	public function index()
 	{
 		if ($this->app->request()->isPost()) {
+			if ($this->auth->login($this->post('username'), $this->post('password'))) {
+				$this->app->flash('info', 'Your login was successfull');
+				$this->redirect('me.tasks');
+			}
+			else
+				$this->app->flashNow('error', "Username or password is incorrect. Check your details again.");
+		
+		}
+		$this->render('pages/login');
+		
+		
+		/*if ($this->app->request()->isPost()) {
 			try {
 				$usernameValidator = v::alnum()
 				->noWhitespace()
@@ -42,7 +54,7 @@ class LoginController extends Controller {
 				$this->app->flashNow('error', $e->setName('Username')->getMainMessage());
 			}
 		}
-		$this->render('pages/login');
+		$this->render('pages/login');*/
 	}
 	
 	

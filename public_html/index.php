@@ -40,7 +40,7 @@ define('EXT', '.twig');
 
 // Create main Slim application
 $app = new \Slim\Slim(array(
-	'openEssayist.async' => true,
+	'openEssayist.async' => false,
 	'view' => new TwigView,
 	'debug' => true,
     'log.level' => 4,

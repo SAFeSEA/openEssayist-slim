@@ -26,7 +26,7 @@
 					
 	<div class="widget-content">
 
-<form name="post_essay" method="post" class="form-horizontal">
+<form name="post_essay" id="post_essay" method="post" class="form-horizontal">
 
 
 <fieldset><div class="control-group">
@@ -40,7 +40,7 @@
 </div></fieldset>
 
 <div class="form-actions">
-	<button class="btn btn-primary" type="submit" name="action" value="Submit">Submit</button> 
+	<button class="btn btn-primary" id="submit_essay" type="submit" name="action" value="Submit">Submit</button> 
 </div>
 								
 </form>
@@ -66,4 +66,32 @@
 
 </div>
 
-{% endblock %} 
+{% endblock %}
+ 
+{% block injectJS %}
+<script src="/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
+<script>
+$(document).ready(function() {
+	$.blockUI.defaults.baseZ = 1100;
+	$("#submit_esddsay").click(function(e) {
+		});
+
+	$('#post_essay').submit(function() {
+		$.blockUI({ message: '<div class="ajax alert alert-info">Starting Analysis. Please Wait.</div>' }); 
+		return true;
+		});
+
+});
+</script>
+{% endblock %}
+
+{% block injectCSS %}
+<style>
+.ajax.alert
+{
+	margin-bottom: 0px;
+	font-weight: bolder;
+}
+</style>
+
+{% endblock %}

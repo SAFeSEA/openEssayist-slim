@@ -159,8 +159,8 @@ class UserController extends Controller
 					var_dump($e);
 
 				}
-				//$r= $this->app->urlFor('me.drafts',array("idt" => $taskId));
-				//$this->redirect($r,false);
+				$r= $this->app->urlFor('me.drafts',array("idt" => $taskId));
+				$this->redirect($r,false);
 			}
 		}
 

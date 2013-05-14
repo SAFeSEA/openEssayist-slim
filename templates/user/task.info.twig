@@ -96,11 +96,31 @@
     {% if usermodel.keyword is empty %}
     	<div class="alert alert-block">
     		{#<button type="button" class="close" data-dismiss="alert">&times;</button>#}
+	    	<h4>Structure</h4>
+	    	<p>OpenEssayist tried to identified the structure of your essay (introduction, conclusion, ...)</p>
+			<p>You can explore it :
+				<a href="{{ urlFor('me.draft.show',{"draft":drafts[0].id}) }}" class="btn btn-small" >In the main text...</a>
+				<button class="btn btn-small disabled" >As a graph ...</button> 
+			</p>			
+		    	
+	    </div>	
+    	<div class="alert alert-block">
+    		{#<button type="button" class="close" data-dismiss="alert">&times;</button>#}
+	    	<h4>Summary</h4>
+	    	<p>OpenEssayist has created a summary of your essay, by extracting the most "important" sentences in it.</p>
+			<p>You can explore it: 
+				<a href="{{ urlFor('me.draft.sentence',{"draft":drafts[0].id}) }}" class="btn btn-small" >As an abstract...</a> 
+			</p>			
+		    	
+	    </div>		    
+    <div class="alert alert-block">
+    		{#<button type="button" class="close" data-dismiss="alert">&times;</button>#}
 	    	<h4>Keywords</h4>
-	    	<p>OpenEssayist has identified the most important keywords in your text.</p>
+	    	<p>OpenEssayist has identified the most "important" keywords in your text.</p>
 			<p>You can explore them here: 
-				<a href="{{ urlFor('me.draft.keywords',{"draft":drafts[0].id}) }}" class="btn btn-small" >Keywords...</a> 
-				<a href="{{ urlFor('me.draft.show',{"draft":drafts[0].id}) }}" class="btn btn-small" >In Text...</a> 
+				<a href="{{ urlFor('me.draft.keywords',{"draft":drafts[0].id}) }}" class="btn btn-small" >In a "keywords cloud" ...</a> 
+				<a href="{{ urlFor('me.draft.show',{"draft":drafts[0].id}) }}" class="btn btn-small" >In the main text ...</a> 
+				<a href="{{ urlFor('me.draft.view.dispersion',{"draft":drafts[0].id}) }}" class="btn btn-small" >As a dispersion graph...</a> 
 			</p>			
 			<p>A good thing to do is to organise these keywords into your own categories.</p>
 	    		    	

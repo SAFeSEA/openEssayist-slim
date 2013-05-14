@@ -2,17 +2,39 @@
     "hash": "8a084790f05b4b3c6a6a532eaf209013",
     "packages": [
         {
-            "name": "Respect/Validation",
+            "name": "jamie/idiorm",
+            "version": "1.0.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/j4mie/idiorm/zipball/master",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
+        },
+        {
+            "name": "jamie/paris",
+            "version": "1.0.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/j4mie/paris/zipball/master",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
+        },
+        {
+            "name": "respect/validation",
             "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Respect/Validation.git",
-                "reference": "06224c04369eec63777da2ce9acf4afee6b92a5d"
+                "reference": "21ef9dae33f9c8bca1ad2bd4d703c356ae39a719"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Respect/Validation/zipball/06224c04369eec63777da2ce9acf4afee6b92a5d",
-                "reference": "06224c04369eec63777da2ce9acf4afee6b92a5d",
+                "url": "https://api.github.com/repos/Respect/Validation/zipball/21ef9dae33f9c8bca1ad2bd4d703c356ae39a719",
+                "reference": "21ef9dae33f9c8bca1ad2bd4d703c356ae39a719",
                 "shasum": ""
             },
             "require-dev": {
@@ -36,7 +58,7 @@
                     "homepage": "http://henriquemoody.com/"
                 },
                 {
-                    "name": "Alexandre Gaigalas",
+                    "name": "Alexandre Gomes Gaigalas",
                     "email": "alexandre@gaigalas.net"
                 },
                 {
@@ -68,7 +90,7 @@
                     "email": "jeanfap@gmail.com"
                 },
                 {
-                    "name": "Kleber Hamada Sato",
+                    "name": "kleberhs007",
                     "email": "kleberhs007@yahoo.com"
                 },
                 {
@@ -107,29 +129,7 @@
                 }
             ],
             "description": "The most awesome validation engine ever created for PHP",
-            "time": "2013-02-26 00:46:46"
-        },
-        {
-            "name": "jamie/idiorm",
-            "version": "1.0.0",
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/j4mie/idiorm/zipball/master",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "library"
-        },
-        {
-            "name": "jamie/paris",
-            "version": "1.0.0",
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/j4mie/paris/zipball/master",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "library"
+            "time": "2013-04-30 17:13:14"
         },
         {
             "name": "rmccue/requests",
@@ -137,12 +137,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/rmccue/Requests.git",
-                "reference": "b84798066e9e448de24e18193c436e2652b91087"
+                "reference": "cbf5cb60372828f22c33a9563b0fa294323ba69a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rmccue/Requests/zipball/b84798066e9e448de24e18193c436e2652b91087",
-                "reference": "b84798066e9e448de24e18193c436e2652b91087",
+                "url": "https://api.github.com/repos/rmccue/Requests/zipball/cbf5cb60372828f22c33a9563b0fa294323ba69a",
+                "reference": "cbf5cb60372828f22c33a9563b0fa294323ba69a",
                 "shasum": ""
             },
             "require": {
@@ -175,7 +175,7 @@
                 "iri",
                 "sockets"
             ],
-            "time": "2013-02-14 02:20:35"
+            "time": "2013-04-29 06:05:08"
         },
         {
             "name": "slim/extras",
@@ -184,12 +184,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeguy/Slim-Extras.git",
-                "reference": "83615926d0500dd8805907d8b778c9fe61970572"
+                "reference": "3e8f94545b5a6ce7ed90b416c54eb5c732ba5263"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeguy/Slim-Extras/zipball/83615926d0500dd8805907d8b778c9fe61970572",
-                "reference": "83615926d0500dd8805907d8b778c9fe61970572",
+                "url": "https://api.github.com/repos/codeguy/Slim-Extras/zipball/3e8f94545b5a6ce7ed90b416c54eb5c732ba5263",
+                "reference": "3e8f94545b5a6ce7ed90b416c54eb5c732ba5263",
                 "shasum": ""
             },
             "require": {
@@ -226,7 +226,7 @@
                 "middleware",
                 "templating"
             ],
-            "time": "2013-02-28 23:49:02"
+            "time": "2013-04-29 14:14:12"
         },
         {
             "name": "slim/slim",
@@ -324,12 +324,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Twig.git",
-                "reference": "399916916533589c95dc04e1afd4aeefa34928ad"
+                "reference": "7b298c2d1fa32b2d3ddb7e3b6b3deb56b16b3527"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/399916916533589c95dc04e1afd4aeefa34928ad",
-                "reference": "399916916533589c95dc04e1afd4aeefa34928ad",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/7b298c2d1fa32b2d3ddb7e3b6b3deb56b16b3527",
+                "reference": "7b298c2d1fa32b2d3ddb7e3b6b3deb56b16b3527",
                 "shasum": ""
             },
             "require": {
@@ -338,7 +338,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.12-dev"
+                    "dev-master": "1.13-dev"
                 }
             },
             "autoload": {
@@ -365,7 +365,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2013-04-01 08:27:18"
+            "time": "2013-05-14 05:05:22"
         }
     ],
     "packages-dev": null,
