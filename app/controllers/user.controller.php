@@ -541,7 +541,6 @@ class UserController extends Controller
 		$analysis = $dr->getAnalysis();
 		$text = $dr->getParasenttok();
 		
-		
 		$struct = array(
 				$analysis->intro->i_first,
 				$analysis->intro->i_last,
@@ -582,12 +581,26 @@ class UserController extends Controller
 		
 		
 		$allkw = array_merge(array(),
-				//$analysis->nvl_data->quadgrams,
+				$analysis->nvl_data->quadgrams,
 				$analysis->nvl_data->trigrams,
 				$analysis->nvl_data->bigrams,
 				$analysis->nvl_data->keywords,
 				array()
 		);
+		
+		
+		$tt = $dr->kwCategories()->find_one();
+		$groups = array();
+		if ($tt!=false)
+		{
+			$groups = $tt->getGroups();
+		}
+		else {
+			$kw = array();
+			foreach ($allkw as $key=>$item)
+				$kw[] = $key;
+			$groups = array(array('id' => 'category_all','keywords' => $kw));
+		}
 		
 		$categories=array();
 		$series=array();
@@ -605,6 +618,20 @@ class UserController extends Controller
 			$ngram = $kw->ngram;
 			$score = $kw->score;
 			
+			$groupid = null;
+			$groupcolor = null;
+			$groupname = null;
+			foreach ($groups as $gr)
+			{
+				
+				if (in_array($key,$gr['keywords']))
+				{
+					$groupid = $gr['id'];
+					break;
+				}
+			}
+			
+			//var_dump($ngram,$groupid);
 			$dispers=array();
 			if (count($ngram)>1)
 			{	
@@ -650,12 +677,40 @@ class UserController extends Controller
 			array_walk($dispers,function (&$item1, $key, $yaxis) { $item1 = array($item1,$yaxis); },$yaxis);
 			$yaxis++;
 
-			$series[] = array(
-					'name' => "".join($ngram," "),
-					'data' => $dispers
-					);
+			if (array_key_exists($groupid,	$series))
+			{
+				$series[$groupid] = array_merge($series[$groupid],$dispers);
+			}
+			else 
+			{
+				$series[$groupid] = $dispers;
+			}
 			$series2['data'] = array_merge($series2['data'],$dispers);
 			$categories[] = "".join($ngram," ");
+		}
+		//var_dump($series);
+		
+		$series3=array();
+		
+		$groups2 = array();
+		foreach ($groups as $key=>$gr)
+		{
+			$groups2[$gr['id']] = $gr;
+		}
+		
+		foreach ($series as $key=>$ser)
+		{
+			$gr = $groups2[$key];
+			$name = $gr['attr']['name'];
+			$name = ($name) ?: "Default Group"; 
+			$color = $gr['attr']['color'];
+			$color = ($color) ?: "#880000";
+			
+			$series3[] = array(
+					'name' => $name,
+					'data' => $ser,
+					'color' =>$color
+			);
 		}
 		
 		$series2['data'] = array_slice($series2['data'],0, 1000);
@@ -664,7 +719,7 @@ class UserController extends Controller
 		$this->render('drafts/view.dispersion',array(
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
-				'series' => array($series2),
+				'series' => $series3,
 				//'series' => ($series),
 				'categories' => $categories,
 				'structure' => $limit

@@ -6,11 +6,13 @@
 <div class="row-fluid">
 	<div class="span8 offset2">
 		<div class="hero-unit">
-			<h1>Hello, world!</h1>
+			<h1>Hello, World!</h1>
 			<p>This is the running prototype of openEssayist.</p>
 			<p>
+				{% if auth.user.isadmin %}
 				<a href="{{ urlFor('config') }}" class="btn btn-primary btn-large">Learn more
 					&raquo;</a> 
+				{% endif %}
 				{% if not(user) %} 
 				<a href="/login"
 					class="btn btn-large">Login &raquo;</a> 
