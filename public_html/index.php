@@ -139,6 +139,7 @@ $c->app->get('/me/draft/:draft/sentence/', array($userCtrl, 'showSentence'))->na
 $c->app->get('/me/draft/:draft/action/keyword', array($userCtrl, 'actionKeyword'))->name('me.draft.act.keyword');
 $c->app->get('/me/draft/:draft/view/network/(:graph)', array($userCtrl, 'viewGraph'))->name('me.draft.view.graph');
 $c->app->get('/me/draft/:draft/view/dispersion', array($userCtrl, 'viewDispersion'))->name('me.draft.view.dispersion');
+$c->app->get('/me/draft/:draft/view/structure', array($userCtrl, 'viewStructure'))->name('me.draft.view.structure');
 
 $c->app->post('/profile/savedata/keywords', array($userCtrl, 'saveKeywords'))->name('profile.save.keyword');
 
