@@ -116,22 +116,25 @@ class Application {
 		
 		$iUser=0;
 		//var_dump($ret);
-		$idx = $this->createGroup("H810");
-		$this->createUser($iUser++,$idx);
+		//$idx = $this->createGroup("H810");
+		//$this->createUser($iUser++,$idx);
 		
-		$this->createTasks(1,$idx);
-		$this->createTasks(2,$idx);
-		$this->createTasks(3,$idx);
+		//$this->createTasks(1,$idx);
+		//$this->createTasks(2,$idx);
+		//$this->createTasks(3,$idx);
 		
-		$idx = $this->createGroup("UserTesting");
+		$idx = $this->createGroup("UserTesting H810");
 		$this->createUser($iUser++,$idx,true);
 		$this->createUser($iUser++,$idx);
 		$this->createUser($iUser++,$idx);
-		$this->createTasks(1,$idx);
-		
-		$idx = $this->createGroup("H100");
+		$this->createUser($iUser++,$idx);
+		$this->createUser($iUser++,$idx);
 		$this->createUser($iUser++,$idx);
 		$this->createTasks(1,$idx);
+		
+		//$idx = $this->createGroup("H100");
+		//$this->createUser($iUser++,$idx);
+		//$this->createTasks(1,$idx);
 		
 	}
 	
