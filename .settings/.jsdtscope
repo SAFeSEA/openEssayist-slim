@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="*.min.*|public_html/assets/bootstrap/js/|public_html/assets/jquery-ui-1.9.2.custom/" kind="src" path="">
+	<classpathentry excluding="public_html/assets/bootstrap/js/|public_html/assets/jquery-ui-1.9.2.custom/|public_html/assets/jquery.sparkline/" kind="src" path="">
 		<attributes>
 			<attribute name="provider" value="org.eclipse.wst.jsdt.web.core.internal.project.ModuleSourcePathProvider"/>
 		</attributes>

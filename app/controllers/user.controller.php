@@ -797,6 +797,42 @@ class UserController extends Controller
 		));		
 	}
 	
+	public function viewMatrix($draft)
+	{
+		$dr = $this->getDraft($draft);
+		$tsk = $dr->task()->find_one();
+
+		$analysis = $dr->getAnalysis(true);
+		$gr = json_decode($analysis['se_sample_graph'],true);
+		
+		$text = $dr->getParasenttok();
+		
+		$struct2 = array();
+		$count = array();
+		// Join the array into a single string and count words
+		foreach ($text as $index => $par)
+		{
+			foreach ($par as $index2 => $sent)
+			{
+				
+				$struct2[$sent['id']] = $sent['tag'];
+			}
+		}
+	$tt = array_unique($struct2);
+	$tt = array_flip($tt);
+	$tt = array_keys($tt);
+	$tt = array_flip($tt);
+
+
+		$this->render('drafts/view.matrix',array(
+				'task' => $tsk->as_array(),
+				'draft' => $dr->as_array(),
+				'graph' => $gr,
+				'category' => $struct2,
+				'colorcat' => $tt
+		));
+	}
+	
 	public function viewGraph($draft,$graph=null)
 	{
 		$graphlist = array(

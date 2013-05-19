@@ -59,10 +59,17 @@
 
 {% block injectJS %}
 <script src="/assets/d3.js/d3.v3.min.js"></script>
+<script src="/assets/d3.js/colorbrewer.js"></script>
 <script type="text/javascript">
 
 var nodes = {{ graph.nodes|json_encode|raw  }};
 var links = {{ graph.links|json_encode|raw  }};
+var maxn = nodes.length;
+
+var ramp=d3.scale.ordinal().domain([0,maxn]).range(colorbrewer.Reds[5]);
+var gg1 = ramp(0);
+var gg2 = ramp(maxn);
+var gg3 = ramp(20);
 
 var w = 960,
     h = 500;
@@ -71,8 +78,10 @@ var force = d3.layout.force()
     .nodes(d3.values(nodes))
     .links(links)
     .size([w, h])
-    .linkDistance(150)
-    .charge(-1000)
+    .gravity(.05)
+    .friction(0.2)
+		.charge(-200)
+		.linkDistance( 150 )
     .on("tick", tick)
     .start();
 
@@ -105,6 +114,7 @@ var path = svg.append("svg:g").selectAll("path")
 var circle = svg.append("svg:g").selectAll("circle")
     .data(force.nodes())
   .enter().append("svg:circle")
+  	.style("fill",function(d,n) { console.log(d); console.log(n); return ramp(d.index); })
     .attr("r", 6)
     .call(force.drag);
 
@@ -150,7 +160,7 @@ function tick() {
 
 .link {
   stroke: #999;
-  stroke-opacity: .6;
+  stroke-opacity: .1;
   stroke-width: 1.5px;
 }
 
@@ -173,7 +183,7 @@ path.link.resolved {
 }
 
 circle {
-  fill: #ccc;
+  /*fill: #ccc;*/
   stroke: #333;
   stroke-width: 1.5px;
 }

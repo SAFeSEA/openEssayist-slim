@@ -30,7 +30,9 @@ h3 > .cat_color
 	font-weight: bolder;
 }
 
-
+.droptrue > li {
+display: inline;
+}
 
 
 </style>
@@ -82,12 +84,13 @@ h3 > .cat_color
 
 <div class="widget-content">
 	<div class="row-fluid">
-		<div class="span3 widget-content-allcat">
+		<div class="span4 widget-content-allcat">
 			<div class="widget-header"><h3>All</h3></div>
 			
 			<div class="widget-content">
 				
 				<ul class="droptrue connectedSortable ui-sortable unstyled" id="category_all">
+					<li class="ui-state-highlight"></li>
 					{% if groups['category_all'] is defined %}
 						
 						{% for key2,item2 in groups['category_all']['keywords']  %}
@@ -103,7 +106,7 @@ h3 > .cat_color
 		</div>
 	
 
-		<div class="span9 widget-content-cats" id="widget-content-cats">
+		<div class="span8 widget-content-cats" id="widget-content-cats">
 			<div class="row-fluid">
 			{% for key,item in groups[1:] %}
 			
