@@ -22,7 +22,9 @@
 			<li class="divider"></li>
     	  	<li {{ view=='graphke'?"class='active'" }}><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphke"}) }}">Keyword Graph</a>
     	  	<li {{ view=='graphse'?"class='active'" }}><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphse"}) }}">Sentence Graph</a>
-		</ul></div>
+			<li class="divider"></li>
+			<li><a href="{{ urlFor('me.draft.view.matrix',{"draft":draft.id}) }}">Sentence Co-occ Matrix</a>
+    	</ul></div>
     </li>    	
 {% endblock %}
 
@@ -66,8 +68,10 @@ var nodes = {{ graph.nodes|json_encode|raw  }};
 var links = {{ graph.links|json_encode|raw  }};
 var maxn = nodes.length;
 
-var ramp=d3.scale.ordinal().domain([0,maxn]).range(colorbrewer.Reds[5]);
+//var ramp=d3.scale.ordinal().domain([0,maxn]).range(colorbrewer.RdYlGn[3]);
+var ramp=d3.scale.linear().domain([0,maxn/2,maxn]).range(colorbrewer.PiYG[3]);
 var gg1 = ramp(0);
+var gg4 = ramp(1);
 var gg2 = ramp(maxn);
 var gg3 = ramp(20);
 
@@ -78,13 +82,16 @@ var force = d3.layout.force()
     .nodes(d3.values(nodes))
     .links(links)
     .size([w, h])
-    .gravity(.05)
+    .gravity(0.35)
     .friction(0.2)
-		.charge(-200)
+		.charge(-50)
 		.linkDistance( 150 )
     .on("tick", tick)
     .start();
-
+    
+$("#svg-container").dblclick(function() {
+	force.stop();
+});
 
 var svg = d3.select("#svg-container").append("svg:svg")
     .attr("width", w)
@@ -108,7 +115,8 @@ var path = svg.append("svg:g").selectAll("path")
     .data(force.links())
   .enter().append("svg:path")
     .attr("class", function(d) { return "link " + d.type; })
-    .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
+      .style("stroke-opacity", function(d) { return 0.1; })
+      .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
 
    
 var circle = svg.append("svg:g").selectAll("circle")
@@ -160,13 +168,13 @@ function tick() {
 
 .link {
   stroke: #999;
-  stroke-opacity: .1;
+  /*stroke-opacity: .1;*/
   stroke-width: 1.5px;
 }
 
 path.link {
   fill: none;
-  stroke: #666;
+  stroke: #999;
   stroke-width: 1.5px;
 }
 

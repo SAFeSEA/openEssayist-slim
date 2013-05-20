@@ -22,6 +22,8 @@
 			<li class="divider"></li>
     	  	<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphke"}) }}">Keyword Graph</a>
     	  	<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphse"}) }}">Sentence Graph</a>
+			<li class="divider"></li>
+			<li><a href="{{ urlFor('me.draft.view.matrix',{"draft":draft.id}) }}">Sentence Co-occ Matrix</a>
 		</ul></div>
     </li>    	
 {% endblock %}
@@ -88,13 +90,16 @@ function row(row) {
 	    .data(row.filter(function(d) { return d.z; }))
 	  .enter().append("rect")
 	    .attr("class", "cell")
-	    .attr("x", function(d) { return x(d.x); })
-	    .attr("width", x.rangeBand())
-	    .attr("height", x.rangeBand())
-	    //.style("fill-opacity", function(d) { return z(d.z); })
+	    .attr("x", function(d) { return d.x==d.y? x(d.x)+2 : x(d.x); })
+	     .attr("y", function(d) { return d.x==d.y? 2 : 0; })
+	    .attr("width", function(d) { return d.x==d.y? x.rangeBand()-4 : x.rangeBand(); })
+	     .attr("height", function(d) { return d.x==d.y? x.rangeBand()-4 : x.rangeBand(); })
+	     //.style("fill-opacity", function(d) { return z(d.z); })
 	    .style("fill", function(d) { return nodes[d.x].group == nodes[d.y].group ? c(nodes[d.x].group) : null; })
 	   //.style("fill", function(d) { return c(nodes[d.y].group); })
-	     .on("mouseover", mouseover)
+	   .style("stroke-width",function(d,n) { return d.x==d.y? "2px" : null; })
+	   	   .style("stroke",function(d,n) { return d.x==d.y? "#666" : null; })
+	   	     .on("mouseover", mouseover)
 	    .on("mouseout", mouseout);
 	}
 
@@ -200,7 +205,7 @@ function row(row) {
 	    .attr("transform", function(d, i) { return "translate(0," + x(i) + ")"; })
 	  .selectAll(".cell")
 	    .delay(function(d) { return x(d.x) * 4; })
-	    .attr("x", function(d) { return x(d.x); });
+	    .attr("x", function(d) { return d.x==d.y? x(d.x)+2 : x(d.x); });
 	
 	t.selectAll(".column")
 	    .delay(function(d, i) { return x(i) * 4; })
