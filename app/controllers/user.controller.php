@@ -796,6 +796,28 @@ class UserController extends Controller
 				'structure' => $limit
 		));		
 	}
+
+	public function viewCloud($draft)
+	{
+		$dr = $this->getDraft($draft);
+		$tsk = $dr->task()->find_one();
+		$analysis = $dr->getAnalysis();
+		$allkw = array_merge(array(),
+				$analysis->nvl_data->quadgrams,
+				$analysis->nvl_data->trigrams,
+				$analysis->nvl_data->bigrams,
+				$analysis->nvl_data->keywords,
+				array()
+		);
+		
+		
+		
+		$this->render('drafts/view.cloud',array(
+				'task' => $tsk->as_array(),
+				'draft' => $dr->as_array(),
+				'keywords' => $allkw
+		));
+	}
 	
 	public function viewMatrix($draft)
 	{
@@ -818,10 +840,10 @@ class UserController extends Controller
 				$struct2[$sent['id']] = $sent['tag'];
 			}
 		}
-	$tt = array_unique($struct2);
-	$tt = array_flip($tt);
-	$tt = array_keys($tt);
-	$tt = array_flip($tt);
+		$tt = array_unique($struct2);
+		$tt = array_flip($tt);
+		$tt = array_keys($tt);
+		$tt = array_flip($tt);
 
 
 		$this->render('drafts/view.matrix',array(

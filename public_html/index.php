@@ -141,6 +141,7 @@ $c->app->get('/me/draft/:draft/view/network/(:graph)', array($userCtrl, 'viewGra
 $c->app->get('/me/draft/:draft/view/dispersion', array($userCtrl, 'viewDispersion'))->name('me.draft.view.dispersion');
 $c->app->get('/me/draft/:draft/view/structure', array($userCtrl, 'viewStructure'))->name('me.draft.view.structure');
 $c->app->get('/me/draft/:draft/view/matrix', array($userCtrl, 'viewMatrix'))->name('me.draft.view.matrix');
+$c->app->get('/me/draft/:draft/view/cloud', array($userCtrl, 'viewCloud'))->name('me.draft.view.cloud');
 
 $c->app->post('/profile/savedata/keywords', array($userCtrl, 'saveKeywords'))->name('profile.save.keyword');
 

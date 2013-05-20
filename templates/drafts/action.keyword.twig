@@ -31,7 +31,13 @@ h3 > .cat_color
 }
 
 .droptrue > li {
-display: inline;
+
+}
+
+ul#category_all
+{
+	max-height: 300px;
+	overflow-y: auto;
 }
 
 
@@ -89,8 +95,13 @@ display: inline;
 			
 			<div class="widget-content">
 				
+				<div class="input-prepend input-append">
+<span class="add-on"><i class="icon-search"></i></span>
+<input class="span4" id="filter"  type="text" placeholder="Username">
+<span class="add-on"><i class="icon-trash"></i></span>
+</div>
 				<ul class="droptrue connectedSortable ui-sortable unstyled" id="category_all">
-					<li class="ui-state-highlight"></li>
+					
 					{% if groups['category_all'] is defined %}
 						
 						{% for key2,item2 in groups['category_all']['keywords']  %}
@@ -214,6 +225,20 @@ display: inline;
 $(document).ready(function() {
 	var is_dirty = false;
 
+	 $('input#filter').keyup(function(){
+	        
+	        var searchText = $(this).val(),
+	            $allListElements = $('ul#category_all > li'),
+	            $matchingListElements = $allListElements.filter(function(i, el){
+	                return $(el).text().indexOf(searchText) !== -1;
+	            });
+	        
+	        $allListElements.hide();
+	        $matchingListElements.show();
+	        
+	    });
+	    
+
 	$(window).bind('beforeunload', function(){
 			if (is_dirty == true)
 		  		return 'Are you sure you want to leave?';
@@ -261,6 +286,7 @@ $(document).ready(function() {
 	{
 		// set the dropable widgets
 		$(".droptrue").sortable({
+			scroll: true, 
 			connectWith : ".connectedSortable",
 			placeholder : "ui-state-highlight",
 			update : function(event, ui) {
