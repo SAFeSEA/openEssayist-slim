@@ -323,6 +323,23 @@ class UserController extends Controller
 		$parasenttok = $dr->getParasenttok();
 		$analysis = $dr->getAnalysis();
 
+		// extract structure tags
+		// Need to be done once for all
+		$struct2 = array();
+		foreach ($parasenttok as $index => $par)
+		{
+			foreach ($par as $index2 => $sent)
+			{
+		
+				$struct2[] = $sent['tag'];
+			}
+		}
+		$tt = array_unique($struct2);
+		$tt = array_flip($tt);
+		$tt = array_keys($tt);
+		$tt = array_flip($tt);
+		
+		
 		// Get all ngrams in a single structure
 		$allkw = array_merge(array(),
 				$analysis->nvl_data->quadgrams,

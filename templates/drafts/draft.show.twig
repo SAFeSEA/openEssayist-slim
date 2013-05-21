@@ -138,14 +138,20 @@
 <div class="widget widget-content assignment">
 	<p>{{ task.assignment | raw | nl2br }}</p>
 </div>
-<div class="widget widget-content">
+
+<div class="widget widget-content widget-essay">
 {% for par in parasenttok %}
-	<p id="{{ loop.index0 }}" class='oe-par' {{ (par[0].tag)?"data-tag=#{ par[0].tag }":"" }}>
+	<div class="par-wrapper" {{ (par[0].tag)?"data-tag=#{ par[0].tag }":"" }}>
+		<div class="par-tag" {{ (par[0].tag)?"data-tag=#{ par[0].tag }":"" }}></div>
+		<div class="par-container">
+			<p id="{{ loop.index0 }}" class='oe-par' >
 	{% for sent in par %}
-			<span class="oe-snt" data-index="{{ sent.id }}" data-tag="{{ sent.tag }}" {{ (sent.rank)? "data-rank="~sent.rank:"" }}>
+				<span class="oe-snt" data-index="{{ sent.id }}" data-tag="{{ sent.tag }}" {{ (sent.rank)? "data-rank="~sent.rank:"" }}>
 				  {{ sent.text }}</span>
 	{% endfor %}
-	</p>
+			</p>
+		</div>
+	</div>
 {% endfor %}
 </div></div>
 
@@ -166,26 +172,69 @@
 
 
 p.oe-par {
-	margin: 1em 0 1em 0;
+	/*margin: 1em 0 1em 0;*/
 	white-space: inherit;
-	border-left: 10px solid #D5D5D5;
-	margin-left: -5px;
-    padding-left: 10px;
+	/*border-left: 10px solid #D5D5D5;*/
+	/*margin-left: -5px;*/
+    /*padding-left: 10px;*/
 }
 
-p.oe-par[data-tag='#+s:i#'] {
+/*p.oe-par[data-tag='#+s:i#'] {
 	border-left: 10px solid red;
 }
 
 p.oe-par[data-tag='#+s:c#'] {
 	border-left: 10px solid green;
-}
+}*/
 
 p.oe-par:before
 {
 	content: "";
 }
 
+.widget-essay
+{
+	display: table;
+}
+
+.par-wrapper
+{	
+	/*display: table-row;*/
+	border-bottom: 2px solid white;
+    border-top: 2px solid white;
+}
+.par-tag
+{
+    display: table-cell;
+    width: 12px;
+    background-color: #D5D5D5 !important;;
+    border-right: 8px solid white;
+        text-align: center;
+    vertical-align: bottom;
+   
+}
+
+
+.par-tag[data-tag='#-s:t#'] {
+	background-color: #1F78B4 !important;;
+}
+
+.par-tag[data-tag='#-s:h#'] {
+	background-color: #A6CEE3 !important;;
+}
+
+.par-tag[data-tag='#+s:i#'] {
+	background-color: #FB8072 !important;;
+}
+
+.par-tag[data-tag='#+s:c#'] {
+	background-color: #B3DE69 !important;;
+}
+
+.par-container
+{
+	display: table-cell;
+}
 
 span.oe-snt {
 	white-space: normal;
@@ -333,10 +382,10 @@ label.checkbox:before
 			var cbox = this;
 			var indicators = cbox.value.split(";");
 			indicators.forEach(function(elt, idx, arr) {
-				var classname = "span.oe-snt[data-tag='" + elt + "']";
+				var classname = ".par-wrapper[data-tag='" + elt + "']";
 				if (cbox.checked)
 					//$(classname).show("fast");
-					$(classname).css({'display':'inline'});
+					$(classname).css({'display':'block'});
 				else
 					$(classname).css({'display':'none'});
 					//$(classname).hide("fast");
