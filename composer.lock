@@ -58,7 +58,7 @@
                     "homepage": "http://henriquemoody.com/"
                 },
                 {
-                    "name": "Alexandre Gomes Gaigalas",
+                    "name": "Alexandre Gaigalas",
                     "email": "alexandre@gaigalas.net"
                 },
                 {
@@ -90,7 +90,7 @@
                     "email": "jeanfap@gmail.com"
                 },
                 {
-                    "name": "kleberhs007",
+                    "name": "Kleber Hamada Sato",
                     "email": "kleberhs007@yahoo.com"
                 },
                 {
@@ -324,12 +324,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Twig.git",
-                "reference": "7b298c2d1fa32b2d3ddb7e3b6b3deb56b16b3527"
+                "reference": "ba88c755579c06e7ccb5ee73c6e27e88a1fed114"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/7b298c2d1fa32b2d3ddb7e3b6b3deb56b16b3527",
-                "reference": "7b298c2d1fa32b2d3ddb7e3b6b3deb56b16b3527",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/ba88c755579c06e7ccb5ee73c6e27e88a1fed114",
+                "reference": "ba88c755579c06e7ccb5ee73c6e27e88a1fed114",
                 "shasum": ""
             },
             "require": {
@@ -365,7 +365,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2013-05-14 05:05:22"
+            "time": "2013-05-17 10:06:31"
         }
     ],
     "packages-dev": null,

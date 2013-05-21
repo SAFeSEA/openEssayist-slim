@@ -36,10 +36,44 @@ h3 > .cat_color
 
 ul#category_all
 {
-	max-height: 300px;
+	min-height: 200px;
+	max-height: 200px;
 	overflow-y: auto;
 }
 
+.input-prepend.input-fullwidth, .input-append.input-fullwidth  {
+    position: relative;
+    display: block;
+}
+
+.input-prepend.input-fullwidth .add-on, .input-append.input-fullwidth .add-on {
+    
+}
+.input-prepend.input-fullwidth .input-wrapper, .input-append.input-fullwidth .input-wrapper {
+    position: absolute;
+    display: block;
+    left: 26px;
+    right: 26px;
+    top: 0;
+    bottom: 0;
+}
+.input-fullwidth .input-wrapper input {
+    width: 100%;
+   
+}
+
+ .ui-autocomplete {
+max-height: 100px;
+overflow-y: auto;
+/* prevent horizontal scrollbar */
+overflow-x: hidden;
+}
+/* IE 6 doesn't support max-height
+* we use height instead, but this forces the menu to always be this tall
+*/
+* html .ui-autocomplete {
+height: 100px;
+}
 
 </style>
 <link href="/assets/jquery.minicolors/jquery.minicolors.css" rel="stylesheet">
@@ -95,11 +129,17 @@ ul#category_all
 			
 			<div class="widget-content">
 				
-				<div class="input-prepend input-append">
-<span class="add-on"><i class="icon-search"></i></span>
-<input class="span4" id="filter"  type="text" placeholder="Username">
-<span class="add-on"><i class="icon-trash"></i></span>
-</div>
+				<div class="input-prepend input-append input-fullwidth">
+					<span class="add-on"><i class="icon-search"></i></span>
+					<div class="input-wrapper">
+						<input class="" id="filter"  type="text" placeholder="filter the list">
+					</div>
+	
+				</div>
+
+
+
+
 				<ul class="droptrue connectedSortable ui-sortable unstyled" id="category_all">
 					
 					{% if groups['category_all'] is defined %}
@@ -113,6 +153,17 @@ ul#category_all
 						{% endfor %}
 					{% endif %}
 				</ul>
+			</div>
+			<div class="widget-header"><h3>Add keywords ...</h3></div>
+			 	
+			<div class="widget-content">
+				<div class="input-append input-fullwidth00">
+					<div class="input-wrapper">
+						<input class="" id="tags"  type="text" placeholder="filter the list">
+						<button class="btn" type="button">Go!</button>
+					</div>
+	
+				</div>
 			</div>
 		</div>
 	
@@ -225,9 +276,58 @@ ul#category_all
 $(document).ready(function() {
 	var is_dirty = false;
 
+	var lemmas = {{ lemmas|json_encode|raw  }};
+	
+	function split( val ) {
+		 return val.split( /,\s*/ );
+	};
+
+	function extractLast( term ) {
+		 return split( term ).pop();
+	};
+
+	$( "#tags" )
+		// don't navigate away from the field on tab when selecting an item
+		.bind( "keydown", function( event ) {
+			console.log(event.keyCode);
+			if ( event.keyCode === $.ui.keyCode.TAB &&
+				$( this ).data( "ui-autocomplete" ).menu.active ) {
+					event.preventDefault();
+				}
+			})
+		// Define and attach the autocomplete UI
+		.autocomplete({
+			minLength: 0,
+			source: function( request, response ) {
+				// delegate back to autocomplete, but extract the last term
+				response( $.ui.autocomplete.filter(
+					lemmas, extractLast( request.term ) ) );
+				},
+			focus: function() {
+				// prevent value inserted on focus
+				return false;
+				},
+			select: function( event, ui ) {
+				var terms = split( this.value );
+				// remove the current input
+				terms.pop();
+				// add the selected item
+				terms.push( ui.item.value );
+				// add placeholder to get the comma-and-space at the end
+				terms.push( "" );
+				this.value = terms.join( ", " );
+				return false;
+				}
+			}) .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+				
+				return $( "<li>" )
+				.append("{{ ngram.toBtnString('item',false,true) }}")
+				.appendTo( ul );
+				};;		 
+
 	 $('input#filter').keyup(function(){
 	        
-	        var searchText = $(this).val(),
+	        var searchText = $(this).val().toLowerCase(),
 	            $allListElements = $('ul#category_all > li'),
 	            $matchingListElements = $allListElements.filter(function(i, el){
 	                return $(el).text().indexOf(searchText) !== -1;

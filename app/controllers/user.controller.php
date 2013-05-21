@@ -514,6 +514,19 @@ class UserController extends Controller
 		
 		
 		$alllema = array_keys(get_object_vars($analysis->ke_data->myarray_ke));
+		$allfreq = $analysis->ke_data->scoresNfreqs ;
+		foreach ($allfreq as $key=>&$item)
+		{
+			$item = array(
+					'value'=>$item[0],
+					//'label'=>$item[0],
+					'ngram'=>array($item[0]),
+					'source'=>array($item[0]),
+					'count'=>$item[3],
+					'score'=>array($item[1])
+				);
+		}
+		
 		
 		$allkw = array_merge(array(),
 			$analysis->nvl_data->quadgrams,
@@ -528,7 +541,7 @@ class UserController extends Controller
 				'draft' => $dr->as_array(),
 				'keywords' => $allkw,
 				'groups' => $groups,
-				'lemmas' => $alllema
+				'lemmas' => $allfreq
 		));
 
 		
