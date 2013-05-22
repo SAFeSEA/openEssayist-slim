@@ -72,10 +72,14 @@ class AdminController extends Controller
 	
 	public function showEssayData()
 	{
-		$draft = Model::factory('Draft')->find_one();
-		$data = $draft->as_array();
-		$analysis = $draft->getAnalysis(true);
+		$drafts = Model::factory('Draft')->order_by_desc('id')->find_many();
+		
+		$analysis = $drafts[0]->getAnalysis(true);
 		ksort($analysis);
+
+		$analysis['se_sample_graph'] = json_decode($analysis['se_sample_graph'],true);
+		$analysis['ke_sample_graph'] = json_decode($analysis['ke_sample_graph'],true);
+		//var_dump($analysis['se_sample_graph']);die();
 		
 		$this->render('admin/data.json',array(
 				'keys' => array_keys($analysis),
