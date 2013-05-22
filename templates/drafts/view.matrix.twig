@@ -92,27 +92,29 @@ var n = nodes.length;
 	
 var categories = {{ category|json_encode|raw  }};
 var colorcat = {{ colorcat|json_encode|raw  }};
+var sentences = {{ sentence|json_encode|raw  }};
 
 // Compute index per node.
 nodes.forEach(function(node, i) {
+	console.log(node);
 	node.index = i;
 	node.count = 0;
-	node.group = colorcat[categories[i]];
+	node.group = colorcat[categories[node.id]];
 	matrix[i] = d3.range(n).map(function(j) { return {x: j, y: i, z: 0}; });
 });
 
 	
 //Convert links to matrix; count character occurrences.
 links.forEach(function(link) {
-	//console.log(link.weight);
+	console.log(link);
 	matrix[link.source][link.target].w = link.weight+.5;
 	matrix[link.target][link.source].w = link.weight+.5;
 		
 	matrix[link.source][link.target].z += 1;//link.value;
 	matrix[link.target][link.source].z += 1;//link.value;
 	// diagonal cells are empty
-	//matrix[link.source][link.source].z += 10;//link.value;
-	//matrix[link.target][link.target].z += 10;//link.value;
+	matrix[link.source][link.source].z += 1;//link.value;
+	matrix[link.target][link.target].z += 1;//link.value;
 	
 	nodes[link.source].count += 1;//link.value;
 	nodes[link.target].count += 1;//link.value;
@@ -180,18 +182,31 @@ function row(row) {
 	  	.style("fill", function(d) { return nodes[d.x].group == nodes[d.y].group ? c(nodes[d.x].group) : null; })
 	  	//.style("fill", function(d) { return c(nodes[d.y].group); })
 	  	.style("stroke-width",function(d,n) { return d.x==d.y? "2px" : null; })
-	  	.style("stroke",function(d,n) { return d.x==d.y? "#666" : null; })
+	  	.style("stroke",function(d,n) { return d.x==d.y? c(nodes[d.x].group) : null; })
 	  .on("mouseover", mouseover)
-	  .on("mouseout", mouseout);
+	  .on("mouseout", mouseout)
+	  .each(function(d,i){
+	        $(this).popover({title:"title", trigger: 'hover',content:nodes[d.x].id, container:"body"});
+	        // and/or $(this).tooltip({title:"tooltip - title", container:"body"});
+	    });
 }
 
 function mouseover(p) {
 	d3.selectAll(".row text").classed("active", function(d, i) { return i == p.y; });
 	d3.selectAll(".column text").classed("active", function(d, i) { return i == p.x; });
+	/*console.log($(this));
+	$(this).popover({
+		animation: true,
+		content: function(){ return "ffdfddffddfdf"},
+		title: "keyword",
+		trigger: 'hover'
+			});
+	$(this).popover('show');*/
 }
 	
-function mouseout() {
+function mouseout(p) {
 	d3.selectAll("text").classed("active", false);
+
 }
 	
 d3.select("#order").on("change", function() {

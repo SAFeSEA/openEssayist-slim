@@ -868,8 +868,11 @@ class UserController extends Controller
 			{
 				
 				$struct2[$sent['id']] = $sent['tag'];
+				$count[$sent['id']] = $sent['text'];
 			}
 		}
+		
+		//var_dump($struct2,$count,$gr);die();
 		$tt = array_unique($struct2);
 		$tt = array_flip($tt);
 		$tt = array_keys($tt);
@@ -881,7 +884,8 @@ class UserController extends Controller
 				'draft' => $dr->as_array(),
 				'graph' => $gr,
 				'category' => $struct2,
-				'colorcat' => $tt
+				'colorcat' => $tt,
+				'sentence' => $count
 		));
 	}
 	
