@@ -107,14 +107,14 @@ nodes.forEach(function(node, i) {
 //Convert links to matrix; count character occurrences.
 links.forEach(function(link) {
 	console.log(link);
-	matrix[link.source][link.target].w = link.weight+.5;
-	matrix[link.target][link.source].w = link.weight+.5;
+	matrix[link.source][link.target].w = link.weight+.000000005;
+	matrix[link.target][link.source].w = link.weight+.000000005;
 		
 	matrix[link.source][link.target].z += 1;//link.value;
 	matrix[link.target][link.source].z += 1;//link.value;
 	// diagonal cells are empty
-	matrix[link.source][link.source].z += 1;//link.value;
-	matrix[link.target][link.target].z += 1;//link.value;
+	//matrix[link.source][link.source].z += 1;//link.value;
+	//matrix[link.target][link.target].z += 1;//link.value;
 	
 	nodes[link.source].count += 1;//link.value;
 	nodes[link.target].count += 1;//link.value;
@@ -186,8 +186,12 @@ function row(row) {
 	  .on("mouseover", mouseover)
 	  .on("mouseout", mouseout)
 	  .each(function(d,i){
-	        $(this).popover({title:"title", trigger: 'hover',content:nodes[d.x].id, container:"body"});
-	        // and/or $(this).tooltip({title:"tooltip - title", container:"body"});
+	        $(this).popover({
+		        title:"adjacency", 
+		        container:"body",
+		        trigger: 'hover',
+		        content:sentences[nodes[d.x].id] + " <br> " + sentences[nodes[d.y].id] , 
+			  });
 	    });
 }
 
