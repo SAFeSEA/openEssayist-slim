@@ -70,6 +70,8 @@ var maxn = nodes.length;
 
 //var ramp=d3.scale.ordinal().domain([0,maxn]).range(colorbrewer.RdYlGn[3]);
 var ramp=d3.scale.linear().domain([0,maxn/2,maxn]).range(colorbrewer.PiYG[3]);
+//var ramp=d3.scale.linear().domain([0,maxn/2,maxn]).range(["red","green","violet"]);
+//var ramp=d3.scale.linear().domain([0,maxn/2,maxn]).range(colorbrewer.Spectral[3]);
 var gg1 = ramp(0);
 var gg4 = ramp(1);
 var gg2 = ramp(maxn);
@@ -122,8 +124,10 @@ var path = svg.append("svg:g").selectAll("path")
 var circle = svg.append("svg:g").selectAll("circle")
     .data(force.nodes())
   .enter().append("svg:circle")
-  	.style("fill",function(d,n) { console.log(d); console.log(n); return ramp(d.index); })
-    .attr("r", 6)
+  	.style("fill",function(d,n) {  return ramp(d.index); })
+  	.style("stroke-width", function(d) { return (d.rank) ? 1.5 : 0.1; })
+  	.style("stroke", function(d) { console.log(ramp(d.index) + " " + d3.rgb(ramp(d.index)).darker(1)); return (d.rank) ? d3.rgb(ramp(d.index)).darker(1) : null; })
+  	.attr("r", 8)
     .call(force.drag);
 
 var text = svg.append("svg:g").selectAll("g")
@@ -138,7 +142,7 @@ text.append("svg:text")
     .text(function(d) { return d.id; });
 
 text.append("svg:text")
-    .attr("x", 8)
+    .attr("x",8)
     .attr("y", ".31em")
     .text(function(d) { return d.id; });
 

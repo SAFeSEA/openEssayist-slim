@@ -1,0 +1,210 @@
+{% extends "site.twig" %} 
+
+{% block title %}Draft - Visualisation (Adjacency Chord){% endblock %} 
+
+
+{% block bccontainer %}		
+	{% include "widgets/breadcrumb.panel.twig" %}
+	    <li><div class="btn-group">
+    	<a href="{{ urlFor('me.drafts',{"idt":task.id}) }}" class="btn btn-small" >
+    		<i class="icon-pencil"></i><span class="hidden-phone hidden-tablet"> {{ task.name }}</span></a>
+	</div></li>
+	<li><div class="btn-group">
+    	<a href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}" class="btn btn-small" >Overview</a>
+	   	<a href="{{ urlFor('me.draft.keywords',{"draft":draft.id}) }}" class="btn btn-small" >Keywords</a>
+    	<a href="{{ urlFor('me.draft.sentence',{"draft":draft.id}) }}" class="btn btn-small" >Sentences</a>
+    	<a href="{{ urlFor('me.draft.stats',{"draft":draft.id}) }}" class="btn btn-small" >Stats</a>
+   	</div></li>
+	<li><div class="btn-group">
+		<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">Views <span class="caret"></span></a>
+    	<ul class="dropdown-menu">
+			<li><a href="{{ urlFor('me.draft.view.dispersion',{"draft":draft.id}) }}">Keyword Dispersion</a>
+			<li class="divider"></li>
+    	  	<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphke"}) }}">Keyword Graph</a>
+    	  	<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphse"}) }}">Sentence Graph</a>
+			<li class="divider"></li>
+			<li><a href="{{ urlFor('me.draft.view.matrix',{"draft":draft.id}) }}">Sentence Co-occ Matrix</a>
+		</ul></div>
+    </li>    	
+{% endblock %}
+
+{% block content %}
+
+<div class="row-fluid"><div class="span12">
+
+	<div class="widget">
+		<div class="widget-header">
+			<h3> Display Options </h3>
+		</div>
+		<div class="widget-content" id='svg-container'></div>
+		</div>
+
+</div></div>
+
+{% endblock %}
+
+{% block injectJS %}
+<script src="/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
+<script src="/assets/d3.js/d3.v3.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+
+
+	// From http://mkweb.bcgsc.ca/circos/guide/tables/
+	var matrix = [];
+
+	//$.blockUI({ message: '<div class="ajax alert alert-info"><img src="/assets/openessayist/img/ajax-loader.gif" /> loading and display data ...</div>' }); 
+	var xhr = d3.json("{{ urlFor('ajax.graph.json',{"draft":draft.id,"graph":"graphse"}) }}")
+		.on("progress", function() { console.log("progress", d3.event.loaded); })
+	    .on("error", function(error) { console.log("failure!", error);$.unblockUI(); })
+	    .on("load", onloaded)
+	    .get();
+
+	function onloaded(graph) {
+
+		/* matrix = [
+		     	  [11975,  5871, 8916, 2868],
+		     	  [ 1951, 10048, 2060, 6171],
+		     	  [ 8010, 16145, 8090, 8045],
+		     	  [ 1013,   990,  940, 6907]
+		     	];*/
+
+			var nodes = graph.nodes;
+			var links = graph.links;
+			var n = nodes.length;
+				
+			// Compute index per node.
+			nodes.forEach(function(node, i) {
+				//console.log(node);
+				
+				matrix[i] = d3.range(n).map(function(j) { return 0; });
+			});
+
+				
+			//Convert links to matrix; count character occurrences.
+			links.forEach(function(link) {
+				//console.log(link);
+				matrix[link.source][link.target] += link.weight;
+				matrix[link.target][link.source] += link.weight;
+			});
+
+			
+	     	
+		
+		var chord = d3.layout.chord()
+	    .padding(.05)
+	    .sortSubgroups(d3.descending)
+	    .matrix(matrix);
+
+
+		console.log(chord.groups());
+
+	var width = 960,
+	    height = 500,
+	    innerRadius = Math.min(width, height) * .41,
+	    outerRadius = innerRadius * 1.1;
+
+	var fill = d3.scale.ordinal()
+	    .domain(d3.range(4))
+	    .range(["#000000", "#FFDD89", "#957244", "#F26223"]);
+
+	var svg = d3.select("#svg-container").append("svg:svg")
+	    .attr("width", width)
+	    .attr("height", height)
+	  .append("g")
+	    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+	svg.append("g").selectAll("path")
+	    .data(chord.groups)
+	  .enter().append("path")
+	    .style("fill", function(d) { return fill(d.index); })
+	    .style("stroke", function(d) { return fill(d.index); })
+	    .attr("d", d3.svg.arc().innerRadius(innerRadius).outerRadius(outerRadius))
+	    .on("mouseover", fade(.05))
+	    .on("mouseout", fade(1));
+
+	var ticks = svg.append("g").selectAll("g")
+	    .data(chord.groups)
+	  .enter().append("g").selectAll("g")
+	    .data(groupTicks)
+	  .enter().append("g")
+	  		
+	    .attr("transform", function(d) {
+	      return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")"
+	          + "translate(" + outerRadius + ",0)";
+	    });
+
+	ticks.append("line")
+	    .attr("x1", 1)
+	    .attr("y1", 0)
+	    .attr("x2", 5)
+	    .attr("y2", 0)
+	    .style("stroke", "#000");
+
+	ticks.append("text")
+	    .attr("x", 8)
+	    .attr("dy", ".35em")
+	    .attr("transform", function(d) { return d.angle > Math.PI ? "rotate(180)translate(-16)" : null; })
+	    .style("text-anchor", function(d) { return d.angle > Math.PI ? "end" : null; })
+	    .text(function(d) { return d.label; });
+
+	svg.append("g")
+	    .attr("class", "chord")
+	  .selectAll("path")
+	    .data(chord.chords)
+	  .enter().append("path")
+	    .attr("d", d3.svg.chord().radius(innerRadius))
+	    .style("fill", function(d) { return fill(d.target.index); })
+	    .style("opacity", 1);
+
+	// Returns an array of tick angles and labels, given a group.
+	function groupTicks(d) {
+	  var k = (d.endAngle - d.startAngle) / d.value;
+	  return d3.range(0,d.value, d.value/2.01).map(function(v, i) {
+	    return {
+	      angle: (i==1) ? v * k + d.startAngle: null,
+	      label: (i==1) ? d.index/* + " (" + d.value + ")"*/ : null
+	    };
+	  });
+	}
+
+	// Returns an event handler for fading a given chord group.
+	function fade(opacity) {
+	  return function(g, i) {
+	    svg.selectAll(".chord path")
+	        .filter(function(d) { return d.source.index != i && d.target.index != i; })
+	      .transition()
+	        .style("opacity", opacity);
+	  };
+	}
+	
+
+		
+	};
+
+	
+});
+</script>
+{% endblock %}
+
+{% block injectCSS %}
+<style type="text/css">
+.ajax.alert
+{
+	margin-bottom: 0px;
+	font-weight: bolder;
+}
+.background {
+  fill: #eee;
+}
+
+line {
+  stroke: #fff;
+}
+
+text.active {
+  fill: red;
+  font-weight: bold;
+}
+    </style>
+{% endblock %}

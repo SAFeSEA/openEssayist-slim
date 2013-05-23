@@ -849,6 +849,28 @@ class UserController extends Controller
 		));
 	}
 	
+	public function viewChord($draft)
+	{
+		$dr = $this->getDraft($draft);
+		$tsk = $dr->task()->find_one();
+		$analysis = $dr->getAnalysis();
+		$allkw = array_merge(array(),
+				$analysis->nvl_data->quadgrams,
+				$analysis->nvl_data->trigrams,
+				$analysis->nvl_data->bigrams,
+				$analysis->nvl_data->keywords,
+				array()
+		);
+	
+	
+	
+		$this->render('drafts/view.chord',array(
+				'task' => $tsk->as_array(),
+				'draft' => $dr->as_array(),
+				'keywords' => $allkw
+		));
+	}
+	
 	public function viewMatrix($draft)
 	{
 		$dr = $this->getDraft($draft);
@@ -927,7 +949,23 @@ class UserController extends Controller
 
 		$analysis = $dr->getAnalysis(true);
 		$gr = json_decode($analysis[$data],true);
-
+		if ($data=='se_sample_graph')
+		{
+			$gg = array();
+			$rr = $analysis['se_data']['se_ranked'];
+			foreach ($rr as $key => &$ranked)
+			{
+				$ranked['rank'] = $key;
+				$gg[$ranked[1]] = $ranked;
+			}
+			foreach ($gr['nodes'] as $key => &$node)
+			{
+				if ($gg[$node[id]])
+					$node['rank'] = $gg[$node[id]]['rank'];
+			}
+			//var_dump($gg,$gr);die();
+		}
+			
 		$this->render($path,array(
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
@@ -1024,4 +1062,27 @@ class UserController extends Controller
 		
 	}
 	
+	
+	public function ajaxGraph($draft,$graph)
+	{
+		
+		$config = array(
+				'graphse'=>'se_sample_graph',
+				'graphke'=>'ke_sample_graph'
+			);
+		
+		$dr = $this->getDraft($draft);
+		$tsk = $dr->task()->find_one();
+		
+		$analysis = $dr->getAnalysis(true);
+		$gr = json_decode($analysis[$config[$graph]],true);
+		
+		
+		$response = $this->app->response();
+		$response['Content-Type'] = 'application/json';
+		$response['X-Powered-By'] = 'openEssayist';
+		$response->status(200);
+		$response->body(json_encode($gr));
+		
+	}
 }
