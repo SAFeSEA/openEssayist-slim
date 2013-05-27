@@ -4,6 +4,8 @@
 {% block title %}Draft - Keyword Categories{% endblock %} 
 
 {% block injectCSS %}
+<link href="/assets/jquery.minicolors/jquery.minicolors.css" rel="stylesheet">
+<link rel="stylesheet" title="jTour" href="/assets/jquery-tour/jquery.tour.css">
 <style>
 .droptrue {
 	min-height: 10px;
@@ -76,7 +78,6 @@ height: 100px;
 }
 
 </style>
-<link href="/assets/jquery.minicolors/jquery.minicolors.css" rel="stylesheet">
 {% endblock %}
 
 {% block bccontainer %}		
@@ -99,7 +100,11 @@ height: 100px;
     	  	<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphke"}) }}">Keyword Graph</a>
     	  	<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphse"}) }}">Sentence Graph</a>
 		</ul></div>
-    </li>	   	    
+    </li>	 
+    
+	<li class="pull-right"><div class="btn-group">
+    	<btn id="starttour" class="btn" title="Get Help on the page"><i class="icon-road"></i>
+    </div></li>  	    
 {% endblock %}
 
 {% block content %}
@@ -269,10 +274,16 @@ height: 100px;
 
 
 {% block injectJS %}
+<script src="/assets/jquery-tour/jquery.tour.js"></script>
 <script src="/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
 <script src="/assets/d3.js/d3.v3.min.js"></script>
 <script src="/assets/jquery.minicolors/jquery.minicolors.js"></script>
 <script>
+(function(u, d, t) {
+	window.rx = true;
+	//console.log("fd");
+})();
+
 $(document).ready(function() {
 	var is_dirty = false;
 
@@ -540,6 +551,43 @@ $(document).ready(function() {
 		
 		updateSortable();
 	});
+
+
+	var tourdata = [
+	         	   {
+	         		  html: "Hello World<br>Let me explain how to use the keyword box"
+	         	   },{
+	         		  html: "This is the box containing all the keywords",
+	         		  element: $('.widget-content-allcat'),
+	         		  overlayOpacity: 0.5,
+	         		  expose: true,
+	         		  position: 'n'
+	         	   },{
+	         		  html: "Click here to create a new category for your keywords.",
+	         		 overlayOpacity: 0.5,
+	         		  expose: true,
+	         		  element: $('#catg-New'),
+	         		  position: 'n'
+	         	   },{
+	         		  html: "This is a paragraph",
+	         		 overlayOpacity: 0.5,
+	         		  expose: true,
+	         		  element: $('#category_all > li'), //use the first p tag with a class "target" as target element
+	         		  position: 's'
+	         	   }
+	         	];
+	
+		var myTour = jTour(tourdata,
+			{
+				axis : 'y',
+				scrollBack: true,
+			});
+		
+
+	$('#starttour').click(function() {
+		myTour.restart();
+	});
+	
 });
 
 </script>
