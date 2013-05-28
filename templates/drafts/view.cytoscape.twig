@@ -1,0 +1,182 @@
+{% extends "site.twig" %} 
+
+{% block title %}Draft - Visualisation ({{ CytoScape }}){% endblock %} 
+
+
+{% block bccontainer %}		
+	{% include "widgets/breadcrumb.panel.twig" %}
+	    <li><div class="btn-group">
+    	<a href="{{ urlFor('me.drafts',{"idt":task.id}) }}" class="btn btn-small" >
+    		<i class="icon-pencil"></i><span class="hidden-phone hidden-tablet"> {{ task.name }}</span></a>
+	</div></li>
+	<li><div class="btn-group">
+    	<a href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}" class="btn btn-small" >Overview</a>
+	   	<a href="{{ urlFor('me.draft.keywords',{"draft":draft.id}) }}" class="btn btn-small" >Keywords</a>
+    	<a href="{{ urlFor('me.draft.sentence',{"draft":draft.id}) }}" class="btn btn-small" >Sentences</a>
+    	<a href="{{ urlFor('me.draft.stats',{"draft":draft.id}) }}" class="btn btn-small" >Stats</a>
+   	</div></li>
+	<li><div class="btn-group">
+		<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">Views <span class="caret"></span></a>
+    	<ul class="dropdown-menu">
+			<li><a href="{{ urlFor('me.draft.view.dispersion',{"draft":draft.id}) }}">Keyword Dispersion</a>
+			<li class="divider"></li>
+    	  	<li {{ view=='graphke'?"class='active'" }}><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphke"}) }}">Keyword Graph</a>
+    	  	<li {{ view=='graphse'?"class='active'" }}><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphse"}) }}">Sentence Graph</a>
+			<li class="divider"></li>
+			<li><a href="{{ urlFor('me.draft.view.matrix',{"draft":draft.id}) }}">Sentence Co-occ Matrix</a>
+    	</ul></div>
+    </li>    	
+{% endblock %}
+
+{% block content %}
+
+{#
+<ul class="breadcrumb">
+	<li><div class="btn-group">
+	{% for key,item in views %}
+		{% if key == view %}
+			<button class="btn btn-small active disabled">{{ item.name }}</button>
+		{% else %}
+			<a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":key}) }}" class="btn btn-small" >{{ item.name }}</a>
+		{% endif %}
+    {% endfor %}
+	   	
+    </div></li>
+</ul>#}
+
+<div class="row-fluid"><div class="span12">
+
+<div class="widget">
+			<div class="widget-header" data-toggle="collapse" data-target="#demo">
+				<h3> Display Options </h3>
+				<div class="box-icon">
+					<a class="btn-setting" href="#"><i class="icon-chevron-down"></i></a>
+				</div>
+			</div>
+			<div class="widget-content" id='svg-container'></div>
+			</div>
+</div></div>
+
+{% endblock %}
+
+{% block injectJS %}
+<script src="/assets/cytoscape.js-2.0.1/cytoscape.min.js"></script>
+<script src="/assets/cytoscape.js-2.0.1/arbor.js"></script>
+<script type="text/javascript">
+
+$('#svg-container').cytoscape({
+	  style: cytoscape.stylesheet()
+	    .selector('node')
+	      .css({
+	        'content': 'data(name)',
+	        'text-valign': 'center',
+	        'color': 'white',
+	        'text-outline-width': 2,
+	        'text-outline-color': '#888'
+	      })
+	    .selector('edge')
+	      .css({
+	        /*'target-arrow-shape': 'triangle'*/
+	      })
+	    .selector(':selected')
+	      .css({
+	        'background-color': 'black',
+	        'line-color': 'black',
+	        /*'target-arrow-color': 'black',
+	        'source-arrow-color': 'black'*/
+	      })
+	    .selector('.faded')
+	      .css({
+	        'opacity': 0.05,
+	        'text-opacity': 0
+	      }),
+
+	  /*layout: {
+		    name: 'random',
+		    ready: undefined, // callback on layoutready
+		    stop: undefined, // callback on layoutstop
+		    fit: true // whether to fit to viewport
+		},*/
+		layout: {
+
+			name: 'arbor',
+		    liveUpdate: true, // whether to show the layout as it's running
+		    ready: undefined, // callback on layoutready 
+		    stop: undefined, // callback on layoutstop
+		    maxSimulationTime: 4000, // max length in ms to run the layout
+		    fit: true, // fit to viewport
+		    padding: [ 50, 50, 50, 50 ], // top, right, bottom, left
+		    ungrabifyWhileSimulating: true, // so you can't drag nodes during layout
+
+		    // forces used by arbor (use arbor default on undefined)
+		    repulsion: undefined,
+		    stiffness: undefined,
+		    friction: undefined,
+		    gravity: true,
+		    fps: undefined,
+		    precision: undefined,
+
+		    // static numbers or functions that dynamically return what these
+		    // values should be for each element
+		    nodeMass: undefined, 
+		    edgeLength: undefined,
+
+		    stepSize: 1, // size of timestep in simulation
+
+		    // function that returns true if the system is stable to indicate
+		    // that the layout can be stopped
+		    stableEnergy: function( energy ){
+		        var e = energy; 
+		        return (e.max <= 0.5) || (e.mean <= 0.3);
+		    }
+		},
+	  elements: {
+	    nodes: [
+			{% for node in graph.nodes %}
+            { data: { id: "{{ node.id }}", name: "{{ node.id }}"} },
+            {% endfor %}
+	    ],
+	    edges: [
+			{% for link in graph.links %}
+	        { data: {source: '{{ graph.nodes[link.source].id }}', target: '{{ graph.nodes[link.target].id }}' }},
+	        {% endfor %}
+	    ]
+	  },
+	  
+	  ready: function(){
+	    window.cy = this;
+	    
+	    // giddy up...
+	    
+	    cy.elements().unselectify();
+	    
+	    cy.on('tap', 'node', function(e){
+	      var node = e.cyTarget; 
+	      var neighborhood = node.neighborhood().add(node);
+	      
+	      cy.elements().addClass('faded');
+	      neighborhood.removeClass('faded');
+	    });
+	    
+	    cy.on('tap', function(e){
+	      if( e.cyTarget === cy ){
+	        cy.elements().removeClass('faded');
+	      }
+	    });
+	  }
+	});
+
+
+</script>
+{% endblock %}
+
+{% block injectCSS %}
+<style type="text/css">
+
+#svg-container {
+  height: 600px;
+  width: 800px;
+  
+}
+</style>
+{% endblock %}

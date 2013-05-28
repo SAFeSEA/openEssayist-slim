@@ -942,6 +942,7 @@ class UserController extends Controller
 		}
 
 		$path = $graphlist[$graph]['path'];
+		$path = 'drafts/view.cytoscape';
 		$data = $graphlist[$graph]['data'];
 
 		$dr = $this->getDraft($draft);
