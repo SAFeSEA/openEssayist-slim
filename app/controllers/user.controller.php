@@ -922,7 +922,11 @@ class UserController extends Controller
 						'name'	=> 'Keyword network',
 						'path'	=> 'drafts/view.graph',
 						'data'	=> 'ke_sample_graph'),
-		);
+				'cytoscape' => array(
+						'name'	=> 'Sentence network',
+						'path'	=> 'drafts/view.cytoscape',
+						'data'	=> 'se_sample_graph'),
+				);
 
 		if (!isset($graph))
 		{
@@ -942,7 +946,6 @@ class UserController extends Controller
 		}
 
 		$path = $graphlist[$graph]['path'];
-		$path = 'drafts/view.cytoscape';
 		$data = $graphlist[$graph]['data'];
 
 		$dr = $this->getDraft($draft);

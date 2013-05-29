@@ -137,7 +137,9 @@ $c->app->get('/me/draft/:draft/keyword/', array($userCtrl, 'showKeyword'))->name
 $c->app->get('/me/draft/:draft/stats/', array($userCtrl, 'showStats'))->name('me.draft.stats');
 $c->app->get('/me/draft/:draft/sentence/', array($userCtrl, 'showSentence'))->name('me.draft.sentence');
 $c->app->get('/me/draft/:draft/action/keyword', array($userCtrl, 'actionKeyword'))->name('me.draft.act.keyword');
-$c->app->get('/me/draft/:draft/view/network/(:graph)', array($userCtrl, 'viewGraph'))->name('me.draft.view.graph');
+$c->app->get('/me/draft/:draft/view/network/(:graph)', array($userCtrl, 'viewGraph'))->name('me.draft.view.graph')
+		->conditions(array('graph' => '(graphse|graphke|cytoscape)'));
+
 $c->app->get('/me/draft/:draft/view/dispersion', array($userCtrl, 'viewDispersion'))->name('me.draft.view.dispersion');
 $c->app->get('/me/draft/:draft/view/structure', array($userCtrl, 'viewStructure'))->name('me.draft.view.structure');
 $c->app->get('/me/draft/:draft/view/matrix', array($userCtrl, 'viewMatrix'))->name('me.draft.view.matrix');
@@ -147,7 +149,7 @@ $c->app->get('/me/draft/:draft/view/chord', array($userCtrl, 'viewChord'))->name
 $c->app->post('/profile/savedata/keywords', array($userCtrl, 'saveKeywords'))->name('profile.save.keyword');
 
 $c->app->get('/ajax/draft/:draft/graph/:graph.json', array($userCtrl, 'ajaxGraph'))->name('ajax.graph.json')
-				->conditions(array('graph' => '(graphse|graphke)'));;
+				->conditions(array('graph' => '(graphse|graphke)'));
 
 $c->app->get('/admin/', array($adminCtrl, 'index'))->name('admin.home');
 $c->app->get('/admin/reset', array($adminCtrl, 'reset'))->name('admin.reset');

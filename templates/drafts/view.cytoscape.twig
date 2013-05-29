@@ -66,14 +66,24 @@
 
 $('#svg-container').cytoscape({
 	  style: cytoscape.stylesheet()
-	    .selector('node')
+	    .selector("node[rank = '-1']")
 	      .css({
-	        'content': 'data(name)',
+	        'content': 'data(name)' ,
 	        'text-valign': 'center',
 	        'color': 'white',
 	        'text-outline-width': 2,
 	        'text-outline-color': '#888'
 	      })
+	      
+	     .selector("node[rank != '-1']")
+	      .css({
+	        'content': 'data(name)' ,
+	        'text-valign': 'center',
+	        'color': 'white',
+	        'background-color': 'red',
+	        'text-outline-width': 2,
+	        'text-outline-color': '#888'
+	      }) 
 	    .selector('edge')
 	      .css({
 	        /*'target-arrow-shape': 'triangle'*/
@@ -103,7 +113,7 @@ $('#svg-container').cytoscape({
 		    liveUpdate: true, // whether to show the layout as it's running
 		    ready: undefined, // callback on layoutready 
 		    stop: undefined, // callback on layoutstop
-		    maxSimulationTime: 4000, // max length in ms to run the layout
+		    maxSimulationTime: 10000, // max length in ms to run the layout
 		    fit: true, // fit to viewport
 		    padding: [ 50, 50, 50, 50 ], // top, right, bottom, left
 		    ungrabifyWhileSimulating: true, // so you can't drag nodes during layout
@@ -112,7 +122,7 @@ $('#svg-container').cytoscape({
 		    repulsion: undefined,
 		    stiffness: undefined,
 		    friction: undefined,
-		    gravity: true,
+		    gravity: false,
 		    fps: undefined,
 		    precision: undefined,
 
@@ -133,7 +143,7 @@ $('#svg-container').cytoscape({
 	  elements: {
 	    nodes: [
 			{% for node in graph.nodes %}
-            { data: { id: "{{ node.id }}", name: "{{ node.id }}"} },
+            { data: { id: "{{ node.id }}", name: "{{ node.id }}", rank:{{ node.rank?:-1 }}} },
             {% endfor %}
 	    ],
 	    edges: [

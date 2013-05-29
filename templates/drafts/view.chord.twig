@@ -97,7 +97,6 @@ $(document).ready(function(){
 	    .matrix(matrix);
 
 
-		console.log(chord.groups());
 
 	var width = 960,
 	    height = 500,
@@ -120,7 +119,7 @@ $(document).ready(function(){
 	    .style("fill", function(d) { return fill(d.index); })
 	    .style("stroke", function(d) { return fill(d.index); })
 	    .attr("d", d3.svg.arc().innerRadius(innerRadius).outerRadius(outerRadius))
-	    .on("mouseover", fade(.05))
+	    .on("mouseover", fade(0))
 	    .on("mouseout", fade(1));
 
 	var ticks = svg.append("g").selectAll("g")
@@ -163,7 +162,7 @@ $(document).ready(function(){
 	  return d3.range(0,d.value, d.value/2.01).map(function(v, i) {
 	    return {
 	      angle: (i==1) ? v * k + d.startAngle: null,
-	      label: (i==1) ? d.index/* + " (" + d.value + ")"*/ : null
+	      label: (i==1) ? nodes[d.index].id /* + " (" + d.value + ")"*/ : null
 	    };
 	  });
 	}
