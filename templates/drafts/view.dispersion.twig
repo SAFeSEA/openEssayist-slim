@@ -50,10 +50,27 @@
 {% endblock %}
 
 {% block injectJS %}
+<script src="/assets/d3.js/colorbrewer.js"></script>
 <script src="/assets/highcharts/js/highcharts.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	var chart = null;
+
+	sections =  {
+			'????':'',
+			'#+s:c#': 'Conclusion', 
+			'#+s:d_i#':'Discussion', 
+			'#+s:d#': 'Discussion', 
+			'#+s:s#': 'Summary', 
+			'#+s:i#': 'Introduction', 
+			'#-s:t#': 'Title', 
+			'#+s:p#': 'Preface', 
+			'#-s:h#': 'Heading', 
+			'#-s:n#': 'Numerics', 
+			'#-s:q#': 'Assignment',  
+			'#-s:p#': 'Punctuation'					
+			};
+	
 	
 	$('#resizer').resizable({
 		ghost: false,
@@ -71,6 +88,22 @@ $(document).ready(function() {
 	    }
 	});
 
+	function hex2rgba(x,a) {
+		  var r=x.replace('#','').match(/../g),g=[],i;
+		  for(i in r){g.push(parseInt(r[i],16));}g.push(a);
+		  return 'rgba('+g.join()+')';
+		}
+	
+	function getColor(tag)
+	{
+		var idx = $.inArray(tag,Object.keys(sections));
+		idx = (idx==-1)?2:idx;
+		var clr = colorbrewer.Paired[11][idx];
+		var clr2 = hex2rgba(clr,'0.2');
+		return clr2;				
+	}
+
+	var tt = getColor('#+s:i#');
 
 	chart = new Highcharts.Chart({
 		chart: {
@@ -102,7 +135,7 @@ $(document).ready(function() {
 					{
 						from: {{ band.from }},
 						to: {{ band.to }},
-						color: '{{ band.color }}'
+						color: getColor('{{ band.tag }}')
 					},
 				{% endfor %}
 				]

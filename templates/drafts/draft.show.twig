@@ -214,7 +214,7 @@ p.oe-par:before
    
 }
 
-
+/*
 .par-tag[data-tag='#-s:t#'] {
 	background-color: #1F78B4 !important;;
 }
@@ -229,7 +229,7 @@ p.oe-par:before
 
 .par-tag[data-tag='#+s:c#'] {
 	background-color: #B3DE69 !important;;
-}
+}*/
 
 .par-container
 {
@@ -335,14 +335,60 @@ label.checkbox:before
 {% endblock %}
 
 {% block injectJS %}
+	<script src="/assets/d3.js/colorbrewer.js"></script>
 	<script src="/assets/highlight.js/highlight.pack.js"></script>
 	<script src="/assets/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.js"></script>
 	{% include "javascript/hljs.keywords.js.twig" %}
 	<script>
 	$(document).ready(function() {
 
+		var sections =  {
+					'#-s:t#': 'Title', 
+					'#+s:s#': 'Summary', 
+					'#+s:d#': 'Discussion', 
+					'#+s:d_i#':'Discussion', 
+					'#+s:i#': 'Introduction', 
+					'#+s:c#': 'Conclusion', 
+					'#-s:q#': 'Assignment',  
+					'#+s:p#': 'Preface', 
+					'#-s:h#': 'Heading', 
+					'#-s:n#': 'Numerics', 
+					'#-s:p#': 'Punctuation'					
+					};
+			          		
+			
+		sections =  {
+				'????':'',
+				'#+s:c#': 'Conclusion', 
+				'#+s:d_i#':'Discussion', 
+				'#+s:d#': 'Discussion', 
+				'#+s:s#': 'Summary', 
+				'#+s:i#': 'Introduction', 
+				'#-s:t#': 'Title', 
+				'#+s:p#': 'Preface', 
+				'#-s:h#': 'Heading', 
+				'#-s:n#': 'Numerics', 
+				'#-s:q#': 'Assignment',  
+				'#-s:p#': 'Punctuation'					
+				};	
+			
+		
 		//$("label.checkbox").disableSelection();
-
+		$(".par-tag[data-tag]").each(function()
+		{
+			console.log(Object.keys(sections));
+			var tag = $(this).attr('data-tag');
+			var idx = $.inArray(tag,Object.keys(sections));
+			idx = (idx==-1)?2:idx;
+			var clr = colorbrewer.Paired[11][idx];
+			console.log(tag + " " + idx + " " + clr);
+			if (clr)
+			{
+				 $(this).attr('style', 'background-color: '+clr+' !important');
+				 $(this).css('opacity', 0.5);
+			}
+			$(this).attr('title', sections[tag]);
+		});
 		
 		
 		// initialise the code highlighting

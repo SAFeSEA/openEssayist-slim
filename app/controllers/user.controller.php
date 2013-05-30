@@ -664,11 +664,11 @@ class UserController extends Controller
 		
 		$limit= array(
 			'Introduction'=> array(
-					'color' => 'rgba(255, 0, 0, 0.1)',
+					'tag' => '#+s:i#',
 					'from' => array_sum(array_slice($struct2,0,$analysis->intro->i_first)),
 					'to' => array_sum(array_slice($struct2,0,$analysis->intro->i_last+1))),
 			'Conclusion'=> array(
-					'color' => 'rgba(0, 255, 0, 0.1)',
+					'tag' => '#+s:c#',
 					'from' => array_sum(array_slice($struct2,0,$analysis->concl->c_first)),
 					'to' => array_sum(array_slice($struct2,0,$analysis->concl->c_last+1))),
 
