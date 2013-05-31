@@ -648,13 +648,19 @@ class UserController extends Controller
 				$analysis->concl->c_first,
 				$analysis->concl->c_last);
 		
+		$tags = array();
 		$struct2 = array();
 		$count = array();
 		// Join the array into a single string and count words
 		foreach ($text as $index => &$par)
 		{	
+			$setag = array();
 			foreach ($par as $index2 => &$sent)
+			{
+				$setag[] = $sent['tag'];
 				$sent = $sent['text'];
+			}
+			$tags[] = array_shift(array_unique($setag));
 			$par = "" . join(" ", $par);
 			$count2 = str_word_count($par, 1);
 			$struct2[] = count($count2);
@@ -662,6 +668,24 @@ class UserController extends Controller
 			//var_dump($struct2,$count);
 		}
 		
+		$limit= array();
+		$ticks= array();
+		$inc = 0;
+		foreach ($struct2 as $key=>$wcount) 
+		{
+			$item = array(
+					'from' => $inc,
+					'to' => $inc+$wcount,
+					'tag' => $tags[$key],
+				
+			);
+			$ticks[] = $inc;
+			$inc += $wcount;
+			$limit[] = $item;
+		}
+		
+		
+		/*
 		$limit= array(
 			'Introduction'=> array(
 					'tag' => '#+s:i#',
@@ -672,7 +696,7 @@ class UserController extends Controller
 					'from' => array_sum(array_slice($struct2,0,$analysis->concl->c_first)),
 					'to' => array_sum(array_slice($struct2,0,$analysis->concl->c_last+1))),
 
-			);
+			);*/
 
 		$text = "" . join(" ", $text);
 // 		/$count = str_word_count($text, 1);
@@ -689,6 +713,12 @@ class UserController extends Controller
 				array()
 		);
 		
+		usort($allkw,function($a,$b)
+		{
+			return ($b->count)-($a->count);
+		});		
+		
+
 		
 		$tt = $dr->kwCategories()->find_one();
 		$groups = array();
@@ -710,7 +740,7 @@ class UserController extends Controller
 					'data' => array()
 					);
 		
-		//var_dump($count);
+		
 		$yaxis=0;
 		foreach ($allkw as  $key=>$kw)
 		{	
@@ -742,10 +772,13 @@ class UserController extends Controller
 				{	
 					$ret = array_keys($count,strtolower($infform));
 					$temp = array_merge($temp,$ret);
+					
 				}
 				// sort indexes numerially
 				sort($temp);
+				//var_dump($temp);
 				$res = array();
+				$res2 = array();
 				$prev = -1000;
 				// find indexes that are consecutive (definition of ngram)
 				foreach ($temp as $key=>$val)
@@ -753,17 +786,26 @@ class UserController extends Controller
 					$diff = $val-$prev;
 					if ($diff==1)
 					{
-						$res[] = $prev;
-						$res[] = $val;
+						$res2[] = $prev;
+						$res2[] = $val;
+						//var_dump(count($res2) . " " . count($ngram));
+						if (count($res2) == 2*(count($ngram)-1))
+						{
+							$res = array_merge($res,$res2);
+						}
+					}
+					else {
+						$res2=array();
 					}
 					$prev = $val;
 				}
 				
 				// remove duplicates
+				//var_dump($res);
 				$res = array_unique($res);
 				// if needed, get only the first index of each ngram
 				//$res = array_chunk($res,count($ngram));
-				
+				//var_dump($res);
 				// merge the indexes into the dispersion array
 				$dispers = array_merge($dispers,$res);
 			}
@@ -789,8 +831,9 @@ class UserController extends Controller
 			$series2['data'] = array_merge($series2['data'],$dispers);
 			$categories[] = "".join($ngram," ");
 		}
-		//var_dump($series);
 		
+		//var_dump($limit);
+		//die();
 		$series3=array();
 		
 		$groups2 = array();
@@ -815,13 +858,20 @@ class UserController extends Controller
 		}
 		
 		$series2['data'] = array_slice($series2['data'],0, 1000);
-		//var_dump($series2);
+		
+		$tags = array();
+		foreach ($limit as $item)
+			if ($item['tag']!='#-s:h#')
+				$tags[$item['from']] = $item['tag'];
+		//var_dump($tags);
+		//die();
 		
 		$this->render('drafts/view.dispersion',array(
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
 				'series' => $series3,
-				//'series' => ($series),
+				'ticks' => $ticks,
+				'tags' =>$tags,
 				'categories' => $categories,
 				'structure' => $limit
 		));		

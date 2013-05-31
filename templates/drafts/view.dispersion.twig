@@ -52,6 +52,7 @@
 {% block injectJS %}
 <script src="/assets/d3.js/colorbrewer.js"></script>
 <script src="/assets/highcharts/js/highcharts.js"></script>
+<script src="/assets/highcharts/js/modules/exporting.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	var chart = null;
@@ -106,10 +107,18 @@ $(document).ready(function() {
 	var tt = getColor('#+s:i#');
 
 	chart = new Highcharts.Chart({
+		credits: {
+            enabled: false
+        },
+        exporting: {
+            enabled: true,
+            sourceWidth: 1175 ,
+            sourceHeight: 825,
+        },
 		chart: {
 			renderTo: 'container',
 			type: 'scatter',
-			zoomType: 'xy',
+			zoomType: 'x',
 			reflow: true
 		},
 		title: {
@@ -120,36 +129,57 @@ $(document).ready(function() {
 				return this.series.name + ' ' + this.x;
 	                }
 	    },
-	    xAxis: {
+	    xAxis: [{ // master axis
 			min: 0,
 	    	title: {
-		    	enabled: true,
+		    	enabled: false,
 		        text: 'word count'
 			},
-			startOnTick: true,
-			endOnTick: true,
+			minRange: 200,
+			startOnTick: false,
+			endOnTick: false,
 			showLastLabel: true,
 			plotBands: [
 				{% for key,band in structure %}
-					/* {{ dump(key) }}*/
 					{
 						from: {{ band.from }},
 						to: {{ band.to }},
-						color: getColor('{{ band.tag }}')
+						color: getColor('{{ band.tag }}'),
+						 thickness: '5%'
 					},
 				{% endfor %}
 				]
-		},
-		yAxis: {
-			
+		},{	// slave axis
+			linkedTo:0 ,			
+			minRange: 50,
+			opposite: false,
+	    	title: {
+		    	enabled: true,
+		        text: 'Essay Parts'
+			},
+			tickPositions: {{ ticks|json_encode|raw }},
+			labels: {
+				 staggerLines: 1,
+				 rotation: -45,
+				formatter: function() {
+					var gg = {{ tags|json_encode|raw }} 
+					return gg[this.value];},
+				},
+		}],
+		yAxis:{ minRange: 10,
 			title: {
 				enabled: false,
 				text: null
 			},
-			startOnTick: false,
+			min:0,
+			
+			startOnTick: true,
 			endOnTick: true,
-			categories: {{ categories|json_encode|raw }},
-			labels: {}
+			tickInterval: 4,
+			minorTickInterval: 1,
+			categories:  {{ categories|json_encode|raw }},
+			
+			
 		},
 		plotOptions: {
 			series: {
@@ -157,7 +187,7 @@ $(document).ready(function() {
 			},
 			scatter: {
 				marker: {
-					symbol: 'square',
+					symbol: 'diamond',
 					radius: 5,
 					states: {
 						hover: {
