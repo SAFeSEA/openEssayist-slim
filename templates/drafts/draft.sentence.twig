@@ -33,17 +33,148 @@
 			<div class="widget-header">
 				<h3> Sentences </h3>
 			</div>
-			<div class="widget-content">
-				<table class="table table-condensed table-striped table-bordered">
+			<div class="widget-toolbar">
+				<div class="btn-toolbar" id="options">
+				    <div class="btn-group option-set"  data-toggle="buttons-radio" data-option-key="sortBy">
+    					<button class="btn" data-option-value="rank">Rank</button>
+					    <button class="btn" data-option-value="id">Order</button>
+					    <button class="btn" data-option-value="tag">Structure</button>
+    				</div>
+				</div>
+			</div>
+			<div class="widget-content" id="container">
+				{#<table class="table table-condensed table-striped table-bordered">
 				<tbody>
 				{% for sentence in sentences %}
 					<tr><td>{{ sentence.text  }}</td>	</tr>
 				{% endfor %}
 				</tbody>
-				</table> 
-				
+				</table>#} 
+				{% for sentence in sentences %}
+					
+					<div class="sent" data-tag="{{ sentence.tag}}" 
+						 			  data-rank="{{ sentence.rank}}" 
+						 			  data-id="{{ sentence.id}}" >
+						<span>{{ sentence.tag}}</span>
+						<span>{{ sentence.rank}}</span>
+ 			  			<span>{{ sentence.id}}</span>
+ 			  			<span>{{ sentence.text}}</span>
+						 			  					</div>
+				{% endfor %}
 			</div> 
 		</div>
 	</div>
 </div></div>
+{% endblock %}
+
+{% block injectJS %}
+<script src="/assets/jquery.isotope.min.js"></script>
+<script src="/assets/d3.js/colorbrewer.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	var $container = $('#container');
+	$container.isotope({
+		layoutMode : 'straightDown',
+		itemSelector : '.sent',
+		animationOptions: {
+		     duration: 150,
+		   },
+		getSortData : {
+			rank : function( $elem ) {
+	            return parseInt($elem.attr('data-rank'),10);
+	          },
+	        id : function( $elem ) {
+		            return $elem.attr('data-id');
+		          },
+			tag : function( $elem ) {
+			            return $elem.attr('data-tag');
+			          }
+		}
+	});
+
+	var $optionSets = $('#options .option-set'),
+    	$optionLinks = $optionSets.find('button');
+
+	 $optionLinks.click(function(){
+		 var $this = $(this);
+
+		// don't proceed if already selected
+	        if ( $this.hasClass('active') ) {
+	          return false;
+	        }
+
+	        var $optionSet = $this.parents('.option-set');
+	        $optionSet.find('.btn-primary').removeClass('btn-primary');
+	        $this.addClass('btn-primary');
+
+	        // make option object dynamically, i.e. { filter: '.my-filter-class' }
+	        var options = {},
+	            key = $optionSet.attr('data-option-key'),
+	            value = $this.attr('data-option-value');
+            	        
+		 console.log(key,value);
+
+		 value = value === 'false' ? false : value;
+	        options[ key ] = value;
+	        if ( key === 'layoutMode' && typeof changeLayoutMode === 'function' ) {
+	          // changes in layout modes need extra logic
+	          changeLayoutMode( $this, options )
+	        } else {
+	          // otherwise, apply new options
+	          $container.isotope( options );
+	        }
+	        
+	        return false;
+		 });
+	
+});
+
+</script>
+{% endblock %}
+
+{% block injectCSS %}
+<style type="text/css">
+
+
+.isotope,
+.isotope .isotope-item {
+  /* change duration value to whatever you like */
+  -webkit-transition-duration: 01.8s;
+     -moz-transition-duration: 01.8s;
+      -ms-transition-duration: 01.8s;
+       -o-transition-duration: 01.8s;
+          transition-duration: 01.8s;
+}
+
+.isotope {
+  -webkit-transition-property: height, width;
+     -moz-transition-property: height, width;
+      -ms-transition-property: height, width;
+       -o-transition-property: height, width;
+          transition-property: height, width;
+}
+
+.isotope .isotope-item {
+  -webkit-transition-property: -webkit-transform, opacity;
+     -moz-transition-property:    -moz-transform, opacity;
+      -ms-transition-property:     -ms-transform, opacity;
+       -o-transition-property:      -o-transform, opacity;
+          transition-property:         transform, opacity;
+}
+
+/**** disabling Isotope CSS3 transitions ****/
+
+.isotope.no-transition,
+.isotope.no-transition .isotope-item,
+.isotope .isotope-item.no-transition {
+  -webkit-transition-duration: 0s;
+     -moz-transition-duration: 0s;
+      -ms-transition-duration: 0s;
+       -o-transition-duration: 0s;
+          transition-duration: 0s;
+}
+
+
+</style>
 {% endblock %}

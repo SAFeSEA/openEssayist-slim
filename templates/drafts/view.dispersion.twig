@@ -34,10 +34,12 @@
 <div class="widget">
 <div class="widget-header" data-toggle="collapse" data-target="#demo">
 	<h3>Keyword Dispersion</h3>
-	
+	<div class="box-icon">
+		<a id="disp-option" class="btn-setting" href="javascript:void(0);"><i class="icon-chevron-down"></i></a>
+				</div>
 </div>
 <div class="widget-content">
-	<div id="container" style="height: 600px;margin: 0 auto">
+	<div id="container" style="height: 800px;margin: 0 auto">
 	<div id="resizer" >
 		<div id="inner-resizer">
 	    	
@@ -56,6 +58,18 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	var chart = null;
+	var chartOptions = null;
+
+	$('#disp-option').click(function(){
+		//console.log("fdfdFDDFFD");
+		//var serieReference = chart.series[1];
+		///serieReference.remove(true);
+		//var t=0;
+		var gg = chartOptions.chart.zoomType;
+		gg = (gg=="y")?"x":"y";
+		chartOptions.chart.zoomType = gg;
+		chart = new Highcharts.Chart(chartOptions);;
+	});
 
 	sections =  {
 			'????':'',
@@ -106,7 +120,8 @@ $(document).ready(function() {
 
 	var tt = getColor('#+s:i#');
 
-	chart = new Highcharts.Chart({
+
+	chartOptions = {
 		credits: {
             enabled: false
         },
@@ -131,6 +146,7 @@ $(document).ready(function() {
 	    },
 	    xAxis: [{ // master axis
 			min: 0,
+			
 	    	title: {
 		    	enabled: false,
 		        text: 'word count'
@@ -160,7 +176,7 @@ $(document).ready(function() {
 			tickPositions: {{ ticks|json_encode|raw }},
 			labels: {
 				 staggerLines: 1,
-				 rotation: -45,
+				 rotation: -90,
 				formatter: function() {
 					var gg = {{ tags|json_encode|raw }} 
 					return gg[this.value];},
@@ -175,8 +191,9 @@ $(document).ready(function() {
 			
 			startOnTick: true,
 			endOnTick: true,
-			tickInterval: 4,
+			tickInterval: 1,
 			minorTickInterval: 1,
+			type: 'category',
 			categories:  {{ categories|json_encode|raw }},
 			
 			
@@ -207,9 +224,9 @@ $(document).ready(function() {
 		},
 		series: {{ series|json_encode|raw }}
 			
-	});
+	};
 
-
+	chart = new Highcharts.Chart(chartOptions);
 
 	
 });
