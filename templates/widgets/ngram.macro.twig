@@ -1,7 +1,8 @@
 {% macro toBtn(ngram,showScore=false,userdefined=false) %}
-	<a class="btn btn-mini btn-ngram {{ userdefined?"btn-warning":"" }}" id="{{ ngram.ngram|join("") }}">
-	<span class="label label-info">{{ ngram.count }}</span>
+	<a class="btn btn-large btn-ngram {{ userdefined?"btn-warning":"" }}" id="{{ ngram.ngram|join("") }}">
+	
 		<span>{{ ngram.ngram|join(" ") }}</span>
+		<span class="label label-info">{{ ngram.count }}</span>
 		{% if showScore %}
 			<span class="inlinebar">{{ ngram.score|join(',') }}</span>
 		{% endif %}
@@ -9,7 +10,7 @@
 {% endmacro %}
 
 {% macro toBtnString(ngram,showScore=false,userdefined=false) %}\
-	<a class='btn btn-mini btn-ngram {{ userdefined?"btn-warning":"" }}' id="+{{ ngram|raw }}.ngram+">\
+	<a class='btn btn-large btn-ngram {{ userdefined?"btn-warning":"" }}' id="+{{ ngram|raw }}.ngram+">\
 		<span class='label label-info'>"+{{ ngram|raw }}.count+"</span>\
 		<span>"+{{ ngram|raw }}.ngram+"</span>\
 	</a>\

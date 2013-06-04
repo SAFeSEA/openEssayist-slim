@@ -42,7 +42,12 @@
     				</div>
 				</div>
 			</div>
-			<div class="widget-content" id="container">
+			
+	</div>
+</div></div>
+
+
+<div class="widget-isotope clearfix " id="container">
 				{#<table class="table table-condensed table-striped table-bordered">
 				<tbody>
 				{% for sentence in sentences %}
@@ -55,16 +60,11 @@
 					<div class="sent" data-tag="{{ sentence.tag}}" 
 						 			  data-rank="{{ sentence.rank}}" 
 						 			  data-id="{{ sentence.id}}" >
-						<span>{{ sentence.tag}}</span>
-						<span>{{ sentence.rank}}</span>
- 			  			<span>{{ sentence.id}}</span>
- 			  			<span>{{ sentence.text}}</span>
+						<span>{{ sentence.text}}</span>
 						 			  					</div>
 				{% endfor %}
 			</div> 
 		</div>
-	</div>
-</div></div>
 {% endblock %}
 
 {% block injectJS %}
@@ -72,7 +72,62 @@
 <script src="/assets/d3.js/colorbrewer.js"></script>
 
 <script type="text/javascript">
-$(document).ready(function() {
+$(function(){
+
+    var $container = $('#container');
+
+    $container.isotope({
+		layoutMode : 'straightDown',
+    	getSortData : {
+    		tag : function( $elem ) {
+            		return $elem.attr('data-tag');
+            	},
+			rank : function( $elem ) {
+            		return parseInt( $elem.attr('data-rank'), 10 );
+          		},
+			id : function( $elem ) {
+            		return parseInt( $elem.attr('data-id'), 10 );
+          	}
+          }
+    	
+    });
+    
+    
+      var $optionSets = $('#options .option-set'),
+          $optionLinks = $optionSets.find('button');
+
+      $optionLinks.click(function(){
+        var $this = $(this);
+        // don't proceed if already selected
+        if ( $this.hasClass('selected') ) {
+          return false;
+        }
+        var $optionSet = $this.parents('.option-set');
+        $optionSet.find('.selected').removeClass('selected');
+        $this.addClass('selected');
+  
+        // make option object dynamically, i.e. { filter: '.my-filter-class' }
+        var options = {},
+            key = $optionSet.attr('data-option-key'),
+            value = $this.attr('data-option-value');
+        // parse 'false' as false boolean
+        value = value === 'false' ? false : value;
+        options[ key ] = value;
+        if ( key === 'layoutMode' && typeof changeLayoutMode === 'function' ) {
+          // changes in layout modes need extra logic
+          changeLayoutMode( $this, options )
+        } else {
+          // otherwise, apply new options
+          $container.isotope( options );
+        }
+        
+        return false;
+      });
+
+
+  });
+  
+/*$(document).ready(function() {
 	var $container = $('#container');
 	$container.isotope({
 		layoutMode : 'straightDown',
@@ -128,13 +183,24 @@ $(document).ready(function() {
 	        return false;
 		 });
 	
-});
+});*/
 
 </script>
 {% endblock %}
 
 {% block injectCSS %}
 <style type="text/css">
+
+.widget-isotope
+{
+	padding: 10px;
+}
+
+.sent:before
+  {
+  	content: "[" attr(data-tag) "][" attr(data-rank) "][" attr(data-id) "]";
+  }
+
 
 
 .isotope,
@@ -162,19 +228,6 @@ $(document).ready(function() {
        -o-transition-property:      -o-transform, opacity;
           transition-property:         transform, opacity;
 }
-
-/**** disabling Isotope CSS3 transitions ****/
-
-.isotope.no-transition,
-.isotope.no-transition .isotope-item,
-.isotope .isotope-item.no-transition {
-  -webkit-transition-duration: 0s;
-     -moz-transition-duration: 0s;
-      -ms-transition-duration: 0s;
-       -o-transition-duration: 0s;
-          transition-duration: 0s;
-}
-
 
 </style>
 {% endblock %}

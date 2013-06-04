@@ -454,15 +454,23 @@ class UserController extends Controller
 		$data = $dr->as_array();
 		$analysis = $dr->getAnalysis();
 
+		// Get all key phrases in a single structure
+		$allkw = array_merge(array(),
+				$analysis->nvl_data->quadgrams,
+				$analysis->nvl_data->trigrams,
+				$analysis->nvl_data->bigrams
+		);
+		
 
 		$this->render('drafts/draft.keyword',array(
 				'task' => $tsk->as_array(),
 				'draft' => $dr	->as_array(),
 				'keywords' => array(
-						'quadgrams' => $analysis->nvl_data->quadgrams,
-						'trigrams' => $analysis->nvl_data->trigrams,
-						'bigrams' => $analysis->nvl_data->bigrams,
-						'keylemmas' => $analysis->nvl_data->keywords,
+						'Key Phrases' => $allkw,
+						//'quadgrams' => $analysis->nvl_data->quadgrams,
+						//'trigrams' => $analysis->nvl_data->trigrams,
+						//'bigrams' => $analysis->nvl_data->bigrams,
+						'Key Words' => $analysis->nvl_data->keywords,
 				)
 		));
 	}
@@ -706,9 +714,9 @@ class UserController extends Controller
 		
 		
 		$allkw = array_merge(array(),
-				$analysis->nvl_data->quadgrams,
-				$analysis->nvl_data->trigrams,
-				$analysis->nvl_data->bigrams,
+				//$analysis->nvl_data->quadgrams,
+				//$analysis->nvl_data->trigrams,
+				//$analysis->nvl_data->bigrams,
 				$analysis->nvl_data->keywords,
 				array()
 		);

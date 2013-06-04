@@ -39,7 +39,7 @@
 				</div>
 </div>
 <div class="widget-content">
-	<div id="container" style="height: 800px;margin: 0 auto">
+	<div id="container" style="height: 600px;margin: 0 auto">
 	<div id="resizer" >
 		<div id="inner-resizer">
 	    	
@@ -171,10 +171,11 @@ $(document).ready(function() {
 			opposite: false,
 	    	title: {
 		    	enabled: true,
-		        text: 'Essay Parts'
+		        text: 'Essay Structure'
 			},
 			tickPositions: {{ ticks|json_encode|raw }},
 			labels: {
+				enabled: false,
 				 staggerLines: 1,
 				 rotation: -90,
 				formatter: function() {
