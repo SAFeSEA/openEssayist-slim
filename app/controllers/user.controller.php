@@ -714,9 +714,9 @@ class UserController extends Controller
 		
 		
 		$allkw = array_merge(array(),
-				//$analysis->nvl_data->quadgrams,
-				//$analysis->nvl_data->trigrams,
-				//$analysis->nvl_data->bigrams,
+				$analysis->nvl_data->quadgrams,
+				$analysis->nvl_data->trigrams,
+				$analysis->nvl_data->bigrams,
 				$analysis->nvl_data->keywords,
 				array()
 		);

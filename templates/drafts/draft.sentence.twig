@@ -28,7 +28,7 @@
 {% block content %}
 
 
-<div class="row-fluid"><div class="span12">
+<div class="row-fluid"><div class="span8 offset2">
 	<div class="widget">
 			<div class="widget-header">
 				<h3> Sentences </h3>
@@ -36,18 +36,15 @@
 			<div class="widget-toolbar">
 				<div class="btn-toolbar" id="options">
 				    <div class="btn-group option-set"  data-toggle="buttons-radio" data-option-key="sortBy">
-    					<button class="btn" data-option-value="rank">Rank</button>
+    					<button class="btn active btn-primary" data-option-value="rank">Rank</button>
 					    <button class="btn" data-option-value="id">Order</button>
 					    <button class="btn" data-option-value="tag">Structure</button>
     				</div>
 				</div>
 			</div>
-			
-	</div>
-</div></div>
-
-
-<div class="widget-isotope clearfix " id="container">
+	
+	
+	<div class="widget-content clearfix " id="container">
 				{#<table class="table table-condensed table-striped table-bordered">
 				<tbody>
 				{% for sentence in sentences %}
@@ -60,11 +57,20 @@
 					<div class="sent" data-tag="{{ sentence.tag}}" 
 						 			  data-rank="{{ sentence.rank}}" 
 						 			  data-id="{{ sentence.id}}" >
-						<span>{{ sentence.text}}</span>
-						 			  					</div>
+						<div class="par-tag" data-tag="{{ sentence.tag}}"></div>		
+						<div class="par-container">				 			  
+							<span>{{ sentence.text}}</span>
+						</div>
+					</div>
 				{% endfor %}
-			</div> 
-		</div>
+</div> 
+			
+	</div>
+</div></div>
+
+
+
+
 {% endblock %}
 
 {% block injectJS %}
@@ -74,6 +80,52 @@
 <script type="text/javascript">
 $(function(){
 
+	var sections =  {
+			'#-s:t#': 'Title', 
+			'#+s:s#': 'Summary', 
+			'#+s:d#': 'Discussion', 
+			'#+s:d_i#':'Discussion', 
+			'#+s:i#': 'Introduction', 
+			'#+s:c#': 'Conclusion', 
+			'#-s:q#': 'Assignment',  
+			'#+s:p#': 'Preface', 
+			'#-s:h#': 'Heading', 
+			'#-s:n#': 'Numerics', 
+			'#-s:p#': 'Punctuation'					
+			};
+	          		
+	
+sections =  {
+		'????':'',
+		'#+s:c#': 'Conclusion', 
+		'#+s:d_i#':'Discussion', 
+		'#+s:d#': 'Discussion', 
+		'#+s:s#': 'Summary', 
+		'#+s:i#': 'Introduction', 
+		'#-s:t#': 'Title', 
+		'#+s:p#': 'Preface', 
+		'#-s:h#': 'Heading', 
+		'#-s:n#': 'Numerics', 
+		'#-s:q#': 'Assignment',  
+		'#-s:p#': 'Punctuation'					
+		};	
+
+$(".par-tag[data-tag]").each(function()
+		{
+			console.log(Object.keys(sections));
+			var tag = $(this).attr('data-tag');
+			var idx = $.inArray(tag,Object.keys(sections));
+			idx = (idx==-1)?2:idx;
+			var clr = colorbrewer.Paired[11][idx];
+			console.log(tag + " " + idx + " " + clr);
+			if (clr)
+			{
+				 $(this).attr('style', 'background-color: '+clr+' !important');
+				 $(this).css('opacity', 0.5);
+			}
+			$(this).attr('title', sections[tag]);
+		});
+	
     var $container = $('#container');
 
     $container.isotope({
@@ -99,12 +151,12 @@ $(function(){
       $optionLinks.click(function(){
         var $this = $(this);
         // don't proceed if already selected
-        if ( $this.hasClass('selected') ) {
+        if ( $this.hasClass('active') ) {
           return false;
         }
         var $optionSet = $this.parents('.option-set');
-        $optionSet.find('.selected').removeClass('selected');
-        $this.addClass('selected');
+        $optionSet.find('.active').removeClass('active').removeClass('btn-primary');
+        $this.addClass('active').addClass('btn-primary');
   
         // make option object dynamically, i.e. { filter: '.my-filter-class' }
         var options = {},
@@ -191,26 +243,57 @@ $(function(){
 {% block injectCSS %}
 <style type="text/css">
 
-.widget-isotope
+.par-tag
 {
-	padding: 10px;
+    display: table-cell;
+    width: 12px;
+    background-color: #D5D5D5 !important;;
+    border-right: 8px solid white;
+        text-align: center;
+    vertical-align: bottom;
+   
 }
 
-.sent:before
+.par-container
+{
+	display: table-cell;
+}
+
+/*@media (min-width: 1200px) {
+
+.span12 {
+    width: 724px;
+  }
+  
+.row-fluid .span12 {
+    width: 724px;
+  }
+
+}*/
+
+.widget-content {
+	padding: 0px;
+}
+.isotope-item
+{
+	padding: 6px 10px;
+}
+
+/*.sent:before
   {
   	content: "[" attr(data-tag) "][" attr(data-rank) "][" attr(data-id) "]";
   }
-
+*/
 
 
 .isotope,
 .isotope .isotope-item {
   /* change duration value to whatever you like */
-  -webkit-transition-duration: 01.8s;
-     -moz-transition-duration: 01.8s;
-      -ms-transition-duration: 01.8s;
-       -o-transition-duration: 01.8s;
-          transition-duration: 01.8s;
+  -webkit-transition-duration: 0.8s;
+     -moz-transition-duration: 0.8s;
+      -ms-transition-duration: 0.8s;
+       -o-transition-duration: 0.8s;
+          transition-duration: 0.8s;
 }
 
 .isotope {
