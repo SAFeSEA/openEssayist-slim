@@ -147,6 +147,7 @@ $c->app->get('/me/draft/:draft/view/cloud', array($userCtrl, 'viewCloud'))->name
 $c->app->get('/me/draft/:draft/view/chord', array($userCtrl, 'viewChord'))->name('me.draft.view.chord');
 
 $c->app->post('/profile/savedata/keywords', array($userCtrl, 'saveKeywords'))->name('profile.save.keyword');
+$c->app->get('/profile/savedata/notes', array($userCtrl, 'saveNotes'))->name('profile.save.notes');
 
 $c->app->get('/ajax/draft/:draft/graph/:graph.json', array($userCtrl, 'ajaxGraph'))->name('ajax.graph.json')
 				->conditions(array('graph' => '(graphse|graphke)'));

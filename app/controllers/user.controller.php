@@ -1037,6 +1037,12 @@ class UserController extends Controller
 		));
 	}
 
+	public function saveNotes()
+	{
+		 $this->app->etag('unique-id');
+		echo "<h3>fggffggffgfg</h3>";
+	}
+	
 	public function saveKeywords()
 	{
 		$req = $this->app->request();
