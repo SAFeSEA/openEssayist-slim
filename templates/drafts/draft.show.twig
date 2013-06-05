@@ -33,36 +33,37 @@
 		<h3> Display Options </h3>
 	</div>
 	<div class="modal-body">
+	
+	<div class="row-fluid">
+	
 	<div class="widget-content span3"> 
-				   
-						<legend>Structure</legend>
-    					
-									<label class="checkbox"> 
-										<input  type="checkbox" value="#-s:t#" class="cStructure" checked="checked"> 
-										Title
-									</label>
-									<label class="checkbox"> 
-										<input  type="checkbox" value="#-s:h#" class="cStructure" checked="checked"> 
-										Headings
-									</label>
-									<label class="checkbox"> 
-										<input  type="checkbox" value="#+s:i#" class="cStructure" checked="checked"> 
-										Introduction
-									</label>
-									<label class="checkbox"> 
-										<input  type="checkbox" value="#+s#" class="cStructure" checked="checked"> 
-										Body
-									</label>
-									<label class="checkbox"> 
-										<input type="checkbox" value="#+s:c#" class="cStructure" checked="checked"> 
-										Conclusion
-									</label>
-									<label class="checkbox"> 
-										<input type="checkbox" value="#-s:q#;#-s:n#;#-s:p#" class="cStructure" checked="checked"> 
-										Others
-									</label>
+		<legend>Structure</legend>
+    	<label class="checkbox"> 
+			<input  type="checkbox" value="#-s:t#" class="cStructure" checked="checked"> 
+			Title
+		</label>
+		<label class="checkbox"> 
+			<input  type="checkbox" value="#-s:h#" class="cStructure" checked="checked"> 
+			Headings
+		</label>
+		<label class="checkbox"> 
+			<input  type="checkbox" value="#+s:i#" class="cStructure" checked="checked"> 
+			Introduction
+		</label>
+		<label class="checkbox"> 
+			<input  type="checkbox" value="#+s#" class="cStructure" checked="checked"> 
+			Body
+		</label>
+		<label class="checkbox"> 
+			<input type="checkbox" value="#+s:c#" class="cStructure" checked="checked"> 
+			Conclusion
+		</label>
+		<label class="checkbox"> 
+			<input type="checkbox" value="#-s:q#;#-s:n#;#-s:p#" class="cStructure" checked="checked"> 
+			Others
+		</label>
 									
-				</div>
+	</div>
 					<div class="widget-content span3"> 
 											<legend> Sentences </legend>
 
@@ -114,9 +115,10 @@
 								</div>
 							
 							</div>
-			</div> 
+			</div> </div> 
 	</div>
 	<div class="modal-footer">
+	
 		<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">OK</button>
 	</div>
 </div>
@@ -124,6 +126,8 @@
 <div class="row-fluid">
 
 <div class="widget widget-content">
+<button class="demo btn btn-primary" data-toggle="modal">View Demo</button>
+<button class="ajax">Test AJAX</button>
 <button data-target="#myModal" role="button" class="btn btn-primary pull-right" data-toggle="modal">
 		Display Options <i class="icon-check icon-white"></i></button>
 </div>
@@ -157,15 +161,35 @@
 
 </div></div>
 
+<div id="ajax-modal" class="modal container  hide fade" tabindex="-1">
+<div class="modal-header">
+		<h3> Display Options </h3>
+	</div>
+	<div class="modal-body">
+		<form>
+	      <textarea id="comment" style="width: 600px; height: 400px;">
+	        <p>This is a comment.</p>
+	      </textarea>
+	    </form>
+	</div>
+	
+	<div class="modal-footer">
+	
+		<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">OK</button>
+	</div>
+</div>
+
 {% endblock %}
 
 
 
 {% block injectCSS %}
 <link href="/assets/openessayist/css/hljs.css" rel="stylesheet">
+<link href="/assets/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" />
 <style type="text/css">
-.modal-backdrop,
-.modal-backdrop.fade.in {
+
+.modal-backdrop, .modal-backdrop.fade.in {
+    background: none repeat scroll 0 0 #000;
   opacity: 0.5;
   filter: alpha(opacity=50);
 }
@@ -338,7 +362,50 @@ label.checkbox:before
 	<script src="/assets/d3.js/colorbrewer.js"></script>
 	<script src="/assets/highlight.js/highlight.pack.js"></script>
 	<script src="/assets/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.js"></script>
-	{% include "javascript/hljs.keywords.js.twig" %}
+	<script src="/assets/bootstrap-modal/js/bootstrap-modalmanager.js"></script>
+	<script src="/assets/bootstrap-modal/js/bootstrap-modal.js"></script>
+	<script src="/assets/snapeditor/snapeditor.js"></script>
+	
+		{% include "javascript/hljs.keywords.js.twig" %}
+		
+<script id="ajax" type="text/javascript">
+
+$('.ajax').on('click', function(){
+	console.log("DFFDDFDF");
+	$.ajax({
+		url: '{{ urlFor('profile.save.notes') }}',
+		context: document.body
+		}).done(function() {
+			console.log("DONE!");
+		});
+});
+		
+var $modal = $('#ajax-modal');
+var inPlaceEditor = null;
+
+$('.demo').on('click', function(){
+  // create the backdrop and wait for next modal to be triggered
+ // $('body').modalmanager('loading');
+
+	$modal.find('textarea#comment').load(
+			"{{ urlFor('profile.save.notes') }}", "", 
+			function(){
+				if (!inPlaceEditor) inPlaceEditor = new SnapEditor.InPlace("comment", {
+					buttons: [
+					          "bold", "italic", "|",
+					          "orderedList", "unorderedList", "indent", "outdent", "|",
+					          "link"
+					        ]
+					});
+     			$modal.modal();
+     			
+    		});
+});
+
+
+
+</script>		
+		
 	<script>
 	$(document).ready(function() {
 
