@@ -126,8 +126,7 @@
 <div class="row-fluid">
 
 <div class="widget widget-content">
-<button class="demo btn btn-primary" data-toggle="modal">View Demo</button>
-<button class="ajax">Test AJAX</button>
+<button class="demo btn btn-primary" data-toggle="modal">Show my notes ...</button>
 <button data-target="#myModal" role="button" class="btn btn-primary pull-right" data-toggle="modal">
 		Display Options <i class="icon-check icon-white"></i></button>
 </div>
@@ -161,16 +160,17 @@
 
 </div></div>
 
-<div id="ajax-modal" class="modal container  hide fade" tabindex="-1">
-<div class="modal-header">
-		<h3> Display Options </h3>
+<div id="ajax-modal" class="modal hide fade" tabindex="-1">
+	<div class="modal-header">
+		<h3>Notes</h3>
 	</div>
 	<div class="modal-body">
-		<form>
+		<div id="comment" style=""></div>
+		{#<form>
 	      <textarea id="comment" style="width: 600px; height: 400px;">
 	        <p>This is a comment.</p>
 	      </textarea>
-	    </form>
+	    </form>#}
 	</div>
 	
 	<div class="modal-footer">
@@ -380,26 +380,37 @@ $('.ajax').on('click', function(){
 		});
 });
 		
-var $modal = $('#ajax-modal');
-var inPlaceEditor = null;
+var $modal = null;
+var $inPlaceEditor = null;
 
 $('.demo').on('click', function(){
   // create the backdrop and wait for next modal to be triggered
  // $('body').modalmanager('loading');
-
-	$modal.find('textarea#comment').load(
-			"{{ urlFor('profile.save.notes') }}", "", 
-			function(){
-				if (!inPlaceEditor) inPlaceEditor = new SnapEditor.InPlace("comment", {
-					buttons: [
-					          "bold", "italic", "|",
-					          "orderedList", "unorderedList", "indent", "outdent", "|",
-					          "link"
-					        ]
-					});
-     			$modal.modal();
-     			
-    		});
+	if ($modal==null)
+	{
+			$modal = $('#ajax-modal');
+			$modal.find('div#comment').load(
+					"{{ urlFor('profile.save.notes') }}", "", 
+					function(){
+						if (!$inPlaceEditor) $inPlaceEditor = new SnapEditor.InPlace("comment", {
+							snap: false,
+							buttons: [
+								"styleBlock", "|",
+							    "bold", "italic", "|",
+							    "orderedList", "unorderedList", "indent", "outdent", "|",
+							    "link"
+							        ]
+							});
+		     			
+		     			
+		    		});	
+    }
+	$modal.modal({
+		width:"400px",
+		maxHeight: "300px",
+		keyboard: false,
+		backdrop: "static",
+		});
 });
 
 
