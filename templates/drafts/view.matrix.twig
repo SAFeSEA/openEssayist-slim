@@ -49,15 +49,20 @@
 	<div class="widget">
 		<div class="widget-header" data-toggle="collapse" data-target="#demo">
 			<h3> Display Options </h3>
-			<div class="box-icon">
-				<a class="btn-setting" href="#"><i class="icon-chevron-down"></i></a>
+		</div>
+		
+		<div class="widget-toolbar">
+			<div class="btn-toolbar">    
+			<div class="btn-group">...</div>
+		    <div class="btn-group" data-toggle="buttons-radio">
+    		<button type="button" value="name" class="btn active">Order</button>
+    		<button type="button" value="count" class="btn">Connections</button>
+    		<button type="button" value="group" class="btn">Structure</button>
+    </div>			
 			</div>
 		</div>
-		<select id="order">
-			<option value="name">by Name</option>
-			<option value="count">by Frequency</option>
-			<option value="group">by Cluster</option>
-		</select>
+		
+	
 		<div class="widget-content" id='svg-container'></div>
 		</div>
 
@@ -70,6 +75,7 @@
 <script src="/assets/d3.js/d3.v3.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+
 	//$.blockUI.defaults.baseZ = 1100; 
 	//$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
 	var margin = {top: 80, right: 0, bottom: 10, left: 80},
@@ -93,7 +99,8 @@ var categories = {{ category|json_encode|raw  }};
 var colorcat = {{ colorcat|json_encode|raw  }};
 var sentences = {{ sentence|json_encode|raw  }};
 
-$.blockUI({ message: '<div class="ajax alert alert-info"><img src="/assets/openessayist/img/ajax-loader.gif" /> loading and display data ...</div>' }); 
+
+//$.blockUI({ message: '<div class="ajax alert alert-info"><img src="/assets/openessayist/img/ajax-loader.gif" /> loading and display data ...</div>' }); 
 var xhr = d3.json("{{ urlFor('ajax.graph.json',{"draft":draft.id,"graph":"graphse"}) }}")
 	.on("progress", function() { console.log("progress", d3.event.loaded); })
     .on("error", function(error) { console.log("failure!", error);$.unblockUI(); })
@@ -102,11 +109,22 @@ var xhr = d3.json("{{ urlFor('ajax.graph.json',{"draft":draft.id,"graph":"graphs
 
 function onloaded(graph) {
 
+	$('.btn-group').find('button').bind('click',function(event){
+		 if ( $(this).hasClass('active') ) {
+	          return false;
+	        }
+
+		order($(this).val());	        
+		console.log($(this).attr('id') + " " + $(this).val());
+		});
+
+
 	
+	console.time("test");
 	var nodes = graph.nodes;
 	var links = graph.links;
 	var n = nodes.length;
-		
+	
 	// Compute index per node.
 	nodes.forEach(function(node, i) {
 		//console.log(node);
@@ -116,7 +134,6 @@ function onloaded(graph) {
 		matrix[i] = d3.range(n).map(function(j) { return {x: j, y: i, z: 0}; });
 	});
 
-		
 	//Convert links to matrix; count character occurrences.
 	links.forEach(function(link) {
 		//console.log(link);
@@ -132,8 +149,6 @@ function onloaded(graph) {
 		nodes[link.source].count += 1;//link.value;
 		nodes[link.target].count += 1;//link.value;
 	});
-
-	//console.log(JSON.stringify(matrix));
 	
 	//Precompute the orders.
 	var orders = {
@@ -144,7 +159,8 @@ function onloaded(graph) {
 
 	// The default sort order.
 	x.domain(orders.name);
-		
+
+
 	svg.append("rect")
 		.attr("class", "background")
 		.attr("width", width)
@@ -156,16 +172,29 @@ function onloaded(graph) {
 			.attr("class", "row")
 			.attr("transform", function(d, i) { return "translate(0," + x(i) + ")"; })
 			.each(row);
-		
+
 	row.append("line")
 		.attr("x2", width);
 
+
+	row.append("rect")
+		.attr("x", 0)
+		.attr("y", 0)
+		.attr("transform", function(d, i) { return "translate(" + (-x.rangeBand()*1.5) + ",0)"; })
+		  	.attr("width", function(d,i) { return x.rangeBand(); })
+		  	.attr("height", function(d,i) { return x.rangeBand(); })
+			.style("stroke-width",function(d,n) { return "1px" ; })
+		  	.style("stroke",function(d,n) { return "white"; })		  	
+				.style("fill", function(d,i) { return c(nodes[i].group); });
+	
+		
 	row.append("text")
-		.attr("x", -6)
+		.attr("x", -(x.rangeBand()*1.5+6))
 		.attr("y", x.rangeBand() / 2)
 		.attr("dy", ".32em")
+		  	
 		.attr("text-anchor", "end")
-		.text(function(d, i) { return nodes[i].id + " (" + nodes[i].group + ")"; });
+		.text(function(d, i) { return nodes[i].id ; });
 		
 	var column = svg.selectAll(".column")
 		.data(matrix)
@@ -175,41 +204,56 @@ function onloaded(graph) {
 		
 	column.append("line")
 		.attr("x1", -width);
+
+
+	column.append("rect")
+		.attr("x", 0)
+		.attr("y", 0)
+		.attr("transform", function(d, i) { return "translate(" + (x.rangeBand()*0.5) + ",0)"; })
+		  	.attr("width", function(d,i) { return x.rangeBand(); })
+	  	.attr("height", function(d,i) { return x.rangeBand(); })
+			.style("stroke-width",function(d,n) { return "1px" ; })
+		  	.style("stroke",function(d,n) { return "white"; })		  	
+	  	.style("fill", function(d,i) { return c(nodes[i].group); });
 		
 	column.append("text")
-		.attr("x", 6)
+		.attr("x",  (x.rangeBand()*1.5+6))
 		.attr("y", x.rangeBand() / 2)
 		.attr("dy", ".32em")
 		.attr("text-anchor", "start")
-		.text(function(d, i) { return nodes[i].id + " (" + nodes[i].group + ")"; });
+		.text(function(d, i) { return nodes[i].id; });
 
-	$.unblockUI();
-
+		
 	function row(row) {
 		var cell = d3.select(this).selectAll(".cell")
 			.data(row.filter(function(d){ return d.z; }))
 		  .enter().append("rect")
+		  .on("mouseover", mouseover)
+		  .on("mouseout", mouseout)
+		  
+		  .transition().duration(1000) // this is 1s
+		  .delay(100)     // this is 0.1s
 		  	.attr("class", "cell")
 		  	.attr("x", function(d) { return d.x==d.y? x(d.x)+2 : x(d.x); })
 		  	.attr("y", function(d) { return d.x==d.y? 2 : 0; })
+		  .delay(100)     // this is 0.1s
 		  	.attr("width", function(d) { return d.x==d.y? x.rangeBand()-4 : x.rangeBand(); })
 		  	.attr("height", function(d) { return d.x==d.y? x.rangeBand()-4 : x.rangeBand(); })
+		  .delay(100)     // this is 0.1s
 		  	.style("fill-opacity", function(d) { return z(d.w); })
 		  	//.style("fill-opacity", function(d) { return d.w ? d.w : 1; })
-		  	.style("fill", function(d) { return nodes[d.x].group == nodes[d.y].group ? c(nodes[d.x].group) : null; })
+		  	//.style("fill", function(d) { return nodes[d.x].group == nodes[d.y].group ? c(nodes[d.x].group) : null; })
 		  	//.style("fill", function(d) { return c(nodes[d.y].group); })
 		  	.style("stroke-width",function(d,n) { return d.x==d.y? "2px" : null; })
 		  	.style("stroke",function(d,n) { return d.x==d.y? c(nodes[d.x].group) : null; })
-		  .on("mouseover", mouseover)
-		  .on("mouseout", mouseout)
-		  .each(function(d,i){
+		  /*.each(function(d,i){
 		        $(this).popover({
 			        title:"adjacency", 
 			        container:"body",
 			        trigger: 'hover',
 			        content:sentences[nodes[d.x].id] + " <br> " + sentences[nodes[d.y].id] , 
 				  });
-		    });
+		    })*/;
 	}
 
 	function mouseover(p) {
@@ -230,10 +274,10 @@ function onloaded(graph) {
 
 	}
 		
-	d3.select("#order").on("change", function() {
-		clearTimeout(timeout);
+	/*d3.select("#order").on("change", function() {
+		//clearTimeout(timeout);
 		order(this.value);
-	});
+	});*/
 
 	function order(value) {
 		x.domain(orders[value]);
@@ -251,12 +295,12 @@ function onloaded(graph) {
 		    .attr("transform", function(d, i) { return "translate(" + x(i) + ")rotate(-90)"; });
 	}
 
-	var timeout = setTimeout(function() {
+	/*var timeout = setTimeout(function() {
 			order("group");
 			d3.select("#order").property("selectedIndex", 2).node().focus();
-		}, 5000);
+		}, 5000);*/
 
-	
+	console.timeEnd("test");
 };
 
 
