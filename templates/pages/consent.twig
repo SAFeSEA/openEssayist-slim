@@ -1,0 +1,56 @@
+{% extends "site.twig" %} 
+
+{% block title %}Consent Form{% endblock %} 
+
+{% block content %}
+
+<div class="row-fluid"><div class="span8 offset2">
+	<div class="widget">
+		<div class="widget-header">
+			<h3> Consent Form </h3>
+		</div>
+		<div class="widget-content clearfix " >
+		
+<div>
+If you are willing to take part in this research project please tick the box below.
+
+At any time during the research you are free to withdraw and to request the destruction 
+of any data that have been gathered from you, up to the point at which data are aggregated for analysis. 
+
+Your participation or non-participation will not affect your access to tutorial support or the results of 
+your assessments. 
+
+The results of any research project involving Open University students constitute personal data under 
+the Data Protection Act. They will be kept secure and not released to any third party. 
+All data will be destroyed once the project is complete.
+
+   
+</div>
+		
+		
+<form name="post_essay" id="post_essay" method="post" class="form-horizontal">
+
+ 
+			
+
+
+<div class="form-actions">
+
+	<label class="checkbox"> 
+		<input type="checkbox" name="consent">
+			I am willing to take part in this research, and I give my permission for the data collected to be used 
+			in an anonymous form in any written reports, presentations and published papers relating to this study.  
+			My written consent will be sought separately before any identifiable data are used in such dissemination.
+	</label>
+</div>
+<div class="form-actions">
+	<button class="btn btn-primary" id="submit_essay" type="submit" name="action" value="Submit">Submit</button> 
+</div>
+								
+</form>	
+		
+		
+		</div>
+	</div>
+</div></div>
+{% endblock %}

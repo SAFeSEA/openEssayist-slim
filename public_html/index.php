@@ -122,6 +122,7 @@ $userCtrl = new UserController();
 $c->app->get('/', array($appController, 'index'))->name('home');
 $c->app->get('/config', array($appController, 'testConfig'))->name('config');
 $c->app->get('/login', array($loginController, 'index'))->via('GET', 'POST')->name('login');
+$c->app->get('/consent', array($loginController, 'consent'))->via('GET', 'POST')->name('consent');
 $c->app->get('/logout', array($loginController, 'logout'))->name('logout');
 
 $c->app->get('/me/', array($userCtrl, 'me'))->name('me.home');

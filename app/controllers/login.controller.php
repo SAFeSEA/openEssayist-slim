@@ -9,6 +9,17 @@ use Respect\Validation\Validator as v;
  */
 class LoginController extends Controller {
 
+	public function consent()
+	{
+		if ($this->app->request()->isPost()) 
+		{
+			
+		}
+		else
+		{
+			$this->render('pages/consent');
+		}
+	}
 	/**
 	 * @route "login"
 	 */
@@ -17,7 +28,13 @@ class LoginController extends Controller {
 		if ($this->app->request()->isPost()) {
 			if ($this->auth->login($this->post('username'), $this->post('password'))) {
 				$this->app->flash('info', 'Your login was successfull');
-				$this->redirect('me.tasks');
+				
+				$user=$this->auth->getUser();
+				//var_dump($this->auth->getUser());die();
+				//if ($user['active']==1)
+					$this->redirect('me.tasks');
+				//else
+				//	$this->redirect('consent');
 			}
 			else
 				$this->app->flashNow('error', "Username or password is incorrect. Check your details again.");
