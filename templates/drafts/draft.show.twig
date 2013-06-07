@@ -4,27 +4,7 @@
 
 
 {% block bccontainer %}		
-	{% include "widgets/breadcrumb.panel.twig" %}
-	    <li><div class="btn-group">
-    	<a href="{{ urlFor('me.drafts',{"idt":task.id}) }}" class="btn btn-small" >
-    		<i class="icon-pencil"></i><span class="hidden-phone hidden-tablet"> {{ task.name }}</span></a>
-	</div></li>
-	<li><div class="btn-group">
-    	<button class="btn btn-small active disabled">Overview</button>
-    	<a href="{{ urlFor('me.draft.keywords',{"draft":draft.id}) }}" class="btn btn-small" >Keywords</a>
-    	<a href="{{ urlFor('me.draft.sentence',{"draft":draft.id}) }}" class="btn btn-small" >Sentences</a>
-    	<a href="{{ urlFor('me.draft.stats',{"draft":draft.id}) }}" class="btn btn-small" >Stats</a>
-    </div></li>
-	<li><div class="btn-group">
-		<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">Views <span class="caret"></span></a>
-    	<ul class="dropdown-menu">
-			<li><a href="{{ urlFor('me.draft.view.dispersion',{"draft":draft.id}) }}">Keyword Dispersion</a>
-			<li class="divider"></li>
-    	  	<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphke"}) }}">Keyword Graph</a>
-    	  	<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphse"}) }}">Sentence Graph</a>
-		</ul></div>
-    </li>
-    
+	{% include "widgets/breadcrumb.task.twig" %}
 {% endblock %}
 
 {% block content %}
@@ -454,12 +434,12 @@ $('.demo').on('click', function(){
 		//$("label.checkbox").disableSelection();
 		$(".par-tag[data-tag]").each(function()
 		{
-			console.log(Object.keys(sections));
+			//console.log(Object.keys(sections));
 			var tag = $(this).attr('data-tag');
 			var idx = $.inArray(tag,Object.keys(sections));
 			idx = (idx==-1)?2:idx;
 			var clr = colorbrewer.Paired[11][idx];
-			console.log(tag + " " + idx + " " + clr);
+			//console.log(tag + " " + idx + " " + clr);
 			if (clr)
 			{
 				 $(this).attr('style', 'background-color: '+clr+' !important');

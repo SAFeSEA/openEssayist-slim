@@ -257,6 +257,20 @@ legend .box-icon{
 	display: none;
 }
 
+
+li.bc_debug
+{
+	  float: right;
+}
+
+li.bc_debug > .btn-group > .btn
+{
+	padding: 2px 4px;
+}
+
+
+
+
 /* Responsive
  -------------------------------------------------- */
 
