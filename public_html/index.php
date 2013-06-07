@@ -26,12 +26,6 @@ require_once "../app/controllers/user.controller.php";
 require_once "../app/models/users.model.php";
 require_once "../app/models/draft.model.php";
 
-#// Very basic ways of simulating "first-run" for initial configuration
-#if (false && !file_exists('./setup/config.ini'))
-#{
-#	require_once "setup/index.php";
-#	die("Configuration ");
-#}
 
 // System's constants
 define('APPLICATION', 'openEssayist');
@@ -87,13 +81,11 @@ if ($view instanceof TwigView)
 // Configuration for Idiom & StrongAuth
 $config = array(
 		'provider' => 'PDOAdmin',
-		//'dsn' => sprintf('mysql:host=%s;dbname=%s', $db[$activeGroup]['hostname'], $db[$activeGroup]['database']),
 		'pdo' => ORM::get_db(),
-		//'dbuser' => $db[$activeGroup]['username'],
-		//'dbpass' => $db[$activeGroup]['password'],
-		'auth.type' => 'form',
-		'login.url' => '/login',
-		'security.urls' => array(
+		'auth.type' => 'form',				// identification by form 
+		'login.url' => '/login',			// URL for login form
+		'consent.url' => '/me/consent',		// URL for consent form
+		'security.urls' => array(			// URLs for secured access
 				array('path' => '/account/'),
 				array('path' => '/me/'),
 				array('path' => '/me/.+'),
@@ -104,9 +96,6 @@ $config = array(
 
 // Define the StrongAuth middleware
 $app->add(new StrongAuthAdmin($config, new Strong\Strong($config)));
-//$app->hook('slim.before', function () use ($app)
-//{
-//});
 
 // Create the openEssaysit application core
 $c = new Application($app);
@@ -122,10 +111,11 @@ $userCtrl = new UserController();
 $c->app->get('/', array($appController, 'index'))->name('home');
 $c->app->get('/config', array($appController, 'testConfig'))->name('config');
 $c->app->get('/login', array($loginController, 'index'))->via('GET', 'POST')->name('login');
-$c->app->get('/consent', array($loginController, 'consent'))->via('GET', 'POST')->name('consent');
 $c->app->get('/logout', array($loginController, 'logout'))->name('logout');
 
 $c->app->get('/me/', array($userCtrl, 'me'))->name('me.home');
+$c->app->get('/me/consent', array($loginController, 'consent'))->via('GET', 'POST')->name('consent');
+
 $c->app->get('/me/essay/(:id(/))', array($userCtrl, 'tasks'))->conditions(array('id' => '[0-9]+'))->name('me.tasks');
 $c->app->get('/me/essay/:idt/draft/(:idd(/))', array($userCtrl, 'drafts'))->name('me.drafts');
 $c->app->get('/me/essay/:idt/submit/', array($userCtrl, 'submitDraft'))->via('GET', 'POST')->name('me.draft.submit');

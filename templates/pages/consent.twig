@@ -12,39 +12,51 @@
 		<div class="widget-content clearfix " >
 		
 <div>
-If you are willing to take part in this research project please tick the box below.
 
-At any time during the research you are free to withdraw and to request the destruction 
-of any data that have been gathered from you, up to the point at which data are aggregated for analysis. 
+<p>If you are willing to take part in this research project please tick the box below.</p>
 
-Your participation or non-participation will not affect your access to tutorial support or the results of 
-your assessments. 
+<p>At any time during the research you are free to withdraw and to request the destruction 
+of any data that have been gathered from you, up to the point at which data are aggregated for analysis.</p> 
 
-The results of any research project involving Open University students constitute personal data under 
+<p>Your participation or non-participation will not affect your access to tutorial support or the results of 
+your assessments. </p>
+
+<p>The results of any research project involving Open University students constitute personal data under 
 the Data Protection Act. They will be kept secure and not released to any third party. 
-All data will be destroyed once the project is complete.
+All data will be destroyed once the project is complete.</p>
 
+<p>My written consent will be sought separately before any identifiable data are used in such dissemination.</p>
    
 </div>
+
 		
 		
-<form name="post_essay" id="post_essay" method="post" class="form-horizontal">
+<form method="post" class="form-horizontal">
 
- 
-			
+<div class="form-consent">
 
+	 <div class="control-group">
+		<label class="control-label" for="consent-name">User: </label>
+		<div class="controls">
+		<input type="text" id="consent-name" name="username" value="{{ auth.user.username }}" readonly="readonly">
+			</div>
+	</div>
 
-<div class="form-actions">
-
-	<label class="checkbox"> 
-		<input type="checkbox" name="consent">
+	
+	<div class="control-group">
+	 	<div class="controls">
+		<label class="checkbox"> 
+			<input type="checkbox" id="consent-check" name="consent" value="Accept">
 			I am willing to take part in this research, and I give my permission for the data collected to be used 
-			in an anonymous form in any written reports, presentations and published papers relating to this study.  
-			My written consent will be sought separately before any identifiable data are used in such dissemination.
-	</label>
+			in an anonymous form in any written reports, presentations and published papers relating to this study.
+		</label>
+		</div>
+	</div>
+
 </div>
 <div class="form-actions">
-	<button class="btn btn-primary" id="submit_essay" type="submit" name="action" value="Submit">Submit</button> 
+	<button class="btn btn-primary" id="consent-submit" type="submit" name="action" value="Submit" disabled="disabled">Accept</button> 
+	<button class="btn " id="consent-cancel" type="submit" name="action" value="Cancel" >Cancel</button>
 </div>
 								
 </form>	
@@ -53,4 +65,45 @@ All data will be destroyed once the project is complete.
 		</div>
 	</div>
 </div></div>
+{% endblock %}
+
+{% block injectCSS %}
+<style>
+
+.form-consent {
+    background-color: #F5F5F5;
+    border-top: 1px solid #E5E5E5;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    padding: 19px 20px 20px;
+}
+
+.form-consent .control-label {
+    float: left;
+    padding-top: 5px;
+    text-align: right;
+    width: 70px;
+}
+
+
+.form-horizontal .controls {
+    margin-left: 80px;
+}
+
+.consent-form input
+{
+  margin-bottom: 0px;
+}
+</style>
+{% endblock %}
+
+{% block injectJS %}
+<script type="text/javascript">
+
+$(document).ready(function(){
+	$("#consent-check").click(function() {
+		  $("#consent-submit").attr("disabled", !this.checked);
+		});
+});
+</script>
 {% endblock %}

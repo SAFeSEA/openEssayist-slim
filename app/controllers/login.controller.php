@@ -13,7 +13,25 @@ class LoginController extends Controller {
 	{
 		if ($this->app->request()->isPost()) 
 		{
-			
+			var_dump($this->post());
+			if ($this->post('action') == 'Submit' && 
+				$this->post('consent') == 'Accept')
+			{
+				$u = Model::factory('Users')->find_one($this->user['id']);
+				if ($u)
+				{
+					// Dirty way of dealing with auth data
+					$_SESSION['auth_user']['active'] = 1;
+					// update user record in database
+					$u->active = 1;
+					$u->save();
+					
+					$this->redirect('me.tasks');
+					
+				}
+				// @todo Should NEVER go there but, just in case, need to add proper exception
+			}
+			$this->redirect('logout');
 		}
 		else
 		{

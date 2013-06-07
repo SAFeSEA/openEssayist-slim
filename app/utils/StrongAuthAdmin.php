@@ -56,17 +56,17 @@ class StrongAuthAdmin extends StrongAuth
 				if (preg_match($patternAsRegex, $req->getPathInfo())) {
 					
 					// FIRST THING: if logged in, check for activation
-					if ($auth->loggedIn())
+					if (isset($config['consent.url']) && $auth->loggedIn())
 					{
 						$user = $auth->getUser();
-						$isactive = $user['active']==1?: false;
-						$path = $req->getPathInfo() == $app->urlFor('consent');
-						//var_dump($path);die();
+						$isactive = $user['active']?: false;
+						$path = $req->getPathInfo() == $config['consent.url'];
+						
 					
 						if (!$isactive)
 						{
-							$app->flash("error", "You need to sign the consent form to access these pages");
-							if (!$path) $app->redirect($app->urlFor('consent'));
+							$app->flashNow("error", "You need to sign the consent form to access these pages");
+							if (!$path) $app->redirect($config['consent.url']);
 						}
 					}
 					
