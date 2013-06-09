@@ -8,7 +8,7 @@
 					class="icon-bar"></span>
 			</button>
 
-			<a class="brand" href="/"><img class="brand-ico"
+			<a class="brand" href="/"><img class="brand-ico" alt="openEssayist"
 				src="/assets/openessayist/img/openEssayist-icon.png">openEssayist</a> 
 				
 			{% if auth.loggedIn() %}	
@@ -26,16 +26,14 @@
 
 			<div class="nav-collapse collapse">
 				<ul class="nav">
-					<li class=""><a href="/me" rel="tooltip" data-placement="bottom"
-						title="Overview of your essays and feedback"><i class="icon-tasks"></i>
-							Dashboard</a>
+					<li class=""><a href="/me" title="Overview of your essays and feedback">
+						<i class="icon-tasks"></i> Dashboard</a>
 					</li> 
 					{% if auth.user.isadmin %}	
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-placement="bottom" rel="tooltip"
-						title="Restricted access to administrative tools"
-						data-toggle="dropdown"><i class="icon-cog"></i> Admin<b
-							class="caret"></b> </a>
+					<li class="dropdown"><a href="#" class="dropdown-toggle" data-placement="bottom" 
+								title="Restricted access to administrative tools"
+								data-toggle="dropdown">
+									<i class="icon-cog"></i> Admin<b class="caret"></b></a>
 						<ul class="dropdown-menu">
 								<li><a href="{{ urlFor('admin.home') }}">openEssayist</a></li>
 							<li class="divider"></li>
