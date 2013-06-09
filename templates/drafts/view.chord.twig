@@ -15,7 +15,9 @@
 		<div class="widget-header">
 			<h3> Chord Diagram </h3>
 		</div>
-		<div class="widget-content" id='svg-container'></div>
+		<div class="widget-content">
+			<div id='svg-container' style=" overflow: hidden;"></div>
+		</div>
 		</div>
 
 </div></div>
@@ -25,9 +27,26 @@
 {% block injectJS %}
 <script src="/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
 <script src="/assets/d3.js/d3.v3.js"></script>
+<script src="/assets/d3.js/colorbrewer.js"></script>
+
 <script type="text/javascript">
 $(document).ready(function(){
 
+	var sections = [
+	        		'????',
+	        		'#+s:c#', 
+	        		'#+s:d_i#', 
+	        		'#+s:d#', 
+	        		'#+s:s#', 
+	        		'#+s:i#', 
+	        		'#-s:t#', 
+	        		'#+s:p#', 
+	        		'#-s:h#', 
+	        		'#-s:n#', 
+	        		'#-s:q#',  
+	        		'#-s:p#',
+	        		'xxxxx'					
+	        		];	
 
 	// From http://mkweb.bcgsc.ca/circos/guide/tables/
 	var matrix = [];
@@ -51,11 +70,20 @@ $(document).ready(function(){
 			var nodes = graph.nodes;
 			var links = graph.links;
 			var n = nodes.length;
-				
+
+			// Not great, get the data into the graph JSON structure
+			var categories = {{ category|json_encode|raw  }};
+			var sentences = {{ sentence|json_encode|raw  }};
+			var rank =  {{ rank|json_encode|raw  }};
+			
+			var c = d3.scale.ordinal().domain(sections).range(colorbrewer.Paired[11]);
+					
 			// Compute index per node.
 			nodes.forEach(function(node, i) {
-				//console.log(node);
-				
+				node.group = categories[node.id];
+				node.color = c(node.group);
+				node.text = sentences[node.id];
+				console.log(node.group + " " + node.color);
 				matrix[i] = d3.range(n).map(function(j) { return 0; });
 			});
 
@@ -87,19 +115,22 @@ $(document).ready(function(){
 	    .range(["#000000", "#FFDD89", "#957244", "#F26223"]);
 
 	var svg = d3.select("#svg-container").append("svg:svg")
-	    .attr("width", width)
+	    .attr("width", "100%")
 	    .attr("height", height)
+	    .attr("overflow","hidden")
 	  .append("g")
 	    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 	svg.append("g").selectAll("path")
 	    .data(chord.groups)
 	  .enter().append("path")
-	    .style("fill", function(d) { return fill(d.index); })
-	    .style("stroke", function(d) { return fill(d.index); })
+	    .style("fill", function(d) { return nodes[d.index].color; })
+		.style("fill-opacity", function(d) { return 0.5; })
+	    .style("stroke", function(d) { return nodes[d.index].color; })
 	    .attr("d", d3.svg.arc().innerRadius(innerRadius).outerRadius(outerRadius))
 	    .on("mouseover", fade(0))
-	    .on("mouseout", fade(1));
+	    .on("mouseout", fade(1))
+	    .each(axisPopover);
 
 	var ticks = svg.append("g").selectAll("g")
 	    .data(chord.groups)
@@ -122,6 +153,8 @@ $(document).ready(function(){
 	ticks.append("text")
 	    .attr("x", 8)
 	    .attr("dy", ".35em")
+	    .attr("width", "100px")
+	    
 	    .attr("transform", function(d) { return d.angle > Math.PI ? "rotate(180)translate(-16)" : null; })
 	    .style("text-anchor", function(d) { return d.angle > Math.PI ? "end" : null; })
 	    .text(function(d) { return d.label; });
@@ -132,7 +165,7 @@ $(document).ready(function(){
 	    .data(chord.chords)
 	  .enter().append("path")
 	    .attr("d", d3.svg.chord().radius(innerRadius))
-	    .style("fill", function(d) { return fill(d.target.index); })
+	    .style("fill", function(d) { return nodes[d.source.index].color; })
 	    .style("opacity", 1);
 
 	// Returns an array of tick angles and labels, given a group.
@@ -145,6 +178,7 @@ $(document).ready(function(){
 	    };
 	  });
 	}
+	
 
 	// Returns an event handler for fading a given chord group.
 	function fade(opacity) {
@@ -156,7 +190,34 @@ $(document).ready(function(){
 	  };
 	}
 	
-
+	function axisPopover(d,i)
+	{
+		$(this).popover({
+			title:"Sentence" , 
+		    container:"body",
+		    trigger: 'hover',
+		    html : true,
+		    placement: function()
+		    {
+			    if (d.startAngle> 7*Math.PI/4)
+				    return "top";
+			    else if (d.startAngle> 5*Math.PI/4)
+			    	return "left";
+			    else if (d.startAngle> 3*Math.PI/4)
+			    	return "bottom";
+			    else if (d.startAngle> Math.PI/4)
+			    	return "right";
+			    else return "top";
+		    	
+			},
+	    
+		    content: function() 
+		    	{ 	
+	    			var rank = (nodes[i].rank==-1)? "" : "<span class='badge badge-info'>"+(nodes[i].rank+1)+"</span>";
+	    			var tag  = "<span class='badge'>"+nodes[i].group+"</span>";
+					return sentences[nodes[i].id] + "<p>"+tag + rank+"</p>";} , 
+			});
+	}
 		
 	};
 
