@@ -919,14 +919,36 @@ class UserController extends Controller
 				$analysis->nvl_data->keywords,
 				array()
 		);
-	
+
+		$rank = $analysis->se_data->se_ranked;
+		foreach ($rank as &$p2222r)
+			$p2222r = $p2222r[1];
+			
+		$text = $dr->getParasenttok();
+		
+		$struct2 = array();
+		$count = array();
+		// Join the array into a single string and count words
+		foreach ($text as $index => $par)
+		{
+			foreach ($par as $index2 => $sent)
+			{
+		
+				$struct2[$sent['id']] = $sent['tag'];
+				$count[$sent['id']] = $sent['text'];
+			}
+		}
+
+		
 	
 	
 		$this->render('drafts/view.chord',array(
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
-				'keywords' => $allkw
-		));
+				'category' => $struct2,
+				'sentence' => $count,
+				'rank' => $rank
+			));
 	}
 	
 	public function viewMatrix($draft)
@@ -937,6 +959,10 @@ class UserController extends Controller
 		$analysis = $dr->getAnalysis(true);
 		$gr = json_decode($analysis['se_sample_graph'],true);
 		
+		$rank = $analysis['se_data']['se_ranked'];
+		foreach ($rank as &$p2222r)
+			$p2222r = $p2222r[1];
+			
 		$text = $dr->getParasenttok();
 		
 		$struct2 = array();
@@ -964,8 +990,8 @@ class UserController extends Controller
 				'draft' => $dr->as_array(),
 				'graph' => $gr,
 				'category' => $struct2,
-				'colorcat' => $tt,
-				'sentence' => $count
+				'sentence' => $count,
+				'rank' => $rank
 		));
 	}
 	
@@ -1091,35 +1117,60 @@ class UserController extends Controller
 		
 		$date = new DateTime();
 		$inc = $date;
-		$data = $dr->as_array();
+		//$data = $dr->as_array();
 		$parasenttok = $dr->getParasenttok();
 		$analysis = $dr->getAnalysis();
+		
+		$keylemmas =$analysis->ke_data->keylemmas; 
+		
 		foreach ($parasenttok as $key=>$tt)
 		{
 			$par = array(
-					'label' => 'paragraph'.$key,
+					'label' => 'par'.str_pad($key, 4, '0', STR_PAD_LEFT),
 					'type' => 'paragraph',
 					'start' => $inc->format('M d Y'),
-					'sentence' => array()
+					'contains' => array()
 			);
 			foreach ($tt as $key=>$hh)
 			{
+				
+				$tt = array_intersect($keylemmas,$hh['lemma']);
+				
+				
+				$id = str_pad($hh['id'], 4, '0', STR_PAD_LEFT);
 				$inc->modify('+1 day');
 				$sen = array(
-						'label' => $hh['id'],
+						'label' => 'sent'.$id,
 						'type' => 'sentence',
 						'tag' => $hh['tag'],
+						'rank' => $hh['rank'],
 						'start' => $inc->format('M d Y'),
-						'text' => ''//$hh['text']
+						'text' => $hh['text'],
+						'keyword' => array_values($tt)//$hh['lemma'],
 				);
 				
-				
-				$par['sentence'][]=$hh['id'];
+				$par['tag']=$hh['tag'];
+				$par['contains'][]='sent'.$id;
 				$json['items'][]=$sen;
+				
+				
 			}
 			$json['items'][]=$par;
 		}
+
 		
+		$json['types']= array(
+				'paragraph' => array(
+						"label" => "Paragraph",
+						"pluralLabel" => "Paragraphs"),
+				'sentence' => array(
+						"label" => "Sentence",
+						"pluralLabel" => "Sentences"),
+		);
+		$json['properties']= array(
+				'contains' 	=> array("valueType" => "item"),
+				'rank' 		=> array("valueType" => "number")
+		);		
 		$response = $this->app->response();
 		$response['Content-Type'] = 'application/json';
 		$response['X-Powered-By'] = 'openEssayist';
@@ -1129,6 +1180,20 @@ class UserController extends Controller
 		$response->body(json_encode($json));
 		
 	}
+	
+	public function viewExhibit($draft)
+	{
+		$dr = $this->getDraft($draft);
+		$tsk = $dr->task()->find_one();
+		
+
+	
+		$this->render('drafts/view.exhibit',array(
+				'task' => $tsk->as_array(),
+				'draft' => $dr->as_array()
+		));
+	}
+	
 	
 	
 	public function ajaxGraph($draft,$graph)
