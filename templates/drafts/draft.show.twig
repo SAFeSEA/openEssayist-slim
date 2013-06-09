@@ -129,7 +129,7 @@
 		<div class="par-container">
 			<p id="{{ loop.index0 }}" class='oe-par' >
 	{% for sent in par %}
-				<span class="oe-snt" data-index="{{ sent.id }}" data-tag="{{ sent.tag }}" {{ (sent.rank)? "data-rank="~sent.rank:"" }}>
+				<span class="oe-snt" data-index="{{ sent.id }}" data-tag="{{ sent.tag }}" {{ (sent.rank is defined)? "data-rank="~(sent.rank+1):"" }}>
 				  {{ sent.text }}</span>
 	{% endfor %}
 			</p>
@@ -510,10 +510,10 @@ $('.demo').on('click', function(){
 					var tt = parseInt($(this).attr('data-rank'));
 					var mina = ui.values[0];
 					var maxa = ui.values[1];
-					//alert(tt);
+					console.log(mina + " " + maxa);
 					$(this).removeClass('showmu');
 					$(this).removeClass('dimshowmu');
-					if (mina <= tt && tt <= maxa) {
+					if (mina <= (tt) && (tt) <= maxa) {
 						// if (tt == maxa)
 						$(this).addClass('showmu');
 						
