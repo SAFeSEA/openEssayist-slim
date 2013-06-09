@@ -1,0 +1,223 @@
+{% extends "site.twig" %} 
+
+{% block title %}Draft - Visualisation (Exhibit){% endblock %} 
+
+{% block bccontainer %}		
+	{% include "widgets/breadcrumb.task.twig" %}
+{% endblock %}
+
+
+{% block content %}
+
+{#<div data-ex-role="collection" id="col-sent" data-ex-item-types="sentence"></div>
+<div data-ex-role="collection" id="col-par" data-ex-item-types="paragraph"></div>#}
+<div data-ex-role="collection" data-ex-item-types="paragraph"></div>
+<div class="row-fluid">
+
+<div class="span2">
+	<div class="widget">
+		<div class="widget-header">
+			<h3> Key Words </h3>
+		</div>
+
+		<div class="widget-content" >
+			{#<div data-ex-role="facet" id="facet-search" data-ex-facet-class="TextSearch" data-ex-expressions=".contains.keyword"></div>
+			<div data-ex-role="facet" id="facet-type" data-ex-expression=".type" data-ex-scroll="false" data-ex-facet-label="Discipline"></div>#}
+			{#<div data-ex-role="facet" data-ex-expression=".contains" data-ex-facet-label="Discipline"></div>
+			<div data-ex-role="facet" data-ex-expression=".contains.tag" data-ex-facet-label="Discipline"></div>#}
+			<div data-ex-role="facet" id="facet-keyword1" data-ex-expression=".contains.keyword"
+								 data-ex-facet-label="Keywords (1)" 
+								 data-ex-sort-mode="count" 
+								 data-ex-sort-direction="forward" 
+								 data-ex-show-missing="false"></div>
+			<div data-ex-role="facet" id="facet-keyword2" data-ex-expression=".contains.keyword"
+								 data-ex-facet-label="Keywords (2)" 
+								 data-ex-sort-mode="count" 
+								 data-ex-sort-direction="forward" 
+								 data-ex-show-missing="false"></div>
+					 
+		</div>
+	</div>
+
+</div>
+
+<div class="span10">
+
+
+	<div class="widget">
+		<div class="widget-header">
+			<h3> Key Words </h3>
+		</div>
+
+		<div class="widget-content">
+			<div data-ex-role="facet" id="facet-cloud" data-ex-facet-class="Cloud" data-ex-minimum-count="0" data-ex-expression=".contains.keyword"></div>
+			{#<div data-ex-role="facet" data-ex-facet-class="Cloud" data-ex-expression=".contains.rank"></div>#}
+		</div>
+	</div>
+
+
+
+	<div class="widget">
+		<div class="widget-header">
+			<h3> Chord Diagram </h3>
+		</div>
+		<div class="widget-toolbar">
+			<div class="btn-toolbar">
+			</div>
+			<div data-ex-role="exhibit-controlPanel"></div>
+			</div>    
+	
+		<div class="widget-content" >
+		
+		
+		
+				<div data-ex-role="coder" data-ex-coder-class="Color" id="party-colors" style="display: none">
+                        <span data-ex-color="#AAAAFF">D</span>
+                        <span data-ex-color="#FFAAAA">R</span>
+                    </div>
+                    
+		 <div data-ex-role="viewPanel" >
+        
+            <div data-ex-role="view" 
+            	data-ex-orders=".id"
+            	data-ex-possible-orders=".id,.label"
+                data-ex-label="Details"
+                data-ex-view-class="Thumbnail"
+                data-ex-show-all="true">
+                
+			<div data-ex-role="exhibit-lens" class="par-wrapper" data-ex-onshow="test(this)" style="display: none;" data-ex-item-types="paragraph">
+				<div data-ex-data-tag-content=".tag" class="par-tag"></div>	
+				<div data-ex-content=".contains" class="par-container">
+						<span data-ex-content=".text"></span></div>
+				</div>
+
+				
+			<div data-ex-role="exhibit-lens" class="pddr-lens" style="display: none;" data-ex-item-types="sentence">
+				<div>XXX</div>
+			</div>
+                   
+                        
+		              
+            </div>
+            
+            <div data-ex-role="view"
+                data-ex-label="Details"
+                data-ex-view-class="Tile"
+                data-ex-show-all="true">
+            </div>
+            
+            
+        </div>
+		
+		
+		</div>
+		</div>
+
+</div>
+
+</div>
+
+{% endblock %}
+
+{% block injectJS %}
+<script src="http://api.simile-widgets.org/exhibit/3.0.0/exhibit-api.js"></script>
+	<script src="/assets/d3.js/colorbrewer.js"></script>
+<script type="text/javascript">
+var sections =  {
+		'#-s:t#': 'Title', 
+		'#+s:s#': 'Summary', 
+		'#+s:d#': 'Discussion', 
+		'#+s:d_i#':'Discussion', 
+		'#+s:i#': 'Introduction', 
+		'#+s:c#': 'Conclusion', 
+		'#-s:q#': 'Assignment',  
+		'#+s:p#': 'Preface', 
+		'#-s:h#': 'Heading', 
+		'#-s:n#': 'Numerics', 
+		'#-s:p#': 'Punctuation'					
+		};
+          		
+
+sections =  {
+	'????':'',
+	'#+s:c#': 'Conclusion', 
+	'#+s:d_i#':'Discussion', 
+	'#+s:d#': 'Discussion', 
+	'#+s:s#': 'Summary', 
+	'#+s:i#': 'Introduction', 
+	'#-s:t#': 'Title', 
+	'#+s:p#': 'Preface', 
+	'#-s:h#': 'Heading', 
+	'#-s:n#': 'Numerics', 
+	'#-s:q#': 'Assignment',  
+	'#-s:p#': 'Punctuation'					
+	};	
+
+	
+function test(elmt)
+{
+	//console.log(Object.keys(sections));
+	var gg = $(elmt).find('.par-tag');
+	var tag  =  	gg.attr('data-tag');
+	var idx = $.inArray(tag,Object.keys(sections));
+	idx = (idx==-1)?2:idx;
+	var clr = colorbrewer.Paired[11][idx];
+	if (clr)
+	{
+		gg.attr('style', 'background-color: '+clr+' !important');
+		gg.css('opacity', 0.5);
+	}
+	gg.attr('title', sections[tag]);
+	tt = window.exhibit.getComponent("facet-keyword1")._valueSet.toArray();
+	console.log(tt);
+	}
+	
+$(document).ready(function(){
+
+
+	
+});
+</script>
+{% endblock %}
+
+{% block injectCSS %}
+<link href="{{ urlFor('api.draft.exhibit',{"draft":draft.id}) }}" type="application/json" rel="exhibit-data" />
+{#<link href="//nobelists.js" type="application/json" rel="exhibit-data" />#}
+<style type="text/css">
+
+.par-container
+{
+	display: table-cell;
+}
+
+
+.par-wrapper
+{	
+	/*display: table-row;*/
+	border-bottom: 2px solid white;
+    border-top: 2px solid white;
+}
+.par-tag
+{
+    display: table-cell;
+    width: 12px;
+    background-color: #D5D5D5 !important;;
+    border-right: 8px solid white;
+        text-align: center;
+    vertical-align: bottom;
+   
+}
+
+
+div.exhibit-text-facet input {
+  display: block;
+  width: 100%;
+  min-height: 28px;      
+  
+  
+  .box-sizing(border-box);
+  box-sizing:border-box;
+	-moz-box-sizing:border-box; /* Firefox */
+}
+</style>
+{% endblock %}
