@@ -55,7 +55,7 @@ d3.layout.cloud().size([500, 400])
     }))
     .rotate(function() { return 0; })
     .font("Impact")
-    .fontSize(function(d) { return d.size; })
+    .fontSize(function(d) { return 2*d.size; })
     .on("word", progress)
     .on("end", draw)
     .start();

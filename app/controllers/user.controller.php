@@ -1115,7 +1115,7 @@ class UserController extends Controller
 		
 		date_default_timezone_set('UTC');
 		
-		$date = new DateTime();
+		$date = new DateTime('0001-01-01');
 		$inc = $date;
 		//$data = $dr->as_array();
 		$parasenttok = $dr->getParasenttok();
@@ -1128,7 +1128,7 @@ class UserController extends Controller
 			$par = array(
 					'label' => 'par'.str_pad($key, 4, '0', STR_PAD_LEFT),
 					'type' => 'paragraph',
-					'start' => $inc->format('M d Y'),
+					'start' => $inc->format('Y-m-d'),
 					'contains' => array()
 			);
 			foreach ($tt as $key=>$hh)
@@ -1138,25 +1138,42 @@ class UserController extends Controller
 				
 				
 				$id = str_pad($hh['id'], 4, '0', STR_PAD_LEFT);
-				$inc->modify('+1 day');
 				$sen = array(
 						'label' => 'sent'.$id,
 						'type' => 'sentence',
 						'tag' => $hh['tag'],
-						'rank' => $hh['rank'],
-						'start' => $inc->format('M d Y'),
+						
+						'start' => $inc->format('Y-m-d'),
 						'text' => $hh['text'],
 						'keyword' => array_values($tt)//$hh['lemma'],
 				);
+				if ($hh['rank'])
+					$sen['rank'] = $hh['rank'];
 				
 				$par['tag']=$hh['tag'];
 				$par['contains'][]='sent'.$id;
 				$json['items'][]=$sen;
 				
+				$inc->modify('+1 year');
+				
 				
 			}
 			$json['items'][]=$par;
 		}
+		
+		$keywords = $analysis->nvl_data->keywords;
+		foreach ($keywords as $key=>$hh)
+			{
+				$key = array(
+						'label' => $hh->ngram[0],
+						'type' => 'keyword',
+						'forms' =>  $hh->source,
+				);
+				
+				
+				$json['items'][]=$key;
+			}
+		
 
 		
 		$json['types']= array(
@@ -1166,9 +1183,14 @@ class UserController extends Controller
 				'sentence' => array(
 						"label" => "Sentence",
 						"pluralLabel" => "Sentences"),
+				'keyword' => array(
+						"label" => "Key Word",
+						"pluralLabel" => "Key Words"),
 		);
 		$json['properties']= array(
 				'contains' 	=> array("valueType" => "item"),
+				'keyword' 	=> array("valueType" => "item"),
+				'start' 	=> array("valueType" => "date"),
 				'rank' 		=> array("valueType" => "number")
 		);		
 		$response = $this->app->response();

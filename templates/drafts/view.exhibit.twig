@@ -10,8 +10,11 @@
 {% block content %}
 
 {#<div data-ex-role="collection" id="col-sent" data-ex-item-types="sentence"></div>
-<div data-ex-role="collection" id="col-par" data-ex-item-types="paragraph"></div>#}
+<div data-ex-role="collection" id="col-par" data-ex-item-types="paragraph"></div>
+<div data-ex-role="collection" data-ex-item-types="paragraph"></div>#}
+
 <div data-ex-role="collection" data-ex-item-types="paragraph"></div>
+
 <div class="row-fluid">
 
 <div class="span2">
@@ -25,12 +28,16 @@
 			<div data-ex-role="facet" id="facet-type" data-ex-expression=".type" data-ex-scroll="false" data-ex-facet-label="Discipline"></div>#}
 			{#<div data-ex-role="facet" data-ex-expression=".contains" data-ex-facet-label="Discipline"></div>
 			<div data-ex-role="facet" data-ex-expression=".contains.tag" data-ex-facet-label="Discipline"></div>#}
-			<div data-ex-role="facet" id="facet-keyword1" data-ex-expression=".contains.keyword"
+			<div data-ex-role="facet" id="facet-keyword1"
+								
+								data-ex-expression=".contains.keyword"
 								 data-ex-facet-label="Keywords (1)" 
 								 data-ex-sort-mode="count" 
 								 data-ex-sort-direction="forward" 
 								 data-ex-show-missing="false"></div>
-			<div data-ex-role="facet" id="facet-keyword2" data-ex-expression=".contains.keyword"
+			<div data-ex-role="facet" id="facet-keyword2" 
+								
+								data-ex-expression=".contains.keyword"
 								 data-ex-facet-label="Keywords (2)" 
 								 data-ex-sort-mode="count" 
 								 data-ex-sort-direction="forward" 
@@ -79,9 +86,10 @@
 		 <div data-ex-role="viewPanel" >
         
             <div data-ex-role="view" 
+            	
             	data-ex-orders=".id"
             	data-ex-possible-orders=".id,.label"
-                data-ex-label="Details"
+                data-ex-label="Text"
                 data-ex-view-class="Thumbnail"
                 data-ex-show-all="true">
                 
@@ -92,18 +100,29 @@
 				</div>
 
 				
-			<div data-ex-role="exhibit-lens" class="pddr-lens" style="display: none;" data-ex-item-types="sentence">
+			<div  data-ex-label="Details" data-ex-role="exhibit-lens" class="pddr-lens" style="display: none;" data-ex-item-types="sentence">
 				<div>XXX</div>
 			</div>
                    
                         
 		              
             </div>
+           
             
-            <div data-ex-role="view"
+            <div data-ex-role="view"  
                 data-ex-label="Details"
                 data-ex-view-class="Tile"
                 data-ex-show-all="true">
+            </div>
+            
+             
+            <div  data-ex-role="view"  
+                data-ex-view-class="Timeline"
+                data-ex-start=".start"
+                data-ex-timeline-constructor="timelineConstructor"
+                data-ex-bubble-Width="150"
+                data-ex-ubble-Height="150">
+              
             </div>
             
             
@@ -121,7 +140,8 @@
 
 {% block injectJS %}
 <script src="http://api.simile-widgets.org/exhibit/3.0.0/exhibit-api.js"></script>
-	<script src="/assets/d3.js/colorbrewer.js"></script>
+<script src="/assets/highlight.js/highlight.pack.js"></script>
+<script src="/assets/d3.js/colorbrewer.js"></script>
 <script type="text/javascript">
 var sections =  {
 		'#-s:t#': 'Title', 
@@ -168,9 +188,137 @@ function test(elmt)
 		gg.css('opacity', 0.5);
 	}
 	gg.attr('title', sections[tag]);
-	tt = window.exhibit.getComponent("facet-keyword1")._valueSet.toArray();
-	console.log(tt);
+	tt1 = window.exhibit.getComponent("facet-keyword1")._valueSet.toArray();
+	tt2 = window.exhibit.getComponent("facet-keyword2")._valueSet.toArray();
+		//console.log(tt);
+
+	hljs.LANGUAGES['par-container'] = function(hljs) {
+
+		// define the formatters, based on pattern matching
+		var formatters = [];
+
+		$.each(tt1,function(idx,obj){
+
+			var forms = database.getObjects(obj, "forms").toArray();
+
+			console.log(forms);
+			formatters.push({
+				className: "ngram group1",
+				beginWithKeyword: true, 
+				keywords: forms.join(" "),
+				relevance: 0
+			});
+		
+		});
+		
+		$.each(tt2,function(idx,obj){
+			var forms = database.getObjects(obj, "forms").toArray();
+			formatters.push({
+				className: "ngram group2",
+				beginWithKeyword: true, 
+				keywords: forms.join(" "),
+				relevance: 0
+			});
+		
+		});
+		
+		
+		// return the "language" definition
+		return {
+			case_insensitive: true,
+			contains: formatters
+		};
+		
+	}(hljs);
+	
+	// initialise the code highlighting
+	$('div.par-container').each(function(i, e) {
+		hljs.highlightBlock(e);
+	});
+	
+}
+
+
+
+
+
+	function timelineConstructor(timelineDiv, eventSource) {   
+
+
+		var oldLabelInterval = Timeline.GregorianDateLabeller.prototype.labelInterval;
+
+		Timeline.GregorianDateLabeller.prototype.labelInterval = function(date, intervalUnit) {
+		    if (date.getUTCFullYear() < 1) {
+		   return { text: "", emphasized: false };
+		} else if (date.getUTCFullYear() > 1464) {
+		   return { text: "", emphasized: false };
+		}else {
+		   return oldLabelInterval.call(this, date, intervalUnit);
+		}
+		 };
+		
+		Exhibit.jQuery(timelineDiv)
+         	.css("height", this.timelineHeight + "px")
+         	.attr("class", "exhibit-timelineView-timeline");
+
+     	theme = Timeline.ClassicTheme.create();
+     	//theme.event.bubble.width = this.getUIContext().getSetting("bubbleWidth");
+     	//theme.event.bubble.height = this.getUIContext().getSetting("bubbleHeight");
+     
+
+        //var date_begin = new Date(1999, 0, 1);
+        var bandInfos = [
+            Timeline.createBandInfo({
+                width:          "20%", 
+                intervalUnit: Exhibit.DateTime.DECADE,
+                intervalPixels: 80,
+                eventSource:    eventSource,
+                // date:           date_begin, 
+	        overview:       true,   
+                theme:          theme
+            }),
+            Timeline.createBandInfo({
+                width:          "80%",
+                intervalUnit: Exhibit.DateTime.YEAR,
+                intervalPixels: 60,
+                eventSource:    eventSource,
+                // date:           date_begin,
+                theme:          theme
+            })
+        ];
+        bandInfos[1].syncWith = 0;
+        bandInfos[0].highlight = false;
+
+        // bandInfos[1].eventPainter.setLayout(bandInfos[0].eventPainter.getLayout());
+	for (var i = 0; i < bandInfos.length; i++){
+	    bandInfos[i].decorators = [
+	        new Timeline.SpanHighlightDecorator({
+		    startDate : "0001AD",
+		    endDate   : "0005AD",
+		    startLabel: "N-term",
+	            endLabel  : "",
+		    color     : "red",
+		    opacity   : 100,
+		    theme     : theme }),
+	        new Timeline.SpanHighlightDecorator({
+	            startDate : new Date( 1464, 1, 1),
+	            endDate   : new Date( 1469, 1, 1),
+	            startLabel: "",
+	 	    endLabel  : "C-term",
+	  	    color     : "#000000",
+		    opacity   : 100,
+		    theme     : theme }) 
+	        ];
 	}
+        tl = Timeline.create(timelineDiv, bandInfos, Timeline.HORIZONTAL);
+	// tl.getBand(0).setCenterVisibleDate(Timeline.DateTime.parseGregorianDateTime(date));
+	// tl.getBand(0).setCenterVisibleDate(Timeline.DateTime.parseGregorianDateTime("0500AD"));
+	// tl.getBand(1).setMinVisibleDate(-100);
+        return tl;
+    }
+
+
+	
 	
 $(document).ready(function(){
 
@@ -182,8 +330,23 @@ $(document).ready(function(){
 
 {% block injectCSS %}
 <link href="{{ urlFor('api.draft.exhibit',{"draft":draft.id}) }}" type="application/json" rel="exhibit-data" />
-{#<link href="//nobelists.js" type="application/json" rel="exhibit-data" />#}
+
+<link rel="exhibit-extension" type="text/javascript" href="http://api.simile-widgets.org/exhibit/3.0.0/extensions/time/time-extension.js" />
+
 <style type="text/css">
+.ngram .keyword {
+	text-shadow: none;
+	font-weight: bold;
+}
+
+.ngram.group1 .keyword {
+	color: #1f77b4 !important;
+}
+
+.ngram.group2 .keyword {
+	color: #d62728  !important;
+}
+
 
 .par-container
 {
