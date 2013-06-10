@@ -24,13 +24,17 @@
 		</div>
 
 		<div class="widget-content" >
+			<div data-ex-role="facet" data-ex-expressions=".contains.text"
+				data-ex-facet-class="TextSearch" 
+				data-ex-query-param-name="srch"></div>	
+				
 			{#<div data-ex-role="facet" id="facet-search" data-ex-facet-class="TextSearch" data-ex-expressions=".contains.keyword"></div>
 			<div data-ex-role="facet" id="facet-type" data-ex-expression=".type" data-ex-scroll="false" data-ex-facet-label="Discipline"></div>#}
 			{#<div data-ex-role="facet" data-ex-expression=".contains" data-ex-facet-label="Discipline"></div>
 			<div data-ex-role="facet" data-ex-expression=".contains.tag" data-ex-facet-label="Discipline"></div>#}
 			<div data-ex-role="facet" id="facet-keyword1"
 								
-								data-ex-expression=".contains.keyword"
+								 data-ex-expression=".contains.keyword"
 								 data-ex-facet-label="Keywords (1)" 
 								 data-ex-sort-mode="count" 
 								 data-ex-sort-direction="forward" 
@@ -42,7 +46,7 @@
 								 data-ex-sort-mode="count" 
 								 data-ex-sort-direction="forward" 
 								 data-ex-show-missing="false"></div>
-					 
+					 			
 		</div>
 	</div>
 
@@ -79,14 +83,17 @@
 		
 		
 				<div data-ex-role="coder" data-ex-coder-class="Color" id="party-colors" style="display: none">
-                        <span data-ex-color="#AAAAFF">D</span>
-                        <span data-ex-color="#FFAAAA">R</span>
-                    </div>
+                        <span data-ex-color="#B2DF8A">#+s#</span>
+						<span data-ex-color="#CAB2D6">#-s:h#</span>
+						<span data-ex-color="#FFFF99">#-s:q#</span>
+						<span data-ex-color="#E31A1C">#+s:i#</span>
+				        <span data-ex-color="#1F78B4">#+s:c#</span>
+				</div>
                     
 		 <div data-ex-role="viewPanel" >
         
             <div data-ex-role="view" 
-            	
+            	 data-ex-item-types="paragraph"
             	data-ex-orders=".id"
             	data-ex-possible-orders=".id,.label"
                 data-ex-label="Text"
@@ -119,6 +126,9 @@
             <div  data-ex-role="view"  
                 data-ex-view-class="Timeline"
                 data-ex-start=".start"
+                data-ex-end=".end"
+                data-ex-color-key=".tag"
+                data-ex-color-coder="party-colors"
                 data-ex-timeline-constructor="timelineConstructor"
                 data-ex-bubble-Width="150"
                 data-ex-ubble-Height="150">
@@ -131,6 +141,16 @@
 		
 		</div>
 		</div>
+		
+		
+			<div class="widget">
+		<div class="widget-header">
+			<h3> Key Words </h3>
+		</div>
+
+		<div class="widget-content" id="debug">
+		</div>
+	</div>
 
 </div>
 
@@ -176,6 +196,7 @@ sections =  {
 	
 function test(elmt)
 {
+	$('#debug').empty();
 	//console.log(Object.keys(sections));
 	var gg = $(elmt).find('.par-tag');
 	var tag  =  	gg.attr('data-tag');
@@ -188,6 +209,7 @@ function test(elmt)
 		gg.css('opacity', 0.5);
 	}
 	gg.attr('title', sections[tag]);
+	tt0 = window.exhibit.getComponent("facet-cloud")._valueSet.toArray();
 	tt1 = window.exhibit.getComponent("facet-keyword1")._valueSet.toArray();
 	tt2 = window.exhibit.getComponent("facet-keyword2")._valueSet.toArray();
 		//console.log(tt);
@@ -197,11 +219,27 @@ function test(elmt)
 		// define the formatters, based on pattern matching
 		var formatters = [];
 
+		$.each(tt0,function(idx,obj){
+
+			var forms = database.getObjects(obj, "forms").toArray();
+
+			$('#debug').append('<p>'+forms.join(" ")+'</p>');
+					
+			formatters.push({
+				className: "ngram group0",
+				beginWithKeyword: true, 
+				keywords: forms.join(" "),
+				relevance: 0
+			});
+		
+		});
+
 		$.each(tt1,function(idx,obj){
 
 			var forms = database.getObjects(obj, "forms").toArray();
 
-			console.log(forms);
+			$('#debug').append('<p>'+forms.join(" ")+'</p>');
+					
 			formatters.push({
 				className: "ngram group1",
 				beginWithKeyword: true, 
@@ -213,6 +251,7 @@ function test(elmt)
 		
 		$.each(tt2,function(idx,obj){
 			var forms = database.getObjects(obj, "forms").toArray();
+			$('#debug').append('<p>'+forms.join(" ")+'</p>');
 			formatters.push({
 				className: "ngram group2",
 				beginWithKeyword: true, 
@@ -230,9 +269,9 @@ function test(elmt)
 		};
 		
 	}(hljs);
-	
-	// initialise the code highlighting
-	$('div.par-container').each(function(i, e) {
+
+
+	$(elmt).find('.par-container').each(function(i, e) {
 		hljs.highlightBlock(e);
 	});
 	
@@ -264,41 +303,44 @@ function test(elmt)
      	theme = Timeline.ClassicTheme.create();
      	//theme.event.bubble.width = this.getUIContext().getSetting("bubbleWidth");
      	//theme.event.bubble.height = this.getUIContext().getSetting("bubbleHeight");
-     
+     theme.event.track.height = 40; // this sets the height for a track
+     theme.event.track.gap = 10; // this sets the spacing between tracks
+     theme.event.tape.height = 32; // this sets how thick a duration  
+     theme.event.track.offset = 20;
 
         //var date_begin = new Date(1999, 0, 1);
         var bandInfos = [
             Timeline.createBandInfo({
-                width:          "20%", 
+                width:          "15%", 
                 intervalUnit: Exhibit.DateTime.DECADE,
-                intervalPixels: 80,
+                intervalPixels: 40,
                 eventSource:    eventSource,
-                // date:           date_begin, 
-	        overview:       true,   
+	        	overview:       true,   
                 theme:          theme
             }),
             Timeline.createBandInfo({
-                width:          "80%",
+                width:          "85%",
                 intervalUnit: Exhibit.DateTime.YEAR,
-                intervalPixels: 60,
+                intervalPixels: 40,
+                trackHeight: 	"140px",
+                trackGap:		450,
                 eventSource:    eventSource,
-                // date:           date_begin,
                 theme:          theme
             })
         ];
-        bandInfos[1].syncWith = 0;
-        bandInfos[0].highlight = false;
+        bandInfos[0].syncWith = 1;
+        bandInfos[0].highlight = true;
 
         // bandInfos[1].eventPainter.setLayout(bandInfos[0].eventPainter.getLayout());
-	for (var i = 0; i < bandInfos.length; i++){
+		/*for (var i = 0; i < bandInfos.length; i++){
 	    bandInfos[i].decorators = [
 	        new Timeline.SpanHighlightDecorator({
 		    startDate : "0001AD",
 		    endDate   : "0005AD",
 		    startLabel: "N-term",
 	            endLabel  : "",
-		    color     : "red",
-		    opacity   : 100,
+		    color     : "#E31A1C",
+		    opacity   : 50,
 		    theme     : theme }),
 	        new Timeline.SpanHighlightDecorator({
 	            startDate : new Date( 1464, 1, 1),
@@ -309,7 +351,7 @@ function test(elmt)
 		    opacity   : 100,
 		    theme     : theme }) 
 	        ];
-	}
+	}*/
         tl = Timeline.create(timelineDiv, bandInfos, Timeline.HORIZONTAL);
 	// tl.getBand(0).setCenterVisibleDate(Timeline.DateTime.parseGregorianDateTime(date));
 	// tl.getBand(0).setCenterVisibleDate(Timeline.DateTime.parseGregorianDateTime("0500AD"));
@@ -339,6 +381,9 @@ $(document).ready(function(){
 	font-weight: bold;
 }
 
+.ngram.group0 .keyword {
+	color: #ff7f0e   !important;
+}
 .ngram.group1 .keyword {
 	color: #1f77b4 !important;
 }
@@ -370,6 +415,12 @@ $(document).ready(function(){
     vertical-align: bottom;
    
 }
+
+.timeline-event-label
+{
+	color: black !important;
+}
+
 
 
 div.exhibit-text-facet input {

@@ -1154,10 +1154,16 @@ class UserController extends Controller
 				$par['contains'][]='sent'.$id;
 				$json['items'][]=$sen;
 				
-				$inc->modify('+1 year');
+				$gg = count($tt);
+				$gg = "+".$gg." month +1 year";
+				
+				$inc->modify($gg);
 				
 				
 			}
+			$inc2 = clone $inc;
+			$inc2->modify('-1 week');
+			$par['end'] = $inc2->format('Y-m-d');
 			$json['items'][]=$par;
 		}
 		
