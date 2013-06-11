@@ -6,13 +6,142 @@
 
 {% block bccontainer %}		
 	{% include "widgets/breadcrumb.task.twig" %}
-
+		<li class="pull-right"><div class="btn-group">
+    	<btn id="starttour" class="btn btn-small btn-success btn-tour" title="Get Help on the page"><i class="icon-road"></i>
+    </div></li> 
 	
+{% endblock %}
+
+{% block injectCSS %}
+{% endblock %}
+
+{% block injectJS %}
+<script>
+$(document).ready(function() {
+
+	var myTour = jTour([
+		{
+        	html: "<h1>Welcome to the OpenEssayist Tour</h1><hr>" +
+            	  "This example shows you many different possibilities to use it"
+		},{
+        	html: "<h1>Welcome to the OpenEssayist Tour</h1><hr>" +
+      	  "Hover me to see the controls for the Tour."
+	},{
+    	html: "<h1>Welcome to the OpenEssayist Tour</h1><hr>" +
+    	  "Use the keys <i class='icon-arrow-left'></i> and <i class='icon-arrow-right'></i> to navigate."
+	},{
+			html: "<h1>Welcome to the OpenEssayist Tour</h1><hr>" +
+					"Always start the Tour with this button",
+			element: $('.btn-tour'),
+			overlayOpacity:0.5,
+			expose: true,
+			position: 's'
+		},{
+        	html: 
+        	  "Let's go through the many tools you can use."
+  	},{
+		html: "I can point out to specific elements, like this one",
+		element: $('#go-keywords'),
+		overlayOpacity:0.5,
+		expose: true,
+		position: 'e'
+	}
+	,{
+		html: "I can trigger actions on your behalf.",
+		element: $('#demo-trigger'),
+		overlayOpacity:0.5,
+		expose: true,
+		position: 's'
+	},
+
+	{	html:"See that?",
+		element:$("#demo"),
+		position:"n",
+		overlayOpacity:0.5,
+		expose: true,
+		onBeforeShow:function(a)
+			{
+				$("#demo-trigger").trigger("click");
+			},
+		onHide:function()
+			{
+				$("#demo-trigger").trigger("click");
+			}
+	},
+	{
+		html: "I even have a Multi Page Feature.",
+		wait: 1000
+	},{
+		html: "<h1>5</h1>",
+		onStep: function(e, p) {
+			this.content.find('h1').html(Math.ceil((100-p)/20));
+		},
+		live:5000,
+		goTo: "{{ urlFor('me.drafts',{'idt':task.id}) }}"
+	},{
+		html: "Doesn't feel much but in fact you have reached a different page.",
+	},{
+		html: "Want to see that again?",
+	},{
+		html: "<h1>5</h1>",
+		onStep: function(e, p) {
+			this.content.find('h1').html(Math.ceil((100-p)/20));
+		},
+		live:1000,
+		goTo: "{{ urlFor('me.draft.show',{'draft':drafts[0].id}) }}"
+	},{
+		html: "Happy now?",
+		wait: 1000
+	},{
+		goTo: "{{ urlFor('me.drafts',{'idt':task.id}) }}"
+	},{
+    	html: "<h1>Using OpenEssayist</h1><hr>" +
+  	  		"Let's see now how to use the system"
+	},
+	{
+    	html: "<h1>Review</h1><hr>" +
+  	  		"This panel contains several advices for action on your text.",
+    	element: $('.widget-review'),
+		overlayOpacity:0.5,
+		expose: true,
+		position: 'n'
+	},
+	{
+    	html: "<h1>Review</h1><hr>" +
+  	  		"Each of these actions have a short description, with access to resources",
+    	element: $('#review-keyword1'),
+		overlayOpacity:0.5,
+		expose: true,
+		position: 'n'
+	},
+	{
+    	html: "<h1>Review</h1><hr>" +
+  	  		"Click the button to explore this resource",
+    	element: $('#go-keywords'),
+		overlayOpacity:0.5,
+		expose: true,
+		position: 'n'
+	}
+		
+	],{
+			axis:'y',  // use only one axis prevent flickring on iOS devices
+			animationIn: 'slideDown',
+			animationOut: 'hide',
+			easing: 'easeInOutExpo', //requires the jquery.easing plugin
+			scrollDuration: 600
+		});
+	
+	$('#starttour').click(function() {
+		myTour.start();
+		//alert("FDFGFG");
+	});
+});
+</script>
 {% endblock %}
 
 {% block content %}
 <div class="row-fluid"><div class="span12">
-<div class="widget" data-toggle="collapse" data-target="#demo" style="cursor: pointer;">
+<div class="widget" id="demo-trigger" data-toggle="collapse" data-target="#demo" style="cursor: pointer;">
 			<div class="widget-header" >
 				<h3>Show Assignment information</h3>
 				<div class="box-icon">
@@ -67,7 +196,7 @@
 
 <div class="row-fluid">
 <div class="span12">
-		<div class="widget">
+		<div class="widget widget-review">
 			<div class="widget-header">
 				<h3>Review</h3>
 			</div>
@@ -81,7 +210,7 @@
 	    	<p>Before we can do anything, you need to submit a draft to the system</p>
 	    	
 	    	<p>
-	    	<a class="btn btn-success"  href="{{ urlFor('me.draft.submit',{"idt":task.id}) }}">Submit a new draft...</a>
+	    	<a class="btn btn-success" href="{{ urlFor('me.draft.submit',{"idt":task.id}) }}">Submit a new draft...</a>
 	    	</p>		    	
 	    </div>			
     {% elseif drafts[0].processed == 1 %}
@@ -102,12 +231,12 @@
 			</p>			
 		    	
 	    </div>	
-    <div class="alert alert-block">
+    <div class="alert alert-block" id="review-keyword1">
     		{#<button type="button" class="close" data-dismiss="alert">&times;</button>#}
 	    	<h4>Keywords</h4>
 	    	<p>OpenEssayist has identified the most "important" keywords in your text.</p>
 			<p>You can explore them here: 
-				<a href="{{ urlFor('me.draft.keywords',{"draft":drafts[0].id}) }}" class="btn btn-small" >In a "keywords cloud" ...</a> 
+				<a href="{{ urlFor('me.draft.keywords',{"draft":drafts[0].id}) }}" id="go-keywords" class="btn btn-small" >In a "keywords cloud" ...</a> 
 			</p>			
 	    </div>	
 	    <div class="alert alert-block">
@@ -135,6 +264,15 @@
 	    	<a class="btn btn-success"  href="{{ urlFor('me.draft.act.keyword',{"draft":drafts[0].id}) }}">Organise your keywords ...</a>
 	    	</p>		    	
 	    </div>	
+	    <div class="alert alert-block">
+    		{#<button type="button" class="close" data-dismiss="alert">&times;</button>#}
+	    	<h4>Overview</h4>
+	    	<p>Now that you have explored the different elements of the review, have a look at how they combine:</p>
+			<p>
+				<a href="{{ urlFor('me.draft.show',{"draft":drafts[0].id}) }}" class="btn btn-small" >In the main text...</a>
+				<a href="{{ urlFor('me.draft.view.exhibit',{"draft":drafts[0].id}) }}" class="btn btn-small" >In the facet explorer ...</a>
+			</p>			
+	    </div>		
 	    <div class="alert alert-error">
     		{#<button type="button" class="close" data-dismiss="alert">&times;</button>#}
 	    	<h4>Submit a new draft</h4>
@@ -143,8 +281,7 @@
 	    	<a class="btn btn-success"  href="{{ urlFor('me.draft.submit',{"idt":task.id}) }}">Submit a new draft...</a>
 	    	</p>		    	
 	    </div>			
-	    		
-    {% endif %}    
+	    {% endif %}    
     {% else %}
         	<div class="alert alert-error">
 	    	<h4>Draft is being analysed</h4>

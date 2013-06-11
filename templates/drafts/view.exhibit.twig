@@ -69,9 +69,7 @@
 
 
 	<div class="widget">
-		<div class="widget-header">
-			<h3> Chord Diagram </h3>
-		</div>
+
 		<div class="widget-toolbar">
 			<div class="btn-toolbar">
 			</div>
@@ -313,6 +311,7 @@ function test(elmt)
             Timeline.createBandInfo({
                 width:          "15%", 
                 intervalUnit: Exhibit.DateTime.DECADE,
+                date:		"0001-01-01",
                 intervalPixels: 40,
                 eventSource:    eventSource,
 	        	overview:       true,   
@@ -321,6 +320,7 @@ function test(elmt)
             Timeline.createBandInfo({
                 width:          "85%",
                 intervalUnit: Exhibit.DateTime.YEAR,
+                date:		"0001-01-01",
                 intervalPixels: 40,
                 trackHeight: 	"140px",
                 trackGap:		450,
@@ -419,6 +419,11 @@ $(document).ready(function(){
 .timeline-event-label
 {
 	color: black !important;
+}
+
+.timeline-event-tape
+{
+	opacity: 0.5 !important;
 }
 
 

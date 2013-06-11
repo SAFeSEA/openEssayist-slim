@@ -256,7 +256,7 @@ function onloaded(graph) {
 		        $(this).popover({
 			        title:"adjacency " + d.w.toFixed(2), 
 			        container:"#svg-container",
-			        trigger: 'click',
+			        trigger: 'hover',
 			        html: true,
 			        content:sentences[nodes[d.x].id] + " <hr> " + sentences[nodes[d.y].id] , 
 				  });
@@ -301,7 +301,7 @@ function onloaded(graph) {
 		$(this).popover({
 			title:"Sentence" , 
 		    container:"body",
-		    trigger: 'click',
+		    trigger: 'hover',
 		    html : true,
 		    content: function() 
 		    	{ 	
