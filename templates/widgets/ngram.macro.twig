@@ -1,6 +1,15 @@
-{% macro toBtn(ngram,showScore=false,userdefined=false) %}
-	<a class="btn btn-large btn-ngram {{ userdefined?"btn-warning":"" }}" id="{{ ngram.ngram|join("") }}">
-	
+{% macro toBtn(ngram,showScore=false,isLarge=false,userdefined=false,showPopover=false) %}
+	<a class="btn {{ isLarge?"btn-large":"btn-small" }} btn-ngram {{ userdefined?"btn-warning":"" }}" id="{{ ngram.ngram|join("") }}"
+		{% if showPopover %}
+			data-score="{{ ngram.score|join(',') }}"
+			data-source="{{ ngram.source|join(', ') }}"
+			data-count="{{ ngram.count }}"
+			data-dim={{ ngram.ngram|length }}
+			data-toggle="popover"
+			data-placement="top"
+			data-title="{{ ngram.ngram|join(" ") }}"
+		{% endif %}
+	>
 		<span>{{ ngram.ngram|join(" ") }}</span>
 		<span class="label label-info">{{ ngram.count }}</span>
 		{% if showScore %}
