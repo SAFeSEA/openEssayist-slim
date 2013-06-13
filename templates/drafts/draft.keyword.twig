@@ -120,6 +120,7 @@ $(document).ready(function() {
 	    	{
 	    		var dim= $(this).attr("data-dim");
     			var score= $(this).attr("data-score");
+    			var trend= $(this).attr("data-trend");
     			var forms= $(this).attr("data-source");
     			var count= $(this).attr("data-count");
 
@@ -152,7 +153,12 @@ $(document).ready(function() {
 				$r2.append($('<div />',{ text: "Centrality:", class: "pop-title"}));
 				$r2.append($('<div />',{ class: "pop-desc"}).append(
     	    			$('<span />',{class: 'inlinebar bartodo',text:score})));	    			
-				
+
+    			$r2 = $('<div />').addClass("pop-line").appendTo($newDiv);
+				$r2.append($('<div />',{ text: "Trend:", class: "pop-title"}));
+				$r2.append($('<div />',{ class: "pop-desc"}).append(
+    	    			$('<span />',{class: 'inlinebar trendtodo',text:trend})));	    			
+    	    			
         		return $newDiv;
 		 	}
 	    }).click(function(e) {
@@ -196,7 +202,9 @@ $(document).ready(function() {
 		    
 	    	$('.bartodo').sparkline("html",bullet).removeClass('bartodo');
 			
-				e.preventDefault();
+	    	$('.trendtodo').sparkline("html",{type:'bar',barWidth: 6}).removeClass('trendtodo');
+			
+							e.preventDefault();
 	});
 
 	
