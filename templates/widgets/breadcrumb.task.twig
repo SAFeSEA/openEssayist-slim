@@ -6,8 +6,8 @@
 {% if task is defined %}
 
 <li><div class="btn-group">
-	<a href="{{ urlFor('me.drafts',{"idt":task.id}) }}" class="btn btn-small" >
-    		<i class="icon-book"></i><span class="hidden-phone hidden-tablet"> {{ task.name }}</span></a>
+	<a href="{{ urlFor('me.drafts',{"idt":task.id}) }}" title="Review of the current draft" class="btn btn-small" >
+    		<i class="icon-pencil"></i><span class="hidden-phone hidden-tablet"> {{ task.name }}</span></a>
 </div></li>
 
 {% if draft is defined %}
@@ -34,10 +34,10 @@
 {% endif %}
 
 <li class="bc_debug"><div class="btn-group">
-    	<button class="btn btn-mini disabled "><i class="icon-cog"></i></button>
-		<button class="btn btn-mini btn-info disabled "><i class="icon-book icon-white"></i> {{ task.id }}</button>
+    	<button class="btn btn-mini disabled " disabled="disabled"><i class="icon-cog"></i></button>
+		<button class="btn btn-mini btn-info disabled " disabled="disabled"><i class="icon-book icon-white"></i> {{ task.id }}</button>
 		{% if draft is defined %}
-    	<button class="btn btn-mini btn-info disabled "><i class="icon-pencil icon-white"></i> {{ draft.id }}</button>
+    	<button class="btn btn-mini btn-info disabled " disabled="disabled"><i class="icon-pencil icon-white"></i> {{ draft.id }}</button>
 		{% endif %}
 	</div></li>
 {% endif %}
