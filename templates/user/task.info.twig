@@ -142,10 +142,10 @@ $(document).ready(function() {
 {% block content %}
 <div class="row-fluid"><div class="span12">
 <div class="widget" id="demo-trigger" data-toggle="collapse" data-target="#demo" style="cursor: pointer;">
-			<div class="widget-header" >
-				<h3>Show Assignment information</h3>
+			<div class="widget-header" title="Expand or collapse the details">
+				<h1>Show Assignment information</h1>
 				<div class="box-icon">
-					<a class="btn-setting" href="#"><i class="icon-chevron-down"></i></a>
+					<a class="btn-setting" ><i class="icon-chevron-down"></i></a>
 				</div>
 			</div>
 			</div> 
@@ -156,7 +156,7 @@ $(document).ready(function() {
 	<div class="span2">
 		<div class="widget">
 			<div class="widget-header">
-			<h3> {{ group.name }}</h3>
+			<h2> {{ group.name }}</h2>
 			</div>
 			<div class="widget-content"> 
 					<p> 
@@ -167,7 +167,7 @@ $(document).ready(function() {
 	<div class="span8">
 		<div class="widget">
 			<div class="widget-header">
-			<h3> Assignment</h3>
+			<h2> Assignment</h2>
 			</div>
 			<div class="widget-content"> 
 					<p>{{ task.assignment|nl2br}} </p>
@@ -177,7 +177,7 @@ $(document).ready(function() {
 	<div class="span2">
 		<div class="widget">
 			<div class="widget-header">
-			<h3> Deadline </h3>
+			<h2> Deadline </h2>
 			</div>
 			<div class="widget-content"> 
 					<p>{{ task.deadline}}</p>
@@ -185,7 +185,7 @@ $(document).ready(function() {
 		</div>
 		<div class="widget">
 			<div class="widget-header">
-				<h3> Word Limit</h3>
+				<h2> Word Limit</h2>
 			</div>
 			<div class="widget-content"> 
 				<p>{{ task.wordcount}}</p>
@@ -198,7 +198,7 @@ $(document).ready(function() {
 <div class="span12">
 		<div class="widget widget-review">
 			<div class="widget-header">
-				<h3>Review</h3>
+				<h1>Review</h1>
 			</div>
 			<div class="widget-content"> 
 

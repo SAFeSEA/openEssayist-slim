@@ -9,9 +9,14 @@
 
 	<div class="span6 offset3">
 		<form class="form-signin" action="{{ urlFor('login') }}" method='POST'>
-			<h2 class="form-signin-heading">Please sign in</h2>
+			<h1 class="form-signin-heading">Please sign in</h2>
+			<label for="username">Username</label>
 			<input type="text" placeholder="Username" name="username"
-				id="username" class="input-block-level tt"> <input type="password"
+				id="username" class="input-block-level tt">
+				
+			<label for="password">Password</label>
+				
+				<input type="password"
 				name="password" id="password" placeholder="Password"
 				class="input-block-level"> 
 				

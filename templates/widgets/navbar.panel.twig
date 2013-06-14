@@ -8,7 +8,7 @@
 					class="icon-bar"></span>
 			</button>
 
-			<a class="brand" href="/"><img class="brand-ico" alt="openEssayist"
+			<a class="brand" href="/"><img class="brand-ico" alt="icon"
 				src="/assets/openessayist/img/openEssayist-icon.png">openEssayist</a> 
 				
 			{% if auth.loggedIn() %}	
@@ -26,8 +26,8 @@
 
 			<div class="nav-collapse collapse">
 				<ul class="nav">
-					<li class=""><a href="/me" title="Overview of your essays and feedback">
-						<i class="icon-tasks"></i> Dashboard</a>
+					{#<li class=""><a href="/me" title="Overview of your essays and feedback">
+						<i class="icon-tasks"></i> Dashboard</a>#}
 					</li> 
 					{% if auth.user.isadmin %}	
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-placement="bottom" 
