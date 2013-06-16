@@ -96,6 +96,13 @@
 						<div class="alert-box alert alert-info">{{ flash.info|raw }}</div>
 					{% endif %}{% if flash.error %}
 						<div class="alert-box alert alert-error">{{ flash.error|raw }}</div>
+					{% endif %}{% if flash.tutor %}
+						<div class="alert-block alert alert-success">
+							<button type="button" class="close" data-dismiss="alert">&times;</button>
+							<h4>Help on the task</h4>
+							<hr>
+							{{ flash.tutor|raw }}
+						</div>
 					{% endif %}</div>
 				</div>
 			{% endblock %}

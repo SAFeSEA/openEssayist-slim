@@ -226,7 +226,9 @@ $(document).ready(function() {
 	    	<h4>Structure</h4>
 	    	<p>OpenEssayist tried to identified the structure of your essay (introduction, conclusion, ...)</p>
 			<p>You can explore it :
-				<a href="{{ urlFor('me.draft.show',{"draft":drafts[0].id}) }}" class="btn btn-small" >In the main text...</a>
+				<a href="{{ urlFor('tutor.redirect',{
+										"config":"1223",
+										"url":urlFor('me.draft.show',{"draft":drafts[0].id})}) }}" class="btn btn-small" >In the main text...</a>
 				<a href="{{ urlFor('me.draft.view.structure',{"draft":drafts[0].id}) }}" class="btn btn-small" >As metrics ...</a>
 			</p>			
 		    	

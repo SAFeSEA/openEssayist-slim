@@ -87,6 +87,7 @@ $config = array(
 		'consent.url' => '/me/consent',		// URL for consent form
 		'security.urls' => array(			// URLs for secured access
 				array('path' => '/account/'),
+				array('path' => '/tutor/.+'),
 				array('path' => '/me/'),
 				array('path' => '/me/.+'),
 				array('path' => '/admin/','admin'=> true),
@@ -122,6 +123,9 @@ $c->app->get('/me/essay/:idt/submit/', array($userCtrl, 'submitDraft'))->via('GE
 
 $c->app->post('/api/process/:idt', array($userCtrl, 'processDraft'))->name('me.draft.process');
 $c->app->get('/api/draft/:draft/exhibit.json', array($userCtrl, 'getExhibitJSON'))->conditions(array('id' => '[0-9]+'))->name('api.draft.exhibit');
+
+$c->app->get('/tutor/:config/:url+', array($userCtrl, 'scafoldRedirect'))->name('tutor.redirect');
+
 
 $c->app->get('/me/draft/:draft/show/', array($userCtrl, 'showDraft'))->name('me.draft.show');
 $c->app->get('/me/draft/:draft/keyword/', array($userCtrl, 'showKeyword'))->name('me.draft.keywords');

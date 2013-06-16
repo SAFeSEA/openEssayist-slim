@@ -1246,4 +1246,19 @@ class UserController extends Controller
 		$response->body(json_encode($gr));
 		
 	}
+	
+	public function scafoldRedirect($config,$url)
+	{
+		echo $config;
+		$redirect = "".join($url,"/");
+
+		$r= $this->app->urlFor('me.drafts',array("idt" => 1	));
+		
+		var_dump($redirect);
+		var_dump($r);
+		;
+			
+		$this->app->flash("tutor", "Cannot find the user data");
+		$this->app->redirect($redirect);
+	}
 }
