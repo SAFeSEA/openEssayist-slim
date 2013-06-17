@@ -11,37 +11,38 @@
 
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-header">
-		<h3> Display Options </h3>
+		<h3> Display Options</h3>
 	</div>
 	<div class="modal-body">
 	
 	<div class="row-fluid">
 	
 	{% if not(config.structure.show is defined and config.structure.show == false) %}
+	{% set dsb = (config.structure.modify is sameas(false))?"disabled" %}
 	<div class="widget-content span3"> 
 		<legend>Structure</legend>
     	<label class="checkbox"> 
-			<input  type="checkbox" value="#-s:t#" class="cStructure" {{ ('#-s:t#' is inOption(config.structure.check))? "checked=\"checked\""}}> 
+			<input  type="checkbox" value="#-s:t#" class="cStructure" {{ ('#-s:t#' is inOption(config.structure.check))? "checked=\"checked\""}} {{ dsb }}> 
 			Title
 		</label>
 		<label class="checkbox"> 
-			<input  type="checkbox" value="#-s:h#" class="cStructure" {{ ('#-s:h#' is inOption(config.structure.check))? "checked=\"checked\""}}> 
+			<input  type="checkbox" value="#-s:h#" class="cStructure" {{ ('#-s:h#' is inOption(config.structure.check))? "checked=\"checked\""}} {{ dsb }}>  
 			Headings
 		</label>
 		<label class="checkbox"> 
-			<input  type="checkbox" value="#+s:i#" class="cStructure" {{ ('#+s:i#' is inOption(config.structure.uncheck))? "checked=\"checked\""}}> 
+			<input  type="checkbox" value="#+s:i#" class="cStructure" {{ ('#+s:i#' is inOption(config.structure.check))? "checked=\"checked\""}} {{ dsb }}>  
 			Introduction
 		</label>
 		<label class="checkbox"> 
-			<input  type="checkbox" value="#+s#" class="cStructure" {{ ('#+s#' is inOption(config.structure.check))? "checked=\"checked\""}}> 
+			<input  type="checkbox" value="#+s#" class="cStructure" {{ ('#+s#' is inOption(config.structure.check))? "checked=\"checked\""}} {{ dsb }}>  
 			Body
 		</label>
 		<label class="checkbox"> 
-			<input type="checkbox" value="#+s:c#" class="cStructure" {{ ('#+s:c#' is inOption(config.structure.check))? "checked=\"checked\""}}> 
+			<input type="checkbox" value="#+s:c#" class="cStructure" {{ ('#+s:c#' is inOption(config.structure.check))? "checked=\"checked\""}} {{ dsb }}>  
 			Conclusion
 		</label>
 		<label class="checkbox"> 
-			<input type="checkbox" value="#-s:q#;#-s:n#;#-s:p#" class="cStructure" {{ ('#-s:q#' is inOption(config.structure.check))? "checked=\"checked\""}}> 
+			<input type="checkbox" value="#-s:q#;#-s:n#;#-s:p#" class="cStructure" {{ ('#-s:q#' is inOption(config.structure.check))? "checked=\"checked\""}} {{ dsb }}>  
 			Others
 		</label>
 									
@@ -76,13 +77,15 @@
 			{% for key,item in groups %}
 			<div class="controls controls-row">	
 				<label class="checkbox inline">
-					<input type="checkbox" value="{{ item.id }}" class="cKeyword"> {{ item.attr.name ? item.attr.name : "Default Group" }}
+					<input type="checkbox" value="{{ item.id }}" class="cKeyword"
+					{{ (item.id is inOption(config.keyword.check))? "checked=\"checked\""}}> {{ item.attr.name ? item.attr.name : "Default Group" }}
 				</label>
 			</div>								
 			{% else %}
 			<div class="controls controls-row">	
 				<label class="checkbox inline">
-					<input type="checkbox" value="category_all" class="cKeyword"> Default Group
+					<input type="checkbox" value="category_all" class="cKeyword"
+						{{ ('category_all' is inOption(config.keyword.check))? "checked=\"checked\""}}> Default Group
 				</label>
 			</div>
 			{% endfor %}
@@ -263,7 +266,7 @@ p.oe-par:before
 
 .widget-essay
 {
-	display: table;
+	/*display: table;*/
 }
 
 .par-wrapper
@@ -673,7 +676,12 @@ $('.demo').on('click', function(){
 			var cbox = this;
 			var indicator = cbox.value;
 			var classname = ".ngram."+indicator;
-			$(classname).toggleClass("showKW");
+			console.log("CHECKL:  " + indicator + " (" + cbox.checked + ")");
+			
+			if (cbox.checked)
+				$(classname).addClass("showKW");
+			else
+				$(classname).removeClass("showKW");
 		
 		});
 		
@@ -691,7 +699,7 @@ $('.demo').on('click', function(){
 			});
 
 		});
-		$('.cStructure').trigger('change');
+		
 
 		function rr(event, ui) {
 			$("#amount").text(ui.values[0] + " - " + ui.values[1]);
@@ -705,7 +713,7 @@ $('.demo').on('click', function(){
 				if (mina <= (tt) && (tt) <= maxa) {
 					// if (tt == maxa)
 					$(this).addClass('showmu');
-					console.log(mina + " " + maxa);
+					//console.log(mina + " " + maxa);
 					
 					//console.log("show" + tt);
 					// else
@@ -716,16 +724,23 @@ $('.demo').on('click', function(){
 		}	
 		
 		// set the sentence slider
+		smin = {{ (config.sentence.range.min)?:0 }};
+		smax={{ (config.sentence.range.max)?:15 }};
 		$("#slider-range").slider({
 			range : true,
 			min : 0,
 			max : 15,
-			values : [ 0, 10 ],
+			values : [ smin, smax ],
 			slide : rr,
-			change: rr,
+			change: function(event, ui) {
+					console.log("DFDFDFDFDF");
+					rr(event, ui);
+				},
 		});
-
-		$('#slider-range').trigger('change');
+		$('.cStructure').trigger('change');
+		$('.cKeyword').trigger('change');
+		$('#slider-range').slider("value", {'min':smin});
+		//$('#slider-range').trigger('change');
 	});
 	</script>
 	

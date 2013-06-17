@@ -22,6 +22,7 @@ require_once "../app/controllers/home.controller.php";
 require_once "../app/controllers/login.controller.php";
 require_once "../app/controllers/user.controller.php";
 require_once "../app/controllers/demo.controller.php";
+require_once "../app/controllers/tutor.controller.php";
 
 // Models
 require_once "../app/models/users.model.php";
@@ -115,7 +116,7 @@ $appController = new HomeController();
 $adminCtrl = new AdminController();
 $userCtrl = new UserController();
 $demoCtrl = new DemoController();
-
+$tutorCtrl = new TutorController();
 
 
 // Define the routes

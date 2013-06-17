@@ -221,16 +221,38 @@ $(document).ready(function() {
     		Draft has been submitted. Proceed with the suggestions arising from the analysis of your text.
 	    </div>			
     {% if usermodel.keyword is empty %}
+    	{% for action in actions %}
+    	<div class="alert alert-block">
+    		<h4>{{ action.title }}</h4>
+    		<div>{{ action.description }}</div>
+    		<div><p>{{ action.prompt }}</p>
+    			{% for btn in action.res %}
+    			{% if btn.config is defined %}
+					<a href="{{ urlFor('tutor.redirect',{
+										"config": btn.config,
+										"url":urlFor(btn.url,{"draft":drafts[0].id})}) }}" class="btn btn-small" >{{ btn.text }}</a>
+    			{% else %}
+    				<a href="{{ urlFor(btn.url,{"draft":drafts[0].id}) }}" class="btn btn-small" >{{ btn.text }}</a>
+    			{% endif %}
+    				
+    			{% endfor %}
+    		</div>
+    	</div>
+    	{% endfor %}
+    	
     	<div class="alert alert-block">
     		{#<button type="button" class="close" data-dismiss="alert">&times;</button>#}
 	    	<h4>Structure</h4>
 	    	<p>OpenEssayist tried to identified the structure of your essay (introduction, conclusion, ...)</p>
 			<p>You can explore it :
 				<a href="{{ urlFor('tutor.redirect',{
-										"config":"1223",
+										"config":"show-1",
 										"url":urlFor('me.draft.show',{"draft":drafts[0].id})}) }}" class="btn btn-small" >In the main text...</a>
 				<a href="{{ urlFor('me.draft.view.structure',{"draft":drafts[0].id}) }}" class="btn btn-small" >As metrics ...</a>
-			</p>			
+				<a href="{{ urlFor('tutor.redirect',{
+										"config":"show-2",
+										"url":urlFor('me.draft.show',{"draft":drafts[0].id})}) }}" class="btn btn-small" >In the main text...</a>
+				</p>			
 		    	
 	    </div>	
     <div class="alert alert-block" id="review-keyword1">

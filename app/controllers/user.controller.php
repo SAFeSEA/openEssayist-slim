@@ -3,7 +3,7 @@ use Respect\Validation\Validator as v;
 
 class UserController extends Controller
 {
-	private $STRUCT = array(
+	public static $STRUCT = array(
 			'#-s:t#'=>'Title',
 			'#+s#'=>'Body',
 			'#-s:h#'=>'Heading',
@@ -12,7 +12,7 @@ class UserController extends Controller
 			'#-s:p#'=>'Others',
 			'#+s:c#'=>'Conclusion',
 	);
-	
+		
 	public function me()
 	{
 		$this->render('user/dashboard');
@@ -104,10 +104,14 @@ class UserController extends Controller
 		}
 		/* @var $d Draft */
 		$ap = $g->tasks()->find_one($taskId);
+		
+		$actions = TutorController::getActivities();
+		
 			
 		$this->render('user/task.info',array(
 				'group' => $g->as_array(),
 				'task' => $ap->as_array(),
+				'actions' => $actions,
 				'drafts' => $d
 		));
 		//var_dump($d);
@@ -393,17 +397,35 @@ class UserController extends Controller
 		{
 			return count($b->ngram)-count($a->ngram);
 		});
+		
+		$tutor = $_SESSION['tutor'];
+		$config = null;
+		if (isset($tutor))
+		{
+			$config  = $tutor['config'];
+			unset($_SESSION['tutor']);
+		}
+			
 	
 	
 		$this->render('drafts/draft.show',array(
-				'config' => array(
+				'configxx' => array(
+						'modify' => false,
 						'structure'=> array(
+								'modify' => true,
 								'show'=> true,
-								'check' => array('#+s:i#','#+s:c#')
+								'check' => null//array('#+s:i#','#+s:c#')
 							),
-						'sentence'=> array('show'=> true),
-						'keyword'=> array('show'=> false),
+						'sentence'=> array(
+								'show'=> true,
+								'range' => array('min'=> 0,'max'=>15)
+							),
+						'keyword'=> array(
+								'show'=> true,
+								'check'=> array('category_all')
+							),
 				),
+				'config' => $config,
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
 				'parasenttok' => $parasenttok,
@@ -1258,6 +1280,15 @@ class UserController extends Controller
 	public function scafoldRedirect($config,$url)
 	{
 		$redirect = "".join($url,"/");
+
+		$configs = TutorController::getViewConfigurations();
+		
+		
+		unset($_SESSION['tutor']);
+		$tt = $configs[$config];
+		$tt['id'] = $config;
+		if (isset($tt))
+			$_SESSION['tutor'] = $tt;
 	
 		$this->app->flash("tutor", "Cannot find the user data");
 		$this->app->redirect($redirect);
