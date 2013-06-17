@@ -396,6 +396,14 @@ class UserController extends Controller
 	
 	
 		$this->render('drafts/draft.show',array(
+				'config' => array(
+						'structure'=> array(
+								'show'=> true,
+								'check' => array('#+s:i#','#+s:c#')
+							),
+						'sentence'=> array('show'=> true),
+						'keyword'=> array('show'=> false),
+				),
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
 				'parasenttok' => $parasenttok,
@@ -466,11 +474,11 @@ class UserController extends Controller
 				'task' => $tsk->as_array(),
 				'draft' => $dr	->as_array(),
 				'keywords' => array(
+						'Key Words' => $analysis->nvl_data->keywords,
 						'Key Phrases' => $allkw,
 						//'quadgrams' => $analysis->nvl_data->quadgrams,
 						//'trigrams' => $analysis->nvl_data->trigrams,
 						//'bigrams' => $analysis->nvl_data->bigrams,
-						'Key Words' => $analysis->nvl_data->keywords,
 				)
 		));
 	}
@@ -1249,15 +1257,8 @@ class UserController extends Controller
 	
 	public function scafoldRedirect($config,$url)
 	{
-		echo $config;
 		$redirect = "".join($url,"/");
-
-		$r= $this->app->urlFor('me.drafts',array("idt" => 1	));
-		
-		var_dump($redirect);
-		var_dump($r);
-		;
-			
+	
 		$this->app->flash("tutor", "Cannot find the user data");
 		$this->app->redirect($redirect);
 	}

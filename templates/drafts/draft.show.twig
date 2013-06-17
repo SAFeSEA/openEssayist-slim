@@ -17,74 +17,80 @@
 	
 	<div class="row-fluid">
 	
+	{% if not(config.structure.show is defined and config.structure.show == false) %}
 	<div class="widget-content span3"> 
 		<legend>Structure</legend>
     	<label class="checkbox"> 
-			<input  type="checkbox" value="#-s:t#" class="cStructure" checked="checked"> 
+			<input  type="checkbox" value="#-s:t#" class="cStructure" {{ ('#-s:t#' is inOption(config.structure.check))? "checked=\"checked\""}}> 
 			Title
 		</label>
 		<label class="checkbox"> 
-			<input  type="checkbox" value="#-s:h#" class="cStructure" checked="checked"> 
+			<input  type="checkbox" value="#-s:h#" class="cStructure" {{ ('#-s:h#' is inOption(config.structure.check))? "checked=\"checked\""}}> 
 			Headings
 		</label>
 		<label class="checkbox"> 
-			<input  type="checkbox" value="#+s:i#" class="cStructure" checked="checked"> 
+			<input  type="checkbox" value="#+s:i#" class="cStructure" {{ ('#+s:i#' is inOption(config.structure.uncheck))? "checked=\"checked\""}}> 
 			Introduction
 		</label>
 		<label class="checkbox"> 
-			<input  type="checkbox" value="#+s#" class="cStructure" checked="checked"> 
+			<input  type="checkbox" value="#+s#" class="cStructure" {{ ('#+s#' is inOption(config.structure.check))? "checked=\"checked\""}}> 
 			Body
 		</label>
 		<label class="checkbox"> 
-			<input type="checkbox" value="#+s:c#" class="cStructure" checked="checked"> 
+			<input type="checkbox" value="#+s:c#" class="cStructure" {{ ('#+s:c#' is inOption(config.structure.check))? "checked=\"checked\""}}> 
 			Conclusion
 		</label>
 		<label class="checkbox"> 
-			<input type="checkbox" value="#-s:q#;#-s:n#;#-s:p#" class="cStructure" checked="checked"> 
+			<input type="checkbox" value="#-s:q#;#-s:n#;#-s:p#" class="cStructure" {{ ('#-s:q#' is inOption(config.structure.check))? "checked=\"checked\""}}> 
 			Others
 		</label>
 									
 	</div>
-					<div class="widget-content span3"> 
-											<legend> Sentences </legend>
+	{% endif %}
+	
+	{% if not(config.sentence.show is defined and config.sentence.show == false) %}
+	<div class="widget-content span3"> 
+		<legend> Sentences </legend>
 
-							<div class="controls controls-row">
-								<div class="control-group">
-									<label class="">Top Sentences: <span id="amount" class="input unedidtable-input">0 - 0</span> </label>
-									<div id="slider-range"></div>
-									<span class="help-block">Set range of top sentences to display.</span> 
-								</div>
-								
-							</div>
-			
-			</div> <div class="widget-content span3"> 
-				<legend> Keywords 						
-					<div class="box-icon">
-							<a href="{{ urlFor('me.draft.act.keyword',{"draft":draft.id}) }}" class="btn-setting"><i class="icon-wrench" data-toggle="tooltip" title="Organise the keywords"></i></a>
-					</div>
-				</legend>
-							<div class="controls controls-row">	
-								<span class="help-block">Set the groups of keywords to
-									display.</span> 
-							</div>				
+		<div class="controls controls-row">
+			<div class="control-group">
+				<label class="">Top Sentences: <span id="amount" class="input unedidtable-input">0 - 0</span> </label>
+				<div id="slider-range"></div>
+				<span class="help-block">Set range of top sentences to display.</span> 
+			</div>
+		</div>
+	</div> 
+	{% endif %}
+	
+	{% if not(config.keyword.show is defined and config.keyword.show == false) %}
+	<div class="widget-content span3"> 
+			<legend> Keywords 						
+				<div class="box-icon">
+					<a href="{{ urlFor('me.draft.act.keyword',{"draft":draft.id}) }}" class="btn-setting"><i class="icon-wrench" data-toggle="tooltip" title="Organise the keywords"></i></a>
+				</div>
+			</legend>
+			<div class="controls controls-row">	
+				<span class="help-block">Set the groups of keywords to display.</span> 
+			</div>				
 							
-							{% for key,item in groups %}
-								<div class="controls controls-row">	
-									<label class="checkbox inline"> <input type="checkbox"
-										value="{{ item.id }}" class="cKeyword"
-										> {{ item.attr.name ? item.attr.name : "Default Group" }}
-									</label>
-								</div>								
-							{% else %}
-								<div class="controls controls-row">	
-									<label class="checkbox inline"> <input type="checkbox"
-										value="category_all" class="cKeyword"
-										> Default Group
-									</label>
-								</div>
-							{% endfor %}
-
-			</div> <div class="widget-content span3"> 
+			{% for key,item in groups %}
+			<div class="controls controls-row">	
+				<label class="checkbox inline">
+					<input type="checkbox" value="{{ item.id }}" class="cKeyword"> {{ item.attr.name ? item.attr.name : "Default Group" }}
+				</label>
+			</div>								
+			{% else %}
+			<div class="controls controls-row">	
+				<label class="checkbox inline">
+					<input type="checkbox" value="category_all" class="cKeyword"> Default Group
+				</label>
+			</div>
+			{% endfor %}
+	</div>
+	{% endif %}
+	 
+			
+			<div class="widget-content span3"> 
 				<legend> Essay </legend>
 
 							<div class="controls controls-row">
@@ -685,38 +691,41 @@ $('.demo').on('click', function(){
 			});
 
 		});
+		$('.cStructure').trigger('change');
+
+		function rr(event, ui) {
+			$("#amount").text(ui.values[0] + " - " + ui.values[1]);
+			$('span.oe-snt[data-rank]').each(function() {
+				var tt = parseInt($(this).attr('data-rank'));
+				var mina = ui.values[0];
+				var maxa = ui.values[1];
+				
+				$(this).removeClass('showmu');
+				$(this).removeClass('dimshowmu');
+				if (mina <= (tt) && (tt) <= maxa) {
+					// if (tt == maxa)
+					$(this).addClass('showmu');
+					console.log(mina + " " + maxa);
+					
+					//console.log("show" + tt);
+					// else
+					// $(this).addClass('dimshow');
+
+				}
+			})
+		}	
 		
 		// set the sentence slider
 		$("#slider-range").slider({
 			range : true,
 			min : 0,
 			max : 15,
-			values : [ 0, 1 ],
-			slide : function(event, ui) {
-				$("#amount").text(ui.values[0] + " - " + ui.values[1]);
-
-				$('span.oe-snt[data-rank]').each(function() {
-					var tt = parseInt($(this).attr('data-rank'));
-					var mina = ui.values[0];
-					var maxa = ui.values[1];
-					console.log(mina + " " + maxa);
-					$(this).removeClass('showmu');
-					$(this).removeClass('dimshowmu');
-					if (mina <= (tt) && (tt) <= maxa) {
-						// if (tt == maxa)
-						$(this).addClass('showmu');
-						
-						//console.log("show" + tt);
-						// else
-						// $(this).addClass('dimshow');
-
-					}
-				});
-
-
-
-			}
+			values : [ 0, 10 ],
+			slide : rr,
+			change: rr,
 		});
+
+		$('#slider-range').trigger('change');
 	});
 	</script>
 	

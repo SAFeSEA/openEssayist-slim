@@ -21,6 +21,7 @@ require_once "../app/controllers/admin.controller.php";
 require_once "../app/controllers/home.controller.php";
 require_once "../app/controllers/login.controller.php";
 require_once "../app/controllers/user.controller.php";
+require_once "../app/controllers/demo.controller.php";
 
 // Models
 require_once "../app/models/users.model.php";
@@ -74,7 +75,15 @@ if ($view instanceof TwigView)
 			return $var;
 	});
 	
+	$test = new Twig_SimpleTest('inOption', function ($a,$b) {
+		if (!isset($b)) return true;
+		if (isset($b) && in_array($a, $b) )
+			return true; 
+		return false;
+	});
+	
 	$twig->addFilter($filter);
+	$twig->addTest($test);
 }
 
 
@@ -105,6 +114,7 @@ $loginController = new LoginController();
 $appController = new HomeController();
 $adminCtrl = new AdminController();
 $userCtrl = new UserController();
+$demoCtrl = new DemoController();
 
 
 
@@ -154,6 +164,9 @@ $c->app->get('/admin/users/', array($adminCtrl, 'allUsers'))->name('admin.users'
 $c->app->get('/admin/tasks/', array($adminCtrl, 'allTasks'))->name('admin.tasks');
 $c->app->get('/admin/task/:taskid', array($adminCtrl, 'editTask'))->via('GET', 'POST')->name('admin.task.edit');
 $c->app->get('/admin/analyser/', array($adminCtrl, 'showEssayData'))->name('admin.json');
+
+//$c->app->get('/demo/draft/:draft/show/', array($demoCtrl, 'showDraft'))->name('demo.draft.show');
+
 
 $c->app->error(array($appController, 'error'));
 
