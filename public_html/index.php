@@ -28,10 +28,9 @@ require_once "../app/controllers/tutor.controller.php";
 require_once "../app/models/users.model.php";
 require_once "../app/models/draft.model.php";
 
-
 // System's constants
 define('APPLICATION', 'openEssayist');
-define('VERSION', '2.0.0');
+define('VERSION', '2.1.0');
 define('EXT', '.twig');
 
 // Create main Slim application
@@ -63,12 +62,18 @@ TwigView::$twigOptions = array(
 
 // Set custom Twig filters
 $view = $app->view();
+
 if ($view instanceof TwigView)
 {
 	/* @var $twig Twig_Environment */
 	$twig = $view->getEnvironment();
 	
-	
+	/**
+	 * Create a TWIG filter for Boolean values
+	 * @param 	$var	The variable to render
+	 * @return	A String containing "True" or "False"
+	 * Usage: {{ item|boolean}}
+	 */
 	$filter = new Twig_SimpleFilter('boolean', function ($var) {
 		if (is_bool($var))
 			return ($var) ? "True":"False"; 
@@ -76,9 +81,17 @@ if ($view instanceof TwigView)
 			return $var;
 	});
 	
-	$test = new Twig_SimpleTest('inOption', function ($a,$b) {
-		if (!isset($b)) return true;
-		if (isset($b) && in_array($a, $b) )
+	/**
+	 * Create a TWIG test for checking the existence of a value in an array
+	 * @param 	$val	The value to search for
+	 * @param 	$arr	The array
+	 * @param 	$def	The default value if the array does not exist
+	 * @return	True if the value is in the array, False if not, $def if the array is not set
+	 * Usage: {{ val is inOption(arr,def) }}
+	 */
+	$test = new Twig_SimpleTest('inOption', function ($val,$arr,$def=true) {
+		if (!isset($arr)) return $def;
+		if (isset($arr) && in_array($val, $arr) )
 			return true; 
 		return false;
 	});
@@ -88,7 +101,10 @@ if ($view instanceof TwigView)
 }
 
 
-// Configuration for Idiom & StrongAuth
+/**
+ * @var $config
+ * Configuration for Idiom & StrongAuth
+ */
 $config = array(
 		'provider' => 'PDOAdmin',
 		'pdo' => ORM::get_db(),
@@ -110,6 +126,7 @@ $app->add(new StrongAuthAdmin($config, new Strong\Strong($config)));
 
 // Create the openEssaysit application core
 $c = new Application($app);
+
 // Create the controllers
 $loginController = new LoginController();
 $appController = new HomeController();
@@ -167,7 +184,6 @@ $c->app->get('/admin/task/:taskid', array($adminCtrl, 'editTask'))->via('GET', '
 $c->app->get('/admin/analyser/', array($adminCtrl, 'showEssayData'))->name('admin.json');
 
 //$c->app->get('/demo/draft/:draft/show/', array($demoCtrl, 'showDraft'))->name('demo.draft.show');
-
 
 $c->app->error(array($appController, 'error'));
 

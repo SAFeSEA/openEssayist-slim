@@ -1,7 +1,16 @@
 <?php
 
+/**
+ * 
+ * @author Nicolas Van Labeke (https://github.com/vanch3d)
+ *
+ */
 class TutorController extends Controller
 {
+	/**
+	 * 
+	 * @return array
+	 */
 	public static function getActivities()
 	{
 		$activities = array();
@@ -35,6 +44,11 @@ class TutorController extends Controller
 		
 		return $activities ;
 	}
+	
+	/**
+	 * 
+	 * @return array
+	 */
 	public static function getViewConfigurations()
 	{
 		$configs = array();

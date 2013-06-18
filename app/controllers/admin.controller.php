@@ -1,6 +1,11 @@
 <?php
 use Respect\Validation\Validator as v;
 
+/**
+ * 
+ * @author "Nicolas Van Labeke (https://github.com/vanch3d)"
+ *
+ */
 class AdminController extends Controller
 {
 	/**

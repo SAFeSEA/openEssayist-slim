@@ -18,31 +18,32 @@
 	<div class="row-fluid">
 	
 	{% if not(config.structure.show is defined and config.structure.show == false) %}
-	{% set dsb = (config.structure.modify is sameas(false))?"disabled" %}
+	{% set cfg = config.structure %}
+	{% set dsb = (cfg.modify is sameas(false))?"disabled" %}
 	<div class="widget-content span3"> 
 		<legend>Structure</legend>
     	<label class="checkbox"> 
-			<input  type="checkbox" value="#-s:t#" class="cStructure" {{ ('#-s:t#' is inOption(config.structure.check))? "checked=\"checked\""}} {{ dsb }}> 
+			<input  type="checkbox" value="#-s:t#" class="cStructure" {{ ('#-s:t#' is inOption(cfg.check))? "checked=\"checked\""}} {{ dsb }}> 
 			Title
 		</label>
 		<label class="checkbox"> 
-			<input  type="checkbox" value="#-s:h#" class="cStructure" {{ ('#-s:h#' is inOption(config.structure.check))? "checked=\"checked\""}} {{ dsb }}>  
+			<input  type="checkbox" value="#-s:h#" class="cStructure" {{ ('#-s:h#' is inOption(cfg.check))? "checked=\"checked\""}} {{ dsb }}>  
 			Headings
 		</label>
 		<label class="checkbox"> 
-			<input  type="checkbox" value="#+s:i#" class="cStructure" {{ ('#+s:i#' is inOption(config.structure.check))? "checked=\"checked\""}} {{ dsb }}>  
+			<input  type="checkbox" value="#+s:i#" class="cStructure" {{ ('#+s:i#' is inOption(cfg.check))? "checked=\"checked\""}} {{ dsb }}>  
 			Introduction
 		</label>
 		<label class="checkbox"> 
-			<input  type="checkbox" value="#+s#" class="cStructure" {{ ('#+s#' is inOption(config.structure.check))? "checked=\"checked\""}} {{ dsb }}>  
+			<input  type="checkbox" value="#+s#" class="cStructure" {{ ('#+s#' is inOption(cfg.check))? "checked=\"checked\""}} {{ dsb }}>  
 			Body
 		</label>
 		<label class="checkbox"> 
-			<input type="checkbox" value="#+s:c#" class="cStructure" {{ ('#+s:c#' is inOption(config.structure.check))? "checked=\"checked\""}} {{ dsb }}>  
+			<input type="checkbox" value="#+s:c#" class="cStructure" {{ ('#+s:c#' is inOption(cfg.check))? "checked=\"checked\""}} {{ dsb }}>  
 			Conclusion
 		</label>
 		<label class="checkbox"> 
-			<input type="checkbox" value="#-s:q#;#-s:n#;#-s:p#" class="cStructure" {{ ('#-s:q#' is inOption(config.structure.check))? "checked=\"checked\""}} {{ dsb }}>  
+			<input type="checkbox" value="#-s:q#;#-s:n#;#-s:p#" class="cStructure" {{ ('#-s:q#' is inOption(cfg.check))? "checked=\"checked\""}} {{ dsb }}>  
 			Others
 		</label>
 									
@@ -64,6 +65,7 @@
 	{% endif %}
 	
 	{% if not(config.keyword.show is defined and config.keyword.show == false) %}
+	{% set cfg = config.keyword %}
 	<div class="widget-content span3"> 
 			<legend> Keywords 						
 				<div class="box-icon">
@@ -78,14 +80,14 @@
 			<div class="controls controls-row">	
 				<label class="checkbox inline">
 					<input type="checkbox" value="{{ item.id }}" class="cKeyword"
-					{{ (item.id is inOption(config.keyword.check))? "checked=\"checked\""}}> {{ item.attr.name ? item.attr.name : "Default Group" }}
+					{{ (item.id is inOption(cfg.check,false))? "checked=\"checked\""}}> {{ item.attr.name ? item.attr.name : "Default Group" }}
 				</label>
 			</div>								
 			{% else %}
 			<div class="controls controls-row">	
 				<label class="checkbox inline">
 					<input type="checkbox" value="category_all" class="cKeyword"
-						{{ ('category_all' is inOption(config.keyword.check))? "checked=\"checked\""}}> Default Group
+						{{ ('category_all' is inOption(cfg.check,false))? "checked=\"checked\""}}> Default Group
 				</label>
 			</div>
 			{% endfor %}
@@ -725,7 +727,7 @@ $('.demo').on('click', function(){
 		
 		// set the sentence slider
 		smin = {{ (config.sentence.range.min)?:0 }};
-		smax={{ (config.sentence.range.max)?:15 }};
+		smax={{ (config.sentence.range.max)?:0 }};
 		$("#slider-range").slider({
 			range : true,
 			min : 0,

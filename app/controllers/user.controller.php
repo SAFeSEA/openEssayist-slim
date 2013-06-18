@@ -1,6 +1,11 @@
 <?php
 use Respect\Validation\Validator as v;
 
+/**
+ * 
+ * @author Nicolas Van Labeke (https://github.com/vanch3d)
+ *
+ */
 class UserController extends Controller
 {
 	public static $STRUCT = array(
@@ -12,7 +17,10 @@ class UserController extends Controller
 			'#-s:p#'=>'Others',
 			'#+s:c#'=>'Conclusion',
 	);
-		
+
+	/**
+	 * 
+	 */
 	public function me()
 	{
 		$this->render('user/dashboard');
@@ -20,7 +28,7 @@ class UserController extends Controller
 
 	/**
 	 *
-	 * @param unknown $id
+	 * @param int $id
 	 */
 	public function tasks($id=-1)
 	{
@@ -68,8 +76,8 @@ class UserController extends Controller
 
 	/**
 	 *
-	 * @param unknown $taskId
-	 * @param string $dradtId
+	 * @param int $taskId
+	 * @param int $dradtId
 	 */
 	public function drafts($taskId,$dradtId=null)
 	{
@@ -119,6 +127,9 @@ class UserController extends Controller
 		//var_dump(date('Y-m-d H:i:s e'));
 	}
 
+	/**
+	 * @param int $taskId
+	 */
 	public function submitDraft($taskId)
 	{
 		$req = $this->app->request();
@@ -183,6 +194,12 @@ class UserController extends Controller
 		));
 	}
 
+	/**
+	 * 
+	 * @param unknown $ap
+	 * @param unknown $taskId
+	 * @param unknown $post
+	 */
 	private function submitAsync($ap,$taskId,$post)
 	{
 		$r= $this->app->urlFor('me.draft.process',array("idt" => $taskId));
