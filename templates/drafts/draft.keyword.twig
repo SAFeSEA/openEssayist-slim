@@ -14,7 +14,7 @@
 
 <div class="widget widget-content">
 <a href="{{ urlFor('me.draft.act.keyword',{"draft":draft.id}) }}" class="btn btn-primary pull-right">
-<i class="icon-wrench icon-white"></i> Organise ...</a>
+<i class="icon-cogs icon-white"></i> Organise</a>
 </div>
 
 
@@ -26,7 +26,7 @@
 	
 		<div class="widget">
 			<div class="widget-header">
-				<h3> {{ key|title }}</h3>
+				<h3> {{ key|title }} ({{ items|length }})</h3>
 			</div>
 			<div class="widget-content"> 
 				{% for item in items %}
