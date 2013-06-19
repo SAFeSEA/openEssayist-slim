@@ -27,7 +27,7 @@ class Application {
 	public function setup($reset=false)
 	{
 		
-		// Create .logs dir if it does not exists
+		/*// Create .logs dir if it does not exists
 		$logWriter = $this->app->config('log.writer');
 		if (!is_dir('../.logs')) {
 			mkdir('../.logs');
@@ -134,8 +134,8 @@ class Application {
 		
 		//$idx = $this->createGroup("H100");
 		//$this->createUser($iUser++,$idx);
-		//$this->createTasks(1,$idx);
-		
+		//$this->createTasks(1,$idx);*/
+		$this->createUser(6,1);
 	}
 	
 	private function createUser($id,$gid,$isadmin=false)

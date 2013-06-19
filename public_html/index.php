@@ -151,6 +151,7 @@ $c->app->get('/me/essay/:idt/submit/', array($userCtrl, 'submitDraft'))->via('GE
 
 $c->app->post('/api/process/:idt', array($userCtrl, 'processDraft'))->name('me.draft.process');
 $c->app->get('/api/draft/:draft/exhibit.json', array($userCtrl, 'getExhibitJSON'))->conditions(array('id' => '[0-9]+'))->name('api.draft.exhibit');
+$c->app->get('/api/orchestrator.json', array($tutorCtrl, 'getJSON'))->name('api.draft.orchestrator');
 
 $c->app->get('/tutor/:config/:url+', array($userCtrl, 'scafoldRedirect'))->name('tutor.redirect');
 

@@ -1252,7 +1252,7 @@ class UserController extends Controller
 		$response->status(200);
 		
 		//$response->body(json_encode($parasenttok));
-		$response->body(json_encode($json));
+		$response->body(json_encode($json,JSON_PRETTY_PRINT));
 		
 	}
 	
