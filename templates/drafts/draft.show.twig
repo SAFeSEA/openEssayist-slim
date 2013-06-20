@@ -367,25 +367,19 @@ $('.demo').on('click', function(){
 	if ($modal==null)
 	{
 			$modal = $('#ajax-modal');
-			$modal.find('div#editor').load(
+			$modal.on('hidden', function () {
+    			var jqxhr = $.post("{{ urlFor('profile.save.notes') }}", 
+    					$('#editor').html())
+    				.done(function() {})
+    				.fail(function() { ; })
+    				.always(function() { });
+    		}).find('div#editor').load(
 					"{{ urlFor('profile.save.notes') }}", "", 
 					function(){
-						/*if (!$inPlaceEditor) $inPlaceEditor = new SnapEditor.InPlace("comment", {
-							snap: false,
-							buttons: [
-								"styleBlock", "|",
-							    "bold", "italic", "|",
-							    "orderedList", "unorderedList", "indent", "outdent", "|",
-							    "link"
-							        ]
-							});*/
 						//$('#editor').wysiwyg();
-		     			
-		     			
 		    		});	
     }
 	$modal.modal({
-		
 		maxHeight: "300px",
 		keyboard: false,
 		backdrop: "static",

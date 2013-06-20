@@ -161,8 +161,6 @@ $c->app->get('/me/draft/:draft/keyword/', array($userCtrl, 'showKeyword'))->name
 $c->app->get('/me/draft/:draft/stats/', array($userCtrl, 'showStats'))->name('me.draft.stats');
 $c->app->get('/me/draft/:draft/sentence/', array($userCtrl, 'showSentence'))->name('me.draft.sentence');
 $c->app->get('/me/draft/:draft/action/keyword', array($userCtrl, 'actionKeyword'))->name('me.draft.act.keyword');
-//$c->app->get('/me/draft/:draft/view/network/(:graph)', array($userCtrl, 'viewGraph'))->name('me.draft.view.graph')
-//		->conditions(array('graph' => '(graphse|graphke|cytoscape)'));
 
 $c->app->get('/me/draft/:draft/view/network/ke', array($userCtrl, 'viewKeGraph'))->name('me.draft.view.kegraph');
 $c->app->get('/me/draft/:draft/view/network/se', array($userCtrl, 'viewSeGraph'))->name('me.draft.view.segraph');
@@ -176,8 +174,8 @@ $c->app->get('/me/draft/:draft/view/cloud', array($userCtrl, 'viewCloud'))->name
 $c->app->get('/me/draft/:draft/view/chord', array($userCtrl, 'viewChord'))->name('me.draft.view.chord');
 $c->app->get('/me/draft/:draft/view/exhibit', array($userCtrl, 'viewExhibit'))->name('me.draft.view.exhibit');
 
-$c->app->post('/profile/savedata/keywords', array($userCtrl, 'saveKeywords'))->name('profile.save.keyword');
-$c->app->get('/profile/savedata/notes', array($userCtrl, 'saveNotes'))->name('profile.save.notes');
+$c->app->post('/profile/data/keywords', array($userCtrl, 'saveKeywords'))->name('profile.save.keyword');
+$c->app->get('/profile/data/notes', array($userCtrl, 'saveNotes'))->via('GET', 'POST')->name('profile.save.notes');
 
 $c->app->get('/ajax/draft/:draft/graph/:graph.json', array($userCtrl, 'ajaxGraph'))->name('ajax.graph.json')
 				->conditions(array('graph' => '(graphse|graphke)'));

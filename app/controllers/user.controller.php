@@ -1188,8 +1188,36 @@ class UserController extends Controller
 
 	public function saveNotes()
 	{
-		 $this->app->etag('unique-id');
-		echo "<h3>fggffggffgfg</h3>";
+		/* @var $u Users */
+		$u = Model::factory('Users')->find_one($this->user['id']);
+		$notes = $u->Notes()->find_one();
+		if ($notes==false)
+		{
+			$notes = Model::factory('Note')->create();
+			$notes->users_id = $this->user['id'];
+			$notes->notes = "<i>start editing your notes</i>";
+			$notes->save();
+		}
+
+		$req = $this->app->request();
+		if ($req && $req->isPost())
+		{
+			$post=  $req->getBody();
+			$notes->notes =  $post;
+			$notes->save();
+
+			$response = $this->app->response();
+			$response->status(200);
+			$response->body($post);
+		}
+		else if ($req && $req->isGet())
+		{
+			$response = $this->app->response();
+			$response['Content-Type'] = 'text/html; charset=UTF-8';
+			$response['X-Powered-By'] = 'openEssayist';
+			$response->status(200);
+			$response->body($notes->notes);
+		}
 	}
 	
 	public function saveKeywords()

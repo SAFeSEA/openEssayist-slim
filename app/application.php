@@ -113,6 +113,15 @@ class Application {
 				PRIMARY KEY (`id`)
 			)  AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 		");
+		// Notes Table
+		$this->db->exec("
+			CREATE TABLE IF NOT EXISTS `note` (
+				`id` int(11) NOT NULL AUTO_INCREMENT,
+				`users_id` int(11) NOT NULL,
+				`notes` LONGBLOB,
+				PRIMARY KEY (`id`)
+			)  AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+		");
 		
 		$iUser=0;
 		//var_dump($ret);
