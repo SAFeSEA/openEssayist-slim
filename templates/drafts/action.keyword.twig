@@ -445,7 +445,7 @@ $(document).ready(function() {
 	};
 	
 	var saveCategory = function(e) {
-		$.blockUI({ message: '<div class="ajax alert alert-info"><img src="/assets/openessayist/img/ajax-loader.gif" /> Saving User Data ...</div>' }); 
+		//$.blockUI({ message: '<div class="ajax alert alert-info"><img src="/assets/openessayist/img/ajax-loader.gif" /> Saving User Data ...</div>' }); 
 		var json = {};
 		
 		var allcats = $('.sortable');
@@ -462,7 +462,7 @@ $(document).ready(function() {
 		var allcats = holder.find(".span4");
 		allcats.each(function(index)
 		{
-			id = $(this).find('.droptrue').attr('id');
+			id = $(this).find('.sortable').attr('id');
 			nm = $(this).find('.grp_name').val();
 			desc = $(this).find('.grp_desc').val();
 			clr = $(this).find('.grp_color').val();
@@ -473,7 +473,7 @@ $(document).ready(function() {
 				};
 		});
 		console.log(json);
-		/*$.ajax({
+		$.ajax({
 			type : "POST",
 			method: "post",
 			url : "{{ urlFor('profile.save.keyword',{"idt":task.id}) }}", // URL and function to call
@@ -496,7 +496,7 @@ $(document).ready(function() {
 				// there was an unhandled exception
 				console.log(msg);
 			}
-		});	*/
+		});		
 
 	};
 	

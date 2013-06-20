@@ -10,20 +10,6 @@
 
 {% block content %}
 
-{#
-<ul class="breadcrumb">
-	<li><div class="btn-group">
-	{% for key,item in views %}
-		{% if key == view %}
-			<button class="btn btn-small active disabled">{{ item.name }}</button>
-		{% else %}
-			<a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":key}) }}" class="btn btn-small" >{{ item.name }}</a>
-		{% endif %}
-    {% endfor %}
-	   	
-    </div></li>
-</ul>#}
-
 <div class="row-fluid"><div class="span12">
 
 <div class="widget">

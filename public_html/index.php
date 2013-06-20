@@ -9,11 +9,13 @@ require_once '../vendor/jamie/paris/paris.php';
 use \Slim\Slim;
 use \Slim\Extras\Views\Twig as TwigView;
 use \Slim\Extras\Middleware\StrongAuth;
+use Slim\Middleware\LoggerMiddleWare;
 
 require_once "../app/config.php";
 require_once "../app/application.php";
 
 // Controllers
+require_once "../app/utils/LoggerMiddleware.php";
 require_once "../app/utils/PDOAdmin.php";
 require_once "../app/utils/StrongAuthAdmin.php";
 require_once "../app/controller.php";
@@ -38,7 +40,7 @@ $app = new \Slim\Slim(array(
 	'openEssayist.async' => false,
 	'view' => new TwigView,
 	'debug' => true,
-    'log.level' => 4,
+    'log.level' => \Slim\Log::INFO,
     'log.enabled' => true,
     'log.writer' => new \Slim\Extras\Log\DateTimeFileWriter(array(
         'path' => '../.logs',
@@ -121,8 +123,9 @@ $config = array(
 		),
 );
 
-// Define the StrongAuth middleware
+// Define and add the StrongAuth middleware to the framework
 $app->add(new StrongAuthAdmin($config, new Strong\Strong($config)));
+$app->add(new LoggerMiddleWare());
 
 // Create the openEssaysit application core
 $c = new Application($app);
@@ -153,16 +156,18 @@ $c->app->post('/api/process/:idt', array($userCtrl, 'processDraft'))->name('me.d
 $c->app->get('/api/draft/:draft/exhibit.json', array($userCtrl, 'getExhibitJSON'))->conditions(array('id' => '[0-9]+'))->name('api.draft.exhibit');
 $c->app->get('/api/orchestrator.json', array($tutorCtrl, 'getJSON'))->name('api.draft.orchestrator');
 
-$c->app->get('/tutor/:config/:url+', array($userCtrl, 'scafoldRedirect'))->name('tutor.redirect');
-
-
 $c->app->get('/me/draft/:draft/show/', array($userCtrl, 'showDraft'))->name('me.draft.show');
 $c->app->get('/me/draft/:draft/keyword/', array($userCtrl, 'showKeyword'))->name('me.draft.keywords');
 $c->app->get('/me/draft/:draft/stats/', array($userCtrl, 'showStats'))->name('me.draft.stats');
 $c->app->get('/me/draft/:draft/sentence/', array($userCtrl, 'showSentence'))->name('me.draft.sentence');
 $c->app->get('/me/draft/:draft/action/keyword', array($userCtrl, 'actionKeyword'))->name('me.draft.act.keyword');
-$c->app->get('/me/draft/:draft/view/network/(:graph)', array($userCtrl, 'viewGraph'))->name('me.draft.view.graph')
-		->conditions(array('graph' => '(graphse|graphke|cytoscape)'));
+//$c->app->get('/me/draft/:draft/view/network/(:graph)', array($userCtrl, 'viewGraph'))->name('me.draft.view.graph')
+//		->conditions(array('graph' => '(graphse|graphke|cytoscape)'));
+
+$c->app->get('/me/draft/:draft/view/network/ke', array($userCtrl, 'viewKeGraph'))->name('me.draft.view.kegraph');
+$c->app->get('/me/draft/:draft/view/network/se', array($userCtrl, 'viewSeGraph'))->name('me.draft.view.segraph');
+$c->app->get('/me/draft/:draft/view/cytoscape/se', array($userCtrl, 'viewCytoScape'))->name('me.draft.view.cytoscape');
+
 
 $c->app->get('/me/draft/:draft/view/dispersion', array($userCtrl, 'viewDispersion'))->name('me.draft.view.dispersion');
 $c->app->get('/me/draft/:draft/view/structure', array($userCtrl, 'viewStructure'))->name('me.draft.view.structure');

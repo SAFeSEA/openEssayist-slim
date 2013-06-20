@@ -1,8 +1,8 @@
 {% extends "site.twig" %} 
 {% import "widgets/ngram.macro.twig" as ngram %}
 
-{% block title %}Assignments{% endblock %} 
-
+{% block title %}Draft{% endblock %} 
+{% block subheader %}<hr>Your Draft{% endblock %} 
 
 {% block bccontainer %}		
 	{% include "widgets/breadcrumb.task.twig" %}
@@ -228,11 +228,11 @@ $(document).ready(function() {
     		<div><p>{{ action.prompt }}</p>
     			{% for btn in action.tasks %}
     			{% if btn.config is defined %}
-					<a href="{{ urlFor('tutor.redirect',{
-										"config": btn.config,
-										"url":urlFor(btn.url,{"draft":drafts[0].id})}) }}" class="btn btn-small" >{{ btn.text }}</a>
+    				<a href="{{ urlFor(btn.url,{"draft":drafts[0].id})~"?tutor="~btn.config }}" class="btn btn-small" >
+    					<i class="icon-desktop"></i> {{ btn.text }}</a>
     			{% else %}
-    				<a href="{{ urlFor(btn.url,{"draft":drafts[0].id}) }}" class="btn btn-small" >{{ btn.text }}</a>
+    				<a href="{{ urlFor(btn.url,{"draft":drafts[0].id}) }}" class="btn btn-small" >
+    					<i class="icon-desktop"></i> {{ btn.text }}</a>
     			{% endif %}
     				
     			{% endfor %}

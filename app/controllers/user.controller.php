@@ -414,16 +414,19 @@ class UserController extends Controller
 		{
 			return count($b->ngram)-count($a->ngram);
 		});
-		
-		$tutor = $_SESSION['tutor'];
-		$config = null;
-		if (isset($tutor))
+
+		// Get the configuration object (if any)
+		$config = $this->get('tutor');
+		if ($config)
 		{
-			$config  = $tutor['config'];
-			unset($_SESSION['tutor']);
-		}
+			$configs = TutorController::getViewConfigurations();
+			$tt = $configs[$config];
+			$tt['id'] = $config;
+			$config = $tt['config'];
+			$this->app->flashNow("tutor", "Cannot find the user data");
 			
-	
+				
+		}
 	
 		$this->render('drafts/draft.show',array(
 				'configxx' => array(
@@ -1041,6 +1044,79 @@ class UserController extends Controller
 				'rank' => $rank
 		));
 	}
+
+	public function viewKeGraph($draft)
+	{
+		$dr = $this->getDraft($draft);
+		$tsk = $dr->task()->find_one();
+		
+		$analysis = $dr->getAnalysis(true);
+		$gr = json_decode($analysis['ke_sample_graph'],true);
+		
+		$this->render("drafts/view.graph",array(
+				'task' => $tsk->as_array(),
+				'draft' => $dr->as_array(),
+				'graph' => $gr
+		));
+		
+	}
+	
+	public function viewSeGraph($draft)
+	{
+		$dr = $this->getDraft($draft);
+		$tsk = $dr->task()->find_one();
+		
+		$analysis = $dr->getAnalysis(true);
+		$gr = json_decode($analysis['se_sample_graph'],true);
+		
+		$gg = array();
+		$rr = $analysis['se_data']['se_ranked'];
+		foreach ($rr as $key => &$ranked)
+		{
+			$ranked['rank'] = $key;
+			$gg[$ranked[1]] = $ranked;
+		}
+		foreach ($gr['nodes'] as $key => &$node)
+		{
+			if ($gg[$node[id]])
+				$node['rank'] = $gg[$node[id]]['rank'];
+		}
+		
+		$this->render("drafts/view.graph",array(
+				'task' => $tsk->as_array(),
+				'draft' => $dr->as_array(),
+				'graph' => $gr
+		));
+	}
+
+	public function viewCytoScape($draft)
+	{
+		$dr = $this->getDraft($draft);
+		$tsk = $dr->task()->find_one();
+		
+		$analysis = $dr->getAnalysis(true);
+		$gr = json_decode($analysis['se_sample_graph'],true);
+		
+		$gg = array();
+		$rr = $analysis['se_data']['se_ranked'];
+		foreach ($rr as $key => &$ranked)
+		{
+			$ranked['rank'] = $key;
+			$gg[$ranked[1]] = $ranked;
+		}
+		foreach ($gr['nodes'] as $key => &$node)
+		{
+			if ($gg[$node[id]])
+				$node['rank'] = $gg[$node[id]]['rank'];
+		}
+		
+		$this->render("drafts/view.cytoscape",array(
+				'task' => $tsk->as_array(),
+				'draft' => $dr->as_array(),
+				'graph' => $gr
+		));
+		
+	}
 	
 	public function viewGraph($draft,$graph=null)
 	{
@@ -1252,7 +1328,7 @@ class UserController extends Controller
 		$response->status(200);
 		
 		//$response->body(json_encode($parasenttok));
-		$response->body(json_encode($json,JSON_PRETTY_PRINT));
+		$response->body(json_encode($json));
 		
 	}
 	
@@ -1292,22 +1368,5 @@ class UserController extends Controller
 		$response->status(200);
 		$response->body(json_encode($gr));
 		
-	}
-	
-	public function scafoldRedirect($config,$url)
-	{
-		$redirect = "".join($url,"/");
-
-		$configs = TutorController::getViewConfigurations();
-		
-		
-		unset($_SESSION['tutor']);
-		$tt = $configs[$config];
-		$tt['id'] = $config;
-		if (isset($tt))
-			$_SESSION['tutor'] = $tt;
-	
-		$this->app->flash("tutor", "Cannot find the user data");
-		$this->app->redirect($redirect);
 	}
 }

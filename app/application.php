@@ -135,7 +135,7 @@ class Application {
 		//$idx = $this->createGroup("H100");
 		//$this->createUser($iUser++,$idx);
 		//$this->createTasks(1,$idx);*/
-		$this->createUser(6,1);
+		//$this->createUser(6,1);
 	}
 	
 	private function createUser($id,$gid,$isadmin=false)

@@ -22,29 +22,36 @@
 <li><div class="btn-group">
 	<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-bar-chart"></i> Views <span class="caret"></span></a>
     <ul class="dropdown-menu">
-    	<li class="nav-header visible-desktop">Structure</li>
+    	<li class="nav-header">Structure</li>
 		<li><a href="{{ urlFor('me.draft.view.structure',{"draft":draft.id}) }}">Word Count</a>
-    	<li class="divider"></li>
-    	<li class="nav-header visible-desktop">Keywords</li>
+    	<li class="divider visible-desktop"></li>
+    	<li class="nav-header">Keywords</li>
 		<li><a href="{{ urlFor('me.draft.view.dispersion',{"draft":draft.id}) }}">Dispersion</a>
 		<li><a href="{{ urlFor('me.draft.view.cloud',{"draft":draft.id}) }}">Cloud</a>
-		<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphke"}) }}">Network</a>
-		<li class="divider"></li>
-    	<li class="nav-header visible-desktop">Sentences</li>
-		<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphse"}) }}">Network</a>
+		<li><a href="{{ urlFor('me.draft.view.kegraph',{"draft":draft.id}) }}">Network</a>
+		<li class="divider visible-desktop"></li>
+    	<li class="nav-header">Sentences</li>
+		<li><a href="{{ urlFor('me.draft.view.segraph',{"draft":draft.id}) }}">Network</a>
 		<li><a href="{{ urlFor('me.draft.view.matrix',{"draft":draft.id}) }}">Adjacency Matrix</a>
 		<li><a href="{{ urlFor('me.draft.view.chord',{"draft":draft.id}) }}">Chord</a>
+    	{% if auth.user.isadmin %}
+		<li class="divider visible-desktop"></li>
+    	<li class="nav-header">Sandbox</li>
+    	<li><a href="{{ urlFor('me.draft.view.exhibit',{"draft":draft.id}) }}">Exhibit</a>
+    	<li><a href="{{ urlFor('me.draft.view.cytoscape',{"draft":draft.id}) }}">Cytoscape Graph</a>
+    	{% endif %}
 	</ul></div>
 </li>
 {% endif %}
 
-<li class="bc_debug"><div class="btn-group">
+{#<li class="bc_debug"><div class="btn-group">
     	<button class="btn btn-mini disabled " disabled="disabled"><i class="icon-cog"></i></button>
 		<button class="btn btn-mini btn-info disabled " disabled="disabled"><i class="icon-book icon-white"></i> {{ task.id }}</button>
 		{% if draft is defined %}
     	<button class="btn btn-mini btn-info disabled " disabled="disabled"><i class="icon-pencil icon-white"></i> {{ draft.id }}</button>
 		{% endif %}
-	</div></li>
+	</div></li>#}
 {% endif %}
 
 {% endblock %}
+

@@ -164,7 +164,7 @@ class TutorController extends Controller
 						'act5-res3' => array(
 								'text' => 'As a network...',
 								'config' => 'show-none',
-								'url' => 'me.draft.view.graph'
+								'url' => 'me.draft.view.kegraph'
 						),
 					),
 				'action' => array()
@@ -199,7 +199,7 @@ class TutorController extends Controller
 						'act5-res3' => array(
 								'text' => 'As a network...',
 								'config' => 'show-none',
-								'url' => 'me.draft.view.graph'
+								'url' => 'me.draft.view.kegraph'
 						),
 				),
 				'action' => array()

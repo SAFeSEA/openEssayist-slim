@@ -1,6 +1,6 @@
 {% extends "site.twig" %} 
 
-{% block title %}Draft - Visualisation ({{ CytoScape }}){% endblock %} 
+{% block title %}Draft - Visualisation (CytoScape){% endblock %} 
 
 {% block bccontainer %}		
 	{% include "widgets/breadcrumb.task.twig" %}
@@ -9,28 +9,11 @@
 
 {% block content %}
 
-{#
-<ul class="breadcrumb">
-	<li><div class="btn-group">
-	{% for key,item in views %}
-		{% if key == view %}
-			<button class="btn btn-small active disabled">{{ item.name }}</button>
-		{% else %}
-			<a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":key}) }}" class="btn btn-small" >{{ item.name }}</a>
-		{% endif %}
-    {% endfor %}
-	   	
-    </div></li>
-</ul>#}
-
 <div class="row-fluid"><div class="span12">
 
 <div class="widget">
 			<div class="widget-header" data-toggle="collapse" data-target="#demo">
-				<h3> Display Options </h3>
-				<div class="box-icon">
-					<a class="btn-setting" href="#"><i class="icon-chevron-down"></i></a>
-				</div>
+				<h3>Sentence Graph</h3>
 			</div>
 			<div class="widget-content" id='svg-container'></div>
 			</div>
