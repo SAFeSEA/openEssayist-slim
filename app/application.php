@@ -26,12 +26,15 @@ class Application {
 
 	public function setup($reset=false)
 	{
+		//$log = $this->app->getLog();
+		//$log->debug("SETUP PROCEDURE CALLED");
 		
-		/*// Create .logs dir if it does not exists
-		$logWriter = $this->app->config('log.writer');
+		// Create .logs dir if it does not exists
 		if (!is_dir('../.logs')) {
 			mkdir('../.logs');
 		}
+		
+		// check DB
 		$this->db = ORM::get_db();
 		
 		if ($reset)
@@ -39,6 +42,7 @@ class Application {
 			$this->db->exec('DROP DATABASE `openessayist`');
 			$this->db->exec('CREATE DATABASE `openessayist`');
 		}
+		
 		// Create Users Table
 		try {
 			$ret = $this->db->exec("
@@ -52,11 +56,11 @@ class Application {
 				  `group_id` int(11) NOT NULL,
 				  `active` int(11) DEFAULT '0',
 				  `isadmin` int(11) DEFAULT '0',
+				  `isdemo` int(11) DEFAULT '0',
 				  PRIMARY KEY (`id`),
 				  UNIQUE (`username`)
 				) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 			");
-			//
 		}
 		catch (\PDOException $e)
 		{
@@ -113,6 +117,7 @@ class Application {
 				PRIMARY KEY (`id`)
 			)  AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 		");
+		
 		// Notes Table
 		$this->db->exec("
 			CREATE TABLE IF NOT EXISTS `note` (
@@ -123,77 +128,16 @@ class Application {
 			)  AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 		");
 		
-		$iUser=0;
-		//var_dump($ret);
-		//$idx = $this->createGroup("H810");
-		//$this->createUser($iUser++,$idx);
-		
-		//$this->createTasks(1,$idx);
-		//$this->createTasks(2,$idx);
-		//$this->createTasks(3,$idx);
-		
-		$idx = $this->createGroup("UserTesting H810");
-		$this->createUser($iUser++,$idx,true);
-		$this->createUser($iUser++,$idx);
-		$this->createUser($iUser++,$idx);
-		$this->createUser($iUser++,$idx);
-		$this->createUser($iUser++,$idx);
-		$this->createUser($iUser++,$idx);
-		$this->createTasks(1,$idx);
-		
-		//$idx = $this->createGroup("H100");
-		//$this->createUser($iUser++,$idx);
-		//$this->createTasks(1,$idx);*/
-		//$this->createUser(6,1);
+		$exist = file_exists('../app/localconfig.php');
+		if($exist)
+		{
+			//$log->debug("LOCAL SETUP INVOKED");
+			include '../app/localconfig.php';
+			$conf = new OpenEssayistConfigurator();
+			$conf->setupDB();
+		}
 	}
 	
-	private function createUser($id,$gid,$isadmin=false)
-	{
-		$gs = Model::factory('Group')->find_many();
-		
-		$u = Model::factory('Users')->create();
-		$u->name = ($isadmin) ? "admin" : "user".$id;
-		$u->email = "nicolas.vanlabeke@open.ac.uk";
-		$u->username = $u->name;
-		$u->password =  Strong\Strong::getInstance()->getProvider()->hashPassword($u->name . "1");
-		$u->ip_address = $this->app->request()->getIp();
-		$u->isadmin = ($isadmin)? 1:0;
-		$u->group_id = $gid;
-		
-		try {
-			$u->save();
-		}
-		catch (\PDOException  $e) {
-			//var_dump($e->getMessage());
-		}
-		
-	}
-	
-	private function createGroup($name)
-	{
-		$gs = Model::factory('Group')->create();
-		$gs->name = $name;
-		try {
-			$gs->save();
-		}
-		catch (\PDOException  $e) {}
-		return $gs->id;
-	}
-	
-	private function createTasks($id,$gid)
-	{
-		$gs = Model::factory('Group')->find_many();
-		
-		/* @var $task Task */
-		$task = Model::factory('Task')->create();
-		$task->name = "TMA0".$id;
-		$task->assignment = "";
-		$task->group_id = $gid;
-		try {
-			$task->save();
-		}
-		catch (\PDOException  $e) {}
-	}
 
 	public function run()
 	{
