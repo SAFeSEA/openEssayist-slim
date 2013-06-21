@@ -64,10 +64,12 @@ class AdminController extends Controller
 		if ($req && $req->isPost())
 		{
 			$post = $req->post();
+			
 			$task->name = $post['name'];
 			$task->assignment = $post['assignment'];
 			$task->wordcount = $post['wordcount'];
 			$task->deadline = $post['date'];
+			$task->isopen = ($post['isopen']=="Yes");
 			$task->save();
 		}
 		

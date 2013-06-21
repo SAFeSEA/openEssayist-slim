@@ -43,6 +43,12 @@
 				<input type="text" id="wordcount" name="wordcount" placeholder="number of words" value="{{ task.wordcount }}">
 			</div>
 		</div>
+		 <div class="control-group">
+			<label class="control-label" for="isopen">Open</label>
+			<div class="controls">
+				<input type="checkbox" id="isopen" name="isopen" value="Yes" {{ task.isopen?"checked" }}>
+			</div>
+		</div>
 		<div class="form-actions">
 			<button class="btn btn-primary" type="submit" name="action" value="Submit">Save</button> 
 		</div>

@@ -35,7 +35,7 @@
 						<th width="5%">#</th>
 						<th>Name</th>
 						<th>Deadline</th>
-						<th>Open</th>
+		
 						
 					</tr>
 				</thead>
@@ -47,7 +47,7 @@
 					<td><a class="btn" 
 							href="{{ urlFor('me.drafts',{"idt":task.id}) }}">{{ task.name }}</a></td>
 					<td>{{ task.deadline }}</td>
-					<td>{{ task.isopen }}</td>
+
 				
 					</tr>
 					{% endfor %}

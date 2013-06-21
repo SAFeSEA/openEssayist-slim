@@ -220,7 +220,7 @@ $(document).ready(function() {
 	    	<h4>Draft submitted & reviewed</h4>
     		Draft has been submitted. Proceed with the suggestions arising from the analysis of your text.
 	    </div>			
-    {% if usermodel.keyword is empty %}
+   
     	{% for action in actions %}
     	<div class="alert alert-block">
     		<h4>{{ action.title }}</h4>
@@ -240,7 +240,7 @@ $(document).ready(function() {
     	</div>
     	{% endfor %}
     	
-  
+  		{% if task.isopen %}
 	    <div class="alert alert-error">
     		{#<button type="button" class="close" data-dismiss="alert">&times;</button>#}
 	    	<h4>Submit a new draft</h4>
@@ -249,7 +249,7 @@ $(document).ready(function() {
 	    	<a class="btn btn-success"  href="{{ urlFor('me.draft.submit',{"idt":task.id}) }}">Submit a new draft...</a>
 	    	</p>		    	
 	    </div>			
-	    {% endif %}    
+	  	{% endif %}
     {% else %}
         	<div class="alert alert-error">
 	    	<h4>Draft is being analysed</h4>

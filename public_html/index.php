@@ -141,7 +141,8 @@ $tutorCtrl = new TutorController();
 
 // Define the routes
 $c->app->get('/', array($appController, 'index'))->name('home');
-$c->app->get('/config', array($appController, 'testConfig'))->name('config');
+$c->app->get('/about', array($appController, 'about'))->name('about');
+//$c->app->get('/config', array($appController, 'testConfig'))->name('config');
 $c->app->get('/login', array($loginController, 'index'))->via('GET', 'POST')->name('login');
 $c->app->get('/logout', array($loginController, 'logout'))->name('logout');
 

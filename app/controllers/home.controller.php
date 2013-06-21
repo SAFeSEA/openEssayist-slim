@@ -20,6 +20,11 @@ class HomeController extends Controller
 		
 	}
 	
+	public function about()
+	{
+		$this->render('pages/about');
+	}
+	
 	public function error(Exception $e)
 	{
 		$log = $this->app->getLog();
