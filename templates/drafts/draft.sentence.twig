@@ -9,7 +9,7 @@
 {% block content %}
 
 
-<div class="row-fluid"><div class="span8 offset2">
+<div class="row-fluid"><div class="span12 offset0">
 	<div class="widget">
 			<div class="widget-header">
 				<h3> Sentences </h3>
@@ -59,6 +59,39 @@
 <script src="/assets/d3.js/colorbrewer.js"></script>
 
 <script type="text/javascript">
+
+function createIsotope()
+{
+    var $container = $('#container');
+
+	$container.isotope({
+		layoutMode : 'straightDown',
+    	getSortData : {
+    		tag : function( $elem ) {
+            		return $elem.attr('data-tag');
+            	},
+			rank : function( $elem ) {
+            		return parseInt( $elem.attr('data-rank'), 10 );
+          		},
+			id : function( $elem ) {
+            		return parseInt( $elem.attr('data-id'), 10 );
+          	}
+          }
+    	
+    });
+	
+}
+
+
+$(window).on("beforeprint",function() {
+	var $container = $('#container');
+	$container.isotope('destroy');
+});	
+
+$(window).on("afterprint",function() {
+	createIsotope();
+});
+   
 $(function(){
 
 	var sections =  {
@@ -107,23 +140,6 @@ $(".par-tag[data-tag]").each(function()
 			$(this).attr('title', sections[tag]);
 		});
 	
-    var $container = $('#container');
-
-    $container.isotope({
-		layoutMode : 'straightDown',
-    	getSortData : {
-    		tag : function( $elem ) {
-            		return $elem.attr('data-tag');
-            	},
-			rank : function( $elem ) {
-            		return parseInt( $elem.attr('data-rank'), 10 );
-          		},
-			id : function( $elem ) {
-            		return parseInt( $elem.attr('data-id'), 10 );
-          	}
-          }
-    	
-    });
     
     
       var $optionSets = $('#options .option-set'),
@@ -151,78 +167,26 @@ $(".par-tag[data-tag]").each(function()
           changeLayoutMode( $this, options )
         } else {
           // otherwise, apply new options
+          var $container = $('#container');
           $container.isotope( options );
         }
         
         return false;
       });
 
-
+      createIsotope();
   });
-  
-/*$(document).ready(function() {
-	var $container = $('#container');
-	$container.isotope({
-		layoutMode : 'straightDown',
-		itemSelector : '.sent',
-		animationOptions: {
-		     duration: 150,
-		   },
-		getSortData : {
-			rank : function( $elem ) {
-	            return parseInt($elem.attr('data-rank'),10);
-	          },
-	        id : function( $elem ) {
-		            return $elem.attr('data-id');
-		          },
-			tag : function( $elem ) {
-			            return $elem.attr('data-tag');
-			          }
-		}
-	});
 
-	var $optionSets = $('#options .option-set'),
-    	$optionLinks = $optionSets.find('button');
-
-	 $optionLinks.click(function(){
-		 var $this = $(this);
-
-		// don't proceed if already selected
-	        if ( $this.hasClass('active') ) {
-	          return false;
-	        }
-
-	        var $optionSet = $this.parents('.option-set');
-	        $optionSet.find('.btn-primary').removeClass('btn-primary');
-	        $this.addClass('btn-primary');
-
-	        // make option object dynamically, i.e. { filter: '.my-filter-class' }
-	        var options = {},
-	            key = $optionSet.attr('data-option-key'),
-	            value = $this.attr('data-option-value');
-            	        
-		 console.log(key,value);
-
-		 value = value === 'false' ? false : value;
-	        options[ key ] = value;
-	        if ( key === 'layoutMode' && typeof changeLayoutMode === 'function' ) {
-	          // changes in layout modes need extra logic
-	          changeLayoutMode( $this, options )
-	        } else {
-	          // otherwise, apply new options
-	          $container.isotope( options );
-	        }
-	        
-	        return false;
-		 });
-	
-});*/
 
 </script>
 {% endblock %}
 
 {% block injectCSS %}
 <style type="text/css">
+
+div.sent{
+ margin-bottom: 3px;
+}
 
 .par-tag
 {
