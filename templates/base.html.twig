@@ -148,6 +148,37 @@
 	<!-- <script src="/bootstrap/openEssayist.js"></script> -->
 	<script src="/assets/bootstrap-modal/js/bootstrap-modalmanager.js"></script>
 	<script src="/assets/bootstrap-modal/js/bootstrap-modal.js"></script>
+	<script src="/assets/log4javascript-1.4.6/log4javascript.min.js"></script>
+	<script id="log4js" type="text/javascript">
+	$(document).ready(function() {
+		var log = log4javascript.getLogger("main");
+		log.setLevel(log4javascript.Level.TRACE);
+
+		{% if auth.user.isadmin %}
+		var appender = new log4javascript.InPageAppender(null,true,false);
+		appender.setShowCommandLine(false);
+		log.addAppender(appender);
+
+		$('#admin-settings-btn').click(function(){
+			if (appender.isVisible())
+				appender.hide();
+			else
+				appender.show();
+			});
+		
+		{% endif %}
+		
+		var ajaxAppender = new log4javascript.AjaxAppender("{{ urlFor('ajax.log.activity') }}");
+		ajaxAppender.setLayout(new log4javascript.JsonLayout());
+		ajaxAppender.setWaitForResponse(false);
+		//ajaxAppender.setSendAllOnUnload(true);
+		//ajaxAppender.setBatchSize(10);
+		log.addAppender(ajaxAppender);
+		//$(window).unload(function() {
+		//	log.sendAll();
+		//});		
+	});	
+	</script>
 	{% block injectJS %}
 	{% endblock %}
 	

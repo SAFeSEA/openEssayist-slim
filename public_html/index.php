@@ -40,11 +40,11 @@ $app = new \Slim\Slim(array(
 	'openEssayist.async' => false,
 	'view' => new TwigView,
 	'debug' => true,
-    'log.level' => \Slim\Log::INFO,
+    'log.level' => \Slim\Log::DEBUG,
     'log.enabled' => true,
     'log.writer' => new \Slim\Extras\Log\DateTimeFileWriter(array(
         'path' => '../.logs',
-        'name_format' => 'y-m-d'
+        'name_format' => 'y-m-d',
     ))
 ));
 
@@ -179,6 +179,9 @@ $c->app->get('/profile/data/notes', array($userCtrl, 'saveNotes'))->via('GET', '
 
 $c->app->get('/ajax/draft/:draft/graph/:graph.json', array($userCtrl, 'ajaxGraph'))->name('ajax.graph.json')
 				->conditions(array('graph' => '(graphse|graphke)'));
+
+$c->app->post('/tutor/logactivity', array($tutorCtrl, 'postActivityLog'))->name('ajax.log.activity');
+
 
 $c->app->get('/admin/', array($adminCtrl, 'index'))->name('admin.home');
 $c->app->get('/admin/reset', array($adminCtrl, 'reset'))->name('admin.reset');

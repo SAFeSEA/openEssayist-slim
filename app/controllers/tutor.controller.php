@@ -288,5 +288,14 @@ class TutorController extends Controller
 		);
 		
 		return $configs;
-	} 
+	}
+
+	public function postActivityLog()
+	{
+		$response = $this->app->response();
+		$response['Content-Type'] = 'application/json';
+		$response['X-Powered-By'] = 'openEssayist';
+		$response->status(200);
+		$response->body(json_encode(array('msg'=>'OK')));
+	}
 }

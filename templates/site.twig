@@ -21,9 +21,14 @@
 
 {% block toolcontainer %}{% if auth.user %}
 <div id="note-container">
-	<div id="note-settings-btn" class="btn btn-app btn-mini btn-warning">
+	<div id="note-settings-btn" class="settings-btn btn btn-app btn-mini btn-warning">
 		<i class="icon-edit"></i>
 	</div>
+	{% if auth.user.isadmin %}
+	<div id="admin-settings-btn" class="settings-btn btn btn-app btn-mini btn-info">
+		<i class="icon-cog"></i>
+	</div>
+	{% endif %}
 </div>
 
 <div id="ajax-modal" class="modal container hide fade" tabindex="-1">

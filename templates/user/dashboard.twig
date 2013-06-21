@@ -86,7 +86,8 @@
 	</div>
 			
 	<div class="widget-content">
-		<p>to do...</p>
+		<div id="thisis">to do...</div>
+		<button id="testlog">dffdfdfddfdf</button>
 	</div>
 	
 </div></div>	
@@ -98,11 +99,13 @@
 {% block injectJS %}
 <script src="/assets/bootstrap-wysiwyg/jquery.hotkeys.min.js"></script>
 <script src="/assets/bootstrap-wysiwyg/bootstrap-wysiwyg.min.js"></script>
-<script id="editor" type="text/javascript">
-$(function(){
-	//$('a[title]').tooltip({container:'body'});
-	//$('#editor').wysiwyg();
-});
+<script type="text/javascript">
+
+		$('#testlog').click(function(){
+			var g = $(this).serialize();
+			var log = log4javascript.getLogger("main");
+			log.trace("fggfgffggf");
+		});
 </script>
 {% endblock %}
 {% block injectCSS %}
