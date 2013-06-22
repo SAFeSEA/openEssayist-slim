@@ -34,21 +34,85 @@
 
 {% block injectJS %}
 <script src="/assets/highcharts/js/highcharts.js"></script>
+<script src="/assets/d3.js/colorbrewer.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-	
-    $('#struct_pie').highcharts({
-        chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false
-        },
-        title: {
-        	text: null
-        },
+
+	// Create a RGBa color from a HEX string
+	function hexToRgba(hex,opacity) {
+	    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	    if (result)
+	    {
+	        r= parseInt(result[1], 16);
+	        g= parseInt(result[2], 16);
+	        b= parseInt(result[3], 16);
+	        return "rgba("+r+","+g+","+b+",.5)";
+	    } 
+	    else return hex;
+	}
+
+	// Map color index to the ColorBrewer set
+	function getColor(obj)
+	{	
+		idx = obj['color'];
+		clr = hexToRgba(colorbrewer.Paired[11][idx],.5);
+		obj['color'] = clr;
+		return obj;
+	}
+
+	// Apply the color mapping to both series 
+	var breakdown = {{ breakdown|json_encode|raw }};
+	breakdown = breakdown.map(getColor);  
+
+	var bullet = {{ bullet|json_encode|raw }};
+	bullet = bullet.map(getColor);  
+
+	// Add the target to the bullet graph series
+	bullet.push({name:'Target',color: 'red',pointWidth:100,type: 'scatter',data:[{{task.wordcount}}],});
+
+	// General HighCharts configuration 
+	var hcOptions = {
+			credits:{enabled:false},
+		    exporting:{enabled:false},
+		    title:{text:null},
+			chart: {
+				plotBackgroundColor: null,
+		        plotBorderWidth: null,
+		        plotShadow: false
+			}
+	};
+
+	// Build the Bullet Graph
+	$('#struct_bullet').highcharts($.extend(true,{}, hcOptions,{
+		chart:{type:'bar'},
         tooltip: {
 			formatter: function () {
-                 return this.point.name + "<br>" +  this.series.name  
+				return this.series.name + ": <strong>" + Highcharts.numberFormat(this.y,0) + "</strong>";
+             }
+    	   
+        },
+		xAxis:{tickLength:10,
+	        lineColor:'#999',
+	        lineWidth:1,
+	        labels:{style:{fontWeight:'bold'}}  ,categories:['']},
+	    yAxis:{
+	        tickColor:'#ccc',
+	        title:{text: null},
+	        plotBands:[
+				{from:{{(task.wordcount)*0.9}},to:{{(task.wordcount)*1.1}},color: 'rgba(255,0,0,.15)'},
+			]},
+	    plotOptions: {
+            series: {stacking: 'normal'},
+            scatter:{
+                marker:{symbol:'diamond',radius:8}
+            }},
+		series: bullet
+	}));
+	
+    $('#struct_pie').highcharts($.extend(true,{}, hcOptions,{
+         tooltip: {
+			formatter: function () {
+                 return this.point.name + " <b>" + this.point.y +"</b><br>" +  this.series.name  
                  + ': <b>' + Highcharts.numberFormat(this.percentage, 1) + '%</b>';
              }
     	   
@@ -71,35 +135,11 @@ $(document).ready(function() {
         series: [{
             type: 'pie',
             name: 'Structure share',
-            data: {{ breakdown|json_encode|raw }}
+            data: breakdown
         	
         }]
-    });
+    }));
 
-
-    $('#struct_bullet').highcharts({
-		chart: {	
-			type: 'bar'	},
-		title: {
-        	text: null },
-		xAxis: {},
-		yAxis: {
-			min: 0,
-			title: {text: null}},
-		legend: {
-			backgroundColor: '#FFFFFF',
-			reversed: true}, plotOptions: {
-                bar: {
-                    stacking: 'normal'
-                }
-            },
-		tooltip: {
-			formatter: function() {
-				return ''+ this.series.name +': '+ this.y +'';}
-			},
-		/* */
-		series: {{ bullet|json_encode|raw }}
-	});
 });
 </script>
 {% endblock %}

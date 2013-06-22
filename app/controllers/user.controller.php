@@ -8,15 +8,25 @@ use Respect\Validation\Validator as v;
  */
 class UserController extends Controller
 {
-	public static $STRUCT = array(
-			'#-s:t#'=>'Title',
-			'#+s#'=>'Body',
-			'#-s:h#'=>'Heading',
-			'#+s:i#'=>'Introduction',
-			'#-s:n#'=>'Number',
-			'#-s:p#'=>'Others',
-			'#+s:c#'=>'Conclusion',
-	);
+	public static function GetStructureData($id=null)
+	{
+		$arr = array(
+			'#+s:c#'	=> array('name'=>'Conclusion','idx'=>'1'),
+			'#+s:d_i#'	=> array('name'=>'Discussion','idx'=>'2'),
+			'#+s:d#'	=> array('name'=>'Discussion','idx'=>'3'),
+			'#+s#'		=> array('name'=>'Discussion','idx'=>'3'),
+			'#+s:s#'	=> array('name'=>'Summary','idx'=>'4'),
+			'#+s:i#'	=> array('name'=>'Introduction','idx'=>'5'),
+			'#-s:t#'	=> array('name'=>'Title','idx'=>'6'),
+			'#+s:p#'	=> array('name'=>'Preface','idx'=>'7'),
+			'#-s:h#'	=> array('name'=>'Heading','idx'=>'8'),
+			'#-s:n#'	=> array('name'=>'Numerics','idx'=>'9'),
+			'#-s:q#'	=> array('name'=>'Assignment','idx'=>'10'),
+			'#-s:p#'	=> array('name'=>'Punctuation','idx'=>'11'),
+		);
+		if ($id) return $arr[$id];
+		else return $arr;
+	}
 
 	/**
 	 * 
@@ -649,10 +659,14 @@ class UserController extends Controller
 		
 		$distribution = array();
 		$bullet = array();
+
+		
 		foreach ($breakdown as $id => $count)
 		{
+			$std = UserController::GetStructureData($id);
 			$tt = array(
-					'name' => $this->STRUCT[$id],
+					'name' => $std['name'],
+					'color' => $std['idx'],
 					'y'=>$count);
 			if (in_array($id, array('#+s:c#','#+s:i#')))
 			{
@@ -662,17 +676,19 @@ class UserController extends Controller
 			}
 			$distribution[] = $tt;
 			$bullet[] = array(
-					'name' => $this->STRUCT[$id],
-					'data'=> array($count),
-					'grouping' => false,'stack' => 'structure');
+					'name' => $std['name'],
+					'color' => $std['idx'],
+					'data'=> array($count));
 			
 		}
-		$bullet[] = array(
-				'name' => 'target',
-				'data' => array(intval($tsk->wordcount)),
-				'pointWidth' => 50,
-				'stack' => 'target','grouping' => false);
-		
+		usort($distribution,function($a,$b)
+		{
+			return ($b['color'])-($a['color']);
+		});
+		usort($bullet,function($a,$b)
+		{
+			return ($a['color'])-($b['color']);
+		});
 	
 		$this->render('drafts/view.structure',array(
 				'task' => $tsk->as_array(),
@@ -681,7 +697,7 @@ class UserController extends Controller
 				'bullet' => $bullet
 
 		));
-		var_dump($this->STRUCT);
+		
 	}
 
 	public function viewDispersion($draft)
