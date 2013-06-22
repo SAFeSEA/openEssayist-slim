@@ -55,6 +55,7 @@
 {% endblock %}
 
 {% block injectJS %}
+	{{ parent() }}
 <script src="/assets/jquery.isotope.min.js"></script>
 <script src="/assets/d3.js/colorbrewer.js"></script>
 
@@ -182,6 +183,7 @@ $(".par-tag[data-tag]").each(function()
 {% endblock %}
 
 {% block injectCSS %}
+	{{ parent() }}
 <style type="text/css">
 
 div.sent{

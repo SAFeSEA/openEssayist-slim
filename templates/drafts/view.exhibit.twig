@@ -157,6 +157,7 @@
 {% endblock %}
 
 {% block injectJS %}
+	{{ parent() }}
 <script src="http://api.simile-widgets.org/exhibit/3.0.0/exhibit-api.js"></script>
 <script src="/assets/highlight.js/highlight.pack.js"></script>
 <script src="/assets/d3.js/colorbrewer.js"></script>
@@ -371,6 +372,7 @@ $(document).ready(function(){
 {% endblock %}
 
 {% block injectCSS %}
+	{{ parent() }}
 <link href="{{ urlFor('api.draft.exhibit',{"draft":draft.id}) }}" type="application/json" rel="exhibit-data" />
 
 <link rel="exhibit-extension" type="text/javascript" href="http://api.simile-widgets.org/exhibit/3.0.0/extensions/time/time-extension.js" />

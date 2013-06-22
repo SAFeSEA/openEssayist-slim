@@ -13,7 +13,7 @@
 				
 			{% if auth.loggedIn() %}	
 			<div class="btn-group pull-right">
-					<button title="Open your Notepad" class="btn btn-info"><i class="icon-edit icon-large"></i></button>
+					<button id="btn-notepad" title="Open your Notepad" class="btn btn-info"><i class="icon-edit icon-large"></i></button>
 				<a class="btn {{ auth.user.isadmin ? "btn-inverse" : ""}} dropdown-toggle" data-toggle="dropdown"
 					title="{{ auth.user.username }}" href="#"> <i class="icon-user {{ auth.user.isadmin ? "icon-white" : ""}}"></i>
 					<span class="hidden-phone">{{ auth.user.username }}</span> <span class="caret"></span>

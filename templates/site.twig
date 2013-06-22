@@ -2,6 +2,15 @@
 
 {% block injectCSS %}
 <style>
+#ajax-modal > .modal-body
+{
+	padding-top:0px;
+}
+
+.modal-toolbar
+{
+	padding: 0 15px;
+}
 #editor { background-color: white;
     border: 1px solid #CCCCCC;
     border-collapse: separate;
@@ -17,6 +26,36 @@
 {% endblock %}
 
 {% block injectJS %}
+<script id="ajax" type="text/javascript">
+var $modal = null;
+$('#btn-notepad').on('click', function(){
+  	// create the backdrop and wait for next modal to be triggered
+	 // $('body').modalmanager('loading');
+	if ($modal==null)
+	{
+			$modal = $('#ajax-modal');
+			$modal.on('hidden', function () {
+    			var jqxhr = $.post("{{ urlFor('profile.save.notes') }}", 
+    					$('#editor').html())
+    				.done(function() {})
+    				.fail(function() { ; })
+    				.always(function() { });
+    		}).find('div#editor').load(
+					"{{ urlFor('profile.save.notes') }}", "", 
+					function(){
+						$('#editor').wysiwyg();
+		    		});	
+    }
+	$modal.modal({
+		maxHeight: "300px",
+		keyboard: false,
+		backdrop: "static",
+		});
+});
+
+
+
+</script>	
 {% endblock %} 
 
 {% block toolcontainer %}{% if auth.user %}
@@ -35,10 +74,9 @@
 	<div class="modal-header">
 		<h3>Notes</h3>
 	</div>
-	<div class="modal-tb">
-		<div data-target="#editor" data-role="editor-toolbar"
-			class="btn-toolbar">
-			<div class="btn-group">
+	<div class="modal-toolbar">
+		<div data-target="#editor" data-role="editor-toolbar" class="btn-toolbar">
+			{#<div class="btn-group">
 				<a title="" data-toggle="dropdown" class="btn dropdown-toggle"
 					data-original-title="Font"><i class="icon-font"></i><b
 					class="caret"></b> </a>
@@ -74,7 +112,7 @@
 					<li><a style="font-family: 'Verdana'" data-edit="fontName Verdana">Verdana</a>
 					</li>
 				</ul>
-			</div>
+			</div>#}
 			<div class="btn-group">
 				<a title="" data-toggle="dropdown" class="btn dropdown-toggle"
 					data-original-title="Font Size"><i class="icon-text-height"></i>&nbsp;<b
@@ -121,7 +159,7 @@
 					data-original-title="Justify (Ctrl/Cmd+J)"><i
 					class="icon-align-justify"></i> </a>
 			</div>
-			<div class="btn-group">
+			{#<div class="btn-group">
 				<a title="" data-toggle="dropdown" class="btn dropdown-toggle"
 					data-original-title="Hyperlink"><i class="icon-link"></i> </a>
 				<div class="dropdown-menu input-append">
@@ -141,7 +179,7 @@
 					data-edit="insertImage" data-target="#pictureBtn"
 					data-role="magic-overlay"
 					style="opacity: 0; position: absolute; top: 0px; left: 0px; width: 39px; height: 30px;">
-			</div>
+			</div>#}
 			<div class="btn-group">
 				<a title="" data-edit="undo" class="btn"
 					data-original-title="Undo (Ctrl/Cmd+Z)"><i class="icon-undo"></i> </a>
@@ -149,14 +187,14 @@
 					data-original-title="Redo (Ctrl/Cmd+Y)"><i class="icon-repeat"></i>
 				</a>
 			</div>
-			<input type="text" x-webkit-speech="" id="voiceBtn"
-				data-edit="inserttext" style="display: none;">
+			{#<input type="text" x-webkit-speech="" id="voiceBtn"
+				data-edit="inserttext" style="display: none;">#}
 		</div>
 	</div>
 	<div class="modal-body">
 
 		<div contenteditable="true" id="editor">
-			Go ahead…dfdd<br> <br>d<br>d<br>d<br>qq<br type="_moz">
+			Go ahead...<br>
 		</div>
 
 

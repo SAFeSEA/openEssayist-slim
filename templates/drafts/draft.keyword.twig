@@ -41,6 +41,7 @@
 
 
 {% block injectCSS %}
+	{{ parent() }}
 <style>
 .btn-ngram { 
 	white-space: nowrap; 
@@ -101,6 +102,7 @@
 {% endblock %}
 
 {% block injectJS %}
+	{{ parent() }}
 <script src="/assets/jquery.sparkline/jquery.sparkline.js"></script>
 <script>
 {% verbatim %}

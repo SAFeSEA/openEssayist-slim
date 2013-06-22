@@ -61,10 +61,13 @@
 {% endblock %} 
 
 {% block injectCSS %}
+	{{ parent() }}
+
 <link href="/assets/bootstrap.datepicker/css/datepicker.css" rel="stylesheet">
 {% endblock %}
 
 {% block injectJS %}
+	{{ parent() }}
 <script src="/assets/bootstrap.datepicker/js/bootstrap-datepicker.js"></script>
 <script>
 	$(document).ready(function() {

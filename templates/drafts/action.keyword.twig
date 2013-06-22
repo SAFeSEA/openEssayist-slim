@@ -4,6 +4,7 @@
 {% block title %}Draft - Keyword Categories{% endblock %} 
 
 {% block injectCSS %}
+	{{ parent() }}
 <link href="/assets/jquery.minicolors/jquery.minicolors.css" rel="stylesheet">
 
  <style>
@@ -367,6 +368,7 @@ height: 100px;
 
 
 {% block injectJS %}
+	{{ parent() }}
 <script src="/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
 <script src="/assets/d3.js/d3.v3.min.js"></script>
 <script src="/assets/jquery.minicolors/jquery.minicolors.js"></script>

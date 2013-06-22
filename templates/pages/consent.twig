@@ -69,6 +69,7 @@ All data will be destroyed once the project is complete.</p>
 {% endblock %}
 
 {% block injectCSS %}
+	{{ parent() }}
 <style>
 
 .form-consent {
@@ -99,6 +100,7 @@ All data will be destroyed once the project is complete.</p>
 {% endblock %}
 
 {% block injectJS %}
+	{{ parent() }}
 <script type="text/javascript">
 
 $(document).ready(function(){

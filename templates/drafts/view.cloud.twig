@@ -39,6 +39,7 @@
 {% endblock %}
 
 {% block injectJS %}
+	{{ parent() }}
 <script src="/assets/d3.js/d3.v3.js"></script>
 <script src="/assets/d3.js/d3.layout.cloud.js"></script>
 <script type="text/javascript">

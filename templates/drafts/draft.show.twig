@@ -161,6 +161,7 @@
 
 
 {% block injectCSS %}
+{{ parent() }}
 <link href="/assets/openessayist/css/hljs.css" rel="stylesheet">
 <style type="text/css">
 
@@ -337,58 +338,16 @@ label.checkbox:before
 {% endblock %}
 
 {% block injectJS %}
+	{{ parent() }}
 	<script src="/assets/d3.js/colorbrewer.js"></script>
 	<script src="/assets/highlight.js/highlight.pack.js"></script>
 	<script src="/assets/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.js"></script>
 	{#<script src="/assets/snapeditor/snapeditor.js"></script>#}
 	<script src="/assets/bootstrap-wysiwyg/jquery.hotkeys.js"></script>
 	<script src="/assets/bootstrap-wysiwyg/bootstrap-wysiwyg.js"></script>
+	{% include "javascript/hljs.keywords.js.twig" %}
+		
 	
-		{% include "javascript/hljs.keywords.js.twig" %}
-		
-<script id="ajax" type="text/javascript">
-
-$('.ajax').on('click', function(){
-	console.log("DFFDDFDF");
-	$.ajax({
-		url: '{{ urlFor('profile.save.notes') }}',
-		context: document.body
-		}).done(function() {
-			console.log("DONE!");
-		});
-});
-		
-var $modal = null;
-//var $inPlaceEditor = null;
-
-$('.demo').on('click', function(){
-  // create the backdrop and wait for next modal to be triggered
- // $('body').modalmanager('loading');
-	if ($modal==null)
-	{
-			$modal = $('#ajax-modal');
-			$modal.on('hidden', function () {
-    			var jqxhr = $.post("{{ urlFor('profile.save.notes') }}", 
-    					$('#editor').html())
-    				.done(function() {})
-    				.fail(function() { ; })
-    				.always(function() { });
-    		}).find('div#editor').load(
-					"{{ urlFor('profile.save.notes') }}", "", 
-					function(){
-						//$('#editor').wysiwyg();
-		    		});	
-    }
-	$modal.modal({
-		maxHeight: "300px",
-		keyboard: false,
-		backdrop: "static",
-		});
-});
-
-
-
-</script>		
 		
 	<script>
 	$(document).ready(function() {

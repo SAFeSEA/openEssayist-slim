@@ -51,6 +51,7 @@
 {% endblock %}
 
 {% block injectJS %}
+	{{ parent() }}
 <script src="/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
 <script src="/assets/d3.js/d3.v3.js"></script>
 <script src="/assets/d3.js/colorbrewer.js"></script>
@@ -326,6 +327,7 @@ function onloaded(graph) {
 {% endblock %}
 
 {% block injectCSS %}
+	{{ parent() }}
 <style type="text/css">
 .ajax.alert
 {

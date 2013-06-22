@@ -13,9 +13,11 @@
 {% endblock %}
 
 {% block injectCSS %}
+	{{ parent() }}
 {% endblock %}
 
 {% block injectJS %}
+	{{ parent() }}
 <script>
 $(document).ready(function() {
 

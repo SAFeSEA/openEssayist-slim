@@ -33,6 +33,7 @@
 {% endblock %}
 
 {% block injectJS %}
+	{{ parent() }}
 <script src="/assets/highcharts/js/highcharts.js"></script>
 <script src="/assets/d3.js/colorbrewer.js"></script>
 <script type="text/javascript">

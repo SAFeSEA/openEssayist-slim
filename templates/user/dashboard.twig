@@ -97,6 +97,7 @@
 {% endblock %}
 
 {% block injectJS %}
+	{{ parent() }}
 <script src="/assets/bootstrap-wysiwyg/jquery.hotkeys.min.js"></script>
 <script src="/assets/bootstrap-wysiwyg/bootstrap-wysiwyg.min.js"></script>
 <script type="text/javascript">
@@ -109,6 +110,7 @@
 </script>
 {% endblock %}
 {% block injectCSS %}
+	{{ parent() }}
 <style>
 #editor { background-color: white;
     border: 1px solid #CCCCCC;

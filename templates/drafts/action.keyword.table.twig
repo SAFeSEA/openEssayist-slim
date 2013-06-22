@@ -4,6 +4,7 @@
 {% block title %}Draft - Keyword Categories{% endblock %} 
 
 {% block injectCSS %}
+	{{ parent() }}
 <style>
 .droptrue {
 	min-height: 10px;
@@ -167,6 +168,7 @@ h3 > .cat_color
 
 
 {% block injectJS %}
+	{{ parent() }}
 <script src="/assets/jquery.dataTables/js/jquery.dataTables.min.js"></script>
 <script src="/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
 <script src="/assets/d3.js/d3.v3.min.js"></script>

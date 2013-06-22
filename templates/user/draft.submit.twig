@@ -69,6 +69,7 @@
 {% endblock %}
  
 {% block injectJS %}
+	{{ parent() }}
 <script src="/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
 <script>
 $(document).ready(function() {
@@ -86,6 +87,7 @@ $(document).ready(function() {
 {% endblock %}
 
 {% block injectCSS %}
+	{{ parent() }}
 <style>
 .ajax.alert
 {

@@ -41,6 +41,7 @@
 {% endblock %}
 
 {% block injectJS %}
+	{{ parent() }}
 <script src="/assets/d3.js/colorbrewer.js"></script>
 <script src="/assets/highcharts/js/highcharts.js"></script>
 <script src="/assets/highcharts/js/modules/exporting.js"></script>
@@ -223,6 +224,7 @@ $(document).ready(function() {
 {% endblock %}
 
 {% block injectCSS %}
+	{{ parent() }}
 <style type="text/css">
 </style>
 {% endblock %}
