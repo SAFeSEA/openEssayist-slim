@@ -13,19 +13,27 @@
 <div class="row-fluid"><div class="span12">
 
 <div class="widget">
-<div class="widget-header" data-toggle="collapse" data-target="#demo">
-	<h3>Keyword Dispersion</h3>
-	<div class="box-icon">
-		<a id="disp-option" class="btn-setting" href="javascript:void(0);"><i class="icon-chevron-down"></i></a>
-				</div>
-</div>
-<div class="widget-content">
-	<div id="container" style="height: 600px;margin: 0 auto">
-	<div id="resizer" >
-		<div id="inner-resizer">
-	    	
-	    	</div>
-	    </div>
+	<div class="widget-header" data-toggle="collapse" data-target="#demo">
+		<h3>Keyword Dispersion</h3>
+	</div>
+	
+	<div class="widget-toolbar">
+		<div class="btn-toolbar" id="options">
+			<div class="btn-group option-set"  data-toggle="buttons-radio" data-option-key="sortBy">
+				<button title="Zoom by essay structure" class="btn-setting btn btn-small active" data-option-value="x">Structure</button>
+				<button title="Zoom by key word" class="btn-setting btn btn-small" data-option-value="y">Key Word</button>
+				<button title="Zoom by both side" class="btn-setting btn btn-small" data-option-value="xy">Both</button>
+			</div>
+		</div>
+	</div>
+	
+	
+	<div class="widget-content">
+		<div id="container" style="height: 600px;margin: 0 auto">
+			<div id="resizer" >
+				<div id="inner-resizer"></div>
+			</div>
+		</div>
 	</div>
 </div>
 </div></div>
@@ -41,14 +49,12 @@ $(document).ready(function() {
 	var chart = null;
 	var chartOptions = null;
 
-	$('#disp-option').click(function(){
-		//console.log("fdfdFDDFFD");
-		//var serieReference = chart.series[1];
-		///serieReference.remove(true);
-		//var t=0;
-		var gg = chartOptions.chart.zoomType;
-		gg = (gg=="y")?"x":"y";
-		chartOptions.chart.zoomType = gg;
+	$('.btn-setting').click(function(){
+		var data = $(this).data('option-value');
+		var zoomtype = chartOptions.chart.zoomType;
+		if (data==zoomtype) return;
+
+		chartOptions.chart.zoomType = data;
 		chart = new Highcharts.Chart(chartOptions);;
 	});
 
