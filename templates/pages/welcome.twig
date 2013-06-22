@@ -15,7 +15,8 @@
 				<a href="{{ urlFor('about') }}" class="btn btn-primary btn-large">Learn more
 					&raquo;</a> 
 				
-				{% if not(user) %} 
+				
+				{% if not auth.loggedIn()  %} 
 				<a href="/login"
 					class="btn btn-large">Login &raquo;</a> 
 				{% endif %}
