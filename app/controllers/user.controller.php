@@ -66,22 +66,22 @@ class UserController extends Controller
 			if ($ap===false)
 			{
 				$this->app->flash("error", "Cannot find the task data");
-				$this->app->notFound();
+				$this->redirect('me.tasks');
 			}
 			$t[] = $ap->as_array();
+			
 		}
-		if ($id===-1)
-			$this->app->flashNow("info", "This is the page for all your assignments");
-		else
-			$this->app->flashNow("info", "This is the page for your <b>" . $t[0]['name'] . "</b> assignment");
-
+		foreach ($t as $key => &$task)
+		{
+			$d = $u->drafts()->where_equal('task_id',$task['id'])->order_by_desc('id')->find_array();
+			$task['draftcount'] = ($d)?count($d):0; 
+				
+		}
+		
 		$this->render('user/tasks',array(
 				'group' => $g->as_array(),
 				'tasks' => $t
 		));
-
-		//var_dump($u->as_array(),$g->as_array());
-		//var_dump($t);
 	}
 
 	/**
