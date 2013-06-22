@@ -8,14 +8,15 @@
 					class="icon-bar"></span>
 			</button>
 
-			<a class="brand" href="/"><img class="brand-ico" alt="icon"
-				src="/assets/openessayist/img/openEssayist-icon.png">openEssayist</a> 
+			<a class="brand" href="/" title="openEssayist" ><img class="brand-ico" alt="icon"
+				src="/assets/openessayist/img/openEssayist-icon.png"><span class="hidden-phone">openEssayist</span></a> 
 				
 			{% if auth.loggedIn() %}	
 			<div class="btn-group pull-right">
+					<button title="Open your Notepad" class="btn btn-info"><i class="icon-edit icon-large"></i></button>
 				<a class="btn {{ auth.user.isadmin ? "btn-inverse" : ""}} dropdown-toggle" data-toggle="dropdown"
-					title="dfsdf sdfs df sadf sdf sad" href="#"> <i class="icon-user {{ auth.user.isadmin ? "icon-white" : ""}}"></i>
-					{{ auth.user.username }} <span class="caret"></span>
+					title="{{ auth.user.username }}" href="#"> <i class="icon-user {{ auth.user.isadmin ? "icon-white" : ""}}"></i>
+					<span class="hidden-phone">{{ auth.user.username }}</span> <span class="caret"></span>
 				</a>
 				<ul class="dropdown-menu">
 					<li><a href="#">Profile</a></li>
@@ -24,7 +25,9 @@
 				</ul>
 			</div>
 
+			
 			<div class="nav-collapse collapse">
+			
 				<ul class="nav">
 					<li class=""><a href="/me" title="Go to your homepage">
 						<i class="icon-home"></i> Dashboard</a>
