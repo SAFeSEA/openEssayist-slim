@@ -297,7 +297,8 @@ var hljs = new function() {
     }
 
     function startNewMode(mode, lexem) {
-      var markup = mode.className? '<span class="' + mode.className + '">': '';
+      var markup = mode.className? '<span class="' + mode.className + '"'+
+    		  ((mode.dataContent)?mode.dataContent:"")+'>': '';
       if (mode.returnBegin) {
         result += markup;
         mode_buffer = '';
