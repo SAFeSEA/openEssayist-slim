@@ -27,6 +27,62 @@ class UserController extends Controller
 		if ($id) return $arr[$id];
 		else return $arr;
 	}
+	
+	public function GetAllKeywords($analysis,$userdata)
+	{
+		if (!$analysis) return null;
+		
+		// Get all ngrams in a single structure
+		$data = array_merge(array(),
+				$analysis->nvl_data->quadgrams,
+				$analysis->nvl_data->trigrams,
+				$analysis->nvl_data->bigrams,
+				$analysis->nvl_data->keywords
+		);
+		
+		$allkw = array();
+		// Transform into associative array
+		foreach ($data as $ngram)
+		{
+			$id = join("",$ngram->ngram);
+			$allkw[$id] = $ngram;
+			
+		}
+		
+		// Get the user-defined keywords
+		// Get the groups
+		$groups = null;
+		if ($userdata!=false)
+		{
+			$groups = $userdata->getGroups();
+		}
+
+		
+		if ($groups==null)
+		{
+			$kw = array();
+			foreach ($allkw as $key=>$item)
+			{
+				//$item->groupid = 'category_all';
+				$kw[] = $key;
+			}
+			$groups = array('category_all'=>
+					array('id' => 'category_all','keywords' => $kw));
+		}
+		
+		foreach ($groups as $gr)
+		{
+			foreach ($gr['keywords'] as $keyw)
+				$allkw[$keyw]->groupid = $gr['id'];
+					
+		}
+		
+
+		//$ret=new stdClass();
+		$ret->allkw = $allkw;
+		$ret->groups = $groups;
+		return $ret;
+	}
 
 	/**
 	 * 
@@ -319,22 +375,30 @@ class UserController extends Controller
 	 * @param string $draft
 	 * @return Draft
 	 */
-	protected function getDraft($draft)
+	protected function getDraft($draft,$redirect=true)
 	{
 		/* @var $u Users */
 		$u = Model::factory('Users')->find_one($this->user['id']);
 		if ($u===false)
 		{
-			$this->app->flash("error", "Cannot find the user data");
-			$this->redirect('me.home');
+			if ($redirect)
+			{
+				$this->app->flash("error", "Cannot find the user data");
+				$this->redirect('me.home');
+			}
+			return null;
 		}
 
 		/* @var $g Draft */
 		$g = $u->drafts()->find_one($draft);
 		if ($g===false)
 		{
-			$this->app->flash("error", "Cannot find the user data");
-			$this->redirect('me.home');
+			if ($redirect)
+			{
+				$this->app->flash("error", "Cannot find the user data");
+				$this->redirect('me.home');
+			}
+			return null;
 		}
 		return $g;
 
@@ -356,7 +420,7 @@ class UserController extends Controller
 
 		// extract structure tags
 		// Need to be done once for all
-		$struct2 = array();
+		/*$struct2 = array();
 		foreach ($parasenttok as $index => $par)
 		{
 			foreach ($par as $index2 => $sent)
@@ -368,19 +432,21 @@ class UserController extends Controller
 		$tt = array_unique($struct2);
 		$tt = array_flip($tt);
 		$tt = array_keys($tt);
-		$tt = array_flip($tt);
+		$tt = array_flip($tt);*/	
 		
 		
 		// Get all ngrams in a single structure
-		$allkw = array_merge(array(),
-				$analysis->nvl_data->quadgrams,
-				$analysis->nvl_data->trigrams,
-				$analysis->nvl_data->bigrams,
-				$analysis->nvl_data->keywords
-		);
-
+		//$allkw = array_merge(array(),
+		//		$analysis->nvl_data->quadgrams,
+		//		$analysis->nvl_data->trigrams,
+		//		$analysis->nvl_data->bigrams,
+		//		$analysis->nvl_data->keywords
+		//);
+		
 		$tt = $dr->kwCategories()->find_one();
-		$groups = array();
+		$mydata = $this->GetAllKeywords($analysis,$tt);
+
+		/*$groups = array();
 		if ($tt!=false)
 		{
 			$groups = $tt->getGroups();
@@ -390,36 +456,22 @@ class UserController extends Controller
 			foreach ($allkw as $key=>$item)
 				$kw[] = $key; 
 			$groups = array(array('id' => 'category_all','keywords' => $kw));
-		}
+		}*/
 		
 		
 		$highlighjs = array();
 		
-		foreach ($groups as $key=>$group){
+		foreach ($mydata->groups as $key=>$group){
 			
-			//$formatter = array();
-			//$formatter['id'] = $group['id'];
+			foreach($group['keywords'] as $ref){
 				
-			$kw = $group['keywords'];
-			$nkw2 = array();
-			
-	//		if (!$kw) $kw=array();
-
-			if ($kw) foreach($kw as $ref){
-				$ngram = $allkw[$ref];
-				
-				$ngram->groupid =  $group['id'];
-				
-				$highlighjs[] = $ngram;
-				//$nkw2[] = $allkw[$ref];
+				$ngram = $mydata->allkw[$ref];
+				$ngram->ngramid =  $ref;
+				$highlighjs[$ref] = $ngram;
 			}
-			//usort($nkw2,function($a,$b)
-			//{
-			//	return count($b->ngram)-count($a->ngram);
-			//});
-			//$formatter['kw'] = $nkw2;
-			//$highlighjs[] = $formatter;
 		}
+		
+		
 		usort($highlighjs,function($a,$b)
 		{
 			return count($b->ngram)-count($a->ngram);
@@ -434,10 +486,8 @@ class UserController extends Controller
 			$tt['id'] = $config;
 			$config = $tt['config'];
 			$this->app->flashNow("tutor", "Cannot find the user data");
-			
-				
 		}
-	
+
 		$this->render('drafts/draft.show',array(
 				'configxx' => array(
 						'modify' => false,
@@ -459,8 +509,8 @@ class UserController extends Controller
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
 				'parasenttok' => $parasenttok,
-				'keywords' => $allkw,
-				'groups' => $groups,
+				'keywords' => $mydata->allkw,
+				'groups' => $mydata->groups,
 				'ngrams' => $highlighjs
 		));
 	}
@@ -520,7 +570,6 @@ class UserController extends Controller
 				$analysis->nvl_data->trigrams,
 				$analysis->nvl_data->bigrams
 		);
-		
 
 		$this->render('drafts/draft.keyword',array(
 				'task' => $tsk->as_array(),
@@ -582,51 +631,52 @@ class UserController extends Controller
 		$dr = $this->getDraft($draft);
 		$tsk = $dr->task()->find_one();
 		
-		$tt = $dr->kwCategories()->find_array();
+		//$tt = $dr->kwCategories()->find_array();
 		$analysis = $dr->getAnalysis();
 		
-		//$cat = Model::factory('KWCategory')->create();
-		//$cat->draft_id = $dr->id;
-		//$cat->category = "THIS IS A TEST";
-		//$cat->save();
-		
-		$tt = $dr->kwCategories()->find_one();
+		/*$tt = $dr->kwCategories()->find_one();
 		$groups = array();
 		if ($tt!=false)
 		{
 			$groups = $tt->getGroups();
 		}
 		
+		$allkw = array_merge(array(),
+			$analysis['nvl_data']['quadgrams'],
+			$analysis['nvl_data']['trigrams'],
+			$analysis['nvl_data']['bigrams'],
+			$analysis['nvl_data']['keywords']
+		);*/
 		
-		$alllema = array_keys(get_object_vars($analysis->ke_data->myarray_ke));
-		$allfreq = $analysis->ke_data->scoresNfreqs ;
-		foreach ($allfreq as $key=>&$item)
+		$tt = $dr->kwCategories()->find_one();
+		$mydata = $this->GetAllKeywords($analysis,$tt);
+		
+		$alllema = (array)$analysis->ke_data->myarray_ke;
+		$allfreq = (array)$analysis->ke_data->scoresNfreqs;
+		$keylemma = (array)$analysis->ke_data->keylemmas;
+		
+		$allfreq2 = array();
+		foreach ($allfreq as $key=>$item)
 		{
-			$item = array(
+			$item2 = array(
 					'value'=>$item[0],
-					//'label'=>$item[0],
+					'userdefined'=>true,
 					'ngram'=>array($item[0]),
-					'source'=>array($item[0]),
+					'source'=> array_unique($alllema[$item[0]]),
 					'count'=>$item[3],
 					'score'=>array($item[1])
-				);
+			);
+			if (!in_array($item[0],$keylemma))
+				$allfreq2[]= $item2;
 		}
-		
-		
-		$allkw = array_merge(array(),
-			$analysis->nvl_data->quadgrams,
-			$analysis->nvl_data->trigrams,
-			$analysis->nvl_data->bigrams,
-			$analysis->nvl_data->keywords
-		);
-		
+	
 		$tmpl = array('drag'=>'drafts/action.keyword','table'=>'drafts/action.keyword.table');
 		$this->render($tmpl['drag'],array(
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
-				'keywords' => $allkw,
-				'groups' => $groups,
-				'lemmas' => $allfreq
+				'keywords' => $mydata->allkw,
+				'groups' => $mydata->groups,
+				'lemmas' => $allfreq2
 		));
 
 		
@@ -657,9 +707,18 @@ class UserController extends Controller
 		}
 		
 		
+		$wc = $analysis->se_stats->number_of_words;
+		$tg = $tsk->wordcount;
+		$target= array(
+			'target' => $tg,
+			'total' => $wc,
+			'range' => array("low"=>intval ($tg*0.9),"high"=>intval($tg*1.1)),
+			'inlimit' => ($wc <= ($tg*1.1) && $wc >= ($tg*0.9))
+		);
+		
 		$distribution = array();
 		$bullet = array();
-
+		
 		
 		foreach ($breakdown as $id => $count)
 		{
@@ -694,7 +753,8 @@ class UserController extends Controller
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
 				'breakdown' => $distribution,
-				'bullet' => $bullet
+				'bullet' => $bullet,
+				'target' =>$target
 
 		));
 		
@@ -759,27 +819,16 @@ class UserController extends Controller
 		}
 		
 		
-		/*
-		$limit= array(
-			'Introduction'=> array(
-					'tag' => '#+s:i#',
-					'from' => array_sum(array_slice($struct2,0,$analysis->intro->i_first)),
-					'to' => array_sum(array_slice($struct2,0,$analysis->intro->i_last+1))),
-			'Conclusion'=> array(
-					'tag' => '#+s:c#',
-					'from' => array_sum(array_slice($struct2,0,$analysis->concl->c_first)),
-					'to' => array_sum(array_slice($struct2,0,$analysis->concl->c_last+1))),
-
-			);*/
-
 		$text = "" . join(" ", $text);
-// 		/$count = str_word_count($text, 1);
 		$count = array_map('strtolower', $count);
-		//$ret = array_search(strtolower("learners"), array_map('strtolower', $count));
 		
-		
-		
-		$allkw = array_merge(array(),
+		$tt = $dr->kwCategories()->find_one();
+		$mydata = $this->GetAllKeywords($analysis,$tt);
+		usort($mydata->allkw,function($a,$b)
+		{
+			return ($b->count)-($a->count);
+		});
+		/*$allkw = array_merge(array(),
 				$analysis->nvl_data->quadgrams,
 				$analysis->nvl_data->trigrams,
 				$analysis->nvl_data->bigrams,
@@ -805,7 +854,7 @@ class UserController extends Controller
 			foreach ($allkw as $key=>$item)
 				$kw[] = $key;
 			$groups = array(array('id' => 'category_all','keywords' => $kw));
-		}
+		}*/
 		
 		$categories=array();
 		$series=array();
@@ -816,25 +865,18 @@ class UserController extends Controller
 		
 		
 		$yaxis=0;
-		foreach ($allkw as  $key=>$kw)
+		foreach ($mydata->allkw as  $key=>$kw)
 		{	
 			$cnt = $kw->count;
 			$src = $kw->source;
 			$ngram = $kw->ngram;
 			$score = $kw->score;
 			
-			$groupid = null;
+
+			$groupid = $kw->groupid;
 			$groupcolor = null;
 			$groupname = null;
-			foreach ($groups as $gr)
-			{
-				
-				if (in_array($key,$gr['keywords']))
-				{
-					$groupid = $gr['id'];
-					break;
-				}
-			}
+			
 			
 			//var_dump($ngram,$groupid);
 			$dispers=array();
@@ -910,8 +952,10 @@ class UserController extends Controller
 		//die();
 		$series3=array();
 		
+		
+		
 		$groups2 = array();
-		foreach ($groups as $key=>$gr)
+		foreach ($mydata->groups as $key=>$gr)
 		{
 			$groups2[$gr['id']] = $gr;
 		}
@@ -1411,6 +1455,34 @@ class UserController extends Controller
 		$response['X-Powered-By'] = 'openEssayist';
 		$response->status(200);
 		$response->body(json_encode($gr));
+		
+	}
+	
+	public function ajaxKeyword($draft)
+	{
+		$response = $this->app->response();
+		$response->status(200);
+		
+		$dr = $this->getDraft($draft,false);
+		if ($dr)
+		{
+			$tsk = $dr->task()->find_one();
+				
+			$tt = $dr->kwCategories()->find_one();
+			$analysis = $dr->getAnalysis();
+			$mydata = $this->GetAllKeywords($analysis,$tt);
+		}
+		else
+		{
+			$mydata = array('msg'=>"You don't have the authorisation to get there.");
+			$response->status(400);
+		}
+
+	
+		$response['Content-Type'] = 'application/json';
+		$response['X-Powered-By'] = 'openEssayist';
+		//$response->body(json_encode($mydata));
+		$response->body($this->indent(json_encode($mydata)));
 		
 	}
 }

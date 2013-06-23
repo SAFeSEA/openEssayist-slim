@@ -180,6 +180,8 @@ $c->app->get('/profile/data/notes', array($userCtrl, 'saveNotes'))->via('GET', '
 
 $c->app->get('/ajax/draft/:draft/graph/:graph.json', array($userCtrl, 'ajaxGraph'))->name('ajax.graph.json')
 				->conditions(array('graph' => '(graphse|graphke)'));
+$c->app->get('/ajax/draft/:draft/keywords.json', array($userCtrl, 'ajaxKeyword'))->name('ajax.keyword.json');
+
 
 $c->app->post('/tutor/logactivity', array($tutorCtrl, 'postActivityLog'))->name('ajax.log.activity');
 

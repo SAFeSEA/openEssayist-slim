@@ -49,6 +49,18 @@ h3 > .cat_color
     white-space: inherit;
 }
 
+ .ui-autocomplete {
+max-height: 200px;
+overflow-y: auto;
+/* prevent horizontal scrollbar */
+overflow-x: hidden;
+}
+/* IE 6 doesn't support max-height
+* we use height instead, but this forces the menu to always be this tall
+*/
+* html .ui-autocomplete {
+height: 100px;
+}
 </style>
  
 {#<style>
@@ -67,18 +79,7 @@ ul#category_all
 	overflow-y: auto;
 }
 
- .ui-autocomplete {
-max-height: 100px;
-overflow-y: auto;
-/* prevent horizontal scrollbar */
-overflow-x: hidden;
-}
-/* IE 6 doesn't support max-height
-* we use height instead, but this forces the menu to always be this tall
-*/
-* html .ui-autocomplete {
-height: 100px;
-}
+
 
 </style>#}
 {% endblock %}
@@ -95,6 +96,8 @@ height: 100px;
 
 {% block content %}
 
+
+
 <div class="row-fluid">
 
 	<div class="widget widget-content">
@@ -102,6 +105,24 @@ height: 100px;
 		<i class="icon-list icon-white"></i> Back to List</a>
 	</div>
 </div>
+
+
+<div class="row-fluid">
+<div class="widget">
+<div class="widget-header"><h3>Add you own key words ...</h3></div>
+			 	
+			<div class="widget-content">
+				<div class="input-append input-fullwidth00">
+					<div class="input-wrapper">
+						<input class="" id="tags"  type="text" placeholder="filter the list">
+						<button class="btn" type="button">Go!</button>
+					</div>
+	
+				</div>
+				<div id="project-id"></div>
+	<p id="project-description"></p>
+			</div>
+</div></div>
 
 {% set lkw = (groups['category_all'] is defined)? groups['category_all']['keywords'] : keywords   %}
 <div class="row-fluid"><div class="span12">
@@ -120,14 +141,14 @@ height: 100px;
 			</div> 
 		<div class="widget-content">
 		<ul class="sortable" id="category_all">
-		
 
+		{% if groups.category_all is defined %}
 		
-		{% if groups['category_all'] is defined %}
-			{% for key2,item2 in groups['category_all']['keywords']  %}
+			{% for key2,item2 in groups.category_all.keywords  %}
 			<li id="{{ item2 }}">{{ ngram.toBtn(keywords[item2],false) }}</li>
 			{% endfor %}
-		{% else %}
+			{% else %}
+		
 			{% for key,item in keywords %}
 			<li id="{{ key }}">{{ ngram.toBtn(item,false) }}</li>
 			{% endfor %}
@@ -372,6 +393,55 @@ height: 100px;
 <script src="/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
 <script src="/assets/d3.js/d3.v3.min.js"></script>
 <script src="/assets/jquery.minicolors/jquery.minicolors.js"></script>
+<script>
+$(document).ready(function() {
+	var lemmas = {{ lemmas|json_encode|raw  }};
+	
+	function split( val ) {
+		 return val.split( /,\s*/ );
+	};
+
+	function extractLast( term ) {
+		 return split( term ).pop();
+	};
+
+	$( "#tags" )
+		
+		// Define and attach the autocomplete UI
+		.autocomplete({
+			minLength: 0,
+			source: lemmas,
+			focus: function( event, ui ) {
+				$( "#tags" ).val( ui.item.label );
+				return false;
+				},
+			select: function( event, ui ) {
+				 $( "#tags" ).val( ui.item.label );
+				 $( "#project-id" ).append("{{ ngram.toBtnString('ui.item',false,true) }}");
+				 $( "#project-description" ).html( ui.item.desc );
+				return false;
+				}
+			}) .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+				
+				return $( "<li>" )
+				.append("{{ ngram.toBtnString('item',false,true) }}")
+				.appendTo( ul );
+				};;		 
+
+	 $('input#filter').keyup(function(){
+	        
+	        var searchText = $(this).val().toLowerCase(),
+	            $allListElements = $('ul#category_all > li'),
+	            $matchingListElements = $allListElements.filter(function(i, el){
+	                return $(el).text().indexOf(searchText) !== -1;
+	            });
+	        
+	        $allListElements.hide();
+	        $matchingListElements.show();
+	        
+	    });
+});
+</script>
 <script>
 $(document).ready(function() {
 	var is_dirty = false;
