@@ -30,8 +30,46 @@
 	</div>
 </div></div>
 </div>
+
+{#<div class="row-fluid">
+<div class="span6"><div class="widget">
+	<div class="widget-header" id="demo-trigger" data-toggle="collapse" data-target="#demo" style="cursor: pointer;">
+		<h3>Show The data</h3>
+	</div>
+	<div class="widget-content in collapse" id="demo">
+		<table class="table table-condensed table-striped table-bordered">
+			<thead>
+			<tr>
+				<th width="5%">#</th>
+				<th>Name</th>
+				<th>Assignment</th>
+				<th>Deadline</th>
+				<th>Drafts</th>
+			</tr>
+			</thead>
+			<tbody>
+			
+			</tbody>
+		</table>
+	</div>
+</div></div>
+</div>#}
 {% endblock %}
 
+{% block injectCSS %}
+	{{ parent() }}
+<style>
+#demo.in.collapse
+{
+	padding:10px;
+}
+#demo.collapse
+{
+	padding:0px 10px;;
+}
+</style>
+{% endblock %}
+	
 {% block injectJS %}
 	{{ parent() }}
 <script src="/assets/highcharts/js/highcharts.js"></script>
@@ -69,7 +107,7 @@ $(document).ready(function() {
 	bullet = bullet.map(getColor);  
 
 	// Add the target to the bullet graph series
-	bullet.push({name:'Target',color: 'red',pointWidth:100,type: 'scatter',data:[{{task.wordcount}}],});
+	bullet.push({name:"Target",color: "{{ (target.inlimit)?'green':'red' }}",pointWidth:100,type: "scatter",data:[{{task.wordcount}}],});
 
 	// General HighCharts configuration 
 	var hcOptions = {
@@ -88,7 +126,8 @@ $(document).ready(function() {
 		chart:{type:'bar'},
         tooltip: {
 			formatter: function () {
-				return this.series.name + ": <strong>" + Highcharts.numberFormat(this.y,0) + "</strong>";
+				return this.series.name + ": <strong>" + Highcharts.numberFormat(this.y,0) + "</strong><br>"
+					+ this.total + " (" + {{ target.total }} + ")";
              }
     	   
         },
@@ -100,7 +139,10 @@ $(document).ready(function() {
 	        tickColor:'#ccc',
 	        title:{text: null},
 	        plotBands:[
-				{from:{{(task.wordcount)*0.9}},to:{{(task.wordcount)*1.1}},color: 'rgba(255,0,0,.15)'},
+				{	from: 	{{(task.wordcount)*0.9}},
+					to:		{{(task.wordcount)*1.1}},
+					color: "{{ (target.inlimit)?'rgba(0,255,0,.10)':'rgba(255,0,0,.10)' }}"
+				},
 			]},
 	    plotOptions: {
             series: {stacking: 'normal'},
@@ -113,8 +155,8 @@ $(document).ready(function() {
     $('#struct_pie').highcharts($.extend(true,{}, hcOptions,{
          tooltip: {
 			formatter: function () {
-                 return this.point.name + " <b>" + this.point.y +"</b><br>" +  this.series.name  
-                 + ': <b>' + Highcharts.numberFormat(this.percentage, 1) + '%</b>';
+                 return this.point.name + " <b>" + this.point.y +"</b> (out of "+ this.total +")<br>" +  
+                 this.series.name + ': <b>' + Highcharts.numberFormat(this.percentage, 1) + '%</b>';
              }
     	   
         },
