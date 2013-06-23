@@ -26,7 +26,9 @@
 		<div class="widget widget-content widget-essay">
 		{% for par in parasenttok %}
 			<div class="par-wrapper" {{ (par[0].tag)?"data-tag=#{ par[0].tag }":"" }}>
-				<div class="par-tag" {{ (par[0].tag)?"data-tag=#{ par[0].tag }":"" }}></div>
+				<div class="par-tag" {{ (par[0].tag)?"data-tag=#{ par[0].tag }":"" }}>
+					<i class="icon-warning-sign icon-light"></i>
+				</div>
 				<div class="par-container">
 					<p id="{{ loop.index0 }}" class='oe-par' >
 			{% for sent in par %}
@@ -195,11 +197,12 @@ p.oe-par:before
 .par-tag
 {
     display: table-cell;
-    width: 12px;
+    width: 18px;
     background-color: #D5D5D5 !important;;
     border-right: 8px solid white;
         text-align: center;
     vertical-align: bottom;
+    cursor: pointer;
    
 }
 
@@ -290,7 +293,7 @@ label.checkbox:before
 
 .ngram.showKW > .keyword
 {
-	cursor: help;
+	cursor: pointer;
 }
 
 .ngram.showKW .keyword {
@@ -334,7 +337,7 @@ label.checkbox:before
 	<script src="/assets/bootstrap-wysiwyg/jquery.hotkeys.js"></script>
 	<script src="/assets/bootstrap-wysiwyg/bootstrap-wysiwyg.js"></script>
 	{% include "javascript/hljs.keywords.js.twig" %}
-		
+
 	{#<script>
 	$(document).ready(function()
 	{
@@ -364,122 +367,6 @@ label.checkbox:before
 		
 	<script>
 	$(document).ready(function() {
-
-		//$('#editor').wysiwyg();
-		var myTour = jTour([
-		            		{
-		                    	html: "<h1>Welcome to the OpenEssayist Tour</h1><hr>" +
-		                        	  "This example shows you many different possibilities to use it"
-		            		},{
-		                    	html: "<h1>Welcome to the OpenEssayist Tour</h1><hr>" +
-		                  	  "Hover me to see the controls for the Tour."
-		            	},{
-		                	html: "<h1>Welcome to the OpenEssayist Tour</h1><hr>" +
-		                	  "Use the keys <i class='icon-arrow-left'></i> and <i class='icon-arrow-right'></i> to navigate."
-		            	},{
-		            			html: "<h1>Welcome to the OpenEssayist Tour</h1><hr>" +
-		            					"Always start the Tour with this button",
-		            			element: $('.btn-tour'),
-		            			overlayOpacity:0.5,
-		            			expose: true,
-		            			position: 's'
-		            		},{
-		                    	html: 
-		                    	  "Let's go through the many tools you can use."
-		              	},{
-		            		html: "I can point out to specific elements, like this one",
-		            		element: $('#go-keywords'),
-		            		overlayOpacity:0.5,
-		            		expose: true,
-		            		position: 'e'
-		            	}
-		            	,{
-		            		html: "I can trigger actions on your behalf.",
-		            		element: $('#demo-trigger'),
-		            		overlayOpacity:0.5,
-		            		expose: true,
-		            		position: 's'
-		            	},
-
-		            	{	html:"See that?",
-		            		element:$("#demo"),
-		            		position:"s",
-		            		overlayOpacity:0.5,
-		            		expose: true,
-		            		onBeforeShow:function(a)
-		            			{
-		            				$("#demo-trigger").trigger("click");
-		            			},
-		            		onHide:function()
-		            			{
-		            				$("#demo-trigger").trigger("click");
-		            			}
-		            	},
-		            	{
-		            		html: "I even have a Multi Page Feature.",
-		            		wait: 1000
-		            	},{
-		            		html: "<h1>5</h1>",
-		            		onStep: function(e, p) {
-		            			this.content.find('h1').html(Math.ceil((100-p)/20));
-		            		},
-		            		live:5000,
-		            		goTo: "{{ urlFor('me.drafts',{'idt':task.id}) }}"
-		            	},{
-		            		html: "Doesn't feel much but in fact you have reached a different page.",
-		            	},{
-		            		html: "Want to see that again?",
-		            	},{
-		            		html: "<h1>5</h1>",
-		            		onStep: function(e, p) {
-		            			this.content.find('h1').html(Math.ceil((100-p)/20));
-		            		},
-		            		live:1000,
-		            		goTo: "{{ urlFor('me.draft.show',{'draft':drafts[0].id}) }}"
-		            	},{
-		            		html: "Happy now?",
-		            		wait: 1000
-		            	},{
-		            		goTo: "{{ urlFor('me.drafts',{'idt':task.id}) }}"
-		            	},{
-		                	html: "<h1>Using OpenEssayist</h1><hr>" +
-		              	  		"Let's see now how to use the system"
-		            	},
-		            	{
-		                	html: "<h1>Review</h1><hr>" +
-		              	  		"This panel contains several advices for action on your text.",
-		                	element: $('.widget-review'),
-		            		overlayOpacity:0.5,
-		            		expose: true,
-		            		position: 'n'
-		            	},
-		            	{
-		                	html: "<h1>Review</h1><hr>" +
-		              	  		"Each of these actions have a short description, with access to resources",
-		                	element: $('#review-keyword1'),
-		            		overlayOpacity:0.5,
-		            		expose: true,
-		            		position: 'n'
-		            	},
-		            	{
-		                	html: "<h1>Review</h1><hr>" +
-		              	  		"Click the button to explore this resource",
-		                	element: $('#go-keywords'),
-		            		overlayOpacity:0.5,
-		            		expose: true,
-		            		position: 'n'
-		            	}
-		            		
-		            	],{
-		            			axis:'y',  // use only one axis prevent flickring on iOS devices
-		            			animationIn: 'slideDown',
-		            			animationOut: 'hide',
-		            			easing: 'easeInOutExpo', //requires the jquery.easing plugin
-		            			scrollDuration: 600
-		            		});
-
-		
-
 		var sections =  {
 					'#-s:t#': 'Title', 
 					'#+s:s#': 'Summary', 
@@ -540,8 +427,57 @@ label.checkbox:before
 			title: "keyword",
 			trigger: 'hover'
 				});*/
-		
 
+				$(':not(#anything)').on('click', function (e) {
+				    $('.pop-link').each(function () {
+				        //the 'is' for buttons that trigger popups
+				        //the 'has' for icons and other elements within a button that triggers a popup
+				        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+				            $(this).popover('hide');
+				            return;
+				        }
+				    });
+				});
+		
+		$(".par-tag").addClass("pop-link").popover({
+			animation: true,
+			html: true,
+			
+			content: function(){ 
+				return "<div style='min-width:150px;'><i>to to ...</i><br>" +
+				"<button class='btn btn-small pull-right'><i class='icon-reply'></i></button></div>"
+			},
+			title: "Discussion",
+			trigger: 'click',
+			container: 'body',
+				});
+
+		$('.ngram').click(function(e){
+			if ($(this).hasClass("showKW"))
+				{
+					if ($(this).hasClass("pop-link"))
+					{
+						$(this).popover('show');
+					}
+					else
+					{
+						var kw = $(this).data("keyword"); 
+						$(this).addClass("pop-link").popover({
+							animation: true,
+							html: true,
+							title: "Key word",
+							trigger:'manual',
+							container: 'body',
+							content:function(a,b,c)
+					    	{
+								return "<div style='min-width:150px;'><i>to to ...</i><br>" +
+								"<button class='btn btn-small pull-right'><i class='icon-reply'></i></button></div>"
+					    	}
+				    	});
+						$(this).popover('show');
+					}
+				}
+			});
 
 		$('.cTaskQuestion').change(function() {
 			var cbox = this;
@@ -583,7 +519,7 @@ label.checkbox:before
 		});
 		
 
-		function rr(event, ui) {
+		function highlighSentence(event, ui) {
 			$("#amount").text(ui.values[0] + " - " + ui.values[1]);
 			$('span.oe-snt[data-rank]').each(function() {
 				var tt = parseInt($(this).attr('data-rank'));
@@ -613,10 +549,10 @@ label.checkbox:before
 			min : 0,
 			max : 15,
 			values : [ smin, smax ],
-			slide : rr,
+			slide : highlighSentence,
 			change: function(event, ui) {
 					console.log("DFDFDFDFDF");
-					rr(event, ui);
+					highlighSentence(event, ui);
 				},
 		});
 		$('.cStructure').trigger('change');

@@ -8,6 +8,7 @@
 <link href="/assets/jquery.minicolors/jquery.minicolors.css" rel="stylesheet">
 
  <style>
+.btn-ngram { cursor: move;}
 .sortable {  list-style-type: none; margin: 0; padding: 0; min-height: 25px; }
 .sortable li {float:left; margin: 2px 3px;}
 
@@ -87,9 +88,6 @@ ul#category_all
 
 {% block bccontainer %}		
 	{% include "widgets/breadcrumb.task.twig" %}
-	<li class="pull-right"><div class="btn-group">
-    	<btn id="starttour" class="btn btn-small" title="Get Help on the page"><i class="icon-road"></i>
-    </div></li> 
 {% endblock %}
 
 
@@ -416,7 +414,7 @@ $(document).ready(function() {
 				return false;
 				},
 			select: function( event, ui ) {
-				 $( "#tags" ).val( ui.item.label );
+				 $( "#tags" ).val( "" );
 				 $( "#project-id" ).append("{{ ngram.toBtnString('ui.item',false,true) }}");
 				 $( "#project-description" ).html( ui.item.desc );
 				return false;
