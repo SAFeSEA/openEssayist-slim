@@ -29,15 +29,37 @@
 <form name="post_essay" id="post_essay" method="post" class="form-horizontal">
 
 
-<fieldset><div class="control-group">
+<fieldset>
+
+<div class="control-group">
 	<label for="text" class="control-label">Text</label>
 	<div class="controls">
-		<textarea style="max-width: 90%; width: 90%; resize: vertical;" rows="15" 
+		<textarea class="boxborder" rows="15" 
 			name="text" id="text" placeholder="paste the text of your essay"
 			required="required">{{ text }}</textarea>
-			<p class="help-block">Copy and paste the complete text of your essay (it will be cleaned)</p>
-		</div>
-</div></fieldset>
+
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">State of writing</label>
+	<div class="controls">
+		<label class="radio">
+			<input type="radio" name="state" id="option-state-early" value="1" checked>
+			Early draft
+		</label>
+		<label class="radio">
+			<input type="radio" name="state" id="option-state-advanced" value="3">
+			Advanced draft
+		</label>
+		<label class="radio">
+			<input type="radio" name="state" id="option-state-final" value="3">
+			Final version
+		</label>
+	</div>
+</div>
+
+
+</fieldset>
 
 <div class="form-actions">
 	<button class="btn btn-primary" id="submit_essay" type="submit" name="action" value="Submit">Submit</button> 
@@ -58,7 +80,12 @@
 					</div> <!-- /widget-header -->
 					
 					<div class="widget-content">
-						
+					<p>Copy and paste the complete text of your essay</p>
+					<p>Don't worry about style, fonts, pictures, etc. Only the raw text will be copied and analysed by the system.</p>	
+					</div> <!-- /widget-content -->
+					
+					<div class="widget-content">
+					<p>Please indicate if you think your draft is at an early stage (initial sketch, first attempt, ...) or at a final stage of writing (before submission to tutor).</p>	
 					</div> <!-- /widget-content -->
 				
 				</div>
@@ -89,6 +116,14 @@ $(document).ready(function() {
 {% block injectCSS %}
 	{{ parent() }}
 <style>
+	
+	.boxborder {
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+              resize: vertical;
+    width: 100%;
+}
 .ajax.alert
 {
 	margin-bottom: 0px;
