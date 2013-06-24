@@ -22,6 +22,15 @@ class Users extends Model {
 		return $this->has_many('Draft');
 	}
 	
+	/**
+	 *
+	 * @key		Note/users_id
+	 * @return 	ORMWrapper
+	 */
+	public function Notes() {
+		return $this->has_one('Note');
+	}
+	
 }
 
 class Group extends Model {
@@ -87,6 +96,20 @@ class Task extends Model {
 		$tt = preg_split('/(?<=[.?!;:])\s+/',$this->assignment);
 		array_shift($tt);
 		return "".join(" ", $tt);
+	}
+	
+}
+
+class Note extends Model 
+{
+	/**
+	 *
+	 * @key		Note/iser_id
+	 * @return 	User
+	 * @see 	ORMWrapper
+	 */
+	public function task() {
+		return $this->belongs_to('User');
 	}
 	
 }

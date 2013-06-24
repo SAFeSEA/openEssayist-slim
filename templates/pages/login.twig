@@ -1,6 +1,7 @@
 {% extends "site.twig" %} 
 
 {% block title %}Login{% endblock %} 
+{% block breadcrumb %}{% endblock %}
 
 {% block content %}
 <div class="row-fluid">
@@ -9,14 +10,20 @@
 
 	<div class="span6 offset3">
 		<form class="form-signin" action="{{ urlFor('login') }}" method='POST'>
-			<h2 class="form-signin-heading">Please sign in</h2>
+			<h1 class="form-signin-heading">Please sign in</h2>
+			<label for="username">Username</label>
 			<input type="text" placeholder="Username" name="username"
-				id="username" class="input-block-level tt"> <input type="password"
+				id="username" class="input-block-level tt">
+				
+			<label for="password">Password</label>
+				
+				<input type="password"
 				name="password" id="password" placeholder="Password"
-				class="input-block-level"> <label class="checkbox"> <input
-				type="checkbox" value="remember-me"> Remember me
-			</label>
+				class="input-block-level"> 
+				
+				<div class="form-actions">
 			<button type="submit" class="btn btn-large btn-primary">Sign in</button>
+			</div>
 		</form>
 	</div>
 </div>
@@ -34,4 +41,34 @@
 	{% endif %}
 </div>
 </div>
+{% endblock %}
+
+{% block injectCSS %}
+	{{ parent() }}
+<style>
+ .form-signin {
+        max-width: 300px;
+        padding: 19px 29px 29px;
+        margin: 0 auto 20px;
+        background-color: #fff;
+        border: 1px solid #e5e5e5;
+        -webkit-border-radius: 5px;
+           -moz-border-radius: 5px;
+                border-radius: 5px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+                box-shadow: 0 1px 2px rgba(0,0,0,.05);
+      }
+      .form-signin .form-signin-heading,
+      .form-signin .checkbox {
+        margin-bottom: 10px;
+      }
+      .form-signin input[type="text"],
+      .form-signin input[type="password"] {
+        font-size: 16px;
+        height: auto;
+        margin-bottom: 15px;
+        padding: 7px 9px;
+      }	
+</style>
 {% endblock %}

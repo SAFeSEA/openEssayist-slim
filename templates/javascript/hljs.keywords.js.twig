@@ -27,7 +27,7 @@ hljs.LANGUAGES['openessay'] = function(hljs) {
 		{% set id = item.groupid %}
 	formatters.push({
 		className: "ngram {{ id }}",
-		dataContent: "data-keyword='1'",
+		dataContent: "data-keyword='{{ item.ngramid }}'",
 		{% if (item.ngram|length) == 1 %}
 		beginWithKeyword: true, 
 		keywords: '{{ item.source|join(' ') }}',

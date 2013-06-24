@@ -1,6 +1,11 @@
 <?php
 use Respect\Validation\Validator as v;
 
+/**
+ * 
+ * @author "Nicolas Van Labeke (https://github.com/vanch3d)"
+ *
+ */
 class AdminController extends Controller
 {
 	/**
@@ -59,10 +64,12 @@ class AdminController extends Controller
 		if ($req && $req->isPost())
 		{
 			$post = $req->post();
+			
 			$task->name = $post['name'];
 			$task->assignment = $post['assignment'];
 			$task->wordcount = $post['wordcount'];
 			$task->deadline = $post['date'];
+			$task->isopen = ($post['isopen']=="Yes");
 			$task->save();
 		}
 		
@@ -72,10 +79,14 @@ class AdminController extends Controller
 	
 	public function showEssayData()
 	{
-		$draft = Model::factory('Draft')->find_one();
-		$data = $draft->as_array();
-		$analysis = $draft->getAnalysis(true);
+		$drafts = Model::factory('Draft')->order_by_desc('id')->find_many();
+		
+		$analysis = $drafts[0]->getAnalysis(true);
 		ksort($analysis);
+
+		$analysis['se_sample_graph'] = json_decode($analysis['se_sample_graph'],true);
+		$analysis['ke_sample_graph'] = json_decode($analysis['ke_sample_graph'],true);
+		//var_dump($analysis['se_sample_graph']);die();
 		
 		$this->render('admin/data.json',array(
 				'keys' => array_keys($analysis),

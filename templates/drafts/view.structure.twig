@@ -1,30 +1,12 @@
 {% extends "site.twig" %} 
 
-{% block title %}Draft - Visualisation (Strucutre){% endblock %} 
+{% block title %}Draft - Visualisation (Structure){% endblock %} 
 
 
 {% block bccontainer %}		
-	{% include "widgets/breadcrumb.panel.twig" %}
-	    <li><div class="btn-group">
-    	<a href="{{ urlFor('me.drafts',{"idt":task.id}) }}" class="btn btn-small" >
-    		<i class="icon-pencil"></i><span class="hidden-phone hidden-tablet"> {{ task.name }}</span></a>
-	</div></li>
-	<li><div class="btn-group">
-    	<a href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}" class="btn btn-small" >Overview</a>
-	   	<a href="{{ urlFor('me.draft.keywords',{"draft":draft.id}) }}" class="btn btn-small" >Keywords</a>
-    	<a href="{{ urlFor('me.draft.sentence',{"draft":draft.id}) }}" class="btn btn-small" >Sentences</a>
-    	<a href="{{ urlFor('me.draft.stats',{"draft":draft.id}) }}" class="btn btn-small" >Stats</a>
-   	</div></li>
-	<li><div class="btn-group">
-		<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">Views <span class="caret"></span></a>
-    	<ul class="dropdown-menu">
-			<li><a href="{{ urlFor('me.draft.view.dispersion',{"draft":draft.id}) }}">Keyword Dispersion</a>
-			<li class="divider"></li>
-    	  	<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphke"}) }}">Keyword Graph</a>
-    	  	<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphse"}) }}">Sentence Graph</a>
-		</ul></div>
-    </li>    	
+	{% include "widgets/breadcrumb.task.twig" %}
 {% endblock %}
+
 
 {% block content %}
 
@@ -48,26 +30,133 @@
 	</div>
 </div></div>
 </div>
+
+{#<div class="row-fluid">
+<div class="span6"><div class="widget">
+	<div class="widget-header" id="demo-trigger" data-toggle="collapse" data-target="#demo" style="cursor: pointer;">
+		<h3>Show The data</h3>
+	</div>
+	<div class="widget-content in collapse" id="demo">
+		<table class="table table-condensed table-striped table-bordered">
+			<thead>
+			<tr>
+				<th width="5%">#</th>
+				<th>Name</th>
+				<th>Assignment</th>
+				<th>Deadline</th>
+				<th>Drafts</th>
+			</tr>
+			</thead>
+			<tbody>
+			
+			</tbody>
+		</table>
+	</div>
+</div></div>
+</div>#}
 {% endblock %}
 
+{% block injectCSS %}
+	{{ parent() }}
+<style>
+#demo.in.collapse
+{
+	padding:10px;
+}
+#demo.collapse
+{
+	padding:0px 10px;;
+}
+</style>
+{% endblock %}
+	
 {% block injectJS %}
+	{{ parent() }}
 <script src="/assets/highcharts/js/highcharts.js"></script>
+<script src="/assets/d3.js/colorbrewer.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-	
-    $('#struct_pie').highcharts({
-        chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false
-        },
-        title: {
-        	text: null
-        },
+
+	// Create a RGBa color from a HEX string
+	function hexToRgba(hex,opacity) {
+	    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	    if (result)
+	    {
+	        r= parseInt(result[1], 16);
+	        g= parseInt(result[2], 16);
+	        b= parseInt(result[3], 16);
+	        return "rgba("+r+","+g+","+b+",.5)";
+	    } 
+	    else return hex;
+	}
+
+	// Map color index to the ColorBrewer set
+	function getColor(obj)
+	{	
+		idx = obj['color'];
+		clr = hexToRgba(colorbrewer.Paired[11][idx],.5);
+		obj['color'] = clr;
+		return obj;
+	}
+
+	// Apply the color mapping to both series 
+	var breakdown = {{ breakdown|json_encode|raw }};
+	breakdown = breakdown.map(getColor);  
+
+	var bullet = {{ bullet|json_encode|raw }};
+	bullet = bullet.map(getColor);  
+
+	// Add the target to the bullet graph series
+	bullet.push({name:"Target",color: "{{ (target.inlimit)?'green':'red' }}",pointWidth:100,type: "scatter",data:[{{task.wordcount}}],});
+
+	// General HighCharts configuration 
+	var hcOptions = {
+			credits:{enabled:false},
+		    exporting:{enabled:false},
+		    title:{text:null},
+			chart: {
+				plotBackgroundColor: null,
+		        plotBorderWidth: null,
+		        plotShadow: false
+			}
+	};
+
+	// Build the Bullet Graph
+	$('#struct_bullet').highcharts($.extend(true,{}, hcOptions,{
+		chart:{type:'bar'},
         tooltip: {
 			formatter: function () {
-                 return this.point.name + "<br>" +  this.series.name  
-                 + ': <b>' + Highcharts.numberFormat(this.percentage, 1) + '%</b>';
+				return this.series.name + ": <strong>" + Highcharts.numberFormat(this.y,0) + "</strong><br>"
+					+ this.total + " (" + {{ target.total }} + ")";
+             }
+    	   
+        },
+		xAxis:{tickLength:10,
+	        lineColor:'#999',
+	        lineWidth:1,
+	        labels:{style:{fontWeight:'bold'}}  ,categories:['']},
+	    yAxis:{
+	        tickColor:'#ccc',
+	        title:{text: null},
+	        plotBands:[
+				{	from: 	{{(task.wordcount)*0.9}},
+					to:		{{(task.wordcount)*1.1}},
+					color: "{{ (target.inlimit)?'rgba(0,255,0,.10)':'rgba(255,0,0,.10)' }}"
+				},
+			]},
+	    plotOptions: {
+            series: {stacking: 'normal'},
+            scatter:{
+                marker:{symbol:'diamond',radius:8}
+            }},
+		series: bullet
+	}));
+	
+    $('#struct_pie').highcharts($.extend(true,{}, hcOptions,{
+         tooltip: {
+			formatter: function () {
+                 return this.point.name + " <b>" + this.point.y +"</b> (out of "+ this.total +")<br>" +  
+                 this.series.name + ': <b>' + Highcharts.numberFormat(this.percentage, 1) + '%</b>';
              }
     	   
         },
@@ -89,35 +178,11 @@ $(document).ready(function() {
         series: [{
             type: 'pie',
             name: 'Structure share',
-            data: {{ breakdown|json_encode|raw }}
+            data: breakdown
         	
         }]
-    });
+    }));
 
-
-    $('#struct_bullet').highcharts({
-		chart: {	
-			type: 'bar'	},
-		title: {
-        	text: null },
-		xAxis: {},
-		yAxis: {
-			min: 0,
-			title: {text: null}},
-		legend: {
-			backgroundColor: '#FFFFFF',
-			reversed: true}, plotOptions: {
-                bar: {
-                    stacking: 'normal'
-                }
-            },
-		tooltip: {
-			formatter: function() {
-				return ''+ this.series.name +': '+ this.y +'';}
-			},
-		/* */
-		series: {{ bullet|json_encode|raw }}
-	});
 });
 </script>
 {% endblock %}

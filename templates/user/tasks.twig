@@ -1,16 +1,26 @@
 {% extends "site.twig" %} 
 
 {% block title %}Assignments{% endblock %} 
+{% block subheader %}<hr>Your Assignments{% endblock %} 
 
 
 {% block bccontainer %}		
-	{% include "widgets/breadcrumb.panel.twig" %}
+	{% include "widgets/breadcrumb.task.twig" %}
+{% endblock %}
+
+
+{% block injectCSS %}
+	{{ parent() }}
+<style>
+td .btn{white-space: nowrap;}
+ 
+</style>
 {% endblock %}
 
 {% block content %}
 
 <div class="row-fluid">
-	<div class="span4">
+	<div class="span2">
 	<div class="widget">
 		<div class="widget-header">
 		<h3>Course</h3>
@@ -21,7 +31,7 @@
 	</div>
 	</div>
 
-	<div class="span8">
+	<div class="span10">
 		<div class="widget">
 			<div class="widget-header">
 				<h3>Assignments in the course {{ group.name }}</h3>
@@ -33,8 +43,10 @@
 					<tr>
 						<th width="5%">#</th>
 						<th>Name</th>
+						<th>Assignment</th>
 						<th>Deadline</th>
-						<th>Open</th>
+						<th>Drafts</th>
+		
 						
 					</tr>
 				</thead>
@@ -43,10 +55,12 @@
 					
 					<tr>
 					<td><code>{{ task.id }}</code></td>
-					<td><a class="btn" 
-							href="{{ urlFor('me.drafts',{"idt":task.id}) }}">{{ task.name }}</a></td>
+					<td><a class="btn" title="Go to the drafts for this assignment"
+							href="{{ urlFor('me.drafts',{"idt":task.id}) }}"><i class="icon-pencil"></i> {{ task.name }}</a></td>
+					<td>{{ task.assignment }}</td>
 					<td>{{ task.deadline }}</td>
-					<td>{{ task.isopen }}</td>
+					<td><span class="badge">{{ task.draftcount }}</span></td>
+
 				
 					</tr>
 					{% endfor %}

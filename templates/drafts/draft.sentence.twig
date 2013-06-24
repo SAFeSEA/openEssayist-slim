@@ -3,47 +3,261 @@
 {% block title %}Draft - Sentences{% endblock %} 
 
 {% block bccontainer %}		
-	{% include "widgets/breadcrumb.panel.twig" %}
-	    <li><div class="btn-group">
-    	<a href="{{ urlFor('me.drafts',{"idt":task.id}) }}" class="btn btn-small" >
-    		<i class="icon-pencil"></i><span class="hidden-phone hidden-tablet"> {{ task.name }}</span></a>
-	</div></li>
-	<li><div class="btn-group">
-    	<a href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}" class="btn btn-small" >Overview</a>
-    	<a href="{{ urlFor('me.draft.keywords',{"draft":draft.id}) }}" class="btn btn-small" >Keywords</a>
-    	<button class="btn btn-small active disabled">Sentences</button>
-    	<a href="{{ urlFor('me.draft.stats',{"draft":draft.id}) }}" class="btn btn-small" >Stats</a>
-    	</div></li>
-	<li><div class="btn-group">
-		<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">Views <span class="caret"></span></a>
-    	<ul class="dropdown-menu">
-			<li><a href="{{ urlFor('me.draft.view.dispersion',{"draft":draft.id}) }}">Keyword Dispersion</a>
-			<li class="divider"></li>
-    	  	<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphke"}) }}">Keyword Graph</a>
-    	  	<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphse"}) }}">Sentence Graph</a>
-		</ul></div>
-    </li>    	
+	{% include "widgets/breadcrumb.task.twig" %}
 {% endblock %}
 
 {% block content %}
 
 
-<div class="row-fluid"><div class="span12">
+<div class="row-fluid"><div class="span12 offset0">
 	<div class="widget">
 			<div class="widget-header">
 				<h3> Sentences </h3>
 			</div>
-			<div class="widget-content">
-				<table class="table table-condensed table-striped table-bordered">
+			<div class="widget-toolbar">
+				<div class="btn-toolbar" id="options">
+				    <div class="btn-group option-set"  data-toggle="buttons-radio" data-option-key="sortBy">
+    					<button class="btn active btn-primary" data-option-value="rank">Rank</button>
+					    <button class="btn" data-option-value="id">Order</button>
+					    {#<button class="btn" data-option-value="tag">Structure</button>#}
+    				</div>
+				</div>
+			</div>
+	
+	
+	<div class="widget-content clearfix " id="container">
+				{#<table class="table table-condensed table-striped table-bordered">
 				<tbody>
 				{% for sentence in sentences %}
 					<tr><td>{{ sentence.text  }}</td>	</tr>
 				{% endfor %}
 				</tbody>
-				</table> 
-				
-			</div> 
-		</div>
+				</table>#} 
+				{% for sentence in sentences %}
+					
+					<div class="sent" data-tag="{{ sentence.tag}}" 
+						 			  data-rank="{{ sentence.rank}}" 
+						 			  data-id="{{ sentence.id}}" >
+						<div class="par-tag" data-tag="{{ sentence.tag}}"></div>		
+						<div class="par-container">				 			  
+							<span>{{ sentence.text}}</span>
+						</div>
+					</div>
+				{% endfor %}
+</div> 
+			
 	</div>
 </div></div>
+
+
+
+
+{% endblock %}
+
+{% block injectJS %}
+	{{ parent() }}
+<script src="/assets/jquery.isotope.min.js"></script>
+<script src="/assets/d3.js/colorbrewer.js"></script>
+
+<script type="text/javascript">
+
+function createIsotope()
+{
+    var $container = $('#container');
+
+	$container.isotope({
+		layoutMode : 'straightDown',
+    	getSortData : {
+    		tag : function( $elem ) {
+            		return $elem.attr('data-tag');
+            	},
+			rank : function( $elem ) {
+            		return parseInt( $elem.attr('data-rank'), 10 );
+          		},
+			id : function( $elem ) {
+            		return parseInt( $elem.attr('data-id'), 10 );
+          	}
+          }
+    	
+    });
+	
+}
+
+
+$(window).on("beforeprint",function() {
+	var $container = $('#container');
+	$container.isotope('destroy');
+});	
+
+$(window).on("afterprint",function() {
+	createIsotope();
+});
+   
+$(function(){
+
+	var sections =  {
+			'#-s:t#': 'Title', 
+			'#+s:s#': 'Summary', 
+			'#+s:d#': 'Discussion', 
+			'#+s:d_i#':'Discussion', 
+			'#+s:i#': 'Introduction', 
+			'#+s:c#': 'Conclusion', 
+			'#-s:q#': 'Assignment',  
+			'#+s:p#': 'Preface', 
+			'#-s:h#': 'Heading', 
+			'#-s:n#': 'Numerics', 
+			'#-s:p#': 'Punctuation'					
+			};
+	          		
+	
+sections =  {
+		'????':'',
+		'#+s:c#': 'Conclusion', 
+		'#+s:d_i#':'Discussion', 
+		'#+s:d#': 'Discussion', 
+		'#+s:s#': 'Summary', 
+		'#+s:i#': 'Introduction', 
+		'#-s:t#': 'Title', 
+		'#+s:p#': 'Preface', 
+		'#-s:h#': 'Heading', 
+		'#-s:n#': 'Numerics', 
+		'#-s:q#': 'Assignment',  
+		'#-s:p#': 'Punctuation'					
+		};	
+
+$(".par-tag[data-tag]").each(function()
+		{
+			console.log(Object.keys(sections));
+			var tag = $(this).attr('data-tag');
+			var idx = $.inArray(tag,Object.keys(sections));
+			idx = (idx==-1)?2:idx;
+			var clr = colorbrewer.Paired[11][idx];
+			console.log(tag + " " + idx + " " + clr);
+			if (clr)
+			{
+				 $(this).attr('style', 'background-color: '+clr+' !important');
+				 $(this).css('opacity', 0.5);
+			}
+			$(this).attr('title', sections[tag]);
+		});
+	
+    
+    
+      var $optionSets = $('#options .option-set'),
+          $optionLinks = $optionSets.find('button');
+
+      $optionLinks.click(function(){
+        var $this = $(this);
+        // don't proceed if already selected
+        if ( $this.hasClass('active') ) {
+          return false;
+        }
+        var $optionSet = $this.parents('.option-set');
+        $optionSet.find('.active').removeClass('active').removeClass('btn-primary');
+        $this.addClass('active').addClass('btn-primary');
+  
+        // make option object dynamically, i.e. { filter: '.my-filter-class' }
+        var options = {},
+            key = $optionSet.attr('data-option-key'),
+            value = $this.attr('data-option-value');
+        // parse 'false' as false boolean
+        value = value === 'false' ? false : value;
+        options[ key ] = value;
+        if ( key === 'layoutMode' && typeof changeLayoutMode === 'function' ) {
+          // changes in layout modes need extra logic
+          changeLayoutMode( $this, options )
+        } else {
+          // otherwise, apply new options
+          var $container = $('#container');
+          $container.isotope( options );
+        }
+        
+        return false;
+      });
+
+      createIsotope();
+  });
+
+
+</script>
+{% endblock %}
+
+{% block injectCSS %}
+	{{ parent() }}
+<style type="text/css">
+
+div.sent{
+ margin-bottom: 3px;
+}
+
+.par-tag
+{
+    display: table-cell;
+    width: 12px;
+    background-color: #D5D5D5 !important;;
+    border-right: 8px solid white;
+        text-align: center;
+    vertical-align: bottom;
+   
+}
+
+.par-container
+{
+	display: table-cell;
+}
+
+/*@media (min-width: 1200px) {
+
+.span12 {
+    width: 724px;
+  }
+  
+.row-fluid .span12 {
+    width: 724px;
+  }
+
+}*/
+
+.widget-content {
+	padding: 0px;
+}
+.isotope-item
+{
+	padding: 6px 10px;
+}
+
+/*.sent:before
+  {
+  	content: "[" attr(data-tag) "][" attr(data-rank) "][" attr(data-id) "]";
+  }
+*/
+
+
+.isotope,
+.isotope .isotope-item {
+  /* change duration value to whatever you like */
+  -webkit-transition-duration: 0.8s;
+     -moz-transition-duration: 0.8s;
+      -ms-transition-duration: 0.8s;
+       -o-transition-duration: 0.8s;
+          transition-duration: 0.8s;
+}
+
+.isotope {
+  -webkit-transition-property: height, width;
+     -moz-transition-property: height, width;
+      -ms-transition-property: height, width;
+       -o-transition-property: height, width;
+          transition-property: height, width;
+}
+
+.isotope .isotope-item {
+  -webkit-transition-property: -webkit-transform, opacity;
+     -moz-transition-property:    -moz-transform, opacity;
+      -ms-transition-property:     -ms-transform, opacity;
+       -o-transition-property:      -o-transform, opacity;
+          transition-property:         transform, opacity;
+}
+
+</style>
 {% endblock %}

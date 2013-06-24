@@ -42,6 +42,10 @@ class StrongAuthAdmin extends StrongAuth
 		$config = $this->config;
 		$this->app->hook('slim.before.router', function () use ($app, $auth, $req, $config) {
 			$secured_urls = isset($config['security.urls']) && is_array($config['security.urls']) ? $config['security.urls'] : array();
+			
+			
+
+			
 			foreach ($secured_urls as $surl) {
 				$patternAsRegex = $surl['path'];
 				if (substr($surl['path'], -1) === '/') {
@@ -50,6 +54,23 @@ class StrongAuthAdmin extends StrongAuth
 				$patternAsRegex = '@^' . $patternAsRegex . '$@';
 
 				if (preg_match($patternAsRegex, $req->getPathInfo())) {
+					
+					// FIRST THING: if logged in, check for activation
+					if (isset($config['consent.url']) && $auth->loggedIn())
+					{
+						$user = $auth->getUser();
+						$isactive = $user['active']?: false;
+						$path = $req->getPathInfo() == $config['consent.url'];
+						
+					
+						if (!$isactive)
+						{
+							$app->flashNow("error", "You need to sign the consent form to access these pages");
+							if (!$path) $app->redirect($config['consent.url']);
+						}
+					}
+					
+					
 					if (!$auth->loggedIn()) {
 						// User is not logged in; redirect
 						if ($req->getPath() !== $config['login.url']) {

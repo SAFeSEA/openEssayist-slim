@@ -1,6 +1,7 @@
 {% extends "site.twig" %} 
 
 {% block title %}Check Configuration{% endblock %}
+{% block breadcrumb %}{% endblock %}
 
 {% block content %}
 <div class="row-fluid">
@@ -28,6 +29,7 @@
 
 
 {% block injectCSS %}
+	{{ parent() }}
 <style>
 <!--
 pre.alert

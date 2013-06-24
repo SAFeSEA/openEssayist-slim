@@ -9,6 +9,35 @@ use Respect\Validation\Validator as v;
  */
 class LoginController extends Controller {
 
+	public function consent()
+	{
+		if ($this->app->request()->isPost()) 
+		{
+			var_dump($this->post());
+			if ($this->post('action') == 'Submit' && 
+				$this->post('consent') == 'Accept')
+			{
+				$u = Model::factory('Users')->find_one($this->user['id']);
+				if ($u)
+				{
+					// Dirty way of dealing with auth data
+					$_SESSION['auth_user']['active'] = 1;
+					// update user record in database
+					$u->active = 1;
+					$u->save();
+					
+					$this->redirect('me.tasks');
+					
+				}
+				// @todo Should NEVER go there but, just in case, need to add proper exception
+			}
+			$this->redirect('logout');
+		}
+		else
+		{
+			$this->render('pages/consent');
+		}
+	}
 	/**
 	 * @route "login"
 	 */
@@ -17,7 +46,13 @@ class LoginController extends Controller {
 		if ($this->app->request()->isPost()) {
 			if ($this->auth->login($this->post('username'), $this->post('password'))) {
 				$this->app->flash('info', 'Your login was successfull');
-				$this->redirect('me.tasks');
+				
+				$user=$this->auth->getUser();
+				//var_dump($this->auth->getUser());die();
+				//if ($user['active']==1)
+					$this->redirect('me.tasks');
+				//else
+				//	$this->redirect('consent');
 			}
 			else
 				$this->app->flashNow('error', "Username or password is incorrect. Check your details again.");

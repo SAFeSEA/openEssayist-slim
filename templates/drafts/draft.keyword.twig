@@ -4,27 +4,7 @@
 {% block title %}Draft - Keywords{% endblock %} 
 
 {% block bccontainer %}		
-	{% include "widgets/breadcrumb.panel.twig" %}
-	    <li><div class="btn-group">
-    	<a href="{{ urlFor('me.drafts',{"idt":task.id}) }}" class="btn btn-small" >
-    		<i class="icon-pencil"></i><span class="hidden-phone hidden-tablet"> {{ task.name }}</span></a>
-	</div></li>
-	<li><div class="btn-group">
-    	<a href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}" class="btn btn-small" >Overview</a>
-		<button class="btn btn-small active disabled">Keywords</button>
-    	<a href="{{ urlFor('me.draft.sentence',{"draft":draft.id}) }}" class="btn btn-small" >Sentences</a>
-   	<a href="{{ urlFor('me.draft.stats',{"draft":draft.id}) }}" class="btn btn-small" >Stats</a>
-    	   </div></li>
-	<li><div class="btn-group">
-		<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">Views <span class="caret"></span></a>
-    	<ul class="dropdown-menu">
-			<li><a href="{{ urlFor('me.draft.view.dispersion',{"draft":draft.id}) }}">Keyword Dispersion</a>
-			<li class="divider"></li>
-    	  	<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphke"}) }}">Keyword Graph</a>
-    	  	<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphse"}) }}">Sentence Graph</a>
-		</ul></div>
-    </li>    	   
-    	   
+	{% include "widgets/breadcrumb.task.twig" %}
 {% endblock %}
 
 
@@ -34,7 +14,7 @@
 
 <div class="widget widget-content">
 <a href="{{ urlFor('me.draft.act.keyword',{"draft":draft.id}) }}" class="btn btn-primary pull-right">
-<i class="icon-wrench icon-white"></i> Organise ...</a>
+<i class="icon-cogs icon-white"></i> Organise</a>
 </div>
 
 
@@ -46,11 +26,11 @@
 	
 		<div class="widget">
 			<div class="widget-header">
-				<h3> {{ key|title }}</h3>
+				<h3> {{ key|title }} ({{ items|length }})</h3>
 			</div>
 			<div class="widget-content"> 
 				{% for item in items %}
-					 {{ ngram.toBtn(item,true) }}
+					 {{ ngram.toBtn(item,false,true,false,true) }}
 				{% endfor %}
 			</div> 
 		</div>
@@ -61,22 +41,178 @@
 
 
 {% block injectCSS %}
+	{{ parent() }}
 <style>
-.btn-ngram { white-space: nowrap; padding:2px; margin:0 0 2px 5px; }
-.inlinebar, .sparkbullet {
+.btn-ngram { 
+	white-space: nowrap; 
+	margin:0 0 5px 5px; 
+}
+
+.btn-ngram.btn-large 
+{
+	padding: 6px 15px;
+}
+
+.btn-ngram.btn-small
+{
+	padding:2px 10px; 
+}
+
+.btn-ngram > .label {
+	margin-left: 10px;
+}
+
+.inlinebardd, .sparkbullet {
 	/*float: right;*/
 	margin-left:25px;
 	}
+	
+.inlinebar,.bartodo
+{
+    border: 1px solid Gainsboro;
+}
+
+
+.pop
+{ display:table;}
+
+.pop-line
+{display: table-row;}
+
+.pop-desc, .pop-title
+{display: table-cell;}
+
+ .pop-title
+ {
+ 	white-space: nowrap;
+ 	font-weight: bold;
+ 	padding: 3px 0px;
+ 	padding-right: 6px;
+ }
+ 
+	
+.dl-horizontal dt {
+	width: inherit;
+}
+
+.dl-horizontal dd {
+	margin-left:110px;
+}
 </style>
 {% endblock %}
 
 {% block injectJS %}
-<script src="/assets/jquery.sparkline/jquery.sparkline.min.js"></script>
+	{{ parent() }}
+<script src="/assets/jquery.sparkline/jquery.sparkline.js"></script>
 <script>
+{% verbatim %}
 $(document).ready(function() {
+
+	$(document).dblclick(function(event){ 
+	   // alert("click"); 
+		   $("a[data-toggle=popover]").popover('hide');
+	}); 
+	
+	 // popover demo
+	$("a[data-toggle=popover]")
+	.popover({
+		html: true,
+	      trigger: 'click',
+	    content:function(a,b,c)
+	    	{
+	    		var dim= $(this).attr("data-dim");
+    			var score= $(this).attr("data-score");
+    			var trend= $(this).attr("data-trend");
+    			var forms= $(this).attr("data-source");
+    			var count= $(this).attr("data-count");
+
+    			score2 = score.split(",");
+    			score = [];
+    			score.push(score2[0]);
+    			score.push("1");
+    			score.push("0.5");
+    			score.push("0.2");
+    			score.push("0.1");
+    			score.join(",");
+    			    			
+
+    			$newDiv = $('<div />').addClass("pop");
+
+    			$r1 = $('<div />').addClass("pop-line").appendTo($newDiv);
+				$r1.append($('<div />',{ text: "Frequency:", class: "pop-title" }));
+				$r1.append($('<div />',{class: "pop-desc"}).append(
+    	    			$('<span />',{ text: count, class: "label label-info"})));
+    				    			
+    			if (dim=="1")
+        		{
+        			$r1 = $('<div />').addClass("pop-line").appendTo($newDiv);
+    				$r1.append($('<div />',{ text: "Forms in text:", class: "pop-title" }));
+    				$r1.append($('<div />',{class: "pop-desc"}).append(
+        	    			$('<span />',{ text: forms})));
+        		}	    	
+
+    			$r2 = $('<div />').addClass("pop-line").appendTo($newDiv);
+				$r2.append($('<div />',{ text: "Centrality:", class: "pop-title"}));
+				$r2.append($('<div />',{ class: "pop-desc"}).append(
+    	    			$('<span />',{class: 'inlinebar bartodo',text:score})));	    			
+
+    			$r2 = $('<div />').addClass("pop-line").appendTo($newDiv);
+				$r2.append($('<div />',{ text: "Trend:", class: "pop-title"}));
+				$r2.append($('<div />',{ class: "pop-desc"}).append(
+    	    			$('<span />',{class: 'inlinebar trendtodo',text:trend})));	    			
+    	    			
+        		return $newDiv;
+		 	}
+	    }).click(function(e) {
+
+	    	var bullet= {
+	    			type: 'bullet',
+	    			disableHiddenCheck : true,
+	    			height : '18px',
+	    			width : '100px',
+	    			  targetColor: '#f33',
+	                  targetWidth: 5, // width of the target bar in pixels
+	                  //performanceColor: '#238B45',
+	                  //rangeColors: ['#EDF8E9', '#BAE4B3', '#74C476'],
+	                  base: undefined, // set this to a number to change the base start number
+	                  tooltipFormat: $.spformat("{{fieldkey:fields}} - {{value}}"),
+	    			tooltipValueLookups: { fields: {r: 'XXXXX', p: '', t: 'Centrality'} },
+	    			numberFormatter: function(v)
+	    				{ return parseFloat(v).toFixed(2);
+	    					 
+	    				}
+					    			
+	    	   };
+	    	
+			var bar =  {
+	    			type : 'bar',
+	    			chartRangeMin : 0,
+	    			chartRangeMax : .25,
+	    			tooltipPrefix : '',
+	    			tooltipSuffix : '',
+	    			disableHiddenCheck : true,
+	    			height : '18px',
+	    			width : '100px',
+	    			barColor : 'red',
+	    			numberDigitGroupCount : 5,
+	    			colorMap : {
+	    				'.25:1' : 'green',
+	    				'.1:.2499999' : 'red',
+	    				'0:.0999999' : 'lightblue'
+	    			}};
+
+		    
+	    	$('.bartodo').sparkline("html",bullet).removeClass('bartodo');
+			
+	    	$('.trendtodo').sparkline("html",{type:'bar',barWidth: 6}).removeClass('trendtodo');
+			
+							e.preventDefault();
+	});
+
+	
 	// initialise the code highlighting
 	// define the sparkline for the keyword's ranking
-	$('.inlinebar').sparkline('html', {
+	/*$('.inlinebar').sparkline('html', {
 		type : 'bar',
 		chartRangeMin : 0,
 		chartRangeMax : .25,
@@ -92,7 +228,8 @@ $(document).ready(function() {
 			'.1:.2499999' : 'red',
 			'0:.0999999' : 'lightblue'
 		}
-	});
+	});*/
 });
+{% endverbatim %}
 </script>
 {% endblock %} 

@@ -1,0 +1,350 @@
+{% extends "site.twig" %} 
+
+{% block title %}Draft - Visualisation (Adjacency Matrix){% endblock %} 
+
+
+{% block bccontainer %}		
+	{% include "widgets/breadcrumb.task.twig" %}
+{% endblock %}
+
+
+{% block content %}
+
+{#
+<ul class="breadcrumb">
+	<li><div class="btn-group">
+	{% for key,item in views %}
+		{% if key == view %}
+			<button class="btn btn-small active disabled">{{ item.name }}</button>
+		{% else %}
+			<a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":key}) }}" class="btn btn-small" >{{ item.name }}</a>
+		{% endif %}
+    {% endfor %}
+	   	
+    </div></li>
+</ul>#}
+
+<div class="row-fluid"><div class="span12">
+
+	<div class="widget">
+		<div class="widget-header" data-toggle="collapse" data-target="#demo">
+			<h3>Adjacency Matrix</h3>
+		</div>
+		
+		<div class="widget-toolbar">
+			<div class="btn-toolbar">    
+			<div class="btn-group">...</div>
+		    <div class="btn-group" data-toggle="buttons-radio">
+    		<button type="button" value="name" class="btn active">Order</button>
+    		<button type="button" value="count" class="btn">Connections</button>
+    		<button type="button" value="group" class="btn">Structure</button>
+    </div>			
+			</div>
+		</div>
+		
+	
+		<div class="widget-content" id='svg-container'></div>
+		</div>
+
+</div></div>
+
+{% endblock %}
+
+{% block injectJS %}
+	{{ parent() }}
+<script src="/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
+<script src="/assets/d3.js/d3.v3.js"></script>
+<script src="/assets/d3.js/colorbrewer.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+	var sections = [
+		'????',
+		'#+s:c#', 
+		'#+s:d_i#', 
+		'#+s:d#', 
+		'#+s:s#', 
+		'#+s:i#', 
+		'#-s:t#', 
+		'#+s:p#', 
+		'#-s:h#', 
+		'#-s:n#', 
+		'#-s:q#',  
+		'#-s:p#',
+		'xxxxx'					
+		];	
+
+	//$.blockUI.defaults.baseZ = 1100; 
+	//$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
+	var margin = {top: 40, right: 0, bottom: 10, left: 40},
+	width = 720,
+	height = 720;
+
+var x = d3.scale.ordinal().rangeBands([0, width]),
+	z = d3.scale.linear().domain([0, 1]).clamp(true),
+	//c = d3.scale.category10().domain(d3.range(10));
+	c = d3.scale.ordinal().domain(sections).range(colorbrewer.Paired[11]);
+	
+console.log(c);
+	
+var svg = d3.select("#svg-container").append("svg:svg")
+	.attr("width", width + margin.left + margin.right)
+	.attr("height", height + margin.top + margin.bottom)
+	.style("margin-left", "0px")
+	.append("g")
+	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var matrix = [];
+
+// Not great, get the data into the graph JSON structure
+var categories = {{ category|json_encode|raw  }};
+var sentences = {{ sentence|json_encode|raw  }};
+var rank =  {{ rank|json_encode|raw  }};
+
+//$.blockUI({ message: '<div class="ajax alert alert-info"><img src="/assets/openessayist/img/ajax-loader.gif" /> loading and display data ...</div>' }); 
+var xhr = d3.json("{{ urlFor('ajax.graph.json',{"draft":draft.id,"graph":"graphse"}) }}")
+	.on("progress", function() { console.log("progress", d3.event.loaded); })
+    .on("error", function(error) { console.log("failure!", error);$.unblockUI(); })
+    .on("load", onloaded)
+    .get();
+
+function onloaded(graph) {
+
+	$('.btn-group').find('button').bind('click',function(event){
+		 if ( $(this).hasClass('active') ) {
+	          return false;
+	        }
+
+		order($(this).val());	        
+		//console.log($(this).attr('id') + " " + $(this).val());
+		});
+
+	var nodes = graph.nodes;
+	var links = graph.links;
+	var n = nodes.length;
+	
+	// Compute index per node.
+	nodes.forEach(function(node, i) {
+		node.index = i;
+		node.count = 0;
+		node.group = categories[node.id];
+		node.color = c(node.group);
+		node.rank = $.inArray(node.id,rank);
+		console.log(node.id + " " + node.rank); 
+		matrix[i] = d3.range(n).map(function(j) { return {x: j, y: i, w:0, z: 0}; });
+	});
+
+	//Convert links to matrix; count character occurrences.
+	links.forEach(function(link) {
+		matrix[link.source][link.target].w += link.weight;
+		matrix[link.target][link.source].w += link.weight;
+			
+		matrix[link.source][link.target].z += 1;//link.value;
+		matrix[link.target][link.source].z += 1;//link.value;
+		// diagonal cells are empty
+		//matrix[link.source][link.source].z += 1;//link.value;
+		//matrix[link.target][link.target].z += 1;//link.value;
+		
+		nodes[link.source].count += 1;//link.value;
+		nodes[link.target].count += 1;//link.value;
+	});
+	
+	//Precompute the orders.
+	var orders = {
+			name: d3.range(n).sort(function(a, b) { return d3.ascending(nodes[a].id, nodes[b].id); }),
+			count: d3.range(n).sort(function(a, b) { return nodes[b].count - nodes[a].count; }),
+			group: d3.range(n).sort(function(a, b) 
+				{ return sections.indexOf(nodes[b].group)
+				- sections.indexOf(nodes[a].group); })
+	};
+
+	// The default sort order.
+	x.domain(orders.name);
+
+
+	svg.append("rect")
+		.attr("class", "background")
+		.attr("width", width)
+		.attr("height", height);
+
+	var row = svg.selectAll(".row")
+		.data(matrix)
+		.enter().append("g")
+			.attr("class", "row")
+			.attr("transform", function(d, i) { return "translate(0," + x(i) + ")"; })
+			.each(row);
+
+	row.append("line")
+		.attr("x2", width);
+
+
+	row.append("rect")
+		.attr("x", 0)
+		.attr("y", 0)
+		.attr("transform", function(d, i) { return "translate(" + (-x.rangeBand()*1.5) + ",0)"; })
+		  	.attr("width", function(d,i) { return  x.rangeBand(); })
+		.attr("height", function(d,i) { return (nodes[i].rank==-1) ? x.rangeBand() : x.rangeBand()-1; })
+		  				.style("stroke-width",function(d,n) { return "1px" ; })
+		  	.style("stroke",function(d,i) { return (nodes[i].rank==-1) ? "white" : "black"; })
+		  			  	.style("fill-opacity", function(d) { return 0.5; })  	
+			.style("fill", function(d,i) { return c(nodes[i].group); })
+		.each(axisPopover);
+	
+		
+	row.append("text")
+		.attr("x", -(x.rangeBand()*1.5+6))
+		.attr("y", x.rangeBand() / 2)
+		.attr("dy", ".32em")
+		  	
+		.attr("text-anchor", "end")
+		.text(function(d, i) { return nodes[i].id ; });
+		
+	var column = svg.selectAll(".column")
+		.data(matrix)
+		.enter().append("g")
+			.attr("class", "column")
+			.attr("transform", function(d, i) { return "translate(" + x(i) + ")rotate(-90)"; });
+		
+	column.append("line")
+		.attr("x1", -width);
+
+
+	column.append("rect")
+		.attr("x", 0)
+		.attr("y", 0)
+		.attr("transform", function(d, i) { return "translate(" + (x.rangeBand()*0.5) + ",0)"; })
+		  	.attr("width", function(d,i) { return x.rangeBand(); })
+			.attr("height", function(d,i) { return (nodes[i].rank==-1) ? x.rangeBand() : x.rangeBand()-1; })
+			.style("stroke-width",function(d,n) { return "1px" ; })
+		  	.style("stroke",function(d,i) { return (nodes[i].rank==-1) ? "white" : "black"; })
+		  	.style("fill-opacity", function(d) { return 0.5; })  	
+			.style("fill", function(d,i) { return c(nodes[i].group); })
+		.each(axisPopover);
+
+
+		
+	
+	column.append("text")
+		.attr("x",  (x.rangeBand()*1.5+6))
+		.attr("y", x.rangeBand() / 2)
+		.attr("dy", ".32em")
+		.attr("text-anchor", "start")
+		.text(function(d, i) { return nodes[i].id; });
+
+		
+	function row(row) {
+		var cell = d3.select(this).selectAll(".cell")
+			.data(row.filter(function(d){ return d.z; }))
+		  .enter().append("rect")
+		  .on("mouseover", mouseover)
+		  .on("mouseout", mouseout)
+		  
+		  .transition().duration(1000) // this is 1s
+		  .delay(100)     // this is 0.1s
+		  	.attr("class", "cell")
+		  	.attr("x", function(d) { return d.x==d.y? x(d.x)+2 : x(d.x); })
+		  	.attr("y", function(d) { return d.x==d.y? 2 : 0; })
+		  .delay(100)     // this is 0.1s
+		  	.attr("width", function(d) { return d.x==d.y? x.rangeBand()-4 : x.rangeBand(); })
+		  	.attr("height", function(d) { return d.x==d.y? x.rangeBand()-4 : x.rangeBand(); })
+		  .delay(100)     // this is 0.1s
+		  	.style("fill-opacity", function(d) { return z(d.w); })
+		  	.style("stroke-width",function(d,n) { return d.x==d.y? "2px" : null; })
+		  	.style("stroke",function(d,n) { return d.x==d.y? c(nodes[d.x].group) : null; })
+		  
+		  .each(function(d,i){
+		        $(this).popover({
+			        title:"adjacency " + d.w.toFixed(2), 
+			        container:"#svg-container",
+			        trigger: 'hover',
+			        html: true,
+			        content:sentences[nodes[d.x].id] + " <hr> " + sentences[nodes[d.y].id] , 
+				  });
+		    });
+	}
+
+	function mouseover(p) {
+		d3.selectAll(".row text").classed("active", function(d, i) { return i == p.y; });
+		d3.selectAll(".column text").classed("active", function(d, i) { return i == p.x; });
+		
+		
+	}
+		
+	function mouseout(p) {
+		d3.selectAll("text").classed("active", false);
+
+	}
+		
+	/*d3.select("#order").on("change", function() {
+		//clearTimeout(timeout);
+		order(this.value);
+	});*/
+
+	function order(value) {
+		x.domain(orders[value]);
+		var t = svg.transition().duration(2500);
+
+		t.selectAll(".row")
+			.delay(function(d, i) { return x(i) * 4; })
+			.attr("transform", function(d, i) { return "translate(0," + x(i) + ")"; })
+		  .selectAll(".cell")
+		    .delay(function(d) { return x(d.x) * 4; })
+		    .attr("x", function(d) { return d.x==d.y? x(d.x)+2 : x(d.x); });
+		
+		t.selectAll(".column")
+		    .delay(function(d, i) { return x(i) * 4; })
+		    .attr("transform", function(d, i) { return "translate(" + x(i) + ")rotate(-90)"; });
+	}
+
+	function axisPopover(d,i)
+	{
+		$(this).popover({
+			title:"Sentence" , 
+		    container:"body",
+		    trigger: 'hover',
+		    html : true,
+		    content: function() 
+		    	{ 	
+	    			var rank = (nodes[i].rank==-1)? "" : "<span class='badge badge-info'>"+(nodes[i].rank+1)+"</span>";
+	    			var tag  = "<span class='badge'>"+nodes[i].group+"</span>";
+					return sentences[nodes[i].id] + "<p>"+tag + rank+"</p>";} , 
+			});
+	}
+	
+	/*var timeout = setTimeout(function() {
+			order("group");
+			d3.select("#order").property("selectedIndex", 2).node().focus();
+		}, 5000);*/
+
+	console.timeEnd("test");
+};
+
+
+	
+});
+</script>
+{% endblock %}
+
+{% block injectCSS %}
+	{{ parent() }}
+<style type="text/css">
+.ajax.alert
+{
+	margin-bottom: 0px;
+	font-weight: bolder;
+}
+.background {
+  fill: white;
+}
+
+line {
+  stroke: #fff;
+}
+
+text.active {
+  fill: red;
+  font-weight: bold;
+}
+    </style>
+{% endblock %}

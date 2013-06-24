@@ -2,6 +2,8 @@
 
 {% block title %}Welcome{% endblock %}
 
+{% block breadcrumb %}{% endblock %}
+
 {% block content %}
 <div class="row-fluid">
 	<div class="span8 offset2">
@@ -9,11 +11,12 @@
 			<h1>Hello, World!</h1>
 			<p>This is the running prototype of openEssayist.</p>
 			<p>
-				{% if auth.user.isadmin %}
-				<a href="{{ urlFor('config') }}" class="btn btn-primary btn-large">Learn more
+				
+				<a href="{{ urlFor('about') }}" class="btn btn-primary btn-large">Learn more
 					&raquo;</a> 
-				{% endif %}
-				{% if not(user) %} 
+				
+				
+				{% if not auth.loggedIn()  %} 
 				<a href="/login"
 					class="btn btn-large">Login &raquo;</a> 
 				{% endif %}
@@ -22,5 +25,4 @@
 	</div>
 </div>
 
-{% endblock %}
-	
+{% endblock %}	

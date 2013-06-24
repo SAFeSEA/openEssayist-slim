@@ -2,6 +2,18 @@
 
 {% block title %}Admin / JSON Structure {% endblock %} 
 
+{% block injectCSS %}
+	{{ parent() }}
+
+<style type="text/css">
+div.json li 
+{
+	overflow: hidden;
+    white-space: nowrap;
+}
+</style>
+{% endblock %}
+
 {% block content %}
 
 <div class="row-fluid">
@@ -12,9 +24,9 @@
 			</div>
 			<div class="widget-content">
 				{% for key in keys %}
-				<p><div class="btn-group">
+				<div class="btn-group" style="clear: both;">
     				<a class="btn" href="#{{ key }}">{{ key }}</a>
-    			</div></p>
+    			</div>
 				
 				{% endfor %}
 			</div> 
@@ -23,7 +35,7 @@
 	
 	<div class="span9">
 	<div class="widget-content">
-	<div><ul>
+	<div class="json"><ul>
 		{% for key,item in json %}
 		<li><code><a id="{{ key }}">{{ key }}</a></code> => 
 		{% if key in ['version'] %}
@@ -34,12 +46,67 @@
 			    <li> <code>{{ key2 }}</code> =>  {{ item2 |json_encode|raw }}
 			{% endfor %}
 		</ul>
-		{% elseif key in ['ke_data'] %}
+		{% elseif key in ['parasenttok'] %}
+		<ul>
+			{% for  key2,item2 in item[:5] %}
+					{% set nn = 2 %}
+			    	<li> <code>{{ key2 }}</code> =>
+			    		<ul>
+				    		{% for  key3,item3 in item2[:nn] %}  
+				    			<li><code>{{ key3 }}</code> : 
+				    				{% if item3 is iterable %}
+				    					{{item3  |json_encode|raw }}
+				    				{% else %}
+				    					{{ item3|raw}}
+				    				{% endif %}
+				    		{% else %}
+				    			<code>[]</code>
+							{% endfor %}
+							{% if item2|length > nn %}
+								<li> <code>...</code>
+							{% endif %}
+						</ul>	
+			{% endfor %}
+			{% if item|length > 5 %}
+							<li> <code>...</code>
+							{% endif %}
+		</ul>
+		{% elseif key in ['ke_data','nvl_data','se_graph','se_data','se_sample_graph','ke_sample_graph'] %}
 		<ul>
 			{% for  key2,item2 in item %}
-			    <li> <code>{{ key2 }}</code> =>  {{ item2 |json_encode|raw }}
+				{% if key2 in ['all_bigrams'] %}
+			    	<li> <code>{{ key2 }}</code> =>  {{ item2 |json_encode|raw }}
+				{% else %}
+					{% set nn = 5 %}
+			    	<li> <code>{{ key2 }}</code> =>
+			    		
+			    		{% if item2 is iterable %}
+			    		<ul>
+				    		{% for  key3,item3 in item2[:nn] %}  
+				    			<li><code>{{ key3 }}</code> : 
+				    				{% if item3 is iterable %}
+				    					{{item3  |json_encode|raw }}
+				    				{% else %}
+				    					{{ item3|raw}}
+				    				{% endif %}
+				    		{% else %}
+				    			<li><code>[]</code>
+							{% endfor %}
+							{% if item2|length > nn %}
+								<li> <code>...</code>
+							{% endif %}
+						</ul>	
+						{% else %}
+						{{ item2|boolean}}
+						{% endif %}
+									    			
+			    {% endif %}
 			{% endfor %}
 		</ul>
+		{% elseif key in [''] %}
+			<ul><li> <code>STRING</code> => {{ item }}
+
+			</ul>
 		{% endif %}
 		</li>
 		{% endfor %}

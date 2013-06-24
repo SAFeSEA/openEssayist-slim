@@ -3,8 +3,6 @@
 {% block title %}Admin / Tasks {% endblock %} 
 
 {% block content %}
-
-
 <div class="row-fluid">
 	<div class="span3">
 	<div class="widget">
@@ -35,7 +33,7 @@
 						<th>Word Limit</th>
 						<th>Deadline</th>
 						<th>Open</th>
-						<th class="td-actions">Actions</th>
+					
 					</tr>
 				</thead>
 				<tbody>
@@ -50,8 +48,13 @@
 					</td>
 					<td>{{ task.wordcount }} </td>
 					<td>{{ task.deadline }}</td>
-					<td>{{ task.isopen }}</td>
-					<td></td>
+					<td>
+						<span class="icon-stack icon-large">
+  							<i class="{{ task.isopen? "icon-check-empty icon-stack-base" : "icon-sign-blank icon-stack-base" }}"></i>
+  							<i class="{{ task.isopen? "icon-folder-open" : "icon-folder-close icon-light" }}"></i>
+						</span>
+					<i class="icon-large "></i></td>
+				
 					</tr>
 					{% endfor %}
 				</tbody>

@@ -1,0 +1,73 @@
+{% extends "site.twig" %} 
+
+
+{% block title %}About ...{% endblock %}
+
+{% block breadcrumb %}{% endblock %}
+
+{% block injectCSS %}
+{{ parent() }}
+<style>
+.widget-help
+{
+	min-height: 250px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="row-fluid">
+<div class="span3">
+	<div class="widget-content">
+    <ul class="nav nav-list ">
+    <li class="nav-header">Content</li>
+    <li class="active"><a href="#about">About</a></li>
+    <li><a href="#analysis">Analysis</a></li>
+    <li><a href="#feedback">Feedback</a></li>
+    <li><a href="#orchestrator">Orchestrator</a></li>
+    <li><a href="#credits">Credits</a></li>
+    </ul></div>
+</div>
+<div class="span9">
+
+<div class="widget">
+	<div class="widget-header">
+		<h3><a name="about"></a>About <span class="openessaysit">openEssayist</span></h3>
+	</div>
+	<div class="widget-content widget-help"> 
+	
+	</div> 
+</div>
+
+<div class="widget">
+	<div class="widget-header">
+		<h3><a name="analysis"></a>How does <span class="openessaysit">openEssayist</span> work?</h3>
+	</div>
+	<div class="widget-content widget-help"> 
+	
+	</div> 
+</div>
+
+<div class="widget">
+	<div class="widget-header">
+		<h3><a name="feedback"></a>What does <span class="openessaysit">openEssayist</span> tell about the essay?</h3>
+	</div>
+	<div class="widget-content widget-help"> 
+	
+	</div> 
+</div>
+
+<div class="widget">
+	<div class="widget-header">
+		<h3><a name="orchestrator"></a>How does <span class="openessaysit">openEssayist</span> help me to review the essay?</h3>
+	</div>	
+	<div class="widget-content widget-help"> 
+	
+	</div> 
+</div>
+
+</div></div>
+
+
+{% endblock %}

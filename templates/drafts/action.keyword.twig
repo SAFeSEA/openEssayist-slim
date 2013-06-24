@@ -4,15 +4,41 @@
 {% block title %}Draft - Keyword Categories{% endblock %} 
 
 {% block injectCSS %}
-<style>
-.droptrue {
-	min-height: 10px;
+	{{ parent() }}
+<link href="/assets/jquery.minicolors/jquery.minicolors.css" rel="stylesheet">
+
+ <style>
+.btn-ngram { cursor: move;}
+.sortable {  list-style-type: none; margin: 0; padding: 0; min-height: 25px; }
+.sortable li {float:left; margin: 2px 3px;}
+
+.sortable li.ui-state-highlight:empty
+{
+	
+	margin-top: 4px;
+	height: 20px;
+    width: 80px;
 }
 
-.ui-state-highlight
-{
-	min-height: 2em;
-	margin-bottom: 0px;
+.input-prepend.input-fullwidth, .input-append.input-fullwidth  {
+    position: relative;
+    display: block;
+}
+
+.input-prepend.input-fullwidth .add-on, .input-append.input-fullwidth .add-on {
+    
+}
+.input-prepend.input-fullwidth .input-wrapper, .input-append.input-fullwidth .input-wrapper {
+    position: absolute;
+    display: block;
+    left: 26px;
+    right: 26px;
+    top: 0;
+    bottom: 0;
+}
+.input-fullwidth .input-wrapper input {
+  
+   
 }
 
 h3 > .cat_color
@@ -24,6 +50,22 @@ h3 > .cat_color
     white-space: inherit;
 }
 
+ .ui-autocomplete {
+max-height: 200px;
+overflow-y: auto;
+/* prevent horizontal scrollbar */
+overflow-x: hidden;
+}
+/* IE 6 doesn't support max-height
+* we use height instead, but this forces the menu to always be this tall
+*/
+* html .ui-autocomplete {
+height: 100px;
+}
+</style>
+ 
+{#<style>
+
 .ajax.alert
 {
 	margin-bottom: 0px;
@@ -31,37 +73,155 @@ h3 > .cat_color
 }
 
 
+ul#category_all
+{
+	min-height: 200px;
+	max-height: 200px;
+	overflow-y: auto;
+}
 
 
-</style>
-<link href="/assets/jquery.minicolors/jquery.minicolors.css" rel="stylesheet">
+
+</style>#}
 {% endblock %}
+
 
 {% block bccontainer %}		
-	{% include "widgets/breadcrumb.panel.twig" %}
-	    <li><div class="btn-group">
-    	<a href="{{ urlFor('me.drafts',{"idt":task.id}) }}" class="btn btn-small" >
-    		<i class="icon-pencil"></i><span class="hidden-phone hidden-tablet"> {{ task.name }}</span></a>
-	</div></li>
-	<li><div class="btn-group">
-    	<a href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}" class="btn btn-small" >Overview</a>
-	   	<a href="{{ urlFor('me.draft.keywords',{"draft":draft.id}) }}" class="btn btn-small" >Keywords</a>
-    	<a href="{{ urlFor('me.draft.sentence',{"draft":draft.id}) }}" class="btn btn-small" >Sentences</a>
-    	<a href="{{ urlFor('me.draft.stats',{"draft":draft.id}) }}" class="btn btn-small" >Stats</a>
-	   	    </div></li>
-	<li><div class="btn-group">
-		<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">Views <span class="caret"></span></a>
-    	<ul class="dropdown-menu">
-			<li><a href="{{ urlFor('me.draft.view.dispersion',{"draft":draft.id}) }}">Keyword Dispersion</a>
-			<li class="divider"></li>
-    	  	<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphke"}) }}">Keyword Graph</a>
-    	  	<li><a href="{{ urlFor('me.draft.view.graph',{"draft":draft.id,"graph":"graphse"}) }}">Sentence Graph</a>
-		</ul></div>
-    </li>	   	    
+	{% include "widgets/breadcrumb.task.twig" %}
 {% endblock %}
 
+
+
 {% block content %}
+
+
+
+<div class="row-fluid">
+
+	<div class="widget widget-content">
+		<a href="{{ urlFor('me.draft.keywords',{"draft":draft.id}) }}" class="btn btn-primary pull-right">
+		<i class="icon-list icon-white"></i> Back to List</a>
+	</div>
+</div>
+
+
+<div class="row-fluid">
+<div class="widget">
+<div class="widget-header"><h3>Add you own key words ...</h3></div>
+			 	
+			<div class="widget-content">
+				<div class="input-append input-fullwidth00">
+					<div class="input-wrapper">
+						<input class="" id="tags"  type="text" placeholder="filter the list">
+						<button class="btn" type="button">Go!</button>
+					</div>
+	
+				</div>
+				<div id="project-id"></div>
+	<p id="project-description"></p>
+			</div>
+</div></div>
+
+{% set lkw = (groups['category_all'] is defined)? groups['category_all']['keywords'] : keywords   %}
 <div class="row-fluid"><div class="span12">
+	<div class="widget">
+		<div class="widget-header"><h3>All Key Words ({{ lkw|length }})</h3></div>
+		<div class="widget-toolbar">
+			<div class="btn-toolbar">
+			<div class="input-prepend input-append input-fullwidth">
+					<span class="add-on"><i class="icon-search"></i></span>
+					<div class="input-wrapper">
+						<input class="" id="filter"  type="text" placeholder="filter the list">
+					</div>
+	
+				</div>
+			</div>
+			</div> 
+		<div class="widget-content">
+		<ul class="sortable" id="category_all">
+
+		{% if groups.category_all is defined %}
+		
+			{% for key2,item2 in groups.category_all.keywords  %}
+			<li id="{{ item2 }}">{{ ngram.toBtn(keywords[item2],false) }}</li>
+			{% endfor %}
+			{% else %}
+		
+			{% for key,item in keywords %}
+			<li id="{{ key }}">{{ ngram.toBtn(item,false) }}</li>
+			{% endfor %}
+		{% endif %}
+		
+		</ul>	
+
+
+		
+		
+		</div>
+	</div>
+</div></div>
+
+<div class="row-fluid"><div class="span12">
+	<div class="widget">
+		<div class="widget-header"><h3>Groups (0)</h3>
+	</div>
+	{% if task.isopen %}
+	<div class="widget-toolbar">
+	<div class="btn-toolbar">    
+		<div class="btn-group">
+    				<button id="catg-Save" class="btn btn-mini btn-primary">Save</button>
+    				<button id="catg-Reset" class="btn btn-mini disabled">Reset</button>
+    	</div>
+    	<div class="btn-group">
+    				<button id="catg-New" class="btn btn-mini">New Category...</button>
+		</div>
+    </div>
+	</div>
+	{% endif %}	
+		<div class="widget-content" id="widget-content-cats">
+			
+			<div class="row-fluid">
+			{% for key,item in groups[1:] %}
+			
+				{% if loop.index0!=0 and loop.index0%3 == 0 %}
+			</div>
+			<div class="row-fluid">
+				{% endif %}
+				<div class="span4" id="cat_{{ loop.index0 }}">
+					
+					<div class="widget-header"><h3>
+								<span class="cat_color" style="background-color: {{ item.attr.color }};"></span>
+								<span class="cat_name">{{ item.attr.name }}</span></h3>
+							{% if task.isopen %}
+							<div class="box-icon">
+							<a href="#" class="btn-setting" title="Edit the group properties" data-toggle="modal" data-target="#dlgSetting" data-category="cat_{{ loop.index0 }}"><i class="icon-wrench"></i></a>
+							</div>
+							{% endif %}
+						</div>
+					<div class="widget-content" id="">
+					<ul class="sortable" id="{{ key }}"> 
+						{% for key2,item2 in item.keywords  %}
+								<li class="" id="{{ item2 }}">{{ ngram.toBtn(keywords[item2],false) }}</li>
+							{% endfor %}
+					</ul>
+					</div>
+					<div class="widget-content info hide" >
+							<input class="grp_name" type="text" placeholder="Type something..." value="{{ item.attr.name }}">
+							<input class="grp_color" type="text" value="{{ item.attr.color }}">
+							<textarea class="grp_desc" placeholder="Type something...">{{ item.attr.desc }}</textarea>
+					</div>
+				</div>
+			{% else %}
+				
+			{% endfor %}
+		
+			
+			
+		</div>
+	</div></div>
+</div></div>
+
+{#<div class="row-fluid"><div class="span12">
 
 <div class="widget">
 <div class="widget-header"><i class="icon-list-alt"></i><h3>Keywords</h3></div>	
@@ -82,28 +242,51 @@ h3 > .cat_color
 
 <div class="widget-content">
 	<div class="row-fluid">
-		<div class="span3 widget-content-allcat">
+		<div class="span4 widget-content-allcat">
 			<div class="widget-header"><h3>All</h3></div>
 			
 			<div class="widget-content">
 				
-				<ul class="droptrue connectedSortable ui-sortable unstyled" id="category_all">
+				<div class="input-prepend input-append input-fullwidth">
+					<span class="add-on"><i class="icon-search"></i></span>
+					<div class="input-wrapper">
+						<input class="" id="filter"  type="text" placeholder="filter the list">
+					</div>
+	
+				</div>
+
+
+
+
+				<div class="droptrue connectedSortable ui-sortable unstyled" id="category_all">
+					
 					{% if groups['category_all'] is defined %}
 						
 						{% for key2,item2 in groups['category_all']['keywords']  %}
-							<li class="" id="{{ item2 }}">{{ ngram.toBtn(keywords[item2],false) }}</li>
+							<div class="" id="{{ item2 }}">{{ ngram.toBtn(keywords[item2],false) }}</div>
 						{% endfor %}
 					{% else %}
 						{% for key,item in keywords %}
-							<li class="" id="{{ key }}">{{ ngram.toBtn(item,false) }}</li>
+							<div class="" id="{{ key }}">{{ ngram.toBtn(item,false) }}</div>
 						{% endfor %}
 					{% endif %}
-				</ul>
+				</div>
+			</div>
+			<div class="widget-header"><h3>Add keywords ...</h3></div>
+			 	
+			<div class="widget-content">
+				<div class="input-append input-fullwidth00">
+					<div class="input-wrapper">
+						<input class="" id="tags"  type="text" placeholder="filter the list">
+						<button class="btn" type="button">Go!</button>
+					</div>
+	
+				</div>
 			</div>
 		</div>
 	
 
-		<div class="span9 widget-content-cats" id="widget-content-cats">
+		<div class="span8 widget-content-cats" id="widget-content-cats">
 			<div class="row-fluid">
 			{% for key,item in groups[1:] %}
 			
@@ -143,7 +326,7 @@ h3 > .cat_color
 	
 	
 	</div>		
-</div>
+</div>#}
 	
 			
 		
@@ -151,7 +334,7 @@ h3 > .cat_color
 </div></div>
 
 <!-- Template for Keyword group -->
-<div class="span6 hide" id="cat_template">
+<div class="span4 hide" id="cat_template">
 	<div class="widget-header"><h3><span class="cat_color"></span><span class="cat_name"></span></h3>
 		<div class="box-icon">
 			<a href="#" class="btn-setting" data-toggle="modal" data-target="#dlgSetting" data-category="ref_template"><i class="icon-wrench"></i></a>
@@ -159,7 +342,7 @@ h3 > .cat_color
 		</div>
 		</div>
 	<div class="widget-content" id="">
-		<ul class="dropfalse connectedSortable ui-sortable unstyled" id="sort_template" style="min-height: 50px">
+		<ul class="nonsortable" id="sort_template" style="min-height: 50px">
 		</ul>
 	</div>
 	<div class="widget-content info hide" id="">
@@ -204,103 +387,142 @@ h3 > .cat_color
 
 
 {% block injectJS %}
+	{{ parent() }}
 <script src="/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
 <script src="/assets/d3.js/d3.v3.min.js"></script>
 <script src="/assets/jquery.minicolors/jquery.minicolors.js"></script>
 <script>
 $(document).ready(function() {
+	var lemmas = {{ lemmas|json_encode|raw  }};
+	
+	function split( val ) {
+		 return val.split( /,\s*/ );
+	};
+
+	function extractLast( term ) {
+		 return split( term ).pop();
+	};
+
+	$( "#tags" )
+		
+		// Define and attach the autocomplete UI
+		.autocomplete({
+			minLength: 0,
+			source: lemmas,
+			focus: function( event, ui ) {
+				$( "#tags" ).val( ui.item.label );
+				return false;
+				},
+			select: function( event, ui ) {
+				 $( "#tags" ).val( "" );
+				 $( "#project-id" ).append("{{ ngram.toBtnString('ui.item',false,true) }}");
+				 $( "#project-description" ).html( ui.item.desc );
+				return false;
+				}
+			}) .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+				
+				return $( "<li>" )
+				.append("{{ ngram.toBtnString('item',false,true) }}")
+				.appendTo( ul );
+				};;		 
+
+	 $('input#filter').keyup(function(){
+	        
+	        var searchText = $(this).val().toLowerCase(),
+	            $allListElements = $('ul#category_all > li'),
+	            $matchingListElements = $allListElements.filter(function(i, el){
+	                return $(el).text().indexOf(searchText) !== -1;
+	            });
+	        
+	        $allListElements.hide();
+	        $matchingListElements.show();
+	        
+	    });
+});
+</script>
+<script>
+$(document).ready(function() {
 	var is_dirty = false;
 
-	$(window).bind('beforeunload', function(){
-			if (is_dirty == true)
-		  		return 'Are you sure you want to leave?';
-		});
-	
-	$('input.minicolors').minicolors({animationSpeed: 100,control: "wheel"});
-    $('#dlgSetting').on('hidden', function () {
-        //tt = $(this).find('.minicolors');
-        //if (tt) tt.minicolors('destroy');
-        console.log("hide");
-	});
-
-    $("#dlg_save").click(function(e) {
-    	var myBookId = $('#dlg_category').val() ;
-        console.log("save > " + myBookId);
-        var tp = $("#"+ myBookId);
-        if (tp)
-        {
-            var name = $('#dlg_name').val();
-            var color = $('#dlg_color').val();
-            var desc = $('#dlg_desc').val();
-            console.log(name + " " + color + " " + desc );
-			g = tp.find('.grp_name');
-			if (g) g.val(name); 
-			g = tp.find('.grp_color');
-			if (g) g.val(color); 
-			g = tp.find('.grp_desc');
-			if (g) g.val(desc); 
-
-			g = tp.find('h3 > .cat_name');
-			if (g) g.text(name);
-			g = tp.find('h3 > .cat_color');
-			if (g) g.css('background-color',color);
-			is_dirty = true;		
-		}
-    });
-
-    	    
-    var color = d3.scale.category10().range(); 
-    
-    color = color.slice({{ groups|length ? groups|length-1:0  }});
+	var color = d3.scale.category10().range(); 
+	color = color.slice({{ groups|length ? groups|length-1:0  }});
 	console.log(color);
-	
-	updateSortable = function()
+
+	{% if task.isopen %}
+		var saveDialog = function(e) {
+	    	var myBookId = $('#dlg_category').val() ;
+	        console.log("save > " + myBookId);
+	        var tp = $("#"+ myBookId);
+	        if (tp)
+	        {
+	            var name = $('#dlg_name').val();
+	            var color = $('#dlg_color').val();
+	            var desc = $('#dlg_desc').val();
+	            console.log(name + " " + color + " " + desc );
+				g = tp.find('.grp_name');
+				if (g) g.val(name); 
+				g = tp.find('.grp_color');
+				if (g) g.val(color); 
+				g = tp.find('.grp_desc');
+				if (g) g.val(desc); 
+
+				g = tp.find('h3 > .cat_name');
+				if (g) g.text(name);
+				g = tp.find('h3 > .cat_color');
+				if (g) g.css('background-color',color);
+				is_dirty = true;		
+			}
+	    };
+
+	var bindDialog = function(e) {
+		var myBookId = $(this).data('category');
+		console.log(myBookId);
+		var tp = $("#"+ myBookId);
+		if (tp)
+		{
+			g = tp.find('.grp_name');
+			if (g) $('#dlg_name').val(g.val()); 
+			g = tp.find('.grp_desc');
+			if (g) $('#dlg_desc').val(g.val()); 
+
+			g = tp.find('.grp_color');
+			if (g) $('#dlg_dlg').val(g.val()); 
+			$('#dlg_color').minicolors('value',g.val());
+			$('#dlg_category').val(myBookId); 
+						
+		}
+		//$('#dlg_color').val(dd);
+		//$('#dlg_color').minicolors('value',dd);
+	};
+
+	var updateSortables = function()
 	{
-		// set the dropable widgets
-		$(".droptrue").sortable({
-			connectWith : ".connectedSortable",
+		console.log("test");
+		$( ".sortable" ).sortable({
 			placeholder : "ui-state-highlight",
+			connectWith : ".sortable",
 			update : function(event, ui) {
 				var order = $(this).sortable('toArray');
 				order=order.toString();
 				console.log(this.id + " " + order);
 				is_dirty = true;
 			}
-		});
-		$(".droptrue").disableSelection();
-		$(".btn-setting").unbind('click');
-		$(".btn-setting").click(function(e) {
-			var myBookId = $(this).data('category');
-			console.log(myBookId);
-			var tp = $("#"+ myBookId);
-			if (tp)
-			{
-				g = tp.find('.grp_name');
-				if (g) $('#dlg_name').val(g.val()); 
-				g = tp.find('.grp_desc');
-				if (g) $('#dlg_desc').val(g.val()); 
+		}).disableSelection();
 
-				g = tp.find('.grp_color');
-				if (g) $('#dlg_dlg').val(g.val()); 
-				$('#dlg_color').minicolors('value',g.val());
-				$('#dlg_category').val(myBookId); 
-							
-			}
-			//$('#dlg_color').val(dd);
-			//$('#dlg_color').minicolors('value',dd);
-		});
+		$(".btn-setting").unbind('click');
+		$(".btn-setting").click(bindDialog);
+		
+	}
+
+	var resetCategory = function(e) {
+		location.reload();
 	};
 	
-	//initialise the blockUI widget on AJAX calls
-	$.blockUI.defaults.baseZ = 1100; 
-	$(document).ajaxStop($.unblockUI);
-	updateSortable();
-
-	$("#catg-Save").click(function(e) {
-		$.blockUI({ message: '<div class="ajax alert alert-info"><img src="/assets/openessayist/img/ajax-loader.gif" /> Saving User Data ...</div>' }); 
+	var saveCategory = function(e) {
+		//$.blockUI({ message: '<div class="ajax alert alert-info"><img src="/assets/openessayist/img/ajax-loader.gif" /> Saving User Data ...</div>' }); 
 		var json = {};
 		
-		var allcats = $('.droptrue');
+		var allcats = $('.sortable');
 		allcats.each(function(index) {
 			var setting = $(this).sortable('toArray');
 			var id = $(this).attr('id');
@@ -310,11 +532,11 @@ $(document).ready(function() {
 			};
 		});
 
-		holder = $('.widget-content-cats');
-		var allcats = holder.find(".span6");
+		holder = $('#widget-content-cats');
+		var allcats = holder.find(".span4");
 		allcats.each(function(index)
 		{
-			id = $(this).find('.droptrue').attr('id');
+			id = $(this).find('.sortable').attr('id');
 			nm = $(this).find('.grp_name').val();
 			desc = $(this).find('.grp_desc').val();
 			clr = $(this).find('.grp_color').val();
@@ -348,14 +570,15 @@ $(document).ready(function() {
 				// there was an unhandled exception
 				console.log(msg);
 			}
-		});	
+		});		
 
-	});
+	};
 	
-	$("#catg-New").click(function(e) {
+
+	var onClickNew =  function(e) {
 		console.log("new category...");
 
-		var holder = $('.widget-content-cats > .row-fluid :last');
+		var holder = $('#widget-content-cats > .row-fluid :last');
 		var n = holder.children().length;
 		
 		var template = $('#cat_template').clone();
@@ -365,14 +588,14 @@ $(document).ready(function() {
 		template.removeClass('hide');
 		template.removeAttr('id');
 
-		var info = template.find('.dropfalse');
+		var info = template.find('.nonsortable');
 		if (info)
-			{	info.removeClass('dropfalse');
-				info.addClass('droptrue');
+			{	info.removeClass('nonsortable');
+				info.addClass('sortable');
 			}
 				
 		
-		if (n!=2)
+		if (n!=3)
 		{
 			template.appendTo(holder);
 		}
@@ -394,8 +617,8 @@ $(document).ready(function() {
 		g = template.find('.cat_color');
 		if (g) g.css('background-color',clr);
 		
-		holder = $('.widget-content-cats');
-		var allcats = holder.find(".span6");
+		holder = $('#widget-content-cats');
+		var allcats = holder.find(".span4");
 		var nCats = allcats.length;
 		allcats.each(function(index)
 			{
@@ -404,15 +627,127 @@ $(document).ready(function() {
 				if (setting) setting.attr('data-category','cat_'+index);
 				var close = $(this).find(".btn-close");
 				if (close) close.attr('data-category','cat_'+index);
-				var dropz = $(this).find(".droptrue");
+				var dropz = $(this).find(".sortable");
 				dropz.attr('id','category_'+index); 
 			});
-
 		
-		updateSortable();
+		
+		updateSortables();
+	};
+
+
+	//initialise the blockUI widget on AJAX calls
+	$.blockUI.defaults.baseZ = 1100; 
+	$(document).ajaxStop($.unblockUI);
+
+	
+	$(window).bind('beforeunload', function(){
+		if (is_dirty == true)
+	  		return 'Are you sure you want to leave?';
 	});
+
+	$("#catg-New").click(onClickNew);
+	$("#catg-Save").click(saveCategory);
+	$("#catg-Reset").click(resetCategory);
+		
+	$("#dlg_save").click(saveDialog);
+
+	$('input.minicolors').minicolors({animationSpeed: 100,control: "wheel"});
+
+	$('#dlgSetting').on('hidden', function () {
+        console.log("hide");
+	});
+	
+	updateSortables();
+	{% endif %}
+
 });
 
 </script>
 
+{#
+<script>
+$(document).ready(function() {
+	var lemmas = {{ lemmas|json_encode|raw  }};
+	
+	function split( val ) {
+		 return val.split( /,\s*/ );
+	};
+
+	function extractLast( term ) {
+		 return split( term ).pop();
+	};
+
+	$( "#tags" )
+		// don't navigate away from the field on tab when selecting an item
+		.bind( "keydown", function( event ) {
+			console.log(event.keyCode);
+			if ( event.keyCode === $.ui.keyCode.TAB &&
+				$( this ).data( "ui-autocomplete" ).menu.active ) {
+					event.preventDefault();
+				}
+			})
+		// Define and attach the autocomplete UI
+		.autocomplete({
+			minLength: 0,
+			source: function( request, response ) {
+				// delegate back to autocomplete, but extract the last term
+				response( $.ui.autocomplete.filter(
+					lemmas, extractLast( request.term ) ) );
+				},
+			focus: function() {
+				// prevent value inserted on focus
+				return false;
+				},
+			select: function( event, ui ) {
+				var terms = split( this.value );
+				// remove the current input
+				terms.pop();
+				// add the selected item
+				terms.push( ui.item.value );
+				// add placeholder to get the comma-and-space at the end
+				terms.push( "" );
+				this.value = terms.join( ", " );
+				return false;
+				}
+			}) .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+				
+				return $( "<li>" )
+				.append("{{ ngram.toBtnString('item',false,true) }}")
+				.appendTo( ul );
+				};;		 
+
+	 $('input#filter').keyup(function(){
+	        
+	        var searchText = $(this).val().toLowerCase(),
+	            $allListElements = $('ul#category_all > li'),
+	            $matchingListElements = $allListElements.filter(function(i, el){
+	                return $(el).text().indexOf(searchText) !== -1;
+	            });
+	        
+	        $allListElements.hide();
+	        $matchingListElements.show();
+	        
+	    });
+	    
+
+
+ 
+
+    	    
+	
+	//initialise the blockUI widget on AJAX calls
+	$.blockUI.defaults.baseZ = 1100; 
+	$(document).ajaxStop($.unblockUI);
+	updateSortable();
+
+
+
+
+
+	
+});
+
+</script>
+#}
 {% endblock %}
