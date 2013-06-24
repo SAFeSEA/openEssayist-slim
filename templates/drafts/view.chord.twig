@@ -85,6 +85,8 @@ $(document).ready(function(){
 				node.color = c(node.group);
 				node.text = sentences[node.id];
 				console.log(node.group + " " + node.color);
+				idx = $.inArray(node.id, rank);
+				node.rank=idx;
 				matrix[i] = d3.range(n).map(function(j) { return 0; });
 			});
 
