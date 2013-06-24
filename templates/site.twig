@@ -2,6 +2,12 @@
 
 {% block injectCSS %}
 <style>
+.modal-backdrop, .modal-backdrop.fade.in {
+    background: none repeat scroll 0 0 #000;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+
 #ajax-modal > .modal-body
 {
 	padding-top:0px;
