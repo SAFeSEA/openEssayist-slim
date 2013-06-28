@@ -163,6 +163,7 @@ class UserController extends Controller
 		}
 
 		$d = $u->drafts()->where_equal('task_id',$taskId)->order_by_desc('id')->find_array();
+		
 		foreach ($d as $key => &$draft)
 		{
 			$analysis = json_decode($draft['analysis'],true);
@@ -175,6 +176,8 @@ class UserController extends Controller
 			unset($draft['analysis']);
 			$gg = $this->timeSince(strtotime($draft['date']));
 			$draft['datesince'] = $gg;
+			$draft['version'] = count($d)-$key;
+			
 		}
 		/* @var $d Draft */
 		$ap = $g->tasks()->find_one($taskId);
