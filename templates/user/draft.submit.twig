@@ -1,6 +1,6 @@
 {% extends "site.twig" %} 
 
-{% block title %}Add a new draft {% endblock %} 
+{% block title %}Analyse a new draft {% endblock %} 
 
 {% block bccontainer %}		
 	{% include "widgets/breadcrumb.panel.twig" %}
@@ -21,7 +21,7 @@
 	<div class="widget">
 		<div class="widget-header">
 			<i class="icon-pencil"></i>
-			<h3>Submit a new draft</h3>
+			<h3>Analyse a new draft</h3>
 		</div> <!-- /widget-header -->
 					
 	<div class="widget-content">
@@ -36,25 +36,31 @@
 	<div class="controls">
 		<textarea class="boxborder" rows="15" 
 			name="text" id="text" placeholder="paste the text of your essay"
-			required="required">{{ text }}</textarea>
+			required="required">{{ form.text }}</textarea>
 
 	</div>
 </div>
 <div class="control-group">
-	<label class="control-label">State of writing</label>
+	<label class="control-label">State of draft</label>
 	<div class="controls">
 		<label class="radio">
-			<input type="radio" name="state" id="option-state-early" value="1" checked>
-			Early draft
+			<input type="radio" name="state" id="draft-state-early" value="1" {{ (form.state=="1" or form.state is not defined)? "checked" }}>
+			Early
 		</label>
 		<label class="radio">
-			<input type="radio" name="state" id="option-state-advanced" value="3">
-			Advanced draft
+			<input type="radio" name="state" id="draft-state-advanced" value="2" {{ (form.state=="2")? "checked" }}>
+			Advanced
 		</label>
 		<label class="radio">
-			<input type="radio" name="state" id="option-state-final" value="3">
-			Final version
+			<input type="radio" name="state" id="draft-state-final" value="3" {{ (form.state=="3")? "checked" }}>
+			Final
 		</label>
+	</div>
+</div>
+<div class="control-group">
+	<div class="controls">
+		<input type="hidden" name="module" id="draft-module" value="{{ group.code }}" readonly="readonly"/>
+		<input type="hidden" name="task" id="draft-task" value="{{ task.code }}" readonly="readonly"/>
 	</div>
 </div>
 
@@ -62,7 +68,7 @@
 </fieldset>
 
 <div class="form-actions">
-	<button class="btn btn-primary" id="submit_essay" type="submit" name="action" value="Submit">Submit</button> 
+	<button class="btn btn-primary" id="submit_essay" type="submit" name="action" value="Submit">Analyse</button> 
 </div>
 								
 </form>
@@ -85,7 +91,7 @@
 					</div> <!-- /widget-content -->
 					
 					<div class="widget-content">
-					<p>Please indicate if you think your draft is at an early stage (initial sketch, first attempt, ...) or at a final stage of writing (before submission to tutor).</p>	
+					<p>Please indicate if you think your draft is at an early stage (initial sketch, first attempt, ...) or at a final stage of writing (just before submitting to the tutors).</p>	
 					</div> <!-- /widget-content -->
 				
 				</div>
@@ -98,16 +104,33 @@
 {% block injectJS %}
 	{{ parent() }}
 <script src="/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
+<script src="/assets/jquery.validation/jquery.validate.min.js"></script>
+
 <script>
 $(document).ready(function() {
 	$.blockUI.defaults.baseZ = 1100;
-	$("#submit_esddsay").click(function(e) {
-		});
 
-	$('#post_essay').submit(function() {
-		$.blockUI({ message: '<div class="ajax alert alert-info">Starting Analysis. Please Wait.</div>' }); 
-		return true;
-		});
+	$('#post_essay').validate({
+		rules: {
+			text:
+			{
+				required: true,
+				minlength: 200
+			}
+		},
+		submitHandler: function(form) {
+			$.blockUI({ message: '<div class="ajax alert alert-info">Starting Analysis. Please Wait.</div>' }); 
+		form.submit();
+			 }, highlight: function(element) {
+				 $(element).closest('.control-group').removeClass('success').addClass('error');
+			 },
+			 success: function(element) {
+			 element
+			 .text('OK!').addClass('valid')
+			 .closest('.control-group').removeClass('error').addClass('success');
+			 }
+		 
+	});
 
 });
 </script>
@@ -116,6 +139,17 @@ $(document).ready(function() {
 {% block injectCSS %}
 	{{ parent() }}
 <style>
+label.error.valid {
+    display: none !important;
+}
+
+label.error {
+    font-weight: bold;
+    color: red;
+    padding: 2px 8px;
+    margin-top: 2px;
+}
+	
 	
 	.boxborder {
     -webkit-box-sizing: border-box;

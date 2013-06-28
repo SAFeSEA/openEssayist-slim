@@ -73,6 +73,7 @@ class Application {
 			CREATE TABLE IF NOT EXISTS `group` (
 			  `id` int(11) NOT NULL AUTO_INCREMENT,
 			  `name` varchar(120) DEFAULT NULL,
+			  `code` varchar(120) DEFAULT NULL,
 			  `description` TEXT,
 			  PRIMARY KEY (`id`),
 			  UNIQUE (`name`)
@@ -84,6 +85,7 @@ class Application {
 			CREATE TABLE IF NOT EXISTS `task` (
 				`id` int(11) NOT NULL AUTO_INCREMENT,
 				`name` varchar(120) DEFAULT NULL,
+			    `code` varchar(120) DEFAULT NULL,
 				`assignment` TEXT,
 				`deadline` DATE,
 				`wordcount` int(11) DEFAULT '0',

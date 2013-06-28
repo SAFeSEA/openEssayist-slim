@@ -203,7 +203,11 @@ class UserController extends Controller
 
 		/* @var $d Draft */
 		$ap = Model::factory('Task')->find_one($taskId);
-
+		$g = $ap->group()->find_one();
+		
+		$formdata=null;
+		$status=200;
+		
 		if ($req && $req->isPost())
 		{
 			$post = $req->post();
@@ -216,9 +220,13 @@ class UserController extends Controller
 					$url = 'http://localhost:8062/api/analysis';
 					$request = Requests::post($url,
 							array(),
-							array('text' => $post["text"]),
+							array(
+									'text' => $post["text"],
+									'module' => $post["module"],
+									'task' => $post["task"],
+								),
 							array('timeout' => 30));
-					//var_dump($request->status_code);
+					
 					if ($request->status_code === 200)
 					{
 						//var_dump($request->body);
@@ -236,28 +244,44 @@ class UserController extends Controller
 						$draft->users_id = $this->user['id'];
 						$draft->date = date('Y-m-d H:i:s e');
 						$draft->save();
-
+						
+						// redirect to the "latest draft review" page
+						$r= $this->app->urlFor('me.drafts',array("idt" => $taskId));
+						$this->redirect($r,false);
+						
+					}
+					else 
+					{	$json = $request->body;
+						$ret = json_decode($json,true);
+						$formdata["text"] = $post["text"];
+						$formdata["state"] = $post["state"];
+						
+						$status = 500;
+						$this->app->flashNow("error", "Problem with the analyser. Make sure you text is not empty. If it continues, please contact the admin.");
+					
 					}
 				}
 				catch (Requests_Exception $e)
 				{
-					$this->app->flashNow("error", "Cannot connect to the analyser (" . $url.")! Try again later");
+					$status = 500;
+					$this->app->flashNow("error", "Cannot connect to the analyser. Try again later.");
 					//var_dump($e);
 				}
 				catch (\PDOException  $e)
 				{
-					$this->app->flashNow("error", "Problem with the database.");
-					var_dump($e);
+					$status = 500;
+					$this->app->flashNow("error", "Problem with the database. Try again later.");
+					//var_dump($e);
 
 				}
-				$r= $this->app->urlFor('me.drafts',array("idt" => $taskId));
-				$this->redirect($r,false);
 			}
 		}
-
+		
 		$this->render('user/draft.submit',array(
 				'task' => $ap->as_array(),
-		));
+				'group' => $g->as_array(),
+				'form' => $formdata
+		),$status);
 	}
 
 	/**
@@ -1248,6 +1272,20 @@ class UserController extends Controller
 
 	public function saveNotes()
 	{
+		$req = $this->app->request();
+		$log = $this->app->getLog();
+		if ($req && $req->isPost())
+		{
+			$log->info("POST TO NOTES WITH USERID: " . $this->user['id']);	
+		}
+		else  if ($req && $req->isGet())
+		{
+			$log->info("GET NOTES FROM USERID: " . $this->user['id']);
+		}
+		else {
+			$log->info("UNKOWN ACCESS TO NOTES FROM USERID: " . $this->user['id']);
+		}
+		
 		/* @var $u Users */
 		$u = Model::factory('Users')->find_one($this->user['id']);
 		$notes = $u->Notes()->find_one();
@@ -1259,7 +1297,6 @@ class UserController extends Controller
 			$notes->save();
 		}
 
-		$req = $this->app->request();
 		if ($req && $req->isPost())
 		{
 			$post=  $req->getBody();
