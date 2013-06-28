@@ -114,7 +114,7 @@ ul#category_all
 				<div class="input-append input-fullwidth00">
 					<div class="input-wrapper">
 						<input class="" id="tags"  type="text" placeholder="filter the list">
-						<button class="btn" type="button">Go!</button>
+						
 					</div>
 	
 				</div>
@@ -128,17 +128,6 @@ ul#category_all
 <div class="row-fluid"><div class="span12">
 	<div class="widget">
 		<div class="widget-header"><h3>All Key Words ({{ lkw|length }})</h3></div>
-		<div class="widget-toolbar">
-			<div class="btn-toolbar">
-			<div class="input-prepend input-append input-fullwidth">
-					<span class="add-on"><i class="icon-search"></i></span>
-					<div class="input-wrapper">
-						<input class="" id="filter"  type="text" placeholder="filter the list">
-					</div>
-	
-				</div>
-			</div>
-			</div> 
 		<div class="widget-content">
 		<ul class="sortable" id="category_all">
 
@@ -393,6 +382,7 @@ ul#category_all
 <script src="/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
 <script src="/assets/d3.js/d3.v3.min.js"></script>
 <script src="/assets/jquery.minicolors/jquery.minicolors.js"></script>
+{% if task.isopen %}
 <script>
 $(document).ready(function() {
 	var lemmas = {{ lemmas|json_encode|raw  }};
@@ -442,6 +432,7 @@ $(document).ready(function() {
 	    });
 });
 </script>
+{% endif %}
 <script>
 $(document).ready(function() {
 	var is_dirty = false;

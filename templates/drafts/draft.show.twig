@@ -325,7 +325,7 @@ label.checkbox:before
 	{{ parent() }}
 	<script src="/assets/d3.js/colorbrewer.js"></script>
 	<script src="/assets/highlight.js/highlight.pack.js"></script>
-	<script src="/assets/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.js"></script>
+	
 	{% include "javascript/hljs.keywords.js.twig" %}
 
 	{#<script>
@@ -386,6 +386,9 @@ label.checkbox:before
 				'#-s:q#': 'Assignment',  
 				'#-s:p#': 'Punctuation'					
 				};	
+
+		keys=[];
+		for (v in sections) keys.push(v);
 			
 		
 		//$("label.checkbox").disableSelection();
@@ -393,7 +396,7 @@ label.checkbox:before
 		{
 			//console.log(Object.keys(sections));
 			var tag = $(this).attr('data-tag');
-			var idx = $.inArray(tag,Object.keys(sections));
+			var idx = $.inArray(tag,keys);
 			idx = (idx==-1)?2:idx;
 			var clr = colorbrewer.Paired[11][idx];
 			//console.log(tag + " " + idx + " " + clr);
@@ -439,7 +442,7 @@ label.checkbox:before
 			},
 			title: "Discussion",
 			trigger: 'click',
-			container: 'body',
+			container: 'body'
 				});
 
 		$('.ngram').click(function(e){
@@ -543,7 +546,7 @@ label.checkbox:before
 			change: function(event, ui) {
 					console.log("DFDFDFDFDF");
 					highlighSentence(event, ui);
-				},
+				}
 		});
 		$('.cStructure').trigger('change');
 		$('.cKeyword').trigger('change');
