@@ -139,27 +139,27 @@ $(document).ready(function() {
     			$newDiv = $('<div />').addClass("pop");
 
     			$r1 = $('<div />').addClass("pop-line").appendTo($newDiv);
-				$r1.append($('<div />',{ text: "Frequency:", class: "pop-title" }));
-				$r1.append($('<div />',{class: "pop-desc"}).append(
-    	    			$('<span />',{ text: count, class: "label label-info"})));
+				$r1.append($('<div />',{ "text": "Frequency:", "class": "pop-title" }));
+				$r1.append($('<div />',{"class": "pop-desc"}).append(
+    	    			$('<span />',{ "text": count, "class": "label label-info"})));
     				    			
     			if (dim=="1")
         		{
         			$r1 = $('<div />').addClass("pop-line").appendTo($newDiv);
-    				$r1.append($('<div />',{ text: "Forms in text:", class: "pop-title" }));
-    				$r1.append($('<div />',{class: "pop-desc"}).append(
-        	    			$('<span />',{ text: forms})));
+    				$r1.append($('<div />',{ "text": "Forms in text:", "class": "pop-title" }));
+    				$r1.append($('<div />',{ "class" : "pop-desc"}).append(
+        	    			$('<span />',{ "text": forms})));
         		}	    	
 
     			$r2 = $('<div />').addClass("pop-line").appendTo($newDiv);
-				$r2.append($('<div />',{ text: "Centrality:", class: "pop-title"}));
-				$r2.append($('<div />',{ class: "pop-desc"}).append(
-    	    			$('<span />',{class: 'inlinebar bartodo',text:score})));	    			
+				$r2.append($('<div />',{ "text": "Centrality:", "class": "pop-title"}));
+				$r2.append($('<div />',{ "class": "pop-desc"}).append(
+    	    			$('<span />',{"class": 'inlinebar bartodo',"text":score})));	    			
 
     			$r2 = $('<div />').addClass("pop-line").appendTo($newDiv);
-				$r2.append($('<div />',{ text: "Trend:", class: "pop-title"}));
-				$r2.append($('<div />',{ class: "pop-desc"}).append(
-    	    			$('<span />',{class: 'inlinebar trendtodo',text:trend})));	    			
+				$r2.append($('<div />',{ "text": "Trend:", "class": "pop-title"}));
+				$r2.append($('<div />',{ "class": "pop-desc"}).append(
+    	    			$('<span />',{"class": 'inlinebar trendtodo',"text":trend})));	    			
     	    			
         		return $newDiv;
 		 	}
