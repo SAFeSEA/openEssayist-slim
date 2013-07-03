@@ -78,7 +78,7 @@ class UserController extends Controller
 		}
 		
 
-		//$ret=new stdClass();
+		$ret=new stdClass();
 		$ret->allkw = $allkw;
 		$ret->groups = $groups;
 		return $ret;
