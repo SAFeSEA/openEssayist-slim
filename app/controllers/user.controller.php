@@ -89,7 +89,8 @@ class UserController extends Controller
 	 */
 	public function me()
 	{
-		$this->render('user/dashboard');
+		$this->render('user/dashboard',array(
+				'nav' => 'nav'));
 	}
 
 	/**
@@ -139,6 +140,83 @@ class UserController extends Controller
 				'tasks' => $t
 		));
 	}
+
+	
+	public function manageDraft($taskId)
+	{
+		/* @var $u Users */
+		$u = Model::factory('Users')->find_one($this->user['id']);
+		if ($u===false)
+		{
+			$this->app->flash("error", "Cannot find the user data");
+			$this->redirect('me.home');
+		}
+		/* @var $g Group */
+		$g = $u->group()->find_one();
+		if ($g===false)
+		{
+			$this->app->flash("error", "Cannot find the group data");
+			$this->redirect('me.home');
+		}
+		
+		/* @var $d Draft */
+		$ap = $g->tasks()->find_one($taskId);
+		
+		
+		$this->render('user/draft.action',array(
+				'group' => $g->as_array(),
+				'task' => $ap->as_array()
+
+		));
+		
+	}
+	
+	public function historyDraft($taskId)
+	{
+		/* @var $u Users */
+		$u = Model::factory('Users')->find_one($this->user['id']);
+		if ($u===false)
+		{
+			$this->app->flash("error", "Cannot find the user data");
+			$this->redirect('me.home');
+		}
+		/* @var $g Group */
+		$g = $u->group()->find_one();
+		if ($g===false)
+		{
+			$this->app->flash("error", "Cannot find the group data");
+			$this->redirect('me.home');
+		}
+		
+		/* @var $d Draft */
+		$ap = $g->tasks()->find_one($taskId);
+		
+		$d = $u->drafts()->where_equal('task_id',$taskId)->order_by_desc('id')->find_array();
+		
+		foreach ($d as $key => &$draft)
+		{
+			$analysis = json_decode($draft['analysis'],true);
+			$wordcount = $analysis['se_stats']['number_of_words'];
+			$draft['wordcount'] = $wordcount;
+			$k = $analysis['nvl_data'];
+			if (isset($k))
+				$draft['keywords'] = array_merge($k['quadgrams'],$k['trigrams'],$k['bigrams']);
+			
+			unset($draft['analysis']);
+			$gg = $this->timeSince(strtotime($draft['date']));
+			$draft['datesince'] = $gg;
+			$draft['version'] = count($d)-$key;
+				
+		}
+		
+		$this->render('user/draft.history',array(
+				'group' => $g->as_array(),
+				'task' => $ap->as_array(),
+				'drafts' => $d
+		
+		));
+	}
+	
 
 	/**
 	 *

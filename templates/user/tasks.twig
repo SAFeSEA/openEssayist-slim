@@ -25,7 +25,8 @@ td .btn{white-space: nowrap;}
 		<div class="widget-header">
 		<h3>Course</h3>
 		</div>
-		<div class="widget-content"> 
+		<div class="widget-content">
+				<p>{{ group.name }}</p> 
 				<p> {{ group.description }}</p>
 			</div> 
 	</div>
@@ -41,7 +42,7 @@ td .btn{white-space: nowrap;}
 				<table class="table table-condensed table-striped table-bordered">
 				<thead>
 					<tr>
-						<th width="5%">#</th>
+						
 						<th>Name</th>
 						<th>Assignment</th>
 						<th>Deadline</th>
@@ -54,9 +55,9 @@ td .btn{white-space: nowrap;}
 					{% for task in tasks %}
 					
 					<tr>
-					<td><code>{{ task.id }}</code></td>
+					
 					<td><a class="btn" title="Go to the drafts for this assignment"
-							href="{{ urlFor('me.drafts',{"idt":task.id}) }}"><i class="icon-pencil"></i> {{ task.name }}</a></td>
+							href="{{ urlFor('me.draft.action',{"idt":task.id}) }}"><i class="icon-pencil"></i> {{ task.name }}</a></td>
 					<td>{{ task.assignment }}</td>
 					<td>{{ task.deadline }}</td>
 					<td><span class="badge">{{ task.draftcount }}</span></td>

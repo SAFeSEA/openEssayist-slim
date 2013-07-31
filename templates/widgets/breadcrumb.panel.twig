@@ -1,8 +1,10 @@
 {% block bccontainer %}
-	<li><div class="btn-group">
-    	<a class="btn btn-small" title="Go to your homepage" href="{{ urlFor('me.home') }}"><i class="icon-home"></i></a>
-	</div></li>
-    <li><div class="btn-group">
-    	<a class="btn btn-small" title="Go to your assignments" href="{{ urlFor('me.tasks') }}"><i class="icon-book"></i><span class="hidden-phone hidden-tablet">  Assignments</span></a>
-	</div></li>
+	<li>
+    	<a class="btn btn-small btn-inverse" title="Go to your homepage" href="{{ urlFor('me.home') }}"><i class="icon-home"></i></a>
+    	
+	</li>
+
+    <li>
+    	<a class="btn btn-small btn-inverse" title="Go to your assignments" href="{{ urlFor('me.tasks') }}"><i class="icon-book"></i><span class="hidden-phone hidden-tablet">  Assignments</span></a>
+	</li>
 {% endblock %}

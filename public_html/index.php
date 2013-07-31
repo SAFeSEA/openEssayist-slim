@@ -150,7 +150,10 @@ $c->app->get('/me/', array($userCtrl, 'me'))->name('me.home');
 $c->app->get('/me/consent', array($loginController, 'consent'))->via('GET', 'POST')->name('consent');
 
 $c->app->get('/me/essay/(:id(/))', array($userCtrl, 'tasks'))->conditions(array('id' => '[0-9]+'))->name('me.tasks');
-$c->app->get('/me/essay/:idt/draft/(:idd(/))', array($userCtrl, 'drafts'))->name('me.drafts');
+//$c->app->get('/me/essay/:idt/draft/(:idd(/))', array($userCtrl, 'drafts'))->name('me.drafts');
+
+$c->app->get('/me/essay/:idt/drafts/', array($userCtrl, 'manageDraft'))->name('me.draft.action');
+$c->app->get('/me/essay/:idt/history/', array($userCtrl, 'historyDraft'))->name('me.draft.history');
 $c->app->get('/me/essay/:idt/submit/', array($userCtrl, 'submitDraft'))->via('GET', 'POST')->name('me.draft.submit');
 
 $c->app->post('/api/process/:idt', array($userCtrl, 'processDraft'))->name('me.draft.process');
