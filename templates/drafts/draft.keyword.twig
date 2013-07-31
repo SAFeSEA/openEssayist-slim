@@ -2,12 +2,16 @@
 {% import "widgets/ngram.macro.twig" as ngram %}
 
 {% block title %}Draft - Keywords{% endblock %} 
-
+{% block subheader %}Draft - Keywords{% endblock %} 
 {% block bccontainer %}		
 	{% include "widgets/breadcrumb.task.twig" %}
 {% endblock %}
 
+{% block navsubheader %}
+	{% include "widgets/navbar.drafts.twig" with {'navsrc': 'me.draft.keywords'} %}
+{% endblock %}
 
+    
 {% block content %}
 
 <div class="row-fluid">

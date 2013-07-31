@@ -1,10 +1,15 @@
 {% extends "site.twig" %} 
 
 {% block title %}Draft - Overview{% endblock %} 
+{% block subheader %}Draft - Overview{% endblock %} 
 
 
 {% block bccontainer %}		
 	{% include "widgets/breadcrumb.task.twig" %}
+{% endblock %}
+
+{% block navsubheader %}
+	{% include "widgets/navbar.drafts.twig" with {'navsrc': 'me.draft.show'} %}
 {% endblock %}
 
 {% block content %}

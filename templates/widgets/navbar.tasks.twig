@@ -1,0 +1,24 @@
+<div class="navbar">
+    <div class="navbar-inner">
+    	<span class="brand" href="#">{{ task.name }}</span>
+    	<ul class="nav">
+ 			<li class="{{ navsrc == 'me.draft.action' ? 'active' }}"><a title="Show the last draft" 
+ 					href="{{ urlFor('me.draft.action',{"idt":task.id}) }}">
+				<i class="icon-large icon-desktop"></i> 
+				<span class="hidden-phone hidden-tablet">Review</span>
+			</a></li>
+			{% if task.isopen %}
+    		<li class="{{ navsrc == 'me.draft.submit' ? 'active' }}"><a title="Go to the drafts for this assignment"
+					href="{{ urlFor('me.draft.submit',{"idt":task.id}) }}">
+				<i class="icon-large icon-upload-alt"></i>
+				<span class="hidden-phone hidden-tablet">New draft</span>
+			</a></li>
+			{% endif %}
+    		<li class="{{ navsrc == 'me.draft.history' ? 'active' }}"><a title="Go to the drafts for this assignment"
+    				href="{{ urlFor('me.draft.history',{"idt":task.id}) }}" >
+				<i class=" icon-large icon-archive"></i>
+				<span class="hidden-phone hidden-tablet">History</span>
+			</a></li>
+    	</ul>
+    </div>
+</div>

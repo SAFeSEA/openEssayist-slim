@@ -1,8 +1,11 @@
 {% extends "site.twig" %} 
 
 {% block title %}Drafts{% endblock %} 
-{% block subheader %}<hr>Manage your drafts for {{ task.name }}{% endblock %} 
+{% block subheader %}History of your drafts for {{ task.name }}{% endblock %} 
 
+{% block navsubheader %}
+	{% include "widgets/navbar.tasks.twig" with {'navsrc': 'me.draft.history'} %}
+{% endblock %}
 
 {% block bccontainer %}		
 	{% include "widgets/breadcrumb.task.twig" %}
@@ -10,34 +13,6 @@
 
 {% block content %}
 
-<div class="row-fluid">
-<div class="span12">
-		<div class="widget widget-review">
-			<div class="widget-header">
-				<h1>Actions</h1>
-			</div>
-			<div class="widget-content"> 
-
-			<a class="btn btn-large" title="Go to the drafts for this assignment"
-				href="{{ urlFor('me.draft.action',{"idt":task.id}) }}">
-				<i class="icon-large icon-desktop"></i> Show the last draft</a>
-			
-			<a class="btn btn-large" title="Go to the drafts for this assignment"
-				href="{{ urlFor('me.draft.submit',{"idt":task.id}) }}">
-				<i class="icon-large icon-upload-alt"></i> Analyse a new draft</a>
-
-			<a class="btn btn-large disabled" title="Go to the drafts for this assignment"
-				>
-				<i class=" icon-large icon-archive"></i> Show the draft history</a>
-			
-	
-			
-					
-				
-			</div>
-		</div>
-	</div>	
-</div>
 
 <div class="row-fluid">
 <div class="span12">

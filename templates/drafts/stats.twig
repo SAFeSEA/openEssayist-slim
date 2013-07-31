@@ -1,10 +1,16 @@
 {% extends "site.twig" %} 
 
 {% block title %}Draft - Statistics{% endblock %} 
-
+ 
+{% block subheader %}Draft - Statistics{% endblock %} 
 {% block bccontainer %}		
 	{% include "widgets/breadcrumb.task.twig" %}
 {% endblock %}
+
+{% block navsubheader %}
+	{% include "widgets/navbar.drafts.twig" with {'navsrc': 'me.draft.stats'} %}
+{% endblock %}
+
 
 {% block content %}
 

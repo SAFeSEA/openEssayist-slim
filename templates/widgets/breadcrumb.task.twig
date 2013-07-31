@@ -7,10 +7,16 @@
 
 <li><div class="btn-group">
 	<a href="{{ urlFor('me.draft.action',{"idt":task.id}) }}" title="Review of the current draft" class="btn btn-small" >
-    		<i class="icon-pencil"></i><span class="hidden-phone hidden-tablet"> {{ task.name }}</span></a>
+    		<i class="icon-pencil"></i><span> {{ task.name }}</span></a>
 </div></li>
 
 {% if draft is defined %}
+<li><div class="btn-group">
+	<a href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}" class="btn btn-small" ><i class="icon-desktop"></i> Version {{ draft.id }}</a>
+</div></li>
+{% endif %}
+
+{% if draftss is defined %}
 <li><div class="btn-group">
 	<a href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}" class="btn btn-small" ><i class="icon-desktop"></i> Overview</a>
     <a href="{{ urlFor('me.draft.keywords',{"draft":draft.id}) }}" class="btn btn-small" ><i class="icon-list"></i> Keywords</a>

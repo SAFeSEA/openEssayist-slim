@@ -245,6 +245,7 @@ div.breadcrumb{
 	background: none repeat scroll 0 0 #FFFFFF;
     border: 1px solid #D5D5D5;
     border-radius: 5px 5px 5px 5px;
+    padding: 0px;
 }
 
 
@@ -259,24 +260,55 @@ div.breadcrumb > h1
 	font-size: 24px;
 	line-height: 30px;
 	font-weight: bolder;
+	padding: 0 15px;
 }
 
 
-div.breadcrumb > h1 > hr
+/*div.breadcrumb > h1 > hr
 {
 	margin: 5px 0
-}
+}*/
 
 ul.breadcrumb {
-	background: none repeat scroll 0 0 #FFFFFF;
-	/*box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+	/*background: none repeat scroll 0 0 #FFFFFF;
+	box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
     border: 1px solid #D5D5D5;
     border-radius: 5px 5px 5px 5px;*/
-    
+    border-radius: 4px 4px 0 0;
+    border-bottom: 1px solid #D4D4D4;
     margin: 0px;
-    padding: 0px;
+    padding: 8px 15px;
    
 }
+
+.navbarhead .brand
+{
+	border-right: 1px solid #D4D4D4;
+}
+
+.navbar .nav > .disabled > a {
+    color: #999999;
+}
+
+.navbar .nav > li > a:focus, .navbar .nav > li > a:hover {
+    background-color: transparent;
+    color: #999999;
+    text-decoration: none;
+}
+
+.navbarhead > .navbar
+{
+	margin-bottom: 0px;
+}
+
+.navbarhead > .navbar > .navbar-inner
+{
+	border: none;
+    border-radius: 0px 0px 4px 4px;
+    box-shadow: none;
+    border-top: 1px solid #D4D4D4;
+}
+
 
 .breadcrumb:empty
 {

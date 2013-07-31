@@ -1,11 +1,15 @@
 {% extends "site.twig" %} 
 
 {% block title %}Draft - Visualisation (Adjacency Chord){% endblock %} 
+{% block subheader %}Draft - Visualisation (Adjacency Chord){% endblock %} 
 
 {% block bccontainer %}		
 	{% include "widgets/breadcrumb.task.twig" %}
 {% endblock %}
 
+{% block navsubheader %}
+	{% include "widgets/navbar.drafts.twig" with {'navsrc': 'me.draft.view.chord'} %}
+{% endblock %}
 
 {% block content %}
 

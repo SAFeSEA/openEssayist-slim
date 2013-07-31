@@ -2,6 +2,12 @@
 {% import "widgets/ngram.macro.twig" as ngram %}
 
 {% block title %}Draft - Keyword Categories{% endblock %} 
+{% block subheader %}Draft - Organise the keywords{% endblock %} 
+
+{% block navsubheader %}
+	{% include "widgets/navbar.drafts.twig" with {'navsrc': 'me.draft.act.keyword'} %}
+{% endblock %}
+
 
 {% block injectCSS %}
 	{{ parent() }}
