@@ -22,14 +22,14 @@
 			<div class="widget-header">
 				<h3>Draft Structure and Text</h3>
 			</div>
-			<div class="widget-toolbar">
-	<div class="btn-toolbar">    
+			<div class="widget-toolbar"><div class="btn-toolbar">    
+		    	<div class="btn-group">
+		    	<button data-target="#myModal" role="button" class="btn btn-primary pull-right" data-toggle="modal">
+					Display Options <i class="icon-check icon-white"></i></button>		</div>
+   				 </div>
+			</div>
 		
-    	<div class="btn-group">
- <button data-target="#myModal" role="button" class="btn btn-primary pull-right" data-toggle="modal">
-			Display Options <i class="icon-check icon-white"></i></button>		</div>
-    </div>
-	</div>
+
 		</div>
 	</div>
 </div>
@@ -38,7 +38,7 @@
 <div class="row-fluid">	<div class="span12">
 	<div class="myessay openessay">
 
-		<div class="widget widget-content assignment">
+				<div class="widget widget-content assignment">
 			<p>{{ task.assignment | raw | nl2br }}</p>
 		</div>
 
@@ -215,8 +215,58 @@ p.oe-par:before
         text-align: center;
     vertical-align: bottom;
     cursor: pointer;
+    min-width: 100px;
    
 }
+
+.par-tag[data-tag]:after
+{   /*font-weight: bolder;
+    text-shadow: 1px 1px white	;*/
+    color: #999999;
+    
+}
+
+.par-tag[data-tag]:hover:after
+{	
+    color: black;
+}
+.par-tag[data-tag='#+s:i#']:after
+{
+	
+	content:"Introduction";
+}
+
+.par-tag[data-tag='#+s:i#'] {
+	background-color: rgba(227,26,28,0.25) !important;;
+}
+
+.par-tag[data-tag='#-s:h#']:after
+{
+	content:"Heading";
+}
+
+.par-tag[data-tag='#-s:h#'] {
+	background-color: rgba(202 ,178 ,214,0.25) !important;;
+}
+
+.par-tag[data-tag='#+s#']:after
+{
+	content:"Discussion";
+}
+
+.par-tag[data-tag='#+s#'] {
+	background-color: rgba(178 ,223 ,138,0.25) !important;;
+}
+
+.par-tag[data-tag='#+s:c#']:after
+{
+	content:"Conclusion";
+}
+
+.par-tag[data-tag='#+s:c#'] {
+	background-color: rgba(31, 120 ,180 ,0.25) !important;;
+}
+
 
 /*
 .par-tag[data-tag='#-s:t#'] {
@@ -421,10 +471,11 @@ label.checkbox:before
 			//console.log(tag + " " + idx + " " + clr);
 			if (clr)
 			{
-				 $(this).attr('style', 'background-color: '+clr+' !important');
-				 $(this).css('opacity', 0.5);
+				 //$(this).attr('style', 'background-color: '+clr+' !important');
+				 //$(this).css('opacity', 0.5);
 			}
-			$(this).attr('title', sections[tag]);
+			//$(this).attr('title', sections[tag]);
+			//$(this).find('.attribute').html(sections[tag]);
 		});
 		
 		

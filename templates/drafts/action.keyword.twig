@@ -326,7 +326,6 @@ ul#category_all
 	<div class="widget-header"><h3><span class="cat_color"></span><span class="cat_name"></span></h3>
 		<div class="box-icon">
 			<a href="#" class="btn-setting" data-toggle="modal" data-target="#dlgSetting" data-category="ref_template"><i class="icon-wrench"></i></a>
-			<a href="#" class="btn-close disabled" data-toggle="modal" data-target="#dlgClose" data-category="ref_template"><i class="icon-remove"></i></a>
 		</div>
 		</div>
 	<div class="widget-content" id="">
@@ -348,22 +347,22 @@ ul#category_all
 	</div>
 	<div class="modal-body">
 	    <form>
-	    	<div class="controls controls-row">
-		    	<div class="controls span6">
+	    	<div class=" controls-row">
+		    	<div class="controls ">
 	    			<label>Name</label>
 	    			<input id="dlg_name" type="text" placeholder="Type something...">
 	    		</div>
-	    		<div class="controls span6">
+	    		<div class="controls ">
 	    			<label>Color</label>
 	    			<input class="minicolors" id="dlg_color" type="text" value="#3b98bd">
 	    		</div>
-	    	</div>
-    		<div class="controls controls-row">
+ 		<div class=" controls">
 		    	<label>Description</label>
     			<textarea id="dlg_desc" class="input-block-level" placeholder="Type something..." rows="5" style="resize: vertical;"></textarea>
     		</div>
     		<input type="hidden" id="dlg_category" value="">
-		</form>
+	    		</div>
+   		</form>
 	</div>
 	<div class="modal-footer">
 		<button id="dlg_close" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
