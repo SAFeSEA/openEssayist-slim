@@ -326,8 +326,9 @@ class UserController extends Controller
 						$draft->date = date('Y-m-d H:i:s e');
 						$draft->save();
 						
-						// redirect to the "latest draft review" page
-						$r= $this->app->urlFor('me.drafts',array("idt" => $taskId));
+						// redirect to the "drafts review" page
+						$this->app->flash('info', 'The analysis of your draft was successfull. Check the details below.');
+						$r= $this->app->urlFor("me.draft.action",array("idt" => $taskId));
 						$this->redirect($r,false);
 						
 					}

@@ -1,12 +1,26 @@
-{% block bccontainer %}
-	<li>
-    	<a class="btn btn-small" title="Go to your homepage" href="{{ urlFor('me.home') }}"><i class="icon-home"></i></a>
-    	
-	</li>
+{% block bccontainer %} 
 
-	{% if task is defined or group is defined or true %}
-    <li>
-    	<a class="btn btn-small " title="Go to your assignments" href="{{ urlFor('me.tasks') }}"><i class="icon-book"></i><span class="hidden-phone hidden-tablet">  Assignments</span></a>
-	</li>
-	{% endif %}
+{% if false %}
+<li><a class="btn btn-small" title="Go back to your homepage"
+	href="{{ urlFor('me.home') }}"><i class="icon-home"></i> </a>
+</li>
+
+<li><a class="btn btn-small " title="Go back to your assignments"
+	href="{{ urlFor('me.tasks') }}"><i class="icon-folder-open"></i><span
+		class="hidden-phone hidden-tablet"> Assignments</span> </a>
+</li>
+{% else %}
+<li><a title="Go back to your homepage"
+		href="{{ urlFor('me.home') }}"><i class="icon-home icon-large"></i>
+		<span class="hidden-phone hidden-tablet">Dashboard</span></a>
+
+</li>
+
+<li><span class="divider"><i class="icon-angle-right icon-large"></i></span>
+	<a title="Go back to your assignments"
+		href="{{ urlFor('me.tasks') }}"><i class="icon-folder-open icon-large"></i>
+		<span class="hidden-phone">Assignments</span></a> 
+</li>
+{% endif %} 
+
 {% endblock %}

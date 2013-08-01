@@ -5,18 +5,41 @@
 
 {% if task is defined %}
 
-<li><div class="btn-group">
+{#<li><div class="btn-group">
 	<a href="{{ urlFor('me.draft.action',{"idt":task.id}) }}" title="Review of the current draft" class="btn btn-small" >
-    		<i class="icon-pencil"></i><span> {{ task.name }}</span></a>
-</div></li>
+    		<i class="icon-book"></i><span> {{ task.name }}</span></a>
+</div></li>#}
 
-{% if draft is defined %}
-<li><div class="btn-group">
-	<a href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}" class="btn btn-small" ><i class="icon-desktop"></i> Version {{ draft.id }}</a>
-</div></li>
+<li><span class="divider"><i class="icon-angle-right icon-large"></i></span>
+	<a title="Review of the current draft"
+		href="{{ urlFor('me.draft.action',{"idt":task.id}) }}"><i class="icon-book icon-large"></i>
+		<span class="hidden-phone">{{ task.name }}</span></a> 
+</li>
+
+	{% if draft is defined %}
+{#<li><div class="btn-group">
+	<a href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}" class="btn btn-small" ><i class="icon-pencil"></i> Version {{ draft.id }}</a>
+</div></li>#}
+<li><span class="divider"><i class="icon-angle-right icon-large"></i></span>
+	<a title="Review of the current draft"
+		href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}"><i class="icon-pencil icon-large"></i>
+		<span class="hidden-phone">Version {{ draft.id }}</span></a> 
+</li>
+	{% endif %}
+
+	{% if auth.user.isadmin %}
+<li class="bc_debug"><div class="btn-group">
+	<button class="btn btn-mini disabled " disabled="disabled"><i class="icon-cog"></i></button>
+	<button class="btn btn-mini btn-info disabled " disabled="disabled"><i class="icon-book icon-white"></i> {{ task.id }}</button>
+		{% if draft is defined %}
+    <button class="btn btn-mini btn-info disabled " disabled="disabled"><i class="icon-pencil icon-white"></i> {{ draft.id }}</button>
+		{% endif %}
+	</div></li>
+	{% endif %}
 {% endif %}
+{% endblock %}
 
-{% if draftss is defined %}
+{#
 <li><div class="btn-group">
 	<a href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}" class="btn btn-small" ><i class="icon-desktop"></i> Overview</a>
     <a href="{{ urlFor('me.draft.keywords',{"draft":draft.id}) }}" class="btn btn-small" ><i class="icon-list"></i> Keywords</a>
@@ -48,16 +71,5 @@
     	{% endif %}
 	</ul></div>
 </li>
-{% endif %}
-
-<li class="bc_debug"><div class="btn-group">
-    	<button class="btn btn-mini disabled " disabled="disabled"><i class="icon-cog"></i></button>
-		<button class="btn btn-mini btn-info disabled " disabled="disabled"><i class="icon-book icon-white"></i> {{ task.id }}</button>
-		{% if draft is defined %}
-    	<button class="btn btn-mini btn-info disabled " disabled="disabled"><i class="icon-pencil icon-white"></i> {{ draft.id }}</button>
-		{% endif %}
-	</div></li>
-{% endif %}
-
-{% endblock %}
+#}
 
