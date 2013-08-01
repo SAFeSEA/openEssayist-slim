@@ -101,16 +101,7 @@ ul#category_all
 {% block content %}
 
 
-
-<div class="row-fluid">
-
-	<div class="widget widget-content">
-		<a href="{{ urlFor('me.draft.keywords',{"draft":draft.id}) }}" class="btn btn-primary pull-right">
-		<i class="icon-list icon-white"></i> Back to List</a>
-	</div>
-</div>
-
-{% if task.isopen %}
+{% if task.isopen and auth.user.isadmin %}
 
 <div class="row-fluid">
 <div class="widget">
@@ -323,12 +314,12 @@ ul#category_all
 	
 	
 	</div>		
-</div>#}
+</div>
 	
 			
 		
 </div>
-</div></div>
+</div></div>#}
 
 <!-- Template for Keyword group -->
 <div class="span4 hide" id="cat_template">
@@ -388,7 +379,7 @@ ul#category_all
 <script src="/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
 <script src="/assets/d3.js/d3.v3.min.js"></script>
 <script src="/assets/jquery.minicolors/jquery.minicolors.js"></script>
-{% if task.isopen %}
+{% if task.isopen and auth.user.isadmin %}
 <script>
 $(document).ready(function() {
 	var lemmas = {{ lemmas|json_encode|raw  }};
