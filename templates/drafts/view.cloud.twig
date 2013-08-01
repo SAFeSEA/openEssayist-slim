@@ -53,7 +53,7 @@ var fill = d3.scale.category20();
 
 var words = {{ keywords|json_encode|raw  }};
 	
-d3.layout.cloud().size([500, 400])
+d3.layout.cloud().size([800, 600])
     .words(words.map(function(d) {
         
       return {text: d.ngram.join(" "), size: 10 + d.count};
@@ -70,12 +70,12 @@ d3.layout.cloud().size([500, 400])
 	}
 function draw(words) {
 	 d3.select("#svg-container").append("svg:svg")
-	 .style("margin", "0 auto")
+	 .style("margin", "auto auto")
 	 .style("display", "block")
-      .attr("width", "500")
-      .attr("height", "400")
+      .attr("width", "800")
+      .attr("height", "600")
     .append("g")
-      .attr("transform", "translate(250,200)")
+      .attr("transform", "translate(400,300)")
     .selectAll("text")
       .data(words)
     .enter().append("text")
