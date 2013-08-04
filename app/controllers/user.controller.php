@@ -72,8 +72,10 @@ class UserController extends Controller
 		
 		foreach ($groups as $gr)
 		{
-			foreach ($gr['keywords'] as $keyw)
-				$allkw[$keyw]->groupid = $gr['id'];
+			
+			if (isset($gr['keywords']))
+				foreach ($gr['keywords'] as $keyw)
+					$allkw[$keyw]->groupid = $gr['id'];
 					
 		}
 		
@@ -568,13 +570,13 @@ class UserController extends Controller
 		$highlighjs = array();
 		
 		foreach ($mydata->groups as $key=>$group){
-			
-			foreach($group['keywords'] as $ref){
-				
-				$ngram = $mydata->allkw[$ref];
-				$ngram->ngramid =  $ref;
-				$highlighjs[$ref] = $ngram;
-			}
+			if (isset($group['keywords']))
+				foreach($group['keywords'] as $ref){
+					
+					$ngram = $mydata->allkw[$ref];
+					$ngram->ngramid =  $ref;
+					$highlighjs[$ref] = $ngram;
+				}
 		}
 		
 		
