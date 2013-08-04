@@ -5,7 +5,7 @@
 
 
 {% block bccontainer %}		
-	{% include "widgets/breadcrumb.task.twig" %}
+	{% include "widgets/breadcrumb.task.twig" with {'navsrc': 'me.tasks'} %}
 {% endblock %}
 
 
@@ -20,19 +20,7 @@ td .btn{white-space: nowrap;}
 {% block content %}
 
 <div class="row-fluid">
-	<div class="span2">
-	<div class="widget">
-		<div class="widget-header">
-		<h3>Course</h3>
-		</div>
-		<div class="widget-content">
-				<p>{{ group.name }}</p> 
-				<p> {{ group.description }}</p>
-			</div> 
-	</div>
-	</div>
-
-	<div class="span10">
+	<div class="span9">
 		<div class="widget">
 			<div class="widget-header">
 				<h3>Assignments in the course {{ group.name }}</h3>
@@ -70,7 +58,20 @@ td .btn{white-space: nowrap;}
 			
 			</div> 
 		</div>
+	</div>	
+		
+		<div class="span3">
+			<div class="widget">
+				<div class="widget-header">
+				<h3>Help</h3>
+				</div>
+			<div class="widget-content">
+			</div> 
 	</div>
+	</div>
+		
+		
+	
 </div>
 
 

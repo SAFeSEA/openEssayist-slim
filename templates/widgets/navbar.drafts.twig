@@ -4,25 +4,27 @@
 		<ul class="nav">
 			<li class="{{ navsrc == 'me.draft.show' ? 'active' }}"><a
 				href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}"><i
-					class="icon-large icon-desktop"></i> Overview</a>
+					class="icon-large icon-desktop"></i><span class="hidden-phone hidden-tablet"> Overview</span></a>
 			
 			<li class="{{ navsrc == 'me.draft.keywords' ? 'active' }}"><a
 				href="{{ urlFor('me.draft.keywords',{"draft":draft.id}) }}"><i
-					class="icon-large icon-list"></i> Keywords</a>
+					class="icon-large icon-list"></i><span class="hidden-phone hidden-tablet"> Keywords</span></a>
 
 			<li class="{{ navsrc == 'me.draft.act.keyword' ? 'active' }}"><a
 				href="{{ urlFor('me.draft.act.keyword',{"draft":draft.id}) }}"><i
-					class="icon-large icon-random"></i> Organise</a>
+					class="icon-large icon-random"></i><span class="hidden-phone hidden-tablet"> Organise</span></a>
 					
 					
 			<li class="{{ navsrc == 'me.draft.sentence' ? 'active' }}"><a
 				href="{{ urlFor('me.draft.sentence',{"draft":draft.id}) }}"><i
-					class="icon-large icon-tag"></i> Sentences</a> {% if
+					class="icon-large icon-tag"></i><span class="hidden-phone hidden-tablet"> Sentences</span></a> {% if
 				auth.user.isadmin %}
 			
 			<li class="{{ navsrc == 'me.draft.stats' ? 'active' }}"><a
 				href="{{ urlFor('me.draft.stats',{"draft":draft.id}) }}"><i
-					class="icon-large icon-info-sign"></i> Stats</a> {% endif %}
+					class="icon-large icon-info-sign"></i><span class="hidden-phone hidden-tablet"> Stats</span></a> {% endif %}
+					
+			
 			
 			<li class="dropdown {{ 'me.draft.view.' in navsrc ? 'active' }}"><a class="dropdown-toggle"
 				data-toggle="dropdown" href="#"><i class="icon-large icon-bar-chart"></i> Views
@@ -67,8 +69,14 @@
 						href="{{ urlFor('me.draft.view.cytoscape',{"draft":draft.id}) }}">Cytoscape
 							Graph</a> 
 					{% endif %}
+					
+					
 				
 				</ul></li>
+		</ul>
+		<ul class="nav pull-right navbar-inverse">
+		<li class=""><a href='#'><i
+					class="icon-large icon-question-sign icon-white"></i></a></li>
 		</ul>
 	</div>
 </div>

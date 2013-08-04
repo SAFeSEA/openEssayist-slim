@@ -303,10 +303,12 @@ ul.breadcrumb a
 }
 
 .navbar .nav > li > a:focus, .navbar .nav > li > a:hover {
-    background-color: transparent;
-    color: #999999;
+    background-color: #E5E5E5;
+    color: #555555;
     text-decoration: none;
 }
+
+
 
 .navbarhead > .navbar
 {

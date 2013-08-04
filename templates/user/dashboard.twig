@@ -4,7 +4,24 @@
 {% block subheader %}Dashboard{% endblock %} 
 
 {% block bccontainer %}		
-	{% include "widgets/breadcrumb.panel.twig" %}
+	{% include "widgets/breadcrumb.panel.twig" with {'navsrc': 'me.home'} %}
+{% endblock %}
+
+
+{% block navsubheader %}
+<div class="navbar">
+    <div class="navbar-inner">
+    	<span class="brand" href="#">&nbsp;</span>
+    	<ul class="nav">
+ 			<li><a title="Go to your assignments and drafts" 
+ 					href="{{ urlFor('me.tasks') }}" rel="tooltip" data-placement="bottom">
+				<i class="icon-folder-open icon-large"></i> 
+				<span class="hidden-phone hidden-tablet">Assignments</span>
+			</a></li>
+
+    	</ul>
+    </div>
+</div>
 {% endblock %}
 
 {% block content %}

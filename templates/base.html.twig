@@ -189,7 +189,13 @@
 		log.addAppender(ajaxAppender);
 		//$(window).unload(function() {
 		//	log.sendAll();
-		//});		
+		//});	
+
+		$(document).ready(function () {
+		    if ($("[rel=tooltip]").length) {
+		        $("[rel=tooltip]").tooltip();
+		    }
+		});	
 	});	
 	</script>
 	{% block injectJS %}
