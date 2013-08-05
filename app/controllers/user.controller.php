@@ -619,7 +619,8 @@ class UserController extends Controller
 				'parasenttok' => $parasenttok,
 				'keywords' => $mydata->allkw,
 				'groups' => $mydata->groups,
-				'ngrams' => $highlighjs
+				'ngrams' => $highlighjs,
+				'help' => 'draft.show'
 		));
 	}
 

@@ -168,6 +168,9 @@
 	</div>
 </div>
 
+<div id="help-modal" class="modal hide fade" tabindex="-1">
+</div>
+
 {% endblock %}
 
 
@@ -463,7 +466,23 @@ label.checkbox:before
 				});
 	});
 	</script>#}
+	<script>
+	$(document).ready(function() {
+		$('#help-on-task').click(function(e){
+			var $modal = $('#help-modal');
+			 
 		
+			// create the backdrop and wait for next modal to be triggered
+			$('body').modalmanager('loading');
+			 
+				$modal.load("{{ urlFor('ajax.help.topic',{'topic':help}) }}", "", 
+					function(){
+						$modal.modal();
+					});
+				
+		});
+	});
+	</script>	
 	<script>
 	$(document).ready(function() {
 		var sections =  {
