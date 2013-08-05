@@ -8,7 +8,7 @@
 					class="icon-bar"></span>
 			</button>
 
-			<a class="brand" href="/" title="openEssayist" ><img class="brand-ico" alt="icon"
+			<a class="brand" href="{{ urlFor('home') }}" title="openEssayist" ><img class="brand-ico" alt="icon"
 				src="/assets/openessayist/img/openEssayist-icon.png"><span class="hidden-phone">openEssayist</span></a> 
 				
 			{% if auth.loggedIn() %}	
@@ -21,7 +21,7 @@
 				<ul class="dropdown-menu">
 					<li><a href="#">Profile</a></li>
 					<li class="divider"></li>
-					<li><a href="/logout">Sign Out</a></li>
+					<li><a href="{{ urlFor('logout') }}">Sign Out</a></li>
 				</ul>
 			</div>
 
@@ -29,7 +29,7 @@
 			<div class="nav-collapse collapse">
 			
 				<ul class="nav">
-					<li class=""><a href="/me" title="Go to your homepage">
+					<li class=""><a href="{{ urlFor('me.home') }}" title="Go to your homepage">
 						<i class="icon-home"></i> Dashboard</a>
 					</li> 
 					{% if auth.user.isadmin %}	

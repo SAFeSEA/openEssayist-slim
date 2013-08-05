@@ -17,7 +17,7 @@
 				
 				
 				{% if not auth.loggedIn()  %} 
-				<a href="/login"
+				<a href="{{ urlFor('login') }}"
 					class="btn btn-large">Login &raquo;</a> 
 				{% endif %}
 			</p>
