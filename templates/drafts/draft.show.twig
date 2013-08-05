@@ -177,7 +177,7 @@
 
 {% block injectCSS %}
 {{ parent() }}
-<link href="/assets/openessayist/css/hljs.css" rel="stylesheet">
+<link href="{{ app_base }}/assets/openessayist/css/hljs.css" rel="stylesheet">
 <style type="text/css">
 
 
@@ -435,8 +435,8 @@ label.checkbox:before
 
 {% block injectJS %}
 	{{ parent() }}
-	<script src="/assets/d3.js/colorbrewer.js"></script>
-	<script src="/assets/highlight.js/highlight.pack.js"></script>
+	<script src="{{ app_base }}/assets/d3.js/colorbrewer.js"></script>
+	<script src="{{ app_base }}/assets/highlight.js/highlight.pack.js"></script>
 	
 	{% include "javascript/hljs.keywords.js.twig" %}
 

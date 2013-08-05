@@ -99,7 +99,7 @@
 
 {% block injectJS %}
 	{{ parent() }}
-<script src="/assets/jquery.sparkline/jquery.sparkline.js"></script>
+<script src="{{ app_base }}/assets/jquery.sparkline/jquery.sparkline.js"></script>
 <script>
 {% verbatim %}
 $(document).ready(function() {

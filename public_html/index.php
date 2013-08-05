@@ -103,6 +103,13 @@ if ($view instanceof TwigView)
 	$twig->addTest($test);
 }
 
+// Create a hook to add the root URI to all views
+$app->hook('slim.before.dispatch', function() use ($app) {
+	$app->view()->appendData(array(
+			'app_base' => $app->request()->getRootUri()
+	));
+});
+
 
 /**
  * @var $config

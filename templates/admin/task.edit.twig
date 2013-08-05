@@ -63,12 +63,12 @@
 {% block injectCSS %}
 	{{ parent() }}
 
-<link href="/assets/bootstrap.datepicker/css/datepicker.css" rel="stylesheet">
+<link href="{{ app_base }}/assets/bootstrap.datepicker/css/datepicker.css" rel="stylesheet">
 {% endblock %}
 
 {% block injectJS %}
 	{{ parent() }}
-<script src="/assets/bootstrap.datepicker/js/bootstrap-datepicker.js"></script>
+<script src="{{ app_base }}/assets/bootstrap.datepicker/js/bootstrap-datepicker.js"></script>
 <script>
 	$(document).ready(function() {
 		// initialise the code highlighting

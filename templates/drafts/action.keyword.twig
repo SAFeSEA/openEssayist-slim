@@ -11,7 +11,7 @@
 
 {% block injectCSS %}
 	{{ parent() }}
-<link href="/assets/jquery.minicolors/jquery.minicolors.css" rel="stylesheet">
+<link href="{{ app_base }}/assets/jquery.minicolors/jquery.minicolors.css" rel="stylesheet">
 
  <style>
 .btn-ngram { cursor: move;}
@@ -375,9 +375,9 @@ ul#category_all
 
 {% block injectJS %}
 	{{ parent() }}
-<script src="/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
-<script src="/assets/d3.js/d3.v3.min.js"></script>
-<script src="/assets/jquery.minicolors/jquery.minicolors.js"></script>
+<script src="{{ app_base }}/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
+<script src="{{ app_base }}/assets/d3.js/d3.v3.min.js"></script>
+<script src="{{ app_base }}/assets/jquery.minicolors/jquery.minicolors.js"></script>
 {% if task.isopen and auth.user.isadmin %}
 <script>
 $(document).ready(function() {

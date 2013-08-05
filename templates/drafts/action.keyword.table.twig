@@ -35,8 +35,8 @@ h3 > .cat_color
 
 
 </style>
-<link href="/assets/jquery.minicolors/jquery.minicolors.css" rel="stylesheet">
-<link href="/assets/jquery.dataTables/css/jquery.dataTables.css" rel="stylesheet">
+<link href="{{ app_base }}/assets/jquery.minicolors/jquery.minicolors.css" rel="stylesheet">
+<link href="{{ app_base }}/assets/jquery.dataTables/css/jquery.dataTables.css" rel="stylesheet">
 
 
 {% endblock %}
@@ -169,10 +169,10 @@ h3 > .cat_color
 
 {% block injectJS %}
 	{{ parent() }}
-<script src="/assets/jquery.dataTables/js/jquery.dataTables.min.js"></script>
-<script src="/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
-<script src="/assets/d3.js/d3.v3.min.js"></script>
-<script src="/assets/jquery.minicolors/jquery.minicolors.js"></script>
+<script src="{{ app_base }}/assets/jquery.dataTables/js/jquery.dataTables.min.js"></script>
+<script src="{{ app_base }}/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
+<script src="{{ app_base }}/assets/d3.js/d3.v3.min.js"></script>
+<script src="{{ app_base }}/assets/jquery.minicolors/jquery.minicolors.js"></script>
 <script>
 $(document).ready(function() {
 	var is_dirty = false;
@@ -265,7 +265,7 @@ $(document).ready(function() {
 	updateSortable();
 
 	$("#catg-Save").click(function(e) {
-		$.blockUI({ message: '<div class="ajax alert alert-info"><img src="/assets/openessayist/img/ajax-loader.gif" /> Saving User Data ...</div>' }); 
+		$.blockUI({ message: '<div class="ajax alert alert-info"><img src="{{ app_base }}/assets/openessayist/img/ajax-loader.gif" /> Saving User Data ...</div>' }); 
 		var json = {};
 		
 		var allcats = $('.droptrue');

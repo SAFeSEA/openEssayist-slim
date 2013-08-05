@@ -103,8 +103,8 @@
  
 {% block injectJS %}
 	{{ parent() }}
-<script src="/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
-<script src="/assets/jquery.validation/jquery.validate.min.js"></script>
+<script src="{{ app_base }}/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
+<script src="{{ app_base }}/assets/jquery.validation/jquery.validate.min.js"></script>
 
 <script>
 $(document).ready(function() {

@@ -27,8 +27,8 @@
 
 {% block injectJS %}
 	{{ parent() }}
-<script src="/assets/cytoscape.js-2.0.1/cytoscape.min.js"></script>
-<script src="/assets/cytoscape.js-2.0.1/arbor.js"></script>
+<script src="{{ app_base }}/assets/cytoscape.js-2.0.1/cytoscape.min.js"></script>
+<script src="{{ app_base }}/assets/cytoscape.js-2.0.1/arbor.js"></script>
 <script type="text/javascript">
 
 $('#svg-container').cytoscape({

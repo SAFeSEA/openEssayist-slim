@@ -46,9 +46,9 @@
 
 {% block injectJS %}
 	{{ parent() }}
-<script src="/assets/d3.js/colorbrewer.js"></script>
-<script src="/assets/highcharts/js/highcharts.js"></script>
-<script src="/assets/highcharts/js/modules/exporting.js"></script>
+<script src="{{ app_base }}/assets/d3.js/colorbrewer.js"></script>
+<script src="{{ app_base }}/assets/highcharts/js/highcharts.js"></script>
+<script src="{{ app_base }}/assets/highcharts/js/modules/exporting.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	var chart = null;
