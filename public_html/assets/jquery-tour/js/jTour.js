@@ -120,7 +120,8 @@ window.jTour = function (tourdata, options) {
 		//the progressbar wrapper
 		$('<div/>', {
 			'class': prefix + 'progress'
-		}).html('<div class="' + prefix + 'progress_bar"></div>').appendTo(box);
+		})
+		.html('<div class="' + prefix + 'progress_bar"></div>').appendTo(box);
 
 		//save the progressbar for later
 		progress = box.find('.' + prefix + 'progress_bar');
@@ -131,7 +132,10 @@ window.jTour = function (tourdata, options) {
 			//the DOM
 			navigation = $('<ul/>', {
 				'class': prefix + 'nav'
-			}).html('<li><a class="' + prefix + 'nav_btn prev" title="previous" data-role="prev">&nbsp;</a></li><li><a class="' + prefix + 'nav_btn play" title="play" data-role="play">&nbsp;</a></li><li><a class="' + prefix + 'nav_btn pause" title="pause" data-role="pause">&nbsp;</a></li><li><a class="' + prefix + 'nav_btn stop" title="stop" data-role="stop">&nbsp;</a></li><li><a class="' + prefix + 'nav_btn next" title="next" data-role="next">&nbsp;</a></li><li><a class="' + prefix + 'nav_btn slower" title="slower" data-role="slower">&nbsp;</a></li><li><a class="' + prefix + 'nav_btn faster" title="faster" data-role="faster">&nbsp;</a></li>').appendTo(box)
+			})
+			.html('<li><a class="' + prefix + 'nav_btn prev" title="previous" data-role="prev">&nbsp;</a></li><li><a class="' + prefix + 'nav_btn play" title="play" data-role="play">&nbsp;</a></li><li><a class="' + prefix + 'nav_btn pause" title="pause" data-role="pause">&nbsp;</a></li><li><a class="' + prefix + 'nav_btn stop" title="stop" data-role="stop">&nbsp;</a></li><li><a class="' + prefix + 'nav_btn next" title="next" data-role="next">&nbsp;</a></li>').appendTo(box)
+			//.html('<li><a class="' + prefix + 'nav_btn prev" title="previous" data-role="prev">&nbsp;</a></li><li><a class="' + prefix + 'nav_btn play" title="play" data-role="play">&nbsp;</a></li><li><a class="' + prefix + 'nav_btn pause" title="pause" data-role="pause">&nbsp;</a></li><li><a class="' + prefix + 'nav_btn stop" title="stop" data-role="stop">&nbsp;</a></li><li><a class="' + prefix + 'nav_btn next" title="next" data-role="next">&nbsp;</a></li><li><a class="' + prefix + 'nav_btn slower" title="slower" data-role="slower">&nbsp;</a></li><li><a class="' + prefix + 'nav_btn faster" title="faster" data-role="faster">&nbsp;</a></li>').appendTo(box)
+			
 			//with some event delegation
 			.delegate('a', 'click.jTour', function () {
 
@@ -753,13 +757,13 @@ window.jTour = function (tourdata, options) {
 					//we have controls
 					if (settings.showControls) {
 
+						navigation.find('a.next, a.prev').show();
 						//hide previous or next if it is the first or last step
 						if (step === 0) {
 							navigation.find('a.prev').hide();
 						} else if (step == total - 1) {
 							navigation.find('a.next').hide();
 						} else {
-							navigation.find('a.next, a.prev').show();
 						}
 					}
 

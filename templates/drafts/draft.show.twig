@@ -468,7 +468,7 @@ label.checkbox:before
 	</script>#}
 	<script>
 	$(document).ready(function() {
-		$('#help-on-task').click(function(e){
+		$('#help-on-task2').click(function(e){
 			var $modal = $('#help-modal');
 			 
 		
@@ -479,6 +479,18 @@ label.checkbox:before
 					function(){
 						$modal.modal();
 					});
+
+				$modal.on('click', '.modal-link', function(e){
+					$modal.modal('loading');
+					var link = $(this).attr('href');
+					
+					setTimeout(function(){
+						$modal
+							.modal('loading')
+							.load(link, "", function(){});
+						}, 100);
+					e.preventDefault();
+				});
 				
 		});
 	});
@@ -683,5 +695,47 @@ label.checkbox:before
 		//$('#slider-range').trigger('change');
 	});
 	</script>
+	
+	<script>
+$(document).ready(function() {
+	
+	var tourdata = [
+		{
+        	html: "<h1>Draft: text and Structure</h1><hr>" +
+            	  "Your draft is shown on this page." + 
+            	  "The different parts of your draft are highlighted by vertical bars of different colours on the left of the text."
+		},
+		{
+	       	html: "<h1>Introduction</h1><hr>"+
+      	  			"The introduction is highlighted in pink." ,
+	       	element: $('.par-tag[data-tag="#+s:i#"]').eq(0),
+	       	position: 'e',
+	       	expose: true, //exposures the target element
+	        overlayOpacity: 0.4, //defines the opacity of the overlay (false disables it)
+	       
+		},
+		{
+	       	html: "<h1>Discussion</h1><hr>"+
+	  			"Discussion paragraphs are highlighted in green." ,
+			       	element: $('.par-tag[data-tag="#+s#"]').eq(0),
+	       	position: 'e',
+	       	
+	       	expose: true, //exposures the target element
+	        overlayOpacity: 0.4, //defines the opacity of the overlay (false disables it)
+	       
+		}
+	];
+	var myTour = jTour(tourdata,
+			{
+				autoplay: false
+			}
+	);
+	
+	$('#help-on-task').click(function() {
+		
+		myTour.restart();
+	});
+});
+</script>
 	
 {% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'help/base.modal.twig' %} 
+
+{% block content %}
+<div class="alert alert-error fade in">
+Cannot find the relevant topic.
+</div>
+<p>Select a topic from the list:</p>
+<ul>
+<li><a class="modal-link" href="{{ urlFor('ajax.help.topic',{'topic':'draft.show'}) }}">About the mashup</a>
+</ul>
+{% endblock %}

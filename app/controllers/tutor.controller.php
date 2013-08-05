@@ -248,7 +248,14 @@ class TutorController extends Controller
 	
 	public function getHelpOnTopic($topic)
 	{
-		$this->render('help/draft.modal');
 		
+		$helptopics = array();
+		$helptopics[] = "draft.show";
+		$helptopics[] = "draft.keyword";
+		
+		if (in_array($topic, $helptopics))
+			$this->render('help/' . $topic);
+		else
+			$this->render('help/alltopics');
 	}
 }

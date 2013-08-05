@@ -1,0 +1,21 @@
+{% extends 'help/base.modal.twig' %} 
+
+{% block helpcontent %}
+<p>Your draft is shown on this page.</p>
+<p>The different parts of your draft are highlighted by vertical bars of different colours on the left of the text:</p>
+<ul>
+<li>The introduction is in pink,
+<li>The discussion is in green, 
+<li>The conclusion is in blue,
+<li>Headings and other formatting elements are in grey.
+</ul> 
+{% endblock %}
+
+{% block hintcontent %}
+<ul class="icons-ul">
+  <li><i class="icon-li icon-comments"></i>Do you think openEssayist got the parts of your assignment right?</li>
+  <li><i class="icon-li icon-comments"></i>Did it correctly identify an Introduction, a Conclusion, the main text, etc.?</li>
+  <li><i class="icon-li icon-comments"></i>If not, why do you think that might be? What is missing from your essay ?</li>
+</ul>
+
+{% endblock %}
