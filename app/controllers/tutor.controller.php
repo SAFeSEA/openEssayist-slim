@@ -245,4 +245,10 @@ class TutorController extends Controller
 		$response->status(200);
 		$response->body(json_encode(array('msg'=>'OK')));
 	}
+	
+	public function getHelpOnTopic($topic)
+	{
+		$this->render('help/draft.modal');
+		
+	}
 }

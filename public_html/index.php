@@ -188,6 +188,8 @@ $c->app->get('/ajax/draft/:draft/keywords.json', array($userCtrl, 'ajaxKeyword')
 
 $c->app->post('/tutor/logactivity', array($tutorCtrl, 'postActivityLog'))->name('ajax.log.activity');
 
+$c->app->get('/help/:topic', array($tutorCtrl, 'getHelpOnTopic'))->name('ajax.help.topic');
+
 
 $c->app->get('/admin/', array($adminCtrl, 'index'))->name('admin.home');
 $c->app->get('/admin/reset', array($adminCtrl, 'reset'))->name('admin.reset');
