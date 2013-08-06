@@ -163,11 +163,16 @@ class UserController extends Controller
 		
 		/* @var $d Draft */
 		$ap = $g->tasks()->find_one($taskId);
-		
+		$d = $u->drafts()->where_equal('task_id',$taskId)->order_by_desc('id')->find_array();
+		foreach ($d as $key => &$draft)
+		{
+			unset($draft['analysis']);
+		}
 		
 		$this->render('user/draft.action',array(
 				'group' => $g->as_array(),
-				'task' => $ap->as_array()
+				'task' => $ap->as_array(),
+				'drafts' => $d
 
 		));
 		
@@ -620,7 +625,7 @@ class UserController extends Controller
 				'keywords' => $mydata->allkw,
 				'groups' => $mydata->groups,
 				'ngrams' => $highlighjs,
-				'help' => 'draft.show'
+				'helpontask' => 'draft.show'
 		));
 	}
 
@@ -653,6 +658,7 @@ class UserController extends Controller
 		array_multisort($sort['rank'], SORT_ASC, $parasenttok);
 
 		$this->render('drafts/draft.sentence',array(
+				'helpontask' => 'draft.sentence',
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
 				'sentences' => $parasenttok
@@ -681,6 +687,7 @@ class UserController extends Controller
 		);
 
 		$this->render('drafts/draft.keyword',array(
+				'helpontask' => 'draft.keyword',
 				'task' => $tsk->as_array(),
 				'draft' => $dr	->as_array(),
 				'keywords' => array(

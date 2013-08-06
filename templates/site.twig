@@ -35,6 +35,25 @@
 <script src="{{ app_base }}/assets/bootstrap-wysiwyg/jquery.hotkeys.js"></script>
 <script src="{{ app_base }}/assets/bootstrap-wysiwyg/bootstrap-wysiwyg.js"></script>
 
+{% if helpontask is defined %}
+<script id="helpmodal">
+$(document).ready(function() {
+	$('#help-on-task').click(function(e){
+		var $modal = $('#help-modal');
+
+		// create the backdrop and wait for next modal to be triggered
+		//$('body').modalmanager('loading');
+			 
+		$modal.load("{{ urlFor('ajax.help.topic',{'topic':helpontask}) }}", "", 
+			function(){
+				$modal.modal();
+		});
+
+	});
+});
+</script>
+{% endif %}
+
 <script id="ajax" type="text/javascript">
 var $modal = null;
 $('#btn-notepad').on('click', function(){
@@ -70,7 +89,11 @@ $('#btn-notepad').on('click', function(){
 </script>	
 {% endblock %} 
 
-{% block toolcontainer %}{% if auth.user %}
+{% block toolcontainer %}
+	<div id="help-modal" class="modal hide fade" tabindex="-1">
+	</div>
+
+	{% if auth.user %}
 {#<div id="note-container">
 	<div id="note-settings-btn" class="settings-btn btn btn-app btn-mini btn-warning">
 		<i class="icon-edit"></i>
@@ -82,7 +105,7 @@ $('#btn-notepad').on('click', function(){
 	{% endif %}
 </div>#}
 
-<div id="ajax-modal" class="modal container hide fade" tabindex="-1">
+	<div id="ajax-modal" class="modal container hide fade" tabindex="-1">
 	<div class="modal-header">
 		<h3>Notes</h3>
 	</div>

@@ -168,9 +168,6 @@
 	</div>
 </div>
 
-<div id="help-modal" class="modal hide fade" tabindex="-1">
-</div>
-
 {% endblock %}
 
 
@@ -181,9 +178,7 @@
 <style type="text/css">
 
 
-.icon-heading:before {
-    content: "H";
-}
+
 
 .icon-heading
 {
@@ -207,12 +202,12 @@ p.oe-par {
 
 p.oe-par[data-tag='#+s:c#'] {
 	border-left: 10px solid green;
-}*/
+}
 
 p.oe-par:before
 {
 	content: "";
-}
+}*/
 
 .widget-essay
 {
@@ -240,59 +235,19 @@ p.oe-par:before
    
 }
 
-/*.par-tag[data-tag]:after
-{   /*font-weight: bolder;
-    text-shadow: 1px 1px white	;*/
-    color: #999999;
-    
-}*/
-
-/*.par-tag[data-tag]:hover:after
-{	
-    color: white;
-}*/
-
-/*.par-tag[data-tag='#+s:i#']:after
+/*.par-tag[data-tag='#+s:c#']:after
 {
-	
-	content:"Introduction";
+	content:"Conclusion";
 }*/
-
-
-.par-tag[data-tag='#+s:i#'] .icon-heading:before
-{
-	content:"I";
-}
 
 .par-tag[data-tag='#+s:i#'] {
-	background-color: rgba(227,26,28,0.25) !important;;
+	background-color: rgba(227,26,28,0.25) !important;
 	color: rgba(227,26,28,0.5) !important;;
 }
-
-/*.par-tag[data-tag='#-s:h#']:after
-{
-	/*content:"Heading";*/
-}*/
-
-.par-tag[data-tag='#-s:h#'] .icon-heading:before
-{
-	content:"H";
-}
-
 
 .par-tag[data-tag='#-s:h#'] {
 	background-color: rgba(202 ,178 ,214,0.25) !important;;
 	color: rgba(202 ,178 ,214,0.5) !important;;
-}
-
-/*.par-tag[data-tag='#+s#']:after
-{
-	content:"Discussion";
-}*/
-
-.par-tag[data-tag='#+s#'] .icon-heading:before
-{
-	content:"D";
 }
 
 .par-tag[data-tag='#+s#'] {
@@ -300,16 +255,29 @@ p.oe-par:before
 	color: rgba(178 ,223 ,138,0.5) !important;;
 }
 
-.par-tag[data-tag='#+s:c#']:after
-{
-	/*content:"Conclusion";*/
-}
-
 .par-tag[data-tag='#+s:c#'] {
 	background-color: rgba(31, 120 ,180 ,0.25) !important;;
 	color: rgba(31, 120 ,180 ,0.5) !important;;
 }
 
+.par-tag[data-tag='#+s#'] .icon-heading:before
+{
+	content:"D";
+}
+.par-tag[data-tag='#+s:c#'] .icon-heading:before
+{
+	content:"C";
+}
+
+.par-tag[data-tag='#-s:h#'] .icon-heading:before
+{
+	content:"H";
+}
+
+.par-tag[data-tag="#+s:i#"] .icon-heading:before
+{
+	content:"I";
+}
 
 /*
 .par-tag[data-tag='#-s:t#'] {
@@ -466,35 +434,7 @@ label.checkbox:before
 				});
 	});
 	</script>#}
-	<script>
-	$(document).ready(function() {
-		$('#help-on-task2').click(function(e){
-			var $modal = $('#help-modal');
-			 
-		
-			// create the backdrop and wait for next modal to be triggered
-			$('body').modalmanager('loading');
-			 
-				$modal.load("{{ urlFor('ajax.help.topic',{'topic':help}) }}", "", 
-					function(){
-						$modal.modal();
-					});
-
-				$modal.on('click', '.modal-link', function(e){
-					$modal.modal('loading');
-					var link = $(this).attr('href');
-					
-					setTimeout(function(){
-						$modal
-							.modal('loading')
-							.load(link, "", function(){});
-						}, 100);
-					e.preventDefault();
-				});
-				
-		});
-	});
-	</script>	
+	
 	<script>
 	$(document).ready(function() {
 		var sections =  {
@@ -578,8 +518,7 @@ label.checkbox:before
 			html: true,
 			
 			content: function(){ 
-				return "<div style='min-width:150px;'><i>to to ...</i><br>" +
-				"<button class='btn btn-small pull-right'><i class='icon-reply'></i></button></div>"
+				return ""
 			},
 			title: "Discussion",
 			trigger: 'click',
@@ -604,8 +543,7 @@ label.checkbox:before
 							container: 'body',
 							content:function(a,b,c)
 					    	{
-								return "<div style='min-width:150px;'><i>to to ...</i><br>" +
-								"<button class='btn btn-small pull-right'><i class='icon-reply'></i></button></div>"
+								return ""
 					    	}
 				    	});
 						$(this).popover('show');
@@ -695,47 +633,4 @@ label.checkbox:before
 		//$('#slider-range').trigger('change');
 	});
 	</script>
-	
-	<script>
-$(document).ready(function() {
-	
-	var tourdata = [
-		{
-        	html: "<h1>Draft: text and Structure</h1><hr>" +
-            	  "Your draft is shown on this page." + 
-            	  "The different parts of your draft are highlighted by vertical bars of different colours on the left of the text."
-		},
-		{
-	       	html: "<h1>Introduction</h1><hr>"+
-      	  			"The introduction is highlighted in pink." ,
-	       	element: $('.par-tag[data-tag="#+s:i#"]').eq(0),
-	       	position: 'e',
-	       	expose: true, //exposures the target element
-	        overlayOpacity: 0.4, //defines the opacity of the overlay (false disables it)
-	       
-		},
-		{
-	       	html: "<h1>Discussion</h1><hr>"+
-	  			"Discussion paragraphs are highlighted in green." ,
-			       	element: $('.par-tag[data-tag="#+s#"]').eq(0),
-	       	position: 'e',
-	       	
-	       	expose: true, //exposures the target element
-	        overlayOpacity: 0.4, //defines the opacity of the overlay (false disables it)
-	       
-		}
-	];
-	var myTour = jTour(tourdata,
-			{
-				autoplay: false
-			}
-	);
-	
-	$('#help-on-task').click(function() {
-		
-		myTour.restart();
-	});
-});
-</script>
-	
 {% endblock %}

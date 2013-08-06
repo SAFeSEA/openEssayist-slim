@@ -3,6 +3,10 @@
 
 /* Body and structure
  -------------------------------------------------- */
+.tooltip-inner {
+  min-width: 100px;
+  
+}
 
 body {
     background: url("../img/bgnoise.png") repeat scroll 0 0 #EEEEEE;
@@ -308,7 +312,10 @@ ul.breadcrumb a
     text-decoration: none;
 }
 
-
+.navbarhead .navbar-inner
+{
+	padding-right: 0px;
+}
 
 .navbarhead > .navbar
 {

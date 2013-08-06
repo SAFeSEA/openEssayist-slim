@@ -74,11 +74,12 @@
 				
 				</ul></li>
 		</ul>
-		<ul class="nav pull-right navbar-inverse">
-		<li class=""><a href="javascript:void(0);" id="help-on-task2"><i
-					class="icon-large icon-question-sign "></i></a></li>
-		<li class=""><a href="javascript:void(0);" id="help-on-task"><i
+		{% if helpontask is defined %}
+		<ul class="nav pull-right">
+			<li class=""><a href="javascript:void(0);" id="help-on-task"
+			rel="tooltip" data-placement="bottom" title="Show Help and Hints on how to use this view."><i
 					class="icon-large icon-question-sign "></i></a></li>
 		</ul>
+		{% endif %}
 	</div>
 </div>

@@ -101,7 +101,7 @@
 	{{ parent() }}
 <script src="{{ app_base }}/assets/jquery.sparkline/jquery.sparkline.js"></script>
 <script>
-{% verbatim %}
+
 $(document).ready(function() {
 
 	$(document).dblclick(function(event){ 
@@ -147,6 +147,7 @@ $(document).ready(function() {
         	    			$('<span />',{ "text": forms})));
         		}	    	
 
+    			{% if auth.user.isadmin2 %}
     			$r2 = $('<div />').addClass("pop-line").appendTo($newDiv);
 				$r2.append($('<div />',{ "text": "Centrality:", "class": "pop-title"}));
 				$r2.append($('<div />',{ "class": "pop-desc"}).append(
@@ -156,12 +157,14 @@ $(document).ready(function() {
 				$r2.append($('<div />',{ "text": "Trend:", "class": "pop-title"}));
 				$r2.append($('<div />',{ "class": "pop-desc"}).append(
     	    			$('<span />',{"class": 'inlinebar trendtodo',"text":trend})));	    			
-    	    			
+				{% endif %}	
+					
         		return $newDiv;
 		 	}
 	    }).click(function(e) {
 
-	    	var bullet= {
+	    	{% verbatim %}
+	    		    	var bullet= {
 	    			type: 'bullet',
 	    			disableHiddenCheck : true,
 	    			height : '18px',
@@ -177,7 +180,7 @@ $(document).ready(function() {
 	    				{ return parseFloat(v).toFixed(2);
 	    					 
 	    				}
-					    			
+	    			{% endverbatim %}		    			
 	    	   };
 	    	
 			var bar =  {
@@ -226,6 +229,6 @@ $(document).ready(function() {
 		}
 	});*/
 });
-{% endverbatim %}
+
 </script>
 {% endblock %} 

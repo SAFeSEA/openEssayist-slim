@@ -1,0 +1,19 @@
+{% extends 'help/base.modal.twig' %} 
+
+{% block helpcontent %}
+<p>These are the words and phrases that openEssayist thinks are the main topics of your text. They are listed in order of importance from top left to bottom right.</p>
+<p>The little blue box next to each word shows how many times that word appears in your text (its frequency).</p>
+<p>When you click on one of the words or phrases, the popup box displays more information about the selected item:</p>
+<ul>
+<li>The <b>frequency</b> of that word or phrase in your text
+<li>For a key word, the <b>various forms</b> that appears in your text (such as singular/plural forms for a noun, inflected forms for a verb, ...) 
+</ul> 
+{% endblock %}
+
+{% block hintcontent %}
+<ul class="icons-ul">
+  <li><i class="icon-li icon-comments"></i>Are you surprised about any of the words in the top row of key words? </li>
+  <li><i class="icon-li icon-comments"></i>Do you think that some important words or phrases are missing from these groups?</li>
+</ul>
+
+{% endblock %}
