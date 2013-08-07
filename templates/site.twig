@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %} 
 
 {% block injectCSS %}
+<link href="{{ app_base }}/assets/jquery.pnotify/jquery.pnotify.default.css" media="all" rel="stylesheet" type="text/css" />
 <style>
 .modal-backdrop, .modal-backdrop.fade.in {
     background: none repeat scroll 0 0 #000;
@@ -28,21 +29,32 @@
     overflow: scroll;
     padding: 4px;
     }
+    
+    /* This one is done through code, to show how it is done. Look down
+			at the stack_bottomright variable in the JavaScript below. */
+		.ui-pnotify.stack-bottomright {
+			/* These are just CSS default values to reset the pnotify CSS. */
+			right: auto;
+			top: auto;
+		}
 </style>
 {% endblock %}
 
 {% block injectJS %}
-<script src="{{ app_base }}/assets/bootstrap-wysiwyg/jquery.hotkeys.js"></script>
-<script src="{{ app_base }}/assets/bootstrap-wysiwyg/bootstrap-wysiwyg.js"></script>
+<script src="{{ app_base }}/assets/bootstrap-wysiwyg/jquery.hotkeys.js" type="text/javascript" ></script>
+<script src="{{ app_base }}/assets/bootstrap-wysiwyg/bootstrap-wysiwyg.js" type="text/javascript" ></script>
+<script src="{{ app_base }}/assets/jquery.pnotify/jquery.pnotify.js" type="text/javascript" ></script>
 
 {% if helpontask is defined %}
 <script id="helpmodal">
+$.pnotify.defaults.history = false;
+
 $(document).ready(function() {
 	$('#help-on-task').click(function(e){
 		var $modal = $('#help-modal');
 
 		// create the backdrop and wait for next modal to be triggered
-		//$('body').modalmanager('loading');
+		$('body').modalmanager('loading');
 			 
 		$modal.load("{{ urlFor('ajax.help.topic',{'topic':helpontask}) }}", "", 
 			function(){
@@ -50,6 +62,48 @@ $(document).ready(function() {
 		});
 
 	});
+
+	var stack_bottomright = {"push": "top","dir1": "up", "dir2": "left", "firstpos1": 50, "firstpos2": 10, "spacing1":10};
+	$('#hint-on-task').click(function(e)
+	{
+		$('body').modalmanager('loading');
+		$.pnotify_remove_all();
+		$.get("{{ urlFor('ajax.help.topic',{'topic':helpontask}) }}", 
+			function(data) {
+				var data = $(data);
+				var tt = data.find( "ul.icons-ul" ).children();
+				var time = 100;
+				var l = tt.length-1;
+
+				tt.each(function(key, value) {
+					console.log(key + " " + l); 
+					setTimeout( function(){
+						var options = {
+										title: 'Hint',
+										text: $(value).text(),
+										addclass: "stack-bottomright",
+								        stack: stack_bottomright, 
+								        //hide: false,
+								        sticker: false, 
+								        //animate_speed: 'slow',
+								       // animation: "show",
+								        type: 'info',
+								        icon: 'icon-large  icon-comments '
+									}; 
+
+						if (l==key) options.after_open =  function(pnotify) {
+									console.log('I\'m called after the notice opens. I\'m passed the pnotify object for the current notice: ' + pnotify);
+									$('body').modalmanager('loading');
+								};
+						$.pnotify(options);	
+					} , time );
+					time += 200;     
+				});
+			});
+	});
+
+	
+	
 });
 </script>
 {% endif %}

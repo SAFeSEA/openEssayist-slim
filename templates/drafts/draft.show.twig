@@ -23,9 +23,16 @@
 				<h3>Draft Structure and Text</h3>
 			</div>
 			<div class="widget-toolbar"><div class="btn-toolbar">    
+			
+			<div class="btn-group option-set"  data-toggle="buttons-radio" data-option-key="sortBy">
+						<span class="navbar-text">dfdfdfdf</span>
+    					<button class="btn  active " data-option-value="rank">Text</button>
+					    <button class="btn " data-option-value="id">With Keywords</button>
+					    <button class="btn " data-option-value="tag">With Sentences</button>
+    				</div>
 		    	<div class="btn-group">
-		    	<button data-target="#myModal" role="button" class="btn btn-primary pull-right" data-toggle="modal">
-					Display Options <i class="icon-check icon-white"></i></button>		</div>
+		    	<button data-target="#myModal" role="button" class="btn  " data-toggle="modal">
+					More Options...</button>		</div>
    				 </div>
 			</div>
 		
@@ -47,7 +54,7 @@
 			<div class="par-wrapper" {{ (par[0].tag)?"data-tag=#{ par[0].tag }":"" }}>
 				<div class="par-tag" {{ (par[0].tag)?"data-tag=#{ par[0].tag }":"" }}>
 					<span class="icon-stack">
-          			<i class="icon-circle icon-stack-base"></i>
+          			<i class="icon-circle-blank  icon-stack-base"></i>
           			<i class="icon-heading "></i>
         </span>
 				</div>
@@ -633,4 +640,5 @@ label.checkbox:before
 		//$('#slider-range').trigger('change');
 	});
 	</script>
+
 {% endblock %}
