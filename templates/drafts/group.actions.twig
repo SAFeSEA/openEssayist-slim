@@ -1,0 +1,39 @@
+{% extends "site.twig" %} 
+
+{% block title %}Draft - Actions{% endblock %} 
+{% block subheader %}Draft - Actions{% endblock %} 
+
+{% block bccontainer %}		
+	{% include "widgets/breadcrumb.task.twig" %}
+{% endblock %}
+
+{% block navsubheader %}
+	{% include "widgets/navbar.drafts.twig" with {'navsrc': 'me.draft.group.actions'} %}
+{% endblock %}
+
+{% block content %}
+
+<div class="row-fluid"><div class="span12">
+
+	<div class="widget">
+		<div class="widget-header">
+			<h3>More Graphics </h3>
+		</div>
+		<div class="widget-content">
+			<p><a class="btn btn-large"
+				href="{{ urlFor('me.draft.act.keyword',{"draft":draft.id}) }}"><i
+					class="icon-large icon-random"></i><span class="hidden-phone hidden-tablet"> Organise</span></a></p>
+		</div>
+		</div>
+
+</div></div>
+
+{% endblock %}
+
+{% block injectJS %}
+	{{ parent() }}
+{% endblock %}
+
+{% block injectCSS %}
+	{{ parent() }}
+{% endblock %}

@@ -174,6 +174,11 @@ $c->app->get('/me/draft/:draft/stats/', array($userCtrl, 'showStats'))->name('me
 $c->app->get('/me/draft/:draft/sentence/', array($userCtrl, 'showSentence'))->name('me.draft.sentence');
 $c->app->get('/me/draft/:draft/action/keyword', array($userCtrl, 'actionKeyword'))->name('me.draft.act.keyword');
 
+$c->app->get('/me/draft/:draft/group/texts', array($demoCtrl, 'groupTexts'))->name('me.draft.group.texts');
+$c->app->get('/me/draft/:draft/group/graphics', array($demoCtrl, 'groupGraphics'))->name('me.draft.group.graphics');
+$c->app->get('/me/draft/:draft/group/actions', array($demoCtrl, 'groupActions'))->name('me.draft.group.actions');
+
+
 $c->app->get('/me/draft/:draft/view/network/ke', array($userCtrl, 'viewKeGraph'))->name('me.draft.view.kegraph');
 $c->app->get('/me/draft/:draft/view/network/se', array($userCtrl, 'viewSeGraph'))->name('me.draft.view.segraph');
 $c->app->get('/me/draft/:draft/view/cytoscape/se', array($userCtrl, 'viewCytoScape'))->name('me.draft.view.cytoscape');
