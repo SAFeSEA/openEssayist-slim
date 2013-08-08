@@ -15,41 +15,35 @@
 {% block content %}
 
 
-<div class="row-fluid">
-	<div class="span12">
+<div class="row-fluid"><div class="span12">
 	
-		<div class="widget">
-			<div class="widget-header">
-				<h3>Draft Structure and Text</h3>
-			</div>
-			<div class="widget-toolbar"><div class="btn-toolbar">    
+	<div class="widget">
+		<div class="widget-header">
+			<h3>Draft Structure and Text</h3>
+		</div>
+		<div class="widget-toolbar "><div class="btn-toolbar form-inline">    
 			
 			<div class="btn-group option-set"  data-toggle="buttons-radio" data-option-key="sortBy">
-						<span class="navbar-text">dfdfdfdf</span>
-    					<button class="btn btn-small active " data-option-value="rank">Text</button>
-					    <button class="btn btn-small" data-option-value="id">With Keywords</button>
-					    <button class="btn btn-small" data-option-value="tag">With Sentences</button>
-    				</div>
-		    	<div class="btn-group">
-		    	<button data-target="#myModal" role="button" class="btn btn-small " data-toggle="modal">
-					More Options...</button>		</div>
-   				 </div>
+				<label style="margin-right: 5px;" class="checkbox">Show : </label>	
+				<button class="btn btn-small active " data-option-value="rank">Text</button>
+				<button class="btn btn-small" data-option-value="id">With Keywords</button>
+				<button class="btn btn-small" data-option-value="tag">With Sentences</button>
+				<button class="btn btn-small" data-option-value="tag">All </button>
 			</div>
+
+    		<div class="btn-group">
+		    	<button data-target="#myModal" role="button" class="btn btn-small " data-toggle="modal">
+					More Options...</button>
+			</div>
+        </div></div>
 		
-
-		</div>
-	</div>
-</div>
-
-
-<div class="row-fluid">	<div class="span12">
-	<div class="myessay openessay">
-
-				<div class="widget widget-content assignment">
+		<div class="myessay openessay">
+		
+		<div class="widget-content assignment">
 			<p>{{ task.assignment | raw | nl2br }}</p>
 		</div>
-
-		<div class="widget widget-content widget-essay">
+        
+		<div class="widget-content widget-essay">
 		{% for par in parasenttok %}
 			<div class="par-wrapper" {{ (par[0].tag)?"data-tag=#{ par[0].tag }":"" }}>
 				<div class="par-tag" {{ (par[0].tag)?"data-tag=#{ par[0].tag }":"" }}>
@@ -68,8 +62,18 @@
 				</div>
 			</div>
 		{% endfor %}
-		</div>
-	</div>
+		</div>        
+        
+	</div>	</div>
+
+</div></div>
+
+
+<div class="row-fluid">	<div class="span12">
+	
+				
+
+
 
 </div></div>
 
@@ -185,7 +189,16 @@
 <style type="text/css">
 
 
-
+.btn-toolbar .title {
+  display: block;
+  float: left;
+  margin-top: -4px; /* Recover part of margin set in child Header nodes */
+  margin-left: 10px;
+  font-size: 20px;
+  font-weight: 200;
+  color: #777777;
+  text-shadow: 0 1px 0 #ffffff;
+}
 
 .icon-heading
 {
@@ -560,7 +573,7 @@ label.checkbox:before
 
 		$('.cTaskQuestion').change(function() {
 			var cbox = this;
-			var classname = ".widget.assignment";
+			var classname = ".widget-content.assignment";
 			if (cbox.checked)
 				//$(classname).show("fast");
 				$(classname).css({'display':'block'});
@@ -636,6 +649,7 @@ label.checkbox:before
 		});
 		$('.cStructure').trigger('change');
 		$('.cKeyword').trigger('change');
+		$('.cTaskQuestion').trigger('change');
 		$('#slider-range').slider("value", {'min':smin});
 		//$('#slider-range').trigger('change');
 	});
