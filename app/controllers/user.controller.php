@@ -899,6 +899,7 @@ class UserController extends Controller
 		$data = $this->getStructTargetData($draft,$dr,$tsk);
 		
 		$this->render('drafts/view.structure',array(
+				'helpontask' => 'view.structure',
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
 				'breakdown' => $data['breakdown']
@@ -917,6 +918,7 @@ class UserController extends Controller
 		$data = $this->getStructTargetData($draft,$dr,$tsk);
 			
 		$this->render('drafts/view.target',array(
+				'helpontask' => 'view.target',
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
 				'breakdown' => $data['breakdown'],
@@ -1152,6 +1154,7 @@ class UserController extends Controller
 		//die();
 		
 		$this->render('drafts/view.dispersion',array(
+				'helpontask' => 'view.dispersion',
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
 				'series' => $series3,

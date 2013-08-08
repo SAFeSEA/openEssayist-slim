@@ -1,0 +1,24 @@
+{% extends 'help/base.modal.twig' %} 
+
+{% block helpcontent %}
+<p>This graph shows the positions of the key words in your assignment.</p>
+
+<p>The graph reads from left to right, i.e. from the beginning of your text to its end.</p>
+
+<p>Your text's key words are shown on the Y-axis, on the left of the chart. A marker is drawn at every approximate position where the key word occurs in the text.</p>
+
+<p> This chart helps you to see how you are using the important words in your assignment. For
+example, you might look at a particular word that is important to you and see whether it
+occurs in the introduction (if openEssayist can find an introduction, it will mark its findings
+in pink here). You can look at the conclusion and see if it contains any of the key words (if
+openEssayist can find a conclusion, it will mark its findings in blue here).</p>
+
+{% endblock %}
+
+{% block hintcontent %}
+<ul class="icons-ul">
+  <li><i class="icon-li icon-comments"></i>Think about whether the key words identified by openEssayist are the ones you need to answer the question in your assignment.  If they appear in the introduction, are they helping the reader to understand that this is what you are going to be writing about in the main text? </li>
+  <li><i class="icon-li icon-comments"></i>. Are the key words in the conclusion similar to those in the rest of the text but provide a summary of your answer?</li>
+</ul>
+
+{% endblock %}

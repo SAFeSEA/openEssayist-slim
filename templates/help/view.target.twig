@@ -1,0 +1,23 @@
+{% extends 'help/base.modal.twig' %} 
+
+{% block helpcontent %}
+<p>This "bullet graph" shows how close your text comes to the required
+number of words for this assignment.</p>
+
+<p>The diamond 'Target' is placed on the chart at
+the position for the number of words you should be aiming at. It will be red if your text is longer or ahorter by 10%, green if within that range.
+</p>
+<p>The coloured blocks, stacked on the left-hand side, shows how close you are to achieving that number of words, and it shows the
+number of words taken up by each part of your assignment.</p>
+
+
+<p>Keep in mind that a "word count" is not an accurate operation: it depends on how you define a "word". Different software will have slightly different counts. So don't be surprise if the numbers given on the graph are not exactly the same as on your own text.</p>
+
+{% endblock %}
+
+{% block hintcontent %}
+<ul class="icons-ul">
+  <li><i class="icon-li icon-comments"></i>Is your draft long enough? Too short?</li>
+</ul>
+
+{% endblock %}
