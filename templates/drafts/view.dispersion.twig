@@ -111,7 +111,7 @@ $(document).ready(function() {
 	}
 
 	var tt = getColor('#+s:i#');
-
+	var myCats = {{ categories|json_encode|raw }};
 
 	chartOptions = {
 		credits: {
@@ -133,7 +133,7 @@ $(document).ready(function() {
 		},
 		tooltip: {
 			formatter: function() {
-				return this.series.name + ' ' + this.x;
+				return "<b>" +  myCats[this.point.y] + "</b><br>" + this.series.name;
 	                }
 	    },
 	    xAxis: [{ // master axis
@@ -190,7 +190,7 @@ $(document).ready(function() {
 			tickInterval: 1,
 			minorTickInterval: 1,
 			type: 'category',
-			categories:  {{ categories|json_encode|raw }},
+			categories:  myCats,
 			
 			
 		},
