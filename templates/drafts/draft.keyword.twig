@@ -86,6 +86,10 @@
  	padding-right: 6px;
  }
  
+ .popover-title {
+ 	font-size: 20px;
+    font-weight: bold;
+ }
 	
 .dl-horizontal dt {
 	width: inherit;
@@ -108,12 +112,24 @@ $(document).ready(function() {
 	   // alert("click"); 
 		   $("a[data-toggle=popover]").popover('hide');
 	}); 
+
+	$(':not(#anything)').on('click', function (e) {
+	    $('a[data-toggle=popover]').each(function () {
+	        //the 'is' for buttons that trigger popups
+	        //the 'has' for icons and other elements within a button that triggers a popup
+	        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+	            $(this).popover('hide');
+	            return;
+	        }
+	    });
+	});
+	
 	
 	 // popover demo
 	$("a[data-toggle=popover]")
 	.popover({
 		html: true,
-	      trigger: 'click',
+		trigger: 'click',
 	    content:function(a,b,c)
 	    	{
 	    		var dim= $(this).attr("data-dim");
@@ -147,7 +163,7 @@ $(document).ready(function() {
         	    			$('<span />',{ "text": forms})));
         		}	    	
 
-    			{% if auth.user.isadmin2 %}
+    			{% if auth.user.isadmin %}
     			$r2 = $('<div />').addClass("pop-line").appendTo($newDiv);
 				$r2.append($('<div />',{ "text": "Centrality:", "class": "pop-title"}));
 				$r2.append($('<div />',{ "class": "pop-desc"}).append(
