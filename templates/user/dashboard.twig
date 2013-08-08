@@ -68,12 +68,13 @@
 	</div>
 			
 	<div class="widget-content">
-	
+	{{ dump(group) }}
+		{% if group.url is not null  %}
 		<div class="row-fluid">
 			<div class="span6">
 					
 				<p><a class="btn btn-large" title="Overview of your progress on this assignment" 
-			 			href="http://open.ac.uk">
+			 			href="{{ group.url }}">
 					<i class="icon-2x pull-left icon-group"></i> 
 					Go to the <b>openEssayist</b><br>forum on the VLE
 				</a></p>
@@ -86,12 +87,14 @@
 			</div>
 
 		</div>
+		{% endif %}
 		
+		{% if group.email is not null %}
 		<div class="row-fluid">
 			<div class="span6">
-					
+				
 				<p><a class="btn btn-large" title="Overview of your progress on this assignment" 
-			 			href="mailto:open.essayist@open.ac.uk" >
+			 			href="mailto:{{ group.email }}" >
 					<i class="icon-2x pull-left icon-envelope"></i> 
 					Send an email to the<br><b>SAFeSEA</b> team ...
 				</a></p>
@@ -104,7 +107,7 @@
 			</div>
 
 		</div>
-	
+		{% endif %}
 	</div>
 	
 	

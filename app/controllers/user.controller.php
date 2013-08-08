@@ -91,7 +91,26 @@ class UserController extends Controller
 	 */
 	public function me()
 	{
+		/* @var $u Users */
+		$u = Model::factory('Users')->find_one($this->user['id']);
+		if ($u===false)
+		{
+			$this->app->flash("error", "Cannot find the user data");
+			$this->redirect('me.home');
+		}
+		
+		/* @var $g Group */
+		$g = $u->group()->find_one();
+		if ($g===false)
+		{
+			$this->app->flash("error", "Cannot find the group data");
+			$this->redirect('me.home');
+		}
+		
+	
+		
 		$this->render('user/dashboard',array(
+				'group' => $g->as_array(),
 				'nav' => 'nav'));
 	}
 
