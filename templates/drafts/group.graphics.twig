@@ -20,23 +20,66 @@
 			<h3>More Graphics </h3>
 		</div>
 		<div class="widget-content">
-			<p><a class="btn btn-large"
-						href="{{ urlFor('me.draft.view.dispersion',{"draft":draft.id}) }}"><i class="icon-large icon-bar-chart"></i> Dispersion</a></p>
-						
-						<p><a class="btn btn-large"
-						href="{{ urlFor('me.draft.view.cloud',{"draft":draft.id}) }}"><i class="icon-large icon-bar-chart"></i> Cloud</a></p>
-						
-						<p><a class="btn btn-large"
-						href="{{ urlFor('me.draft.view.structure',{"draft":draft.id}) }}"><i class="icon-large icon-bar-chart"></i> Word
-							Count</a></p>
 							
-								<p><a class="btn btn-large"
-						href="{{ urlFor('me.draft.view.target',{"draft":draft.id}) }}"><i class="icon-large icon-bar-chart"></i> Word
-							Count</a></p>
 		</div>
 		</div>
 
 </div></div>
+
+<div class="row-fluid">
+
+	<div class="span6"><div class="widget">
+		<div class="widget-header">
+			<h3>More Text </h3>
+		</div>
+		<div class="widget-content">
+						<p><a class="btn btn-large"
+						href="{{ urlFor('me.draft.view.dispersion',{"draft":draft.id}) }}"><i class="icon-large icon-bar-chart"></i> Dispersion</a></p>
+						
+		
+	</div></div></div>
+
+	<div class="span6"><div class="widget">
+		<div class="widget-header">
+			<h3>More Text </h3>
+		</div>
+		<div class="widget-content">
+						<p><a class="btn btn-large"
+						href="{{ urlFor('me.draft.view.cloud',{"draft":draft.id}) }}"><i class="icon-large icon-bar-chart"></i> Cloud</a></p>
+						
+					
+	</div></div></div>
+	
+	
+</div>
+
+
+<div class="row-fluid">
+
+	<div class="span6"><div class="widget">
+		<div class="widget-header">
+			<h3>More Text </h3>
+		</div>
+		<div class="widget-content">
+						<p><a class="btn btn-large"
+						href="{{ urlFor('me.draft.view.structure',{"draft":draft.id}) }}"><i class="icon-large icon-bar-chart"></i>Structure Share</a></p>
+								
+		
+	</div></div></div>
+
+	<div class="span6"><div class="widget">
+		<div class="widget-header">
+			<h3>More Text </h3>
+		</div>
+		<div class="widget-content">
+								<p><a class="btn btn-large"
+						href="{{ urlFor('me.draft.view.target',{"draft":draft.id}) }}"><i class="icon-large icon-bar-chart"></i> Word
+							Count ^ Word Limit</a></p>
+							
+	</div></div></div>
+	
+	
+</div>
 
 {% endblock %}
 
