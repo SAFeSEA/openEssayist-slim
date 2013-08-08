@@ -143,6 +143,9 @@ $(document).ready(function() {
 		    	enabled: false,
 		        text: 'word count'
 			},
+			labels: {
+				enabled: false
+			},
 			minRange: 200,
 			startOnTick: false,
 			endOnTick: false,
@@ -157,15 +160,15 @@ $(document).ready(function() {
 					},
 				{% endfor %}
 				]
-		},{	// slave axis
+		}/*,{	// slave axis
 			linkedTo:0 ,			
 			minRange: 50,
 			opposite: false,
 	    	title: {
-		    	enabled: true,
+		    	enabled: false,
 		        text: 'Essay Structure'
 			},
-			tickPositions: {{ ticks|json_encode|raw }},
+			//tickPositions: {{ ticks|json_encode|raw }},
 			labels: {
 				enabled: false,
 				 staggerLines: 1,
@@ -174,7 +177,7 @@ $(document).ready(function() {
 					var gg = {{ tags|json_encode|raw }} 
 					return gg[this.value];},
 				},
-		}],
+		}*/],
 		yAxis:{ minRange: 10,
 			title: {
 				enabled: false,
