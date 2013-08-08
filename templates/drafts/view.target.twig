@@ -87,10 +87,12 @@ $(document).ready(function() {
 		chart:{type:'bar'},
         tooltip: {
 			formatter: function () {
-				return this.series.name + ": <strong>" + Highcharts.numberFormat(this.y,0) + "</strong><br>"
-					+ this.total + " (" + {{ target.total }} + ")";
-             }
-    	   
+				if (this.series.type == 'scatter')
+					return this.series.name + ": <b>" + Highcharts.numberFormat(this.y,0) + "</b> words";
+				else
+					return this.series.name + ": <b>" + Highcharts.numberFormat(this.y,0) + "</b> words (out of "+ this.total +")<br>" 
+					+ 'Structure share: <b>' + Highcharts.numberFormat(this.percentage, 1) + '%</b>';
+				}
         },
 		xAxis:{tickLength:10,
 	        lineColor:'#999',
@@ -108,7 +110,13 @@ $(document).ready(function() {
 	    plotOptions: {
             series: {stacking: 'normal'},
             scatter:{
-                marker:{symbol:'diamond',radius:8}
+                marker:{symbol:'diamond',radius:8},
+                tooltip: {
+        			formatter: function () {
+        				return "fddfdf";
+                     }
+            	   
+                },
             }},
 		series: bullet
 	}));

@@ -81,7 +81,7 @@ $(document).ready(function() {
 	$('#struct_pie').highcharts($.extend(true,{}, hcOptions,{
          tooltip: {
 			formatter: function () {
-                 return this.point.name + " <b>" + this.point.y +"</b> (out of "+ this.total +")<br>" +  
+                 return this.point.name + ": <b>" + this.point.y +"</b> words (out of "+ this.total +")<br>" +  
                  this.series.name + ': <b>' + Highcharts.numberFormat(this.percentage, 1) + '%</b>';
              }
     	   
@@ -92,11 +92,11 @@ $(document).ready(function() {
                 showInLegend: true,
                 cursor: 'pointer',
                 dataLabels: {
-                    enabled: false,
+                    enabled: true,
                     color: '#000000',
                     connectorColor: '#000000',
                     formatter: function() {
-                        return '<b>'+ this.point.name +'</b>: '+ this.percentage +' %';
+                        return '<b>'+ this.point.name +'</b>: '+ Highcharts.numberFormat(this.percentage, 1) +' %';
                     }
                 }
             }
