@@ -73,29 +73,50 @@ $(document).ready(function() {
 				var data = $(data);
 				var tt = data.find( "ul.icons-ul" ).children();
 				var time = 100;
-				var l = tt.length-1;
+				var l = tt.length;
 
+				var options = {
+						title: 'Hint',
+						text: 'Sorry, not hints at this point in time. Try asking later on.',
+						addclass: "stack-bottomright",
+				        stack: stack_bottomright, 
+				        hide: false,
+				        sticker: false, 
+				        //animate_speed: 'slow',
+				       // animation: "show",
+				        type: 'info',
+				        icon: 'icon-large  icon-comments '
+					}; 
+				
+				if (l==0)
+				{
+					tt.push(null);	
+					l = tt.length;				
+				}
+				
+
+					
 				tt.each(function(key, value) {
 					console.log(key + " " + l); 
 					setTimeout( function(){
-						var options = {
-										title: 'Hint',
-										text: $(value).text(),
-										addclass: "stack-bottomright",
-								        stack: stack_bottomright, 
-								        //hide: false,
-								        sticker: false, 
-								        //animate_speed: 'slow',
-								       // animation: "show",
-								        type: 'info',
-								        icon: 'icon-large  icon-comments '
-									}; 
 
-						if (l==key) options.after_open =  function(pnotify) {
+						var locals = {};
+						
+						if (value != null) 
+							locals.text= $(value).text();
+						else
+							locals.type = 'error';
+						
+						
+						
+						if (l==(key+1)) locals.after_open =  function(pnotify) {
 									console.log('I\'m called after the notice opens. I\'m passed the pnotify object for the current notice: ' + pnotify);
 									$('body').modalmanager('loading');
 								};
-						$.pnotify(options);	
+								
+						opts = $.extend({}, options, locals);								
+						$.pnotify(opts);
+							
 					} , time );
 					time += 200;     
 				});

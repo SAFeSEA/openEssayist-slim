@@ -253,6 +253,8 @@ class TutorController extends Controller
 		$helptopics[] = "draft.show";
 		$helptopics[] = "draft.keyword";
 		$helptopics[] = "draft.sentence";
+		$helptopics[] = "view.cloud";
+		$helptopics[] = "action.keyword";
 		
 		if (in_array($topic, $helptopics))
 			$this->render('help/' . $topic);

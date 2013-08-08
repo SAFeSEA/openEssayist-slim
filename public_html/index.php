@@ -158,7 +158,6 @@ $c->app->get('/me/', array($userCtrl, 'me'))->name('me.home');
 $c->app->get('/me/consent', array($loginController, 'consent'))->via('GET', 'POST')->name('consent');
 
 $c->app->get('/me/essay/(:id(/))', array($userCtrl, 'tasks'))->conditions(array('id' => '[0-9]+'))->name('me.tasks');
-//$c->app->get('/me/essay/:idt/draft/(:idd(/))', array($userCtrl, 'drafts'))->name('me.drafts');
 
 $c->app->get('/me/essay/:idt/drafts/', array($userCtrl, 'manageDraft'))->name('me.draft.action');
 $c->app->get('/me/essay/:idt/history/', array($userCtrl, 'historyDraft'))->name('me.draft.history');
@@ -172,6 +171,7 @@ $c->app->get('/me/draft/:draft/show/', array($userCtrl, 'showDraft'))->name('me.
 $c->app->get('/me/draft/:draft/keyword/', array($userCtrl, 'showKeyword'))->name('me.draft.keywords');
 $c->app->get('/me/draft/:draft/stats/', array($userCtrl, 'showStats'))->name('me.draft.stats');
 $c->app->get('/me/draft/:draft/sentence/', array($userCtrl, 'showSentence'))->name('me.draft.sentence');
+
 $c->app->get('/me/draft/:draft/action/keyword', array($userCtrl, 'actionKeyword'))->name('me.draft.act.keyword');
 
 $c->app->get('/me/draft/:draft/group/texts', array($demoCtrl, 'groupTexts'))->name('me.draft.group.texts');
@@ -186,6 +186,7 @@ $c->app->get('/me/draft/:draft/view/cytoscape/se', array($userCtrl, 'viewCytoSca
 
 $c->app->get('/me/draft/:draft/view/dispersion', array($userCtrl, 'viewDispersion'))->name('me.draft.view.dispersion');
 $c->app->get('/me/draft/:draft/view/structure', array($userCtrl, 'viewStructure'))->name('me.draft.view.structure');
+$c->app->get('/me/draft/:draft/view/target', array($userCtrl, 'viewTarget'))->name('me.draft.view.target');
 $c->app->get('/me/draft/:draft/view/matrix', array($userCtrl, 'viewMatrix'))->name('me.draft.view.matrix');
 $c->app->get('/me/draft/:draft/view/cloud', array($userCtrl, 'viewCloud'))->name('me.draft.view.cloud');
 $c->app->get('/me/draft/:draft/view/chord', array($userCtrl, 'viewChord'))->name('me.draft.view.chord');

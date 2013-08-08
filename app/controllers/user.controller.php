@@ -788,6 +788,7 @@ class UserController extends Controller
 	
 		$tmpl = array('drag'=>'drafts/action.keyword','table'=>'drafts/action.keyword.table');
 		$this->render($tmpl['drag'],array(
+				'helpontask' => 'action.keyword',
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
 				'keywords' => $mydata->allkw,
@@ -799,14 +800,12 @@ class UserController extends Controller
 		
 	}
 	
-	public function viewStructure($draft)
-	{
-		$dr = $this->getDraft($draft);
-		$tsk = $dr->task()->find_one();
 	
+	private function getStructTargetData($draft,$dr,$tsk)
+	{
+		
 		$analysis = $dr->getAnalysis();
 		$text = $dr->getParasenttok();
-		
 		
 		$breakdown = array();
 		foreach ($text as $index => &$par)
@@ -826,10 +825,10 @@ class UserController extends Controller
 		$wc = $analysis->se_stats->number_of_words;
 		$tg = $tsk->wordcount;
 		$target= array(
-			'target' => $tg,
-			'total' => $wc,
-			'range' => array("low"=>intval ($tg*0.9),"high"=>intval($tg*1.1)),
-			'inlimit' => ($wc <= ($tg*1.1) && $wc >= ($tg*0.9))
+				'target' => $tg,
+				'total' => $wc,
+				'range' => array("low"=>intval ($tg*0.9),"high"=>intval($tg*1.1)),
+				'inlimit' => ($wc <= ($tg*1.1) && $wc >= ($tg*0.9))
 		);
 		
 		$distribution = array();
@@ -847,14 +846,14 @@ class UserController extends Controller
 			{
 				$tt['sliced'] = true;
 				$tt['selected'] = true;
-				
+		
 			}
 			$distribution[] = $tt;
 			$bullet[] = array(
 					'name' => $std['name'],
 					'color' => $std['idx'],
 					'data'=> array($count));
-			
+				
 		}
 		usort($distribution,function($a,$b)
 		{
@@ -863,17 +862,50 @@ class UserController extends Controller
 		usort($bullet,function($a,$b)
 		{
 			return ($a['color'])-($b['color']);
-		});
+		});		
+		
+		return array(
+				'breakdown' => 	$distribution,
+				'bullet' => 	$bullet,
+				'target' =>		$target
+		); 
+	}
 	
+	public function viewStructure($draft)
+	{
+		$dr = $this->getDraft($draft);
+		$tsk = $dr->task()->find_one();
+		
+		
+		$data = $this->getStructTargetData($draft,$dr,$tsk);
+		
 		$this->render('drafts/view.structure',array(
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
-				'breakdown' => $distribution,
-				'bullet' => $bullet,
-				'target' =>$target
+				'breakdown' => $data['breakdown']
+				
 
 		));
 		
+	}
+	
+	public function viewTarget($draft)
+	{
+		$dr = $this->getDraft($draft);
+		$tsk = $dr->task()->find_one();
+		
+		
+		$data = $this->getStructTargetData($draft,$dr,$tsk);
+			
+		$this->render('drafts/view.target',array(
+				'task' => $tsk->as_array(),
+				'draft' => $dr->as_array(),
+				'breakdown' => $data['breakdown'],
+				'bullet' => $data['bullet'],
+				'target' =>$data['target']
+
+		));
+			
 	}
 
 	public function viewDispersion($draft)
@@ -1127,6 +1159,7 @@ class UserController extends Controller
 		
 		
 		$this->render('drafts/view.cloud',array(
+				'helpontask' => 'view.cloud',
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
 				'keywords' => $allkw

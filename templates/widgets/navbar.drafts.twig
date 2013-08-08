@@ -55,7 +55,9 @@
 					<li class="{{ navsrc == 'me.draft.view.structure' ? 'active' }}"><a
 						href="{{ urlFor('me.draft.view.structure',{"draft":draft.id}) }}">Word
 							Count</a>
-					
+					<li class="{{ navsrc == 'me.draft.view.target' ? 'active' }}"><a
+						href="{{ urlFor('me.draft.view.target',{"draft":draft.id}) }}">Word Limit</a>
+							
 					<li class="divider visible-desktop"></li>
 					<li class="nav-header">Keywords</li>
 					<li class="{{ navsrc == 'me.draft.view.dispersion' ? 'active' }}"><a

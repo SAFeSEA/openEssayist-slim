@@ -1,29 +1,30 @@
 {% extends "site.twig" %} 
 
-{% block title %}Draft - Visualisation (Structure){% endblock %} 
-{% block subheader %}Draft - Structure{% endblock %} 
+{% block title %}Draft - Visualisation (Target){% endblock %} 
+{% block subheader %}Draft - Target{% endblock %} 
 
 {% block bccontainer %}		
 	{% include "widgets/breadcrumb.task.twig" %}
 {% endblock %}
 
 {% block navsubheader %}
-	{% include "widgets/navbar.drafts.twig" with {'navsrc': 'me.draft.view.structure'} %}
+	{% include "widgets/navbar.drafts.twig" with {'navsrc': 'me.draft.view.target'} %}
 {% endblock %}
 
 {% block content %}
 
 <div class="row-fluid">
 
+
+
 <div class="span12"><div class="widget">
 	<div class="widget-header">
-		<h3>Structure Distribution</h3>
+		<h3>Target</h3>
 	</div>
 	<div class="widget-content">
-		<div id="struct_pie" style="height: 500px;margin: 0 auto"></div>
+		<div id="struct_bullet" style="height: 500px;margin: 0 auto"></div>
 	</div>
 </div></div>
-
 </div>
 
 {% endblock %}
@@ -63,8 +64,11 @@ $(document).ready(function() {
 	}
 
 	// Apply the color mapping to both series 
-	var breakdown = {{ breakdown|json_encode|raw }};
-	breakdown = breakdown.map(getColor);  
+	var bullet = {{ bullet|json_encode|raw }};
+	bullet = bullet.map(getColor);  
+
+	// Add the target to the bullet graph series
+	bullet.push({name:"Target",color: "{{ (target.inlimit)?'green':'red' }}",pointWidth:100,type: "scatter",data:[{{task.wordcount}}],});
 
 	// General HighCharts configuration 
 	var hcOptions = {
@@ -78,36 +82,36 @@ $(document).ready(function() {
 			}
 	};
 
-	$('#struct_pie').highcharts($.extend(true,{}, hcOptions,{
-         tooltip: {
+	// Build the Bullet Graph
+	$('#struct_bullet').highcharts($.extend(true,{}, hcOptions,{
+		chart:{type:'bar'},
+        tooltip: {
 			formatter: function () {
-                 return this.point.name + " <b>" + this.point.y +"</b> (out of "+ this.total +")<br>" +  
-                 this.series.name + ': <b>' + Highcharts.numberFormat(this.percentage, 1) + '%</b>';
+				return this.series.name + ": <strong>" + Highcharts.numberFormat(this.y,0) + "</strong><br>"
+					+ this.total + " (" + {{ target.total }} + ")";
              }
     	   
         },
-        plotOptions: {
-            pie: {
-                allowPointSelect: true,
-                showInLegend: true,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: false,
-                    color: '#000000',
-                    connectorColor: '#000000',
-                    formatter: function() {
-                        return '<b>'+ this.point.name +'</b>: '+ this.percentage +' %';
-                    }
-                }
-            }
-        },
-        series: [{
-            type: 'pie',
-            name: 'Structure share',
-            data: breakdown
-        	
-        }]
-    }));
+		xAxis:{tickLength:10,
+	        lineColor:'#999',
+	        lineWidth:1,
+	        labels:{style:{fontWeight:'bold'}}  ,categories:['']},
+	    yAxis:{
+	        tickColor:'#ccc',
+	        title:{text: null},
+	        plotBands:[
+				{	from: 	{{(task.wordcount)*0.9}},
+					to:		{{(task.wordcount)*1.1}},
+					color: "{{ (target.inlimit)?'rgba(0,255,0,.10)':'rgba(255,0,0,.10)' }}"
+				},
+			]},
+	    plotOptions: {
+            series: {stacking: 'normal'},
+            scatter:{
+                marker:{symbol:'diamond',radius:8}
+            }},
+		series: bullet
+	}));
 
 });
 </script>
