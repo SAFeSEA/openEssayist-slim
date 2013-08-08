@@ -74,6 +74,8 @@ class Application {
 			  `id` int(11) NOT NULL AUTO_INCREMENT,
 			  `name` varchar(120) DEFAULT NULL,
 			  `code` varchar(120) DEFAULT NULL,
+			  `url` varchar(255) DEFAULT NULL,
+			  `email` varchar(220) DEFAULT NULL,
 			  `description` TEXT,
 			  PRIMARY KEY (`id`),
 			  UNIQUE (`name`)
