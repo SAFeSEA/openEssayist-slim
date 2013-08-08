@@ -1,10 +1,8 @@
 <?php
-//$ROOTAPPFOLDER = "../";		// ON LIVE SERVER (deals with the 'openessayist/' forward 
-$ROOTAPPFOLDER = "";		// ON WINDOWS & ELSEWHERE
 		
-require_once $ROOTAPPFOLDER . '../vendor/autoload.php';
-require_once $ROOTAPPFOLDER . '../vendor/jamie/idiorm/idiorm.php';
-require_once $ROOTAPPFOLDER . '../vendor/jamie/paris/paris.php';
+require_once '../vendor/autoload.php';
+require_once '../vendor/jamie/idiorm/idiorm.php';
+require_once '../vendor/jamie/paris/paris.php';
 
 use \Slim\Slim;
 use \Slim\Extras\Views\Twig as TwigView;
@@ -12,24 +10,24 @@ use \Slim\Extras\Middleware\StrongAuth;
 use \Slim\Middleware\LoggerMiddleWare;
 use \Slim\Extras\Middleware\StrongAuthAdmin;
 
-require_once $ROOTAPPFOLDER . "../app/config.php";
-require_once $ROOTAPPFOLDER . "../app/application.php";
-require_once $ROOTAPPFOLDER . "../app/utils/LoggerMiddleware.php";
-require_once $ROOTAPPFOLDER . "../app/utils/PDOAdmin.php";
-require_once $ROOTAPPFOLDER . "../app/utils/StrongAuthAdmin.php";
+require_once "../app/config.php";
+require_once "../app/application.php";
+require_once "../app/utils/LoggerMiddleware.php";
+require_once "../app/utils/PDOAdmin.php";
+require_once "../app/utils/StrongAuthAdmin.php";
 
 // Controllers
-require_once $ROOTAPPFOLDER . "../app/controller.php";
-require_once $ROOTAPPFOLDER . "../app/controllers/admin.controller.php";
-require_once $ROOTAPPFOLDER . "../app/controllers/home.controller.php";
-require_once $ROOTAPPFOLDER . "../app/controllers/login.controller.php";
-require_once $ROOTAPPFOLDER . "../app/controllers/user.controller.php";
-require_once $ROOTAPPFOLDER . "../app/controllers/demo.controller.php";
-require_once $ROOTAPPFOLDER . "../app/controllers/tutor.controller.php";
+require_once "../app/controller.php";
+require_once "../app/controllers/admin.controller.php";
+require_once "../app/controllers/home.controller.php";
+require_once "../app/controllers/login.controller.php";
+require_once "../app/controllers/user.controller.php";
+require_once "../app/controllers/demo.controller.php";
+require_once "../app/controllers/tutor.controller.php";
 
 // Models
-require_once $ROOTAPPFOLDER . "../app/models/users.model.php";
-require_once $ROOTAPPFOLDER . "../app/models/draft.model.php";
+require_once "../app/models/users.model.php";
+require_once "../app/models/draft.model.php";
 
 // System's constants
 define('APPLICATION', 'openEssayist');
@@ -44,7 +42,7 @@ $app = new \Slim\Slim(array(
     'log.level' => \Slim\Log::DEBUG,
     'log.enabled' => true,
     'log.writer' => new \Slim\Extras\Log\DateTimeFileWriter(array(
-        'path' => $ROOTAPPFOLDER . '../.logs',
+        'path' => '../.logs',
         'name_format' => 'y-m-d',
     ))
 ));
@@ -56,10 +54,10 @@ TwigView::$twigExtensions = array(
 );
 
 TwigView::$twigTemplateDirs = array(
-	$ROOTAPPFOLDER . '../templates',
+	'../templates',
 );
 TwigView::$twigOptions = array(
-	'cache' => $ROOTAPPFOLDER . '../.cache',
+	'cache' => '../.cache',
 	'debug'=> true,
 );
 
