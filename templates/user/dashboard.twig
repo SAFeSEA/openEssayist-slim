@@ -68,7 +68,17 @@
 	</div>
 			
 	<div class="widget-content">
-	{{ dump(group) }}
+	
+		{% if group.url is null and  group.email is null %}
+		
+		<div class="alert alert-block">
+			<h4>Warning!</h4>
+		    <p>No external sources of help have been defined for your group.</p>
+    	</div>
+    
+		
+		{% endif %}
+	
 		{% if group.url is not null  %}
 		<div class="row-fluid">
 			<div class="span6">
