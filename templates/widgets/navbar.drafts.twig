@@ -1,73 +1,83 @@
-<div class="navbar">
-	<div class="navbar-inner">
-		<span class="brand" >Version {{ draft.id }}</span>
-		<ul class="nav">
+<div class="navbar"><div class="navbar-inner">
+	<span class="brand" >Version {{ draft.id }}</span>
+	<ul class="nav">
 		
-		{% set allnavs = ["none", "menu","short"]  %}
-		{% set navigation = allnavs[1]  %}
+	{% set allnavs = ["none", "menu","short"]  %}
+	{% set navigation = allnavs[1]  %}
 				
-		{% if navigation == "short" %}		
-			<li class="{{ navsrc == 'me.draft.show' ? 'active' }}"><a
-				href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}"><i
-					class="icon-large icon-desktop"></i><span class="hidden-phone hidden-tablet"> Overview</span></a>
+	{% if navigation == "short" %}		
+		<li class="{{ navsrc == 'me.draft.show' ? 'active' }}"><a
+			href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}"><i
+				class="icon-large icon-desktop"></i><span class="hidden-phone hidden-tablet"> Overview</span></a>
 
-			<li class="{{ navsrc == 'me.draft.group.texts' ? 'active' }}"><a
-				href="{{ urlFor('me.draft.group.texts',{"draft":draft.id}) }}"><i
-					class="icon-large icon-file-text"></i><span class="hidden-phone hidden-tablet"> Texts</span></a>
+		<li class="{{ navsrc == 'me.draft.group.texts' ? 'active' }}"><a
+			href="{{ urlFor('me.draft.group.texts',{"draft":draft.id}) }}"><i
+				class="icon-large icon-file-text"></i><span class="hidden-phone hidden-tablet"> Texts</span></a>
 
-			<li class="{{ navsrc == 'me.draft.group.actions' ? 'active' }}"><a
-				href="{{ urlFor('me.draft.group.actions',{"draft":draft.id}) }}"><i
-					class="icon-large icon-random"></i><span class="hidden-phone hidden-tablet"> Actions</span></a>
+		<li class="{{ navsrc == 'me.draft.group.actions' ? 'active' }}"><a
+			href="{{ urlFor('me.draft.group.actions',{"draft":draft.id}) }}"><i
+				class="icon-large icon-random"></i><span class="hidden-phone hidden-tablet"> Actions</span></a>
+				
+		<li class="{{ navsrc == 'me.draft.group.graphics' ? 'active' }}"><a
+			href="{{ urlFor('me.draft.group.graphics',{"draft":draft.id}) }}"><i
+				class="icon-large icon-bar-chart"></i><span class="hidden-phone hidden-tablet"> Graphics</span></a>
 					
-			<li class="{{ navsrc == 'me.draft.group.graphics' ? 'active' }}"><a
-				href="{{ urlFor('me.draft.group.graphics',{"draft":draft.id}) }}"><i
-					class="icon-large icon-bar-chart"></i><span class="hidden-phone hidden-tablet"> Graphics</span></a>
-					
-		{% elseif navigation == "menu" %}		
-			<li class="{{ navsrc == 'me.draft.show' ? 'active' }}"><a
-				href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}"><i
-					class="icon-large icon-desktop"></i><span class="hidden-phone hidden-tablet"> Overview</span></a>
+	{% elseif navigation == "menu" %}		
+		<li class="{{ navsrc == 'me.draft.show' ? 'active' }}"><a
+			href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}"><i
+				class="icon-large icon-desktop"></i><span class="hidden-phone hidden-tablet"> Overview</span></a>
 
-
-			<li class="dropdown"><a class="dropdown-toggle"
-				data-toggle="dropdown" href="#"><i class="icon-large icon-file-text"></i> Texts
-					<span class="caret"></span></a>
+		<li class="dropdown"><a class="dropdown-toggle"
+			data-toggle="dropdown" href="#"><i class="icon-large icon-file-text"></i> Texts
+				<span class="caret"></span></a>
 			
-				<ul class="dropdown-menu">
-					<li class="{{ navsrc == 'me.draft.group.texts' ? 'active' }}"><a
-						href="{{ urlFor('me.draft.group.texts',{"draft":draft.id}) }}"><i
-						class="icon-large icon-file-text"></i> About</a>
-						<li class="divider visible-desktop"></li>
-					<li class="{{ navsrc == 'me.draft.keywords' ? 'active' }}"><a
-						href="{{ urlFor('me.draft.keywords',{"draft":draft.id}) }}"><i
-							class="icon-large icon-list"></i><span class="hidden-phone hidden-tablet"> Keywords</span></a>
-					<li class="{{ navsrc == 'me.draft.sentence' ? 'active' }}"><a
+			<ul class="dropdown-menu">
+				<li class="{{ navsrc == 'me.draft.group.texts' ? 'active' }}"><a
+					href="{{ urlFor('me.draft.group.texts',{"draft":draft.id}) }}">About...</a>
+				<li class="divider visible-desktop"></li>
+				<li class="{{ navsrc == 'me.draft.keywords' ? 'active' }}"><a
+					href="{{ urlFor('me.draft.keywords',{"draft":draft.id}) }}"><i
+					class="icon-large icon-list"></i><span class="hidden-phone hidden-tablet"> Keywords</span></a>
+				<li class="{{ navsrc == 'me.draft.sentence' ? 'active' }}"><a
 					href="{{ urlFor('me.draft.sentence',{"draft":draft.id}) }}"><i
-						class="icon-large icon-tag"></i><span class="hidden-phone hidden-tablet"> Sentences</span></a>						
-				</ul>
-										
+					class="icon-large icon-tag"></i><span class="hidden-phone hidden-tablet"> Sentences</span></a>						
+			</ul>
+									
 					
-			<li class="dropdown"><a class="dropdown-toggle"
-				data-toggle="dropdown" href="#"><i class="icon-large icon-random"></i> Actions
-					<span class="caret"></span></a>
+		<li class="dropdown"><a class="dropdown-toggle"
+			data-toggle="dropdown" href="#"><i class="icon-large icon-random"></i> Actions
+				<span class="caret"></span></a>
 			
-				<ul class="dropdown-menu">
-					<li class="{{ navsrc == 'me.draft.group.actions' ? 'active' }}"><a
-					href="{{ urlFor('me.draft.group.actions',{"draft":draft.id}) }}"><i
-						class="icon-large icon-random"></i><span class="hidden-phone hidden-tablet"> About </span></a>
-					<li class="divider visible-desktop"></li>
-			<li class="{{ navsrc == 'me.draft.act.keyword' ? 'active' }}"><a
-				href="{{ urlFor('me.draft.act.keyword',{"draft":draft.id}) }}"><i
+			<ul class="dropdown-menu">
+				<li class="{{ navsrc == 'me.draft.group.actions' ? 'active' }}"><a
+					href="{{ urlFor('me.draft.group.actions',{"draft":draft.id}) }}">About...</a>
+				<li class="divider visible-desktop"></li>
+				<li class="{{ navsrc == 'me.draft.act.keyword' ? 'active' }}"><a
+					href="{{ urlFor('me.draft.act.keyword',{"draft":draft.id}) }}"><i
 					class="icon-large icon-random"></i><span class="hidden-phone hidden-tablet"> Organise</span></a>
+				
+			</ul>
 					
-				</ul>
+		<li class="dropdown"><a class="dropdown-toggle"
+			data-toggle="dropdown" href="#"><i class="icon-large icon-bar-chart"></i> Graphics
+				<span class="caret"></span></a>
+			
+			<ul class="dropdown-menu">
+				<li class="{{ navsrc == 'me.draft.group.graphics' ? 'active' }}"><a
+					href="{{ urlFor('me.draft.group.graphics',{"draft":draft.id}) }}">About...</a>
+				<li class="divider visible-desktop"></li>
+					<li class="{{ navsrc == 'me.draft.view.dispersion' ? 'active' }}"><a
+						href="{{ urlFor('me.draft.view.dispersion',{"draft":draft.id}) }}">Dispersion</a>
 					
-					
-					
-					
-			<li class="{{ navsrc == 'me.draft.group.graphics' ? 'active' }}"><a
-				href="{{ urlFor('me.draft.group.graphics',{"draft":draft.id}) }}"><i
-					class="icon-large icon-bar-chart"></i><span class="hidden-phone hidden-tablet"> Graphics</span></a>
+					<li  class="{{ navsrc == 'me.draft.view.cloud' ? 'active' }}"><a
+						href="{{ urlFor('me.draft.view.cloud',{"draft":draft.id}) }}">Cloud</a>
+					<li class="{{ navsrc == 'me.draft.view.structure' ? 'active' }}"><a
+						href="{{ urlFor('me.draft.view.structure',{"draft":draft.id}) }}">Word
+							Count</a>
+					<li class="{{ navsrc == 'me.draft.view.target' ? 'active' }}"><a
+						href="{{ urlFor('me.draft.view.target',{"draft":draft.id}) }}">Word Limit</a>
+						
+			</ul>					
 		{% else %}
 			<li class="{{ navsrc == 'me.draft.show' ? 'active' }}"><a
 				href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}"><i
@@ -157,5 +167,4 @@
 					class="icon-large icon-question-sign "></i></a></li>
 		</ul>
 		{% endif %}
-	</div>
-</div>
+</div></div>
