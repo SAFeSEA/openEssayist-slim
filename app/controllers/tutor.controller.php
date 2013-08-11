@@ -251,6 +251,10 @@ class TutorController extends Controller
 		
 		$helptopics = array();
 		$helptopics[] = "draft.show";
+		$helptopics[] = "draft.show.text";
+		$helptopics[] = "draft.show.keyword";
+		$helptopics[] = "draft.show.sentence";
+		$helptopics[] = "draft.show.all";
 		$helptopics[] = "draft.keyword";
 		$helptopics[] = "draft.sentence";
 		$helptopics[] = "view.cloud";

@@ -1,14 +1,67 @@
 {% extends 'help/base.modal.twig' %} 
 
 {% block helpcontent %}
-<p>Your draft is shown on this page.</p>
+<p>Your draft is shown on this page, after having been analysed and marked up by OpenEssayist. 
+On it, you can explore the three elements extracted by the system and their meaning(s) for your essay: structure, key words and key sentences.</p>
+
+{% block helpStruct %}
+<h4>Structure</h4>
 <p>The different parts of your draft are highlighted by vertical bars of different colours on the left of the text:</p>
 <ul>
-<li>The introduction is in pink,
-<li>The discussion is in green, 
-<li>The conclusion is in blue,
-<li>Headings and other formatting elements are in grey.
+<li>The introduction is in pink: 
+		<div style="display: inline-block;" data-tag="#+s:i#" class="par-tag">
+			<span class="icon-stack">
+          			<i class="icon-circle-blank  icon-stack-base"></i>
+          			<i class="icon-heading "></i>
+        	</span>
+		</div>
+<li>The discussion is in green: 
+		<div style="display: inline-block;" data-tag="#+s#" class="par-tag">
+			<span class="icon-stack">
+          			<i class="icon-circle-blank  icon-stack-base"></i>
+          			<i class="icon-heading "></i>
+        	</span>
+		</div>
+<li>The conclusion is in blue: 
+		<div style="display: inline-block;" data-tag="#+s:c#" class="par-tag">
+			<span class="icon-stack">
+          			<i class="icon-circle-blank  icon-stack-base"></i>
+          			<i class="icon-heading "></i>
+        	</span>
+		</div>
+<li>Headings and other formatting elements are in grey: 
+		<div style="display: inline-block;" data-tag="#-s:h#" class="par-tag">
+			<span class="icon-stack">
+          			<i class="icon-circle-blank  icon-stack-base"></i>
+          			<i class="icon-heading "></i>
+        	</span>
+		</div>
 </ul> 
+{% endblock %}
+
+{% block helpKeyword %}
+	
+<h4>Key words and Key phrases</h4>
+<p>Key words identified by the system are marked up on the text 
+	<span class="ngram category_all showKW" data-keyword="pray">
+		<span class="keyword">like this</span>
+	</span>.</p>
+<p>Initially, the system groups all key words and key phrases in a single group.</p>
+<p>Different coulours will be used if you have defined your own group(s) and re-organised the key words in them  (see the Organise page).</p>
+{% endblock %}
+
+
+{% block helpSentence %}
+<h4>Key Sentences</h4>
+<p>Sentences that are considered are important by the system are marked up on the text 
+	<span data-rank="1" data-tag="#+s#" data-index="42" class="oe-snt showmu">
+	by a different background colour and a number, like this one.
+	</span>
+</p>
+<p>The number indicates the importance of the sentence, from <span data-rank="1" data-tag="#+s#" data-index="42" class="oe-snt showmu"></span> 
+for the most important, down to <span data-rank="15" data-tag="#+s#" data-index="42" class="oe-snt showmu"></span>.</p>
+{% endblock %}
+
 {% endblock %}
 
 {% block hintcontent %}
