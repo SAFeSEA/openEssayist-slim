@@ -166,6 +166,8 @@ $c->app->get('/api/draft/:draft/exhibit.json', array($userCtrl, 'getExhibitJSON'
 $c->app->get('/api/orchestrator.json', array($tutorCtrl, 'getJSON'))->name('api.draft.orchestrator');
 
 $c->app->get('/me/draft/:draft/show/', array($userCtrl, 'showDraft'))->name('me.draft.show');
+$c->app->get('/me/draft/:draft/show/:cmd', array($userCtrl, 'showDraft'))->name('me.draft.showext')
+->conditions(array('cmd' => '(text|keyword|sentence|all)'));
 $c->app->get('/me/draft/:draft/keyword/', array($userCtrl, 'showKeyword'))->name('me.draft.keywords');
 $c->app->get('/me/draft/:draft/stats/', array($userCtrl, 'showStats'))->name('me.draft.stats');
 $c->app->get('/me/draft/:draft/sentence/', array($userCtrl, 'showSentence'))->name('me.draft.sentence');

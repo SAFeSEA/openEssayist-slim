@@ -540,8 +540,9 @@ class UserController extends Controller
 	 *
 	 * @param string $draft
 	 */
-	public function showDraft($draft)
+	public function showDraft($draft,$cmd=null)
 	{
+		if ($cmd==null) $cmd='text';
 		$dr = $this->getDraft($draft);
 		$tsk = $dr->task()->find_one();
 
@@ -621,6 +622,7 @@ class UserController extends Controller
 		}
 
 		$this->render('drafts/draft.show',array(
+				'mashup' => $cmd,
 				'configxx' => array(
 						'modify' => false,
 						'structure'=> array(
@@ -644,7 +646,7 @@ class UserController extends Controller
 				'keywords' => $mydata->allkw,
 				'groups' => $mydata->groups,
 				'ngrams' => $highlighjs,
-				'helpontask' => 'draft.show'
+				'helpontask' => 'draft.show' . '.' . $cmd
 		));
 	}
 

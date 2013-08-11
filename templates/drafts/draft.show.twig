@@ -23,23 +23,24 @@
 		</div>
 		<div class="widget-toolbar "><div class="btn-toolbar form-inline">    
 			
-			<div class="btn-group option-set"  data-toggle="buttons-radio" data-option-key="sortBy">
+			<div class="btn-group">
 				<label style="margin-right: 5px;" class="checkbox">Show : </label>	
-				<button class="btn btn-small active " data-option-value="rank">Text</button>
-				<button class="btn btn-small" data-option-value="id">With Keywords</button>
-				<button class="btn btn-small" data-option-value="tag">With Sentences</button>
-				<button class="btn btn-small" data-option-value="tag">All </button>
+				<a class="btn btn-small {{ mashup=='text' ? 'active'}}" href="{{ urlFor('me.draft.show',{'draft':draft.id,'cmd':''}) }}">Text</a>
+				<a class="btn btn-small {{ mashup=='keyword' ? 'active'}}" href="{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'keyword'}) }}">Keywords</a>
+				<a class="btn btn-small {{ mashup=='sentence' ? 'active'}}" href="{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'sentence'}) }}">Sentences</a>
+				<a class="btn btn-small {{ mashup=='all' ? 'active'}}" href="{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'all'}) }}">All</a>
 			</div>
-
+			{% if mashup == 'all' %}
     		<div class="btn-group">
 		    	<button data-target="#myModal" role="button" class="btn btn-small " data-toggle="modal">
 					More Options...</button>
 			</div>
+			{% endif  %}
         </div></div>
 		
 		<div class="myessay openessay">
 		
-		<div class="widget-content assignment">
+		<div class="widget-content assignment" style="display: none;"><i class="icon-quote-left icon-4x pull-left icon-muted"></i>
 			<p>{{ task.assignment | raw | nl2br }}</p>
 		</div>
         
@@ -67,16 +68,6 @@
 	</div>	</div>
 
 </div></div>
-
-
-<div class="row-fluid">	<div class="span12">
-	
-				
-
-
-
-</div></div>
-
 
 
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -355,7 +346,10 @@ span.oe-snt[data-rank].showmu{
 	display: none;
 }
 
-
+.assignment p{
+font-style: italic;
+ text-align: justify;
+ }
 
 .widget-content legend
 {    font-size: 12px;
@@ -423,10 +417,12 @@ label.checkbox:before
 
 {% block injectJS %}
 	{{ parent() }}
-	<script src="{{ app_base }}/assets/d3.js/colorbrewer.js"></script>
-	<script src="{{ app_base }}/assets/highlight.js/highlight.pack.js"></script>
+<script src="{{ app_base }}/assets/d3.js/colorbrewer.js"></script>
+<script src="{{ app_base }}/assets/highlight.js/highlight.pack.js"></script>
 	
+{% if mashup in ['keyword','all'] %}
 	{% include "javascript/hljs.keywords.js.twig" %}
+{% endif %}
 
 	{#<script>
 	$(document).ready(function()
@@ -491,7 +487,7 @@ label.checkbox:before
 		for (v in sections) keys.push(v);
 			
 		
-		//$("label.checkbox").disableSelection();
+		/*//$("label.checkbox").disableSelection();
 		$(".par-tag[data-tag]").each(function()
 		{
 			//console.log(Object.keys(sections));
@@ -505,33 +501,9 @@ label.checkbox:before
 				 //$(this).attr('style', 'background-color: '+clr+' !important');
 				 //$(this).css('opacity', 0.5);
 			}
-			//$(this).attr('title', sections[tag]);
-			//$(this).find('.attribute').html(sections[tag]);
+			$(this).attr('title', sections[tag]);
+			$(this).find('.attribute').html(sections[tag]);
 		});
-		
-		
-		// initialise the code highlighting
-		$('div.openessay').each(function(i, e) {
-			hljs.highlightBlock(e)
-		});
-
-		/*$("span.keyword").popover({
-			animation: true,
-			content: function(){ return "ffdfddffddfdf"},
-			title: "keyword",
-			trigger: 'hover'
-				});*/
-
-				$(':not(#anything)').on('click', function (e) {
-				    $('.pop-link').each(function () {
-				        //the 'is' for buttons that trigger popups
-				        //the 'has' for icons and other elements within a button that triggers a popup
-				        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-				            $(this).popover('hide');
-				            return;
-				        }
-				    });
-				});
 		
 		$(".par-tag").addClass("pop-link").popover({
 			animation: true,
@@ -543,8 +515,35 @@ label.checkbox:before
 			title: "Discussion",
 			trigger: 'click',
 			container: 'body'
-				});
+				});		*/
+		/*$("span.keyword").popover({
+		animation: true,
+		content: function(){ return "ffdfddffddfdf"},
+		title: "keyword",
+		trigger: 'hover'
+			});*/
 
+		/*	$(':not(#anything)').on('click', function (e) {
+			    $('.pop-link').each(function () {
+			        //the 'is' for buttons that trigger popups
+			        //the 'has' for icons and other elements within a button that triggers a popup
+			        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+			            $(this).popover('hide');
+			            return;
+			        }
+			    });
+			});
+		*/
+	{% if mashup in ['keyword','all'] %}		
+		// initialise the code highlighting
+		$('div.openessay').each(function(i, e) {
+			hljs.highlightBlock(e)
+		});
+	{%  endif %}
+
+
+	/*{% if mashup in ['keyword','all'] %}		
+	
 		$('.ngram').click(function(e){
 			if ($(this).hasClass("showKW"))
 				{
@@ -570,7 +569,8 @@ label.checkbox:before
 					}
 				}
 			});
-
+		{%  endif %}*/
+			
 		$('.cTaskQuestion').change(function() {
 			var cbox = this;
 			var classname = ".widget-content.assignment";
@@ -633,9 +633,13 @@ label.checkbox:before
 			})
 		}	
 		
+	{% if mashup in ['keyword','all'] %}
+		$('.cKeyword').prop('checked', true);	
+	{%  endif %}
+	{% if mashup in ['sentence','all'] %}
 		// set the sentence slider
-		smin = {{ (config.sentence.range.min)?:0 }};
-		smax={{ (config.sentence.range.max)?:0 }};
+		smin = 0;
+		smax=15;
 		$("#slider-range").slider({
 			range : true,
 			min : 0,
@@ -647,6 +651,8 @@ label.checkbox:before
 					highlighSentence(event, ui);
 				}
 		});
+	{%  endif %}	
+	
 		$('.cStructure').trigger('change');
 		$('.cKeyword').trigger('change');
 		$('.cTaskQuestion').trigger('change');
