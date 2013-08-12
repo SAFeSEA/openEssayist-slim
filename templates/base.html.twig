@@ -168,6 +168,11 @@
 	<script src="{{ app_base }}/assets/log4javascript-1.4.6/log4javascript.min.js"></script>
 	<script id="log4js" type="text/javascript">
 	$(document).ready(function() {
+
+		if ($("[rel=tooltip]").length) {
+		        $("[rel=tooltip]").tooltip();
+		    }
+		
 		var log = log4javascript.getLogger("main");
 		log.setLevel(log4javascript.Level.TRACE);
 
@@ -195,11 +200,7 @@
 		//	log.sendAll();
 		//});	
 
-		$(document).ready(function () {
-		    if ($("[rel=tooltip]").length) {
-		        $("[rel=tooltip]").tooltip();
-		    }
-		});	
+
 	});	
 	</script>
 	{% block injectJS %}
