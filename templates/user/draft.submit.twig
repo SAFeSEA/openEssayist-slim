@@ -16,7 +16,7 @@
 
 <div class="row-fluid">
 
-<div class="span9">
+<div class="span12">
 
 	<div class="widget">
 		<div class="widget-header">
@@ -38,11 +38,31 @@
 			name="text" id="text" placeholder="paste the text of your essay"
 			required="required">{{ form.text }}</textarea>
 
+		<span class="help-block">
+			Copy and paste the complete text of your essay in this box.
+			Don't worry about style, fonts, pictures, etc. 
+			Only the raw text will be copied and analysed by the system.
+		</span>
+			
+			
 	</div>
 </div>
+
 <div class="control-group">
-	<label class="control-label">State of draft</label>
+	<label for="draft-name" class="control-label">Name for draft</label>
 	<div class="controls">
+		<input type="text" name="name" id="draft-name" class="input-xxlarge"
+			placeholder="The name for this draft" value="{{ form.name }}">
+		<span class="help-block">Optionally, you can give a name or a description for this draft. 
+			With or without it, this draft will be identified by the system as 
+			<span class="label label-success"><b>Version {{ form.version }}</b></span>
+			.</span>
+	</div>
+</div>
+
+<div class="control-group">
+	<span class="control-label">State of draft</span>
+	<div class="controls" id="draft-state-group">
 		<label class="radio">
 			<input type="radio" name="state" id="draft-state-early" value="1" {{ (form.state=="1" or form.state is not defined)? "checked" }}>
 			Early
@@ -55,12 +75,16 @@
 			<input type="radio" name="state" id="draft-state-final" value="3" {{ (form.state=="3")? "checked" }}>
 			Final
 		</label>
+		<span class="help-block">Indicate if you think your draft is at an early stage (initial sketch, first attempt, ...),
+		close to its final form (just before submitting to the tutors) or somewhere in-between.</span>
+		
 	</div>
 </div>
 <div class="control-group">
 	<div class="controls">
-		<input type="hidden" name="module" id="draft-module" value="{{ group.code }}" readonly="readonly"/>
-		<input type="hidden" name="task" id="draft-task" value="{{ task.code }}" readonly="readonly"/>
+		<input type="hidden" name="module" id="draft-module" value="{{ group.code }}"/>
+		<input type="hidden" name="task" id="draft-task" value="{{ task.code }}"/>
+		<input type="hidden" name="version" id="draft-version" value="{{ form.version }}"/>
 	</div>
 </div>
 
@@ -77,25 +101,7 @@
 </div><!-- /widget -->
 	
 </div>
-<div class="span3">
 
-	<div class="widget">
-					<div class="widget-header">
-						<i class="icon-question-sign"></i>
-						<h3>Help</h3>
-					</div> <!-- /widget-header -->
-					
-					<div class="widget-content">
-					<p>Copy and paste the complete text of your essay</p>
-					<p>Don't worry about style, fonts, pictures, etc. Only the raw text will be copied and analysed by the system.</p>	
-					</div> <!-- /widget-content -->
-					
-					<div class="widget-content">
-					<p>Please indicate if you think your draft is at an early stage (initial sketch, first attempt, ...) or at a final stage of writing (just before submitting to the tutors).</p>	
-					</div> <!-- /widget-content -->
-				
-				</div>
-</div>
 
 </div>
 

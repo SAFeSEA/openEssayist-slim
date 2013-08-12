@@ -106,6 +106,8 @@ class Application {
 				`users_id` int(11) NOT NULL,
 				`type` int(11) DEFAULT '0',
 				`processed` int(11) DEFAULT '1',
+				`version` int(11) NOT NULL DEFAULT '1',
+				`name` varchar(120) DEFAULT NULL,
 				`analysis` LONGBLOB,
 				`date` DATETIME,
 				PRIMARY KEY (`id`)

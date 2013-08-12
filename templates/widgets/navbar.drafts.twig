@@ -1,9 +1,9 @@
 <div class="navbar"><div class="navbar-inner">
-	<span class="brand" >Version {{ draft.id }}</span>
+	<span class="brand" title="{{ draft.name }}" rel="tooltip" data-placement="bottom" >Version {{ draft.version }}</span>
 	<ul class="nav">
 		
 	{% set allnavs = ["none", "menu","short"]  %}
-	{% set navigation = allnavs[1]  %}
+	{% set navigation = allnavs[2]  %}
 				
 	{% if navigation == "short" %}		
 		<li class="{{ navsrc == 'me.draft.show' ? 'active' }}"><a

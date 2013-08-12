@@ -27,9 +27,10 @@
 				<thead>
 					<tr>
 						<th>Version</th>
+						<th>Description</th>
 						<th>Date Analysed</th>
 						<th>Word Count</th>
-						<th>Key Words</th>
+						<th>Key Words (Top 10)</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -37,12 +38,13 @@
 				
 				<tr>
 					<td><a class="btn btn-large"  href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}">
-					<i class="icon-large icon-pencil"></i> version {{ draft.id }}</a></td>
+					<i class="icon-large icon-pencil"></i> Version {{ draft.version }}</a></td>
+					<td>{{ draft.name }}</td>
 					<td style="white-space: nowrap;">{{ draft.date | date("Y-m-d")}}<br><i class="icon-time icon-large"></i> <small>{{ draft.datesince }} ago</small></td>
 					<td>{{ draft.wordcount }}</td>
 					<td>{% for item in draft.keywords[0:10] %} 
-						{{ ngram.toBtn(item) }}
-						{% endfor %} <a class="btn btn-small">...</a> </td>
+						{{ ngram.toBtnExt(item,{isDisabled:true}) }}
+						{% endfor %}
 				</tr>
 				{% endfor %}
 				

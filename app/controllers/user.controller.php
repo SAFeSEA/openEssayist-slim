@@ -323,6 +323,10 @@ class UserController extends Controller
 				$this->submitAsync($ap, $taskId, $post);
 			else
 			{
+				$formdata["text"] = $post["text"];
+				$formdata["state"] = $post["state"];
+				$formdata["name"] = $post["name"];
+				$formdata["version"] = $post["version"];
 				try {
 					$url = 'http://localhost:8062/api/analysis';
 					$request = Requests::post($url,
@@ -348,6 +352,9 @@ class UserController extends Controller
 						$draft->type = 0;
 						$draft->analysis = $json;
 						$draft->task_id = $taskId;
+						$draft->version = $formdata["version"];
+						$draft->name = $formdata["name"];
+						
 						$draft->users_id = $this->user['id'];
 						$draft->date = date('Y-m-d H:i:s e');
 						$draft->save();
@@ -361,8 +368,6 @@ class UserController extends Controller
 					else 
 					{	$json = $request->body;
 						$ret = json_decode($json,true);
-						$formdata["text"] = $post["text"];
-						$formdata["state"] = $post["state"];
 						
 						$status = 500;
 						$this->app->flashNow("error", "Problem with the analyser. Make sure you text is not empty. If it continues, please contact the admin.");
@@ -383,6 +388,12 @@ class UserController extends Controller
 
 				}
 			}
+		}
+		else {
+			$u = Model::factory('Users')->find_one($this->user['id']);
+			$d = $u->drafts()->where_equal('task_id',$taskId)->order_by_desc('id')->find_array();
+			
+			$formdata['version'] = count($d)+1;
 		}
 		
 		$this->render('user/draft.submit',array(
@@ -965,7 +976,8 @@ class UserController extends Controller
 				$setag[] = $sent['tag'];
 				$sent = $sent['text'];
 			}
-			$tags[] = array_shift(array_unique($setag));
+			$alltags = array_unique($setag);
+			$tags[] = array_shift($alltags);
 			$par = "" . join(" ", $par);
 			$count2 = str_word_count($par, 1);
 			$struct2[] = count($count2);

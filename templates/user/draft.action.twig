@@ -26,7 +26,7 @@
 				<p>Once ready, go and use the "New draft" command:</p>
 				<p><a class="btn btn-large span3" title="Analyse a first draft for this assignment"
 					href="{{ urlFor('me.draft.submit',{"idt":task.id}) }}" rel="tooltip" data-placement="right">
-				<i class="icon-large icon-upload-alt"></i>
+				<i class="icon-large icon-upload-alt"></i> 
 				<span class="hidden-phone hidden-tablet">New draft</span>
 			</a></p>
 			</div> 
@@ -47,7 +47,7 @@
 						title="Show the analysis of your first draft" 
 						rel="tooltip" data-placement="right"
 						href="{{ urlFor('me.draft.show',{"draft":drafts[0].id}) }}">
-					<i class="icon-large icon-pencil"></i> version {{drafts[0].id }}</a>    					
+					<i class="icon-large icon-pencil"></i> Version {{drafts[0].version }}</a>    					
     					</p>
 			</div> 
 		</div>
@@ -68,7 +68,7 @@
 						title="Show the analysis of the latest draft" 
 						rel="tooltip" data-placement="right"
 					 	href="{{ urlFor('me.draft.show',{"draft":drafts[0].id}) }}">
-					<i class="icon-large icon-pencil"></i> version {{drafts[0].id }}</a>    					
+					<i class="icon-large icon-pencil"></i> Version {{drafts[0].version }}</a>    					
     			</p>
     		</div>
 				<p>You can also check individual analysis in your history: </p>
