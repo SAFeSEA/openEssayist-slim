@@ -14,6 +14,21 @@
 
 {% block content %}
 
+{% if not task.isopen %}
+<div class="alert alert-block alert-error"><div class="row-fluid">
+	<span class="icon-stack span2 icon-2x" style="color:black;" title="{{ task.isopen? "This is open" : "this is closed" }}">
+		<i class="{{ task.isopen? "icon-circle  icon-stack-base" : "icon-ban-circle icon-stack-base text-error  icon-flip-vertical " }}"></i>
+	  	<i class="{{ task.isopen? "icon-pencil icon-light" : "icon-pencil" }}"></i>
+	</span>	
+		
+	<div class="span10">
+		<h4>This assignment is closed.</h4>
+		<p>You can still explore its content, including all the drafts you wrote and their analysis, 
+			but you will not be able to change any of their content.</p>
+	</div>
+</div></div>
+{% endif %}
+
 <div class="row-fluid">
 
 <div class="span12">
@@ -36,7 +51,7 @@
 	<div class="controls">
 		<textarea class="boxborder" rows="15" 
 			name="text" id="text" placeholder="paste the text of your essay"
-			required="required">{{ form.text }}</textarea>
+			required="required" {{ not(task.isopen) ? "readonly"}}>{{ form.text }}</textarea>
 
 		<span class="help-block">
 			Copy and paste the complete text of your essay in this box.
@@ -52,7 +67,7 @@
 	<label for="draft-name" class="control-label">Name for draft</label>
 	<div class="controls">
 		<input type="text" name="name" id="draft-name" class="input-xxlarge"
-			placeholder="The name for this draft" value="{{ form.name }}">
+			placeholder="The name for this draft" value="{{ form.name }}" {{ not(task.isopen) ? "readonly"}}>
 		<span class="help-block">Optionally, you can give a name or a description for this draft. 
 			With or without it, this draft will be identified by the system as 
 			<span class="label label-success"><b>Version {{ form.version }}</b></span>
@@ -64,15 +79,15 @@
 	<span class="control-label">State of draft</span>
 	<div class="controls" id="draft-state-group">
 		<label class="radio">
-			<input type="radio" name="state" id="draft-state-early" value="1" {{ (form.state=="1" or form.state is not defined)? "checked" }}>
+			<input type="radio" name="state" id="draft-state-early" value="1" {{ (form.state=="1" or form.state is not defined)? "checked" }} {{ not(task.isopen) ? "disabled"}}>
 			Early
 		</label>
 		<label class="radio">
-			<input type="radio" name="state" id="draft-state-advanced" value="2" {{ (form.state=="2")? "checked" }}>
+			<input type="radio" name="state" id="draft-state-advanced" value="2" {{ (form.state=="2")? "checked" }} {{ not(task.isopen) ? "disabled"}}>
 			Advanced
 		</label>
 		<label class="radio">
-			<input type="radio" name="state" id="draft-state-final" value="3" {{ (form.state=="3")? "checked" }}>
+			<input type="radio" name="state" id="draft-state-final" value="3" {{ (form.state=="3")? "checked" }} {{ not(task.isopen) ? "disabled"}}>
 			Final
 		</label>
 		<span class="help-block">Indicate if you think your draft is at an early stage (initial sketch, first attempt, ...),
@@ -91,10 +106,11 @@
 
 </fieldset>
 
+{% if task.isopen %}
 <div class="form-actions">
 	<button class="btn btn-primary" id="submit_essay" type="submit" name="action" value="Submit">Analyse</button> 
 </div>
-								
+{% endif %}								
 </form>
 	
 	</div> <!-- /widget-content -->

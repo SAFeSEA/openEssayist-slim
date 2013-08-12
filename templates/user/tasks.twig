@@ -26,7 +26,8 @@ td .btn{white-space: nowrap;}
 				<h3>Assignments in the course {{ group.name }}</h3>
 			</div>
 			<div class="widget-content"> 
-				<p>You are a member of the <b>{{ group.name }}</b> group. Below are the assignments (TMAs) that are open for you to use and analyse your drafts.</p>
+				<p>You are a member of the <b>{{ group.name }}</b> group. <br>
+				Below are the assignments (TMAs) that are available for you to use and analyse your drafts.</p>
 				<table class="table table-condensed table-striped table-bordered">
 				<thead>
 					<tr>
@@ -44,10 +45,18 @@ td .btn{white-space: nowrap;}
 					
 					<tr>
 					
-					<td><a class="btn" title="Go to the drafts for this assignment"
+					<td><a class="btn btn-large" title="Go to this assignment"
+						rel="tooltip" data-placement="bottom"
 							href="{{ urlFor('me.draft.action',{"idt":task.id}) }}"><i class="icon-book icon-large"></i> {{ task.name }}</a></td>
 					<td>{{ task.assignment }}</td>
-					<td>{{ task.deadline }}</td>
+					<td>{{ task.deadline }}<br>
+					
+						<span class="icon-stack  icon-large" title="{{ task.isopen? 'This is assignment is open' : 'this is assignment is closed' }}">
+  							<i class="{{ task.isopen? 'icon-circle  icon-stack-base' : 'icon-ban-circle icon-stack-base text-error  icon-flip-vertical' }}"></i>
+  							<i class="{{ task.isopen? 'icon-pencil icon-light' : 'icon-pencil' }}"></i>
+						</span>
+					
+					</td>
 					<td><span class="badge">{{ task.draftcount }}</span></td>
 
 				
