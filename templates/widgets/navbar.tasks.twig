@@ -1,6 +1,6 @@
 <div class="navbar">
     <div class="navbar-inner">
-    	<span class="brand" href="#">{{ task.name }}</span>
+    	<span class="brand" >{{ task.name }}</span>
     	<ul class="nav">
  			<li class="{{ navsrc == 'me.draft.action' ? 'active' }}"><a title="Overview of your progress on this assignment" 
  					href="{{ urlFor('me.draft.action',{"idt":task.id}) }}" rel="tooltip" data-placement="bottom">
