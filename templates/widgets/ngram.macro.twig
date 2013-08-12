@@ -25,3 +25,24 @@
 		<span>"+{{ ngram|raw }}.ngram+"</span>\
 	</a>\
 {% endmacro %}
+
+{% macro toBtnExt(ngram,options=null) %}
+	<a class="btn {{ options.isLarge?"btn-large":"btn-small" }} btn-ngram {{ options.userdefined?"btn-warning":"" }} {{ options.isDisabled?"disabled" }}" id="{{ ngram.ngram|join("") }}"
+		{% if options.showPopover %}
+			data-score="{{ ngram.score|join(',') }}"
+			data-source="{{ ngram.source|join(', ') }}"
+			data-count="{{ ngram.count }}"
+			data-trend="{{ ngram.trend|join(',') }}"
+			data-dim={{ ngram.ngram|length }}
+			data-toggle="popover"
+			data-placement="top"
+			data-title="{{ ngram.ngram|join(" ") }}"
+		{% endif %}
+	>
+		<span>{{ ngram.ngram|join(" ") }}</span>
+		<span class="label label-info">{{ ngram.count }}</span>
+		{% if options.showScore %}
+			<span class="inlinebar">{{ ngram.score|join(',') }}</span>
+		{% endif %}
+	</a>
+{% endmacro %}
