@@ -268,10 +268,7 @@ div.breadcrumb > h1
 }
 
 
-/*div.breadcrumb > h1 > hr
-{
-	margin: 5px 0
-}*/
+
 
 ul.breadcrumb {
 	/*background: none repeat scroll 0 0 #FFFFFF;
@@ -288,13 +285,13 @@ ul.breadcrumb {
 ul.breadcrumb a:hover, ul.breadcrumb a:focus
 {
 	text-decoration: none;
-	color: #999999;
+	
 }
 
 ul.breadcrumb a
 {
 	text-decoration: none;
-	color: #777777;
+	
 }
 
 .navbarhead .brand
@@ -384,8 +381,23 @@ li.bc_debug > .btn-group > .btn
     clear: both;
 }
 
+/* NGram buttons
+ -------------------------------------------------- */
 
+.btn-ngram.disabled
+{
+	opacity: inherit;
+}
 
+.btn-ngram.disabled > .label
+{
+	opacity: 0.25;
+}
+
+.btn-ngram.disabled:hover > .label
+{
+	
+}
 
 /* Responsive
  -------------------------------------------------- */
