@@ -226,7 +226,7 @@ class UserController extends Controller
 			$draft['wordcount'] = $wordcount;
 			$k = $analysis['nvl_data'];
 			if (isset($k))
-				$draft['keywords'] = array_merge($k['quadgrams'],$k['trigrams'],$k['bigrams']);
+				$draft['keywords'] = array_merge(array(),$k['keywords']);
 			
 			unset($draft['analysis']);
 			$gg = $this->timeSince(strtotime($draft['date']));
