@@ -65,8 +65,9 @@ class StrongAuthAdmin extends StrongAuth
 					
 						if (!$isactive)
 						{
+							
 							$app->flashNow("error", "You need to sign the consent form to access these pages");
-							if (!$path) $app->redirect($config['consent.url']);
+							if (!$path) $app->redirect($app->request()->getRootUri() . $config['consent.url']);
 						}
 					}
 					
@@ -75,7 +76,7 @@ class StrongAuthAdmin extends StrongAuth
 						// User is not logged in; redirect
 						if ($req->getPath() !== $config['login.url']) {
 							$app->flash("error", "You need to log in to access these pages");
-							$app->redirect($config['login.url']);
+							$app->redirect($app->request()->getRootUri() . $config['login.url']);
 						}
 					}
 					else {
@@ -87,7 +88,7 @@ class StrongAuthAdmin extends StrongAuth
 						{
 							// route is admin-only but user is not admon; redirect
 							$app->flash("error", "You don't have the rights to access these pages");
-							$app->redirect($config['login.url']);
+							$app->redirect($app->request()->getRootUri() . $config['login.url']);
 						}
 					}
 				}
