@@ -33,7 +33,8 @@
 		<div class="widget-header">
 			<h3>More Text </h3>
 		</div>
-		<div class="widget-content">
+		<div class="widget-content">Click on the 'key words' button [GO TO ] to see again the words that openEssayist
+thinks your assignment is about but shown in a different way from Activity 1
 			<p><a class="btn btn-large"
 			title="Show the key words and key phrases of the draft"
 			rel="tooltip" data-placement="bottom" 
@@ -46,7 +47,10 @@
 		<div class="widget-header">
 			<h3>More Text </h3>
 		</div>
-		<div class="widget-content">
+		<div class="widget-content">Click on the 'summary' button [GO TO ] to see a written summary of your
+assignment. The summary is made up of the sentences that openEssayist thinks are the
+most prominent sentences in your assignment. These are the sentences that sum up
+best what you are trying to say in your assignment. 
 			<p><a class="btn btn-large"
 			title="Show the key sentences of the draft"
 			rel="tooltip" data-placement="bottom" 
@@ -57,6 +61,29 @@
 	
 	
 </div>
+
+<div class="row-fluid"><div class="span6">
+
+	<div class="widget">
+		<div class="widget-header">
+			<h3>More Graphics </h3>
+		</div>
+		<div class="widget-content">The 'organise key words' button [GO TO ] will take you to an activity in which you
+can organise your key words into different groups, and you can choose which key
+words you would like to see highlighted in the text of your assignment.
+Then click the 'text + organised key words' button [GO TO ] to see all the text of your
+assignment with your personal choice of key words highlighted.
+			<p><a class="btn btn-large"
+						title="Organise the key words of the draft  into your own groups"
+			rel="tooltip" data-placement="bottom" 
+			
+				href="{{ urlFor('me.draft.act.keyword',{"draft":draft.id}) }}"><i
+					class="icon-large icon-random"></i><span class=""> Organise</span></a></p>
+		</div>
+		</div>
+
+</div></div>
+
 
 {% endblock %}
 
