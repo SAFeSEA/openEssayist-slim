@@ -11,9 +11,12 @@
 			<a class="brand" href="{{ urlFor('home') }}" title="openEssayist" ><img class="brand-ico" alt="icon"
 				src="{{ app_base }}/assets/openessayist/img/openEssayist-icon.png"><span class="hidden-phone">openEssayist</span></a> 
 				
-			{% if auth.loggedIn() %}	
+			{% if auth.loggedIn()  %}	
 			<div class="btn-group pull-right">
-					<button id="btn-notepad" title="Open your Notepad" class="btn btn-info"><i class="icon-edit icon-large"></i></button>
+			
+				{% if auth.user.active  %}	
+				<button id="btn-notepad" title="Open your Notepad" class="btn btn-info"><i class="icon-edit icon-large"></i></button>
+				{% endif %}
 				<a class="btn {{ auth.user.isadmin ? "btn-inverse" : ""}} dropdown-toggle" data-toggle="dropdown"
 					title="{{ auth.user.username }}" href="#"> <i class="icon-user {{ auth.user.isadmin ? "icon-white" : ""}}"></i>
 					<span class="hidden-phone">{{ auth.user.username }}</span> <span class="caret"></span>
@@ -30,7 +33,7 @@
 			
 				<ul class="nav">
 					<li class=""><a href="{{ urlFor('me.home') }}" title="Go to your homepage">
-						<i class="icon-home"></i> Dashboard</a>
+						<i class="icon-home"></i> Home</a>
 					</li> 
 					{% if auth.user.isadmin %}	
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-placement="bottom" 
