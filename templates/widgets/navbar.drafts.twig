@@ -3,31 +3,42 @@
 	<ul class="nav">
 		
 	{% set allnavs = ["none", "menu","short"]  %}
-	{% set navigation = allnavs[2]  %}
+	{% set navigation = allnavs[1]  %}
 				
 	{% if navigation == "short" %}		
 		<li class="{{ navsrc == 'me.draft.show' ? 'active' }}"><a
+			title="Explore the text of the draft"
+			rel="tooltip" data-placement="bottom" 
 			href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}"><i
 				class="icon-large icon-desktop"></i><span class="hidden-phone hidden-tablet"> Overview</span></a>
 
 		<li class="{{ navsrc == 'me.draft.group.texts' ? 'active' }}"><a
+			title="Explore the summaries of the draft"
+			rel="tooltip" data-placement="bottom" 
 			href="{{ urlFor('me.draft.group.texts',{"draft":draft.id}) }}"><i
 				class="icon-large icon-file-text"></i><span class="hidden-phone hidden-tablet"> Texts</span></a>
 
 		<li class="{{ navsrc == 'me.draft.group.actions' ? 'active' }}"><a
+			title="Modify the content of the analysis"
+			rel="tooltip" data-placement="bottom" 
 			href="{{ urlFor('me.draft.group.actions',{"draft":draft.id}) }}"><i
 				class="icon-large icon-random"></i><span class="hidden-phone hidden-tablet"> Actions</span></a>
 				
 		<li class="{{ navsrc == 'me.draft.group.graphics' ? 'active' }}"><a
+			title="Explore various graphics of the draft"
+			rel="tooltip" data-placement="bottom" 
 			href="{{ urlFor('me.draft.group.graphics',{"draft":draft.id}) }}"><i
 				class="icon-large icon-bar-chart"></i><span class="hidden-phone hidden-tablet"> Graphics</span></a>
 					
 	{% elseif navigation == "menu" %}		
 		<li class="{{ navsrc == 'me.draft.show' ? 'active' }}"><a
+			title="Explore the text of the draft"
+			rel="tooltip" data-placement="bottom" 
 			href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}"><i
 				class="icon-large icon-desktop"></i><span class="hidden-phone hidden-tablet"> Overview</span></a>
 
 		<li class="dropdown"><a class="dropdown-toggle"
+			
 			data-toggle="dropdown" href="#"><i class="icon-large icon-file-text"></i> Texts
 				<span class="caret"></span></a>
 			
@@ -80,6 +91,8 @@
 			</ul>					
 		{% else %}
 			<li class="{{ navsrc == 'me.draft.show' ? 'active' }}"><a
+				title="Explore the text of the draft"
+				rel="tooltip" data-placement="bottom" 
 				href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}"><i
 					class="icon-large icon-desktop"></i><span class="hidden-phone hidden-tablet"> Overview</span></a>
 

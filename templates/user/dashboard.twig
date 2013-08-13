@@ -36,10 +36,12 @@
 	
 	<div class="row-fluid">	
 
-				<a class="quick-button metro green span2" title="Go to your assignments and drafts" 
- 					href="{{ urlFor('me.tasks') }}" >
+
+					<a class="quick-button span2" title="Go to your assignments and drafts" 
+ 					href="{{ urlFor('me.tasks') }}">
 					<i class="icon-folder-open"></i>
 					<p>Assignments</p>
+					<span class="notification green">2</span>
 				</a>
 				
 				{#<a class="quick-button metro black span2">
@@ -145,7 +147,119 @@
 {% block injectCSS %}
 	{{ parent() }}
 <style>
+.notification {
+    border-radius: 50em 50em 50em 50em;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08), 0 1px rgba(255, 255, 255, 0.3) inset;
+    color: white !important;
+    height: 16px;
+    line-height: 16px;
+    padding: 6px 10px;
+    position: absolute;
+    right: -12px;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.25);
+    top: -12px;
+}
+.notification-small {
+    border-radius: 50em 50em 50em 50em;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08), 0 1px rgba(255, 255, 255, 0.3) inset;
+    color: white !important;
+    padding: 2px 7px;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.25);
+}
+.notification-small, .notification {
+    background-color: #67C2EF;
+    background-image: -moz-linear-gradient(center top , #ACDDF5, #66C1EF);
+    border-color: #2FABE9;
+}
+.notification-small.green, .notification.green {
+    background-color: #78CD51;
+    background-image: -moz-linear-gradient(center top , #A6DC8D, #78CC51);
+    border-color: #5AAD34;
+}
+.notification-small.yellow, .notification.yellow {
+    background-color: #FABB3D;
+    background-image: -moz-linear-gradient(center top , #FBD587, #FABB3D);
+    border-color: #F4A506;
+}
+.notification-small.red, .notification.red {
+    background-color: #FA603D;
+    background-image: -moz-linear-gradient(center top , #FB9C87, #FA5F3D);
+    border-color: #FA5833;
+}
 .quick-button {
+    background-color: #FAFAFA;
+    background-image: linear-gradient(to bottom, #FAFAFA, #EFEFEF);
+    border: 1px solid #DDDDDD;
+    border-radius: 2px 2px 2px 2px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+    color: #646464;
+    cursor: pointer;
+    display: block;
+    font-size: 14px;
+    margin-bottom: -1px;
+    padding: 30px 0 10px;
+    position: relative;
+    text-align: center;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease 0s;
+}
+.quick-button:hover {
+    border-color: #A5A5A5;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
+    color: #444444;
+    text-decoration: none;
+    text-shadow: 0 1px 0 #FFFFFF;
+    transition: all 0.3s ease 0s;
+}
+.quick-button:active {
+    color: #444444;
+    text-decoration: none;
+}
+.quick-button:hover .notification {
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.6);
+    transition: all 0.3s ease 0s;
+}
+.quick-button i {
+    font-size: 32px;
+}	
+
+.quick-button-small {
+    background-color: #FAFAFA;
+    background-image: linear-gradient(to bottom, #FAFAFA, #EFEFEF);
+    border: 1px solid #DDDDDD;
+    border-radius: 2px 2px 2px 2px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+    color: #646464;
+    cursor: pointer;
+    display: block;
+    font-size: 10px;
+    padding: 15px 0 0;
+    position: relative;
+    text-align: center;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease 0s;
+}
+.quick-button-small:hover {
+    border-color: #A5A5A5;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
+    color: #444444;
+    text-decoration: none;
+    text-shadow: 0 1px 0 #FFFFFF;
+    transition: all 0.3s ease 0s;
+}
+.quick-button-small:hover .notification {
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.6);
+    transition: all 0.3s ease 0s;
+}
+.quick-button-small i {
+    font-size: 20px;
+}
+	
+{#.quick-button {
     background-color: #FAFAFA;
     background-image: linear-gradient(to bottom, #FAFAFA, #EFEFEF);
     border: 1px solid #DDDDDD;
@@ -222,7 +336,7 @@
     background: none repeat scroll 0 0 #FFC40D !important;
     border-color: #FFC40D !important
 }
-
+#}
 
 
 </style

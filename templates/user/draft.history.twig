@@ -37,8 +37,11 @@
 				{% for draft in drafts %}
 				
 				<tr>
-					<td><a class="btn btn-large"  href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}">
-					<i class="icon-large icon-pencil"></i> Version {{ draft.version }}</a></td>
+					<td><a class="btn btn-large"
+							title="Go to this draft"
+							rel="tooltip" data-placement="bottom" 
+							href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}">
+					<i class="icon-large icon-pencil"></i> Version&nbsp;{{ draft.version }}</a></td>
 					<td>{{ draft.name }}</td>
 					<td style="white-space: nowrap;">{{ draft.date | date("Y-m-d")}}<br><i class="icon-time icon-large"></i> <small>{{ draft.datesince }} ago</small></td>
 					<td>{{ draft.wordcount }}</td>
