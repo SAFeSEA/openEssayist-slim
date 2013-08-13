@@ -1,7 +1,7 @@
 {% extends "site.twig" %} 
 
-{% block title %}Dashboard{% endblock %} 
-{% block subheader %}Dashboard{% endblock %} 
+{% block title %}Home{% endblock %} 
+{% block subheader %}Your Homepage{% endblock %} 
 
 {% block bccontainer %}		
 	{% include "widgets/breadcrumb.panel.twig" with {'navsrc': 'me.home'} %}
@@ -38,10 +38,11 @@
 
 
 					<a class="quick-button span2" title="Go to your assignments and drafts" 
- 					href="{{ urlFor('me.tasks') }}">
-					<i class="icon-folder-open"></i>
-					<p>Assignments</p>
-					<span class="notification green">2</span>
+ 						rel="tooltip" data-placement="bottom"
+ 						href="{{ urlFor('me.tasks') }}">
+							<i class="icon-folder-open"></i>
+							<p>Assignments</p>
+
 				</a>
 				
 				{#<a class="quick-button metro black span2">
@@ -131,7 +132,10 @@
 	</div>
 			
 	<div class="widget-content">
-		<div id="thisis">This functionality has not be implemented yet.</div>
+	    <div class="alert alert-block alert-error ">
+    		This functionality has not be implemented yet.
+    	</div>
+		
 	</div>
 	
 </div></div>	
