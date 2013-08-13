@@ -8,9 +8,9 @@
 class DemoController extends UserController
 {
 	
-	public function showDraft($draft)
+	public function showDraft($draft,$cmd=null)
 	{
-		parent::showDraft($draft);
+		parent::showDraft($draft,$cmd);
 	}
 	
 	public function groupTexts($draft)
