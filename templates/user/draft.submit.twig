@@ -141,7 +141,7 @@ $(document).ready(function() {
 			}
 		},
 		submitHandler: function(form) {
-			$.blockUI({ message: '<div class="ajax alert alert-info">Starting Analysis. Please Wait.</div>' }); 
+			$.blockUI({ message: '<div class="ajax alert alert-info">Starting Analysis. Please Wait, it will take 10 to 20s...</div>' }); 
 		form.submit();
 			 }, highlight: function(element) {
 				 $(element).closest('.control-group').removeClass('success').addClass('error');

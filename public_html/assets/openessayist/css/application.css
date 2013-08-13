@@ -381,6 +381,23 @@ li.bc_debug > .btn-group > .btn
     clear: both;
 }
 
+.navbar .nav > li.dropdown-split-left.active > a {
+  /*  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.125) inset;
+    box-shadow: 0px 3px 3px 8px rgba(0, 0, 0, 0.125) inset;*/
+    
+}
+
+.navbar .nav > li.dropdown-split-right.active > a {
+   /*box-shadow: 0 3px 8px rgba(0, 0, 0, 0.125) inset;*/
+}
+
+.navbar .nav > li.dropdown-split-right > a {
+   /* padding-left: 7px;*/
+}
+.navbar .nav > li.dropdown-split-left > a {
+    /*padding-right: 0;*/
+}
+
 /* NGram buttons
  -------------------------------------------------- */
 

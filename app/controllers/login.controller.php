@@ -45,7 +45,7 @@ class LoginController extends Controller {
 	{
 		if ($this->app->request()->isPost()) {
 			if ($this->auth->login($this->post('username'), $this->post('password'))) {
-				$this->app->flash('info', 'Your login was successfull');
+				$this->app->flash('info', 'Your login was successful');
 				
 				$user=$this->auth->getUser();
 				//var_dump($this->auth->getUser());die();
@@ -77,7 +77,7 @@ class LoginController extends Controller {
 					->check($this->post('password'));
 	
 					if ($this->auth->login($this->post('username'), $this->post('password'))) {
-						$this->app->flash('info', 'Your login was successfull');
+						$this->app->flash('info', 'Your login was successful');
 						$this->redirect('home');
 					}
 					else 

@@ -360,7 +360,7 @@ class UserController extends Controller
 						$draft->save();
 						
 						// redirect to the "drafts review" page
-						$this->app->flash('info', 'The analysis of your draft was successfull. Check the details below.');
+						$this->app->flash('info', 'The analysis of your draft was successful. Check the details below.');
 						$r= $this->app->urlFor("me.draft.action",array("idt" => $taskId));
 						$this->redirect($r,false);
 						

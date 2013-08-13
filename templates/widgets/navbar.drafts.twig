@@ -12,14 +12,32 @@
 			href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}"><i
 				class="icon-large icon-desktop"></i><span class="hidden-phone hidden-tablet"> Essay</span></a>
 
-		<li class="{{ navsrc == 'me.draft.group.texts' ? 'active' }}"><a
+		<li class="{{ navsrc == 'me.draft.group.texts' ? 'active' }} dropdown-split-left"><a
 			title="Explore the summaries of the draft"
 			rel="tooltip" data-placement="bottom" 
-			href="{{ urlFor('me.draft.group.texts',{"draft":draft.id}) }}"><i
-				class="icon-large icon-file-text"></i><span class="hidden-phone hidden-tablet"> Analysis</span></a>
+			href="{{ urlFor('me.draft.group.texts',{"draft":draft.id}) }}">
+					<i class="icon-beaker icon-large"></i>
+				<span class="hidden-phone hidden-tablet"> Analysis</span></a>
 
-
-				
+		
+			{#<li class="dropdown dropdown-split-right active">
+            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+              <i class="icon-caret-down"></i>
+            </a>
+            
+            			<ul class="dropdown-menu pull-right">
+				<li class="{{ navsrc == 'me.draft.group.texts' ? 'active' }}"><a
+					href="{{ urlFor('me.draft.group.texts',{"draft":draft.id}) }}">About...</a>
+				<li class="divider visible-desktop"></li>
+				<li class="{{ navsrc == 'me.draft.keywords' ? 'active' }}"><a
+					href="{{ urlFor('me.draft.keywords',{"draft":draft.id}) }}"><i
+					class="icon-large icon-list"></i><span class="hidden-phone hidden-tablet"> Keywords</span></a>
+				<li class="{{ navsrc == 'me.draft.sentence' ? 'active' }}"><a
+					href="{{ urlFor('me.draft.sentence',{"draft":draft.id}) }}"><i
+					class="icon-large icon-tag"></i><span class="hidden-phone hidden-tablet"> Sentences</span></a>						
+			</ul>
+          </li>#}
+          
 		<li class="{{ navsrc == 'me.draft.group.graphics' ? 'active' }}"><a
 			title="Explore various graphics of the draft"
 			rel="tooltip" data-placement="bottom" 
