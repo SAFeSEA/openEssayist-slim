@@ -65,38 +65,60 @@
 
 <div class="row-fluid">
 
-<div class="span7"><div class="widget">
+<div class="span8"><div class="widget">
 	<div class="widget-header">
 		<h3>Getting Help and Support</h3>
 	</div>
 			
 	<div class="widget-content">
-	
-		{% if group.url is null and  group.email is null %}
+		<h4>Within the system</h4>
+		<div class="row-fluid">
+			
+			<a href="javascript:void(0);" class="btn btn-large span2 offset1" id="help-on-task">
+			<i class="icon-large icon-question-sign "></i> Help</a>
 		
-		<div class="alert alert-block">
-			<h4>Warning!</h4>
-		    <p>No external sources of help have been defined for your group.</p>
-    	</div>
-    
+			<div class="span8 offset1">
+				<p>For a description of the content of the different aspects of the system,
+					check the on-board help pages. The command is always available on the top 
+					navigation bar.</p>
+				</p>
+				
+			</div>
+
+		</div>	
+
+		<div class="row-fluid">
+			
+			<a href="javascript:void(0);" class="btn btn-large span2 offset1" id="help-on-task">
+				<i class="icon-large icon-comments "></i> Hints</a>
 		
-		{% endif %}
+			<div class="span8 offset1">
+				<p>Once you are exploring your drafts and their analyses, you will have access 
+					to some hints on how to use the analysis, interpret the results and exploit 
+					them for revising your essay. Look for the <i class="icon-large icon-comments "> </i> icon. 
+				</p>
+				
+			</div>
+
+		</div>	
+		
+		
+		
+		<h4>Outside the system</h4>
 	
 		{% if group.url is not null  %}
 		<div class="row-fluid">
-			<div class="span6">
-					
-				<p><a class="btn btn-large" title="Overview of your progress on this assignment" 
-			 			href="{{ group.url }}">
-					<i class="icon-2x pull-left icon-group"></i> 
-					Go to the <b>openEssayist</b><br>forum on the VLE
-				</a></p>
-			
-			</div>
-			<div class="span6">
-				<p>
+			<a class="btn span4" 
+					href="{{ group.url }}">
+				<i class="icon-2x pull-left icon-group"></i> 
+					<div>Go to the <b>openEssayist</b><br>forum</div>
+			</a>
+			<div class="span8">
+				<p> On the Open University page for the course, you will find a self-help technical forum where questions about 
+					openEssayist can be asked to other users. </p>
+				<p>This is you primary source for help, as problems can be shared and solved for everybody's benefit. 
 				</p>
-				<p>To use in emergencies only</p>
+				
 			</div>
 
 		</div>
@@ -104,19 +126,20 @@
 		
 		{% if group.email is not null %}
 		<div class="row-fluid">
-			<div class="span6">
-				
-				<p><a class="btn btn-large" title="Overview of your progress on this assignment" 
+			<a class="btn span4" 
 			 			href="mailto:{{ group.email }}" >
 					<i class="icon-2x pull-left icon-envelope"></i> 
 					Send an email to the<br><b>SAFeSEA</b> team ...
-				</a></p>
+				</a>
 			
-			</div>
-			<div class="span6">
+	
+			<div class="span8">
 				<p> 
 				</p>
-				<p>To use in emergencies only</p>
+				<div class="alert alert-block alert-error ">
+    		<h4>To use for emergencies only</h4>
+    	</div>
+				<p></p>
 			</div>
 
 		</div>
@@ -126,13 +149,13 @@
 	
 </div></div>
 
-		<div class="span5"><div class="widget">
+		<div class="span4"><div class="widget">
 	<div class="widget-header" >
 		<h3>Activity Log</h3>
 	</div>
 			
 	<div class="widget-content">
-	    <div class="alert alert-block alert-error ">
+	    <div class="alert alert-block ">
     		This functionality has not be implemented yet.
     	</div>
 		

@@ -1,7 +1,15 @@
-	{% extends "site.twig" %} 
+{% extends "site.twig" %} 
 
-{% block title %}Draft - Overview{% endblock %} 
-{% block subheader %}Draft - Overview{% endblock %} 
+{% set helpers = {
+	'text': 'text only',
+	'keyword': 'with key words',
+	'sentence': 'with key sentences',
+	'all': 'with all elements'
+} %}
+
+
+{% block title %}{{ task.name }} v{{ draft.version }} - Essay Overview ({{ helpers[mashup] }}){% endblock %} 
+{% block subheader %}Your Draft : Overview ({{ helpers[mashup] }}){% endblock %} 
 
 
 {% block bccontainer %}		
@@ -19,15 +27,15 @@
 	
 	<div class="widget">
 		<div class="widget-header">
-			<h3>Draft Structure and Text</h3>
+			<h3>Your essay</h3>
 		</div>
 		<div class="widget-toolbar "><div class="btn-toolbar form-inline">    
 			
 			<div class="btn-group">
-				<label style="margin-right: 5px;" class="checkbox">Show : </label>	
+				<label style="margin-right: 5px;" class="checkbox">Show: </label>	
 				<a class="btn btn-small {{ mashup=='text' ? 'active'}}" href="{{ urlFor('me.draft.show',{'draft':draft.id,'cmd':''}) }}">Text</a>
-				<a class="btn btn-small {{ mashup=='keyword' ? 'active'}}" href="{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'keyword'}) }}">Keywords</a>
-				<a class="btn btn-small {{ mashup=='sentence' ? 'active'}}" href="{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'sentence'}) }}">Sentences</a>
+				<a class="btn btn-small {{ mashup=='keyword' ? 'active'}}" href="{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'keyword'}) }}">Key Words</a>
+				<a class="btn btn-small {{ mashup=='sentence' ? 'active'}}" href="{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'sentence'}) }}">Key Sentences</a>
 				<a class="btn btn-small {{ mashup=='all' ? 'active'}}" href="{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'all'}) }}">All</a>
 			</div>
 			{% if mashup == 'all' %}
@@ -38,13 +46,13 @@
 			{% endif  %}
         </div></div>
 		
-		<div class="myessay openessay">
 		
-		<div class="widget-content assignment" style="display: none;"><i class="icon-quote-left icon-4x pull-left icon-muted"></i>
+		
+		<div class="widget-content assignment myessay openessay" style="display: none;"><i class="icon-quote-left icon-4x pull-left icon-muted"></i>
 			<p>{{ task.assignment | raw | nl2br }}</p>
 		</div>
         
-		<div class="widget-content widget-essay">
+		<div class="widget-content widget-essay myessay openessay">
 		{% for par in parasenttok %}
 			<div class="par-wrapper" {{ (par[0].tag)?"data-tag=#{ par[0].tag }":"" }}>
 				<div class="par-tag" {{ (par[0].tag)?"data-tag=#{ par[0].tag }":"" }}>
@@ -65,7 +73,8 @@
 		{% endfor %}
 		</div>        
         
-	</div>	</div>
+		
+	</div>
 
 </div></div>
 

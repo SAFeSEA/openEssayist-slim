@@ -1,7 +1,7 @@
 {% extends "site.twig" %} 
 
-{% block title %}Drafts{% endblock %} 
-{% block subheader %}Manage your drafts for {{ task.name }}{% endblock %} 
+{% block title %}{{ task.name }} Drafts{% endblock %} 
+{% block subheader %}Manage Your Drafts for {{ task.name }}{% endblock %} 
 
 
 {% block bccontainer %}		
@@ -12,11 +12,23 @@
 	{% include "widgets/navbar.tasks.twig" with {'navsrc': 'me.draft.action'} %}
 {% endblock %}
 
+{% block injectCSS %}
+	{{ parent() }}
+<style>
+#demo-trigger h3:before {
+	content: "Hide "
+}
+#demo-trigger.collapsed h3:before {
+	content: "Show "
+}
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="row-fluid"><div class="span12">
-<div class="widget" id="demo-trigger" data-toggle="collapse" data-target="#demo" style="cursor: pointer;">
+<div class="widget collapsed" id="demo-trigger" data-toggle="collapse" data-target="#demo" style="cursor: pointer;">
 			<div class="widget-header" title="Expand or collapse the details">
-				<h1>Show Assignment information</h1>
+				<h3>Assignment Information</h3>
 				<div class="box-icon">
 					<a class="btn-setting" ><i class="icon-chevron-down"></i></a>
 				</div>
@@ -29,7 +41,7 @@
 	<div class="span2">
 		<div class="widget">
 			<div class="widget-header">
-			<h2> {{ group.name }}</h2>
+			<h4> {{ group.name }}</h4>
 			</div>
 			<div class="widget-content"> 
 					<p> 
@@ -40,7 +52,7 @@
 	<div class="span8">
 		<div class="widget">
 			<div class="widget-header">
-			<h2> Assignment</h2>
+			<h4> Assignment</h4>
 			</div>
 			<div class="widget-content"> 
 					<p>{{ task.assignment|nl2br}} </p>
@@ -50,7 +62,7 @@
 	<div class="span2">
 		<div class="widget">
 			<div class="widget-header">
-			<h2> Deadline </h2>
+			<h4> Deadline </h4>
 			</div>
 			<div class="widget-content"> 
 					<p>{{ task.deadline}}</p>
@@ -58,7 +70,7 @@
 		</div>
 		<div class="widget">
 			<div class="widget-header">
-				<h2> Word Limit</h2>
+				<h4> Word Limit</h4>
 			</div>
 			<div class="widget-content"> 
 				<p>{{ task.wordcount}}</p>
@@ -86,13 +98,13 @@
 <div class="row-fluid"><div class="span12">
 <div class="widget">
 			<div class="widget-header">
-			<h2>To analyse a draft</h2>
+			<h3>To analyse a draft</h3>
 			</div>
 			<div class="widget-content"> 
 				<p>Before going further, you need to have a draft of your assignment ready for analysis.</p>
 				<p>It does not have to be complete, just with enough text for the system to extract key words, key sentences and such.</p>
 				<p>Since openEssayist does not support online editing, make sure you have your text handy in a format you can easily copy from and paste into the system.</p>
-				<p>Once ready, go and use the "New draft" command:</p>
+				<p>Once ready, go and use the "New draft" command.</p>
 				<p><a class="btn btn-large span3" title="Analyse a first draft for this assignment"
 					href="{{ urlFor('me.draft.submit',{"idt":task.id}) }}" rel="tooltip" data-placement="bottom">
 				<i class="icon-large icon-upload-alt"></i> New draft</a></p>
@@ -104,14 +116,19 @@
 <div class="row-fluid"><div class="span12">
 <div class="widget">
 			<div class="widget-header">
-			<h2>Review your draft</h2>
+			<h3>To review your draft</h3>
 			</div>
 			<div class="widget-content"> 
-				<p>You recently had a first draft analysed by openEssayist.</p>
-				<p>You can review the analysis here: </p>
+				<p>You recently had a first draft (Version {{drafts[0].version }}, "{{drafts[0].name }}") analysed by openEssayist.</p>
+				<p>
+					OpenEssayist has extracted key words, key sentences and other information from your text. 
+					All this information will be presented in various forms, giving you matters to explore, 
+					reflect on, and - ultimately - exploit to revise your essay.
+				</p> 
+				<p>You can go to the analysis here: </p>
 				<p>
 				<a class="btn btn-large span3"  
-						title="Show the analysis of your first draft" 
+						title="Go to the analysis of your first draft" 
 						rel="tooltip" data-placement="bottom"
 						href="{{ urlFor('me.draft.show',{"draft":drafts[0].id}) }}">
 					<i class="icon-large icon-pencil"></i> Version {{drafts[0].version }}</a>    					
@@ -124,12 +141,12 @@
 <div class="row-fluid"><div class="span12">
 <div class="widget">
 			<div class="widget-header">
-			<h2>Review your drafts</h2>
+			<h3>Review your drafts</h3>
 			</div>
 			<div class="widget-content"> 
 			<div class="clearfix ">
 				<p>You have analysed several drafts so far.</p>
-				<p>You can always review the analysis of the latest draft here: </p>
+				<p>You can always go and review the analysis of the latest draft (Version {{drafts[0].version }}, "{{drafts[0].name }}") here: </p>
 				<p>
 				<a class="btn btn-large span3"
 						title="Show the analysis of the latest draft" 
@@ -138,7 +155,7 @@
 					<i class="icon-large icon-pencil"></i> Version {{drafts[0].version }}</a>    					
     			</p>
     		</div><div class="clearfix ">
-				<p>You can also check individual analysis in your history: </p>
+				<p>Alternatively, You can go and check previous drafts and their analysis: </p>
 				<p><a class="btn btn-large span3"  title="Show all the drafts analysed for this assignment"
     				href="{{ urlFor('me.draft.history',{"idt":task.id}) }}" rel="tooltip" data-placement="bottom">
 				<i class=" icon-large icon-archive"></i> History</a></p>

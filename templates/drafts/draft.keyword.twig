@@ -1,8 +1,8 @@
 {% extends "site.twig" %} 
 {% import "widgets/ngram.macro.twig" as ngram %}
 
-{% block title %}Draft - Keywords{% endblock %} 
-{% block subheader %}Draft - Keywords{% endblock %} 
+{% block title %}{{ task.name }} v{{ draft.version }} - Key Words{% endblock %} 
+{% block subheader %}Your Draft : Key Words & Key Phrases{% endblock %} 
 {% block bccontainer %}		
 	{% include "widgets/breadcrumb.task.twig" %}
 {% endblock %}

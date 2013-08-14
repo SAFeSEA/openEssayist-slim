@@ -1,7 +1,7 @@
 {% extends "site.twig" %} 
 
-{% block title %}Draft - More Text Options{% endblock %} 
-{% block subheader %}Draft - More Text Options{% endblock %} 
+{% block title %}{{ task.name }} v{{ draft.version }} - Text Options{% endblock %} 
+{% block subheader %}Your Draft : More Text Options{% endblock %} 
 
 {% block bccontainer %}		
 	{% include "widgets/breadcrumb.task.twig" %}
@@ -17,10 +17,10 @@
 
 	<div class="widget">
 		<div class="widget-header">
-			<h3>More Text </h3>
+			<h3>About</h3>
 		</div>
 		<div class="widget-content">
-			<p>bladibla</p>
+			<p>In this page, you can access the different elements of the analysis made by openEssayist on your essay, on their own.</p>
 		</div>
 		</div>
 
@@ -31,31 +31,31 @@
 
 	<div class="span6"><div class="widget">
 		<div class="widget-header">
-			<h3>More Text </h3>
+			<h3>Key Words & Key Phrases </h3>
 		</div>
-		<div class="widget-content">Click on the 'key words' button [GO TO ] to see again the words that openEssayist
-thinks your assignment is about but shown in a different way from Activity 1
+		<div class="widget-content">
+			The most important words and phrases have been extracted from your text. 
+			
 			<p><a class="btn btn-large"
 			title="Show the key words and key phrases of the draft"
 			rel="tooltip" data-placement="bottom" 
 				href="{{ urlFor('me.draft.keywords',{"draft":draft.id}) }}"><i
-					class="icon-large icon-list"></i><span class=""> Keywords</span></a>
+					class="icon-large icon-list"></i><span class=""> Key Words</span></a>
 			</p>
 	</div></div></div>
 
 	<div class="span6"><div class="widget">
 		<div class="widget-header">
-			<h3>More Text </h3>
+			<h3>Key Sentences</h3>
 		</div>
-		<div class="widget-content">Click on the 'summary' button [GO TO ] to see a written summary of your
-assignment. The summary is made up of the sentences that openEssayist thinks are the
-most prominent sentences in your assignment. These are the sentences that sum up
-best what you are trying to say in your assignment. 
+		<div class="widget-content">The summary is made up of the sentences that openEssayist thinks are the
+			most prominent sentences in your assignment. These are the sentences that sum up
+			best what you are trying to say in your assignment. 
 			<p><a class="btn btn-large"
 			title="Show the key sentences of the draft"
 			rel="tooltip" data-placement="bottom" 
 				href="{{ urlFor('me.draft.sentence',{"draft":draft.id}) }}"><i
-					class="icon-large icon-tag"></i><span class=""> Sentences</span></a></p>
+					class="icon-large icon-tags"></i><span class=""> Key Sentences</span></a></p>
 			
 	</div></div></div>
 	
@@ -66,13 +66,13 @@ best what you are trying to say in your assignment.
 
 	<div class="widget">
 		<div class="widget-header">
-			<h3>More Graphics </h3>
+			<h3><i
+					class="icon-large icon-bolt"></i> Action - Organise your key words </h3>
 		</div>
-		<div class="widget-content">The 'organise key words' button [GO TO ] will take you to an activity in which you
-can organise your key words into different groups, and you can choose which key
-words you would like to see highlighted in the text of your assignment.
-Then click the 'text + organised key words' button [GO TO ] to see all the text of your
-assignment with your personal choice of key words highlighted.
+		<div class="widget-content">
+		The key words extracted by openEssayist are ranked by importance, as seen above, but are not organised in any other ways.
+		Here, you can start an activity in which you can organise your key words into different groups, as you see fit.
+		This will let you choose which key words you would like to see displayed in the text of your assignment and on other graphics.
 			<p><a class="btn btn-large"
 						title="Organise the key words of the draft  into your own groups"
 			rel="tooltip" data-placement="bottom" 

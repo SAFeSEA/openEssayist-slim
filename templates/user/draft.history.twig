@@ -1,7 +1,7 @@
 {% extends "site.twig" %} 
 {% import "widgets/ngram.macro.twig" as ngram %}
 
-{% block title %}Drafts{% endblock %} 
+{% block title %}{{ task.name }} History{% endblock %} 
 {% block subheader %}History of your drafts for {{ task.name }}{% endblock %} 
 
 {% block navsubheader %}

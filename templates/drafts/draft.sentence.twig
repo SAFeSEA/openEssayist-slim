@@ -1,7 +1,7 @@
 {% extends "site.twig" %} 
 
-{% block title %}Draft - Sentences{% endblock %} 
-{% block subheader %}Draft - Sentences{% endblock %} 
+{% block title %}{{ task.name }} v{{ draft.version }} - Key Sentences{% endblock %} 
+{% block subheader %}Your Draft : Key Sentences{% endblock %} 
 
 {% block bccontainer %}		
 	{% include "widgets/breadcrumb.task.twig" %}
@@ -19,10 +19,11 @@
 				<h3> Sentences </h3>
 			</div>
 			<div class="widget-toolbar">
-				<div class="btn-toolbar" id="options">
+				<div class="btn-toolbar form-inline" id="options">
 				    <div class="btn-group option-set"  data-toggle="buttons-radio" data-option-key="sortBy">
-    					<button class="btn btn-small active btn-primary" data-option-value="rank">Rank</button>
-					    <button class="btn btn-small" data-option-value="id">Order</button>
+    					<label style="margin-right: 5px;" class="checkbox">Sort by: </label>	
+    					<button class="btn btn-small active" data-option-value="rank">Importance</button>
+					    <button class="btn btn-small" data-option-value="id">Text Order</button>
 					    {#<button class="btn" data-option-value="tag">Structure</button>#}
     				</div>
 				</div>
@@ -157,8 +158,8 @@ $(".par-tag[data-tag]").each(function()
           return false;
         }
         var $optionSet = $this.parents('.option-set');
-        $optionSet.find('.active').removeClass('active').removeClass('btn-primary');
-        $this.addClass('active').addClass('btn-primary');
+        $optionSet.find('.active').removeClass('active');
+        $this.addClass('active');
   
         // make option object dynamically, i.e. { filter: '.my-filter-class' }
         var options = {},

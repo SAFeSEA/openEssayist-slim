@@ -1,7 +1,7 @@
 {% extends "site.twig" %} 
 
-{% block title %}Draft - More Graphics Visualisation{% endblock %} 
-{% block subheader %}Draft - More Graphics Options{% endblock %} 
+{% block title %}{{ task.name }} v{{ draft.version }} - Graphics Options{% endblock %} 
+{% block subheader %}Your Draft : More Graphics Options{% endblock %} 
 
 {% block bccontainer %}		
 	{% include "widgets/breadcrumb.task.twig" %}
@@ -17,10 +17,10 @@
 
 	<div class="widget">
 		<div class="widget-header">
-			<h3>More Graphics </h3>
+			<h3>About</h3>
 		</div>
 		<div class="widget-content">
-							
+				In this page, you can access various graphics representing the different elements of the analysis in different ways.			
 		</div>
 		</div>
 
@@ -30,10 +30,9 @@
 
 	<div class="span6"><div class="widget">
 		<div class="widget-header">
-			<h3>More Text </h3>
+			<h3>Dispersion Graph </h3>
 		</div>
-		<div class="widget-content">lick on the 'key word distribution' button [GO TO ] to see a chart showing
-whereabouts in your assignment the key words occur
+		<div class="widget-content">See a "dispersion graph" showing the occurrence of key words throughout the essay.
 						<p><a class="btn btn-large"
 						href="{{ urlFor('me.draft.view.dispersion',{"draft":draft.id}) }}"><i class="icon-large icon-bar-chart"></i> Dispersion</a></p>
 						
@@ -42,12 +41,11 @@ whereabouts in your assignment the key words occur
 
 	<div class="span6"><div class="widget">
 		<div class="widget-header">
-			<h3>More Text </h3>
+			<h3>Word Cloud</h3>
 		</div>
-		<div class="widget-content">Click on the 'cloud' button [GO TO ] to see a picture made of some of the words
-in
-your assignment. openEssayist thinks these are the topics your assignment is
-discussing the most. 
+		<div class="widget-content">See a "word cloud" of the key words in your essay, 
+		giving prominence to the words that appear more frequently in it. 
+		OpenEssayist thinks these are the topics your essay is discussing the most. 
 						<p><a class="btn btn-large"
 						href="{{ urlFor('me.draft.view.cloud',{"draft":draft.id}) }}"><i class="icon-large icon-bar-chart"></i> Cloud</a></p>
 						
@@ -62,11 +60,10 @@ discussing the most.
 
 	<div class="span6"><div class="widget">
 		<div class="widget-header">
-			<h3>More Text </h3>
+			<h3>Word Count</h3>
 		</div>
-		<div class="widget-content">Click on the 'parts' button [GO TO ] to see a pie chart showing the sizes of the
-different parts of your assignment. These are the introduction, the conclusion and the
-main body of text
+		<div class="widget-content">See a "pie chart" showing the size, in term of word count, of the
+different parts of your essay (introduction, discussion, conclusion, ...).
 						<p><a class="btn btn-large"
 						href="{{ urlFor('me.draft.view.structure',{"draft":draft.id}) }}">
 						<i class="icon-large icon-bar-chart"></i> Structure Share</a></p>
@@ -76,10 +73,10 @@ main body of text
 
 	<div class="span6"><div class="widget">
 		<div class="widget-header">
-			<h3>More Text </h3>
+			<h3>Word Limit</h3>
 		</div>
-		<div class="widget-content">Click on the 'wordcount' button [GO TO ] to see a bullet chart showing how close
-your assignment comes to the required number of words for this assignment.
+		<div class="widget-content">See a "bullet graph" showing how close
+			your essay comes to the required number of words for this assignment.
 								<p><a class="btn btn-large"
 						href="{{ urlFor('me.draft.view.target',{"draft":draft.id}) }}"><i class="icon-large icon-bar-chart"></i> Word
 							Count & Word Limit</a></p>
