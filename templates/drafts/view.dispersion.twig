@@ -1,7 +1,7 @@
 {% extends "site.twig" %} 
 
-{% block title %}Draft - Visualisation (Dispersion){% endblock %} 
-{% block subheader %}Draft - Visualisation (Dispersion){% endblock %} 
+{% block title %}{{ task.name }} v{{ draft.version }} - Keywords Dispersion{% endblock %} 
+{% block subheader %}Your Draft : Key Words Dispersion{% endblock %} 
 
 
 {% block bccontainer %}		
@@ -18,14 +18,15 @@
 
 <div class="widget">
 	<div class="widget-header" data-toggle="collapse" data-target="#demo">
-		<h3>Keyword Dispersion</h3>
+		<h3>Key Words Dispersion</h3>
 	</div>
 	
 	<div class="widget-toolbar">
-		<div class="btn-toolbar" id="options">
+		<div class="btn-toolbar form-inline" id="options">
 			<div class="btn-group option-set"  data-toggle="buttons-radio" data-option-key="sortBy">
-				<button title="Zoom by essay structure" class="btn-setting btn btn-small active" data-option-value="x">Structure</button>
-				<button title="Zoom by key word" class="btn-setting btn btn-small" data-option-value="y">Key Word</button>
+  				<label style="margin-right: 5px;" class="checkbox">Zoom by axis : </label>	
+ 				<button title="Zoom by essay structure" class="btn-setting btn btn-small active" data-option-value="x">Essay</button>
+				<button title="Zoom by key word" class="btn-setting btn btn-small" data-option-value="y">Key Words</button>
 				<button title="Zoom by both side" class="btn-setting btn btn-small" data-option-value="xy">Both</button>
 			</div>
 		</div>
@@ -129,7 +130,7 @@ $(document).ready(function() {
 			reflow: true
 		},
 		title: {
-			text: 'Keyword Dispersion'
+			text: 'Occurrence of key words & key phrases throughout the essay'
 		},
 		tooltip: {
 			formatter: function() {

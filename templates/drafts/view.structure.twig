@@ -1,7 +1,7 @@
 {% extends "site.twig" %} 
 
-{% block title %}Draft - Visualisation (Structure){% endblock %} 
-{% block subheader %}Draft - Structure{% endblock %} 
+{% block title %}{{ task.name }} v{{ draft.version }} - Word Count{% endblock %} 
+{% block subheader %}Your Draft : Word Count{% endblock %} 
 
 {% block bccontainer %}		
 	{% include "widgets/breadcrumb.task.twig" %}
@@ -17,7 +17,7 @@
 
 <div class="span12"><div class="widget">
 	<div class="widget-header">
-		<h3>Structure Distribution</h3>
+		<h3>Word Count</h3>
 	</div>
 	<div class="widget-content">
 		<div id="struct_pie" style="height: 500px;margin: 0 auto"></div>

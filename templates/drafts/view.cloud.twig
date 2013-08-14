@@ -1,7 +1,7 @@
 {% extends "site.twig" %} 
 
-{% block title %}Draft - Visualisation (Word Cloud){% endblock %} 
-{% block subheader %}Draft - Visualisation (Word Cloud){% endblock %} 
+{% block title %}{{ task.name }} v{{ draft.version }} - Word Cloud{% endblock %} 
+{% block subheader %}Your Draft : Word Cloud{% endblock %} 
 
 {% block bccontainer %}		
 	{% include "widgets/breadcrumb.task.twig" %}
@@ -16,7 +16,7 @@
 
 <div class="widget">
 			<div class="widget-header" data-toggle="collapse" data-target="#demo">
-				<h3>KeyWord Cloud</h3>
+				<h3>Key Words Cloud</h3>
 				
 			</div>
 			
