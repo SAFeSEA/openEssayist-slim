@@ -3,6 +3,11 @@
 {% block injectCSS %}
 <link href="{{ app_base }}/assets/jquery.pnotify/jquery.pnotify.default.css" media="all" rel="stylesheet" type="text/css" />
 <style>
+
+.ui-pnotify .ui-pnotify-title {
+    margin-bottom: 0.4em;
+}
+
 .modal-backdrop, .modal-backdrop.fade.in {
     background: none repeat scroll 0 0 #000;
   opacity: 0.5;
@@ -48,7 +53,8 @@
 {% if helpontask is defined %}
 <script id="helpmodal">
 $.pnotify.defaults.history = false;
-
+$.pnotify.defaults.openessayist = {"push": "top","dir1": "up", "dir2": "left", "firstpos1": 50, "firstpos2": 10, "spacing1":10};
+	
 $(document).ready(function() {
 	$('#help-on-task').click(function(e){
 		var $modal = $('#help-modal');
@@ -63,7 +69,7 @@ $(document).ready(function() {
 
 	});
 
-	var stack_bottomright = {"push": "top","dir1": "up", "dir2": "left", "firstpos1": 50, "firstpos2": 10, "spacing1":10};
+	var stack_bottomright = $.pnotify.defaults.openessayist;//{"push": "top","dir1": "up", "dir2": "left", "firstpos1": 50, "firstpos2": 10, "spacing1":10};
 	$('#hint-on-task').click(function(e)
 	{
 		$('body').modalmanager('loading');

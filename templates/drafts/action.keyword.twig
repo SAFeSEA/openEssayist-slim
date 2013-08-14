@@ -1,8 +1,8 @@
 {% extends "site.twig" %} 
 {% import "widgets/ngram.macro.twig" as ngram %}
 
-{% block title %}Draft - Keyword Categories{% endblock %} 
-{% block subheader %}Draft - Organise the keywords{% endblock %} 
+{% block title %}{{ task.name }} v{{ draft.version }} - Organise Key Words{% endblock %} 
+{% block subheader %}Your Draft : Organise the Key Words{% endblock %} 
 
 {% block navsubheader %}
 	{% include "widgets/navbar.drafts.twig" with {'navsrc': 'me.draft.act.keyword'} %}
@@ -109,8 +109,7 @@ ul#category_all
 {% block content %}
 
 
-{% if task.isopen and auth.user.isadmin %}
-
+{#
 <div class="row-fluid">
 <div class="widget">
 <div class="widget-header"><h3>Add you own key words ...</h3></div>
@@ -127,7 +126,7 @@ ul#category_all
 	<p id="project-description"></p>
 			</div>
 </div></div>
-{% endif %}
+#}
 
 {% set lkw = (groups['category_all'] is defined)? groups['category_all']['keywords'] : keywords   %}
 <div class="row-fluid"><div class="span12">
@@ -159,19 +158,15 @@ ul#category_all
 
 <div class="row-fluid"><div class="span12">
 	<div class="widget">
-		<div class="widget-header"><h3>Groups (0)</h3>
+		<div class="widget-header"><h3>Your Groups (0)</h3>
 	</div>
 	{% if task.isopen %}
 	<div class="widget-toolbar">
-	<div class="btn-toolbar">    
-		<div class="btn-group">
-    				<button id="catg-Save" class="btn btn-small btn-primary">Save</button>
-    				<button id="catg-Reset" class="btn btn-small disabled">Reset</button>
+		<div class="btn-toolbar">    
+    		<button id="catg-Save" class="btn btn-small btn-primary disabled">Save</button>
+    		<button id="catg-Reset" class="btn btn-small disabled">Reset</button>
+    		<button id="catg-New" class="btn btn-small">New Category...</button>
     	</div>
-    	<div class="btn-group">
-    				<button id="catg-New" class="btn btn-small">New Category...</button>
-		</div>
-    </div>
 	</div>
 	{% endif %}	
 		<div class="widget-content" id="widget-content-cats">
@@ -217,117 +212,6 @@ ul#category_all
 	</div></div>
 </div></div>
 
-{#<div class="row-fluid"><div class="span12">
-
-<div class="widget">
-<div class="widget-header"><i class="icon-list-alt"></i><h3>Keywords</h3></div>	
-
-<div class="widget-toolbar">
-	<div class="btn-toolbar">    
-	<div class="btn-group">
-    				<button id="catg-Save" class="btn btn-mini btn-primary">Save</button>
-    				<button id="catg-Reset" class="btn btn-mini disabled">Reset</button>
-    				</div>
-
-    				<div class="btn-group">
-    				<button id="catg-New" class="btn btn-mini">New Category...</button>
-    			</div>
-    		</div>
-</div>
-
-
-<div class="widget-content">
-	<div class="row-fluid">
-		<div class="span4 widget-content-allcat">
-			<div class="widget-header"><h3>All</h3></div>
-			
-			<div class="widget-content">
-				
-				<div class="input-prepend input-append input-fullwidth">
-					<span class="add-on"><i class="icon-search"></i></span>
-					<div class="input-wrapper">
-						<input class="" id="filter"  type="text" placeholder="filter the list">
-					</div>
-	
-				</div>
-
-
-
-
-				<div class="droptrue connectedSortable ui-sortable unstyled" id="category_all">
-					
-					{% if groups['category_all'] is defined %}
-						
-						{% for key2,item2 in groups['category_all']['keywords']  %}
-							<div class="" id="{{ item2 }}">{{ ngram.toBtn(keywords[item2],false) }}</div>
-						{% endfor %}
-					{% else %}
-						{% for key,item in keywords %}
-							<div class="" id="{{ key }}">{{ ngram.toBtn(item,false) }}</div>
-						{% endfor %}
-					{% endif %}
-				</div>
-			</div>
-			<div class="widget-header"><h3>Add keywords ...</h3></div>
-			 	
-			<div class="widget-content">
-				<div class="input-append input-fullwidth00">
-					<div class="input-wrapper">
-						<input class="" id="tags"  type="text" placeholder="filter the list">
-						<button class="btn" type="button">Go!</button>
-					</div>
-	
-				</div>
-			</div>
-		</div>
-	
-
-		<div class="span8 widget-content-cats" id="widget-content-cats">
-			<div class="row-fluid">
-			{% for key,item in groups[1:] %}
-			
-				{% if loop.index0!=0 and loop.index0%2 == 0 %}
-			</div>
-			<div class="row-fluid">
-				{% endif %}
-				<div class="span6" id="cat_{{ loop.index0 }}">
-					
-					<div class="widget-header"><h3>
-								<span class="cat_color" style="background-color: {{ item.attr.color }};"></span>
-								<span class="cat_name">{{ item.attr.name }}</span></h3>
-						<div class="box-icon">
-							<a href="#" class="btn-setting" data-toggle="modal" data-target="#dlgSetting" data-category="cat_{{ loop.index0 }}"><i class="icon-wrench"></i></a>
-							<a href="#" class="btn-close disabled" data-toggle="modal" data-target="#dlgClose" data-category="cat_{{ loop.index0 }}"><i class="icon-remove"></i></a>
-						</div>
-						</div>
-					<div class="widget-content" id="">
-						<ul class="droptrue connectedSortable ui-sortable unstyled" id="{{ key }}" style="min-height: 50px">
-							{% for key2,item2 in item.keywords  %}
-								<li class="" id="{{ item2 }}">{{ ngram.toBtn(keywords[item2],false) }}</li>
-							{% endfor %}
-						</ul>
-					</div>
-					<div class="widget-content info hide" >
-							<input class="grp_name" type="text" placeholder="Type something..." value="{{ item.attr.name }}">
-							<input class="grp_color" type="text" value="{{ item.attr.color }}">
-							<textarea class="grp_desc" placeholder="Type something...">{{ item.attr.desc }}</textarea>
-					</div>
-				</div>
-			{% else %}
-				
-			{% endfor %}
-			</div>
-		</div>	
-	
-	
-	
-	</div>		
-</div>
-	
-			
-		
-</div>
-</div></div>#}
 
 <!-- Template for Keyword group -->
 <div class="span4 hide" id="cat_template">
@@ -386,8 +270,8 @@ ul#category_all
 <script src="{{ app_base }}/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
 <script src="{{ app_base }}/assets/d3.js/d3.v3.min.js"></script>
 <script src="{{ app_base }}/assets/jquery.minicolors/jquery.minicolors.js"></script>
-{% if task.isopen and auth.user.isadmin %}
-<script>
+
+{#<script>
 $(document).ready(function() {
 	var lemmas = {{ lemmas|json_encode|raw  }};
 	
@@ -436,7 +320,8 @@ $(document).ready(function() {
 	    });
 });
 </script>
-{% endif %}
+#}
+
 <script>
 $(document).ready(function() {
 	var is_dirty = false;
@@ -468,7 +353,8 @@ $(document).ready(function() {
 				if (g) g.text(name);
 				g = tp.find('h3 > .cat_color');
 				if (g) g.css('background-color',color);
-				is_dirty = true;		
+				is_dirty = true;	
+				$("#catg-Save").removeClass("disabled");
 			}
 	    };
 
@@ -504,6 +390,7 @@ $(document).ready(function() {
 				order=order.toString();
 				console.log(this.id + " " + order);
 				is_dirty = true;
+				$("#catg-Save").removeClass("disabled");
 			}
 		}).disableSelection();
 
@@ -513,10 +400,19 @@ $(document).ready(function() {
 	}
 
 	var resetCategory = function(e) {
-		location.reload();
+		//location.reload();
 	};
-	
+
+	/**
+		Save the groups' content and definition
+	*/
 	var saveCategory = function(e) {
+		if ($(this).hasClass('disabled'))
+		{
+			console.log("FFFFF");
+			return;
+		}
+	
 		//$.blockUI({ message: '<div class="ajax alert alert-info"><img src="/assets/openessayist/img/ajax-loader.gif" /> Saving User Data ...</div>' });
 		$('body').modalmanager('loading'); 
 		var json = {};
@@ -563,14 +459,19 @@ $(document).ready(function() {
 				// Set Response outcome
 				console.log(msg);
 				is_dirty = false;
-				var opts = {
-				        title: "Over Here",
-				        text: "Check me out. I'm in a different stack.",
-				        addclass: "stack-bar-bottom",
-				        cornerclass: "",
-				        width: "70%",
-				        stack: stack_bar_bottom
-				    };
+				$("#catg-Save").addClass("disabled");
+				 opts = {
+						title: 'Hint',
+						text: "The content of your groups have been saved.<br>Why don't you check the effect of the changes by going to the main essay?" + 
+							"<a class='btn btn-small' href='{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'keyword'}) }}'><i class='icon-large icon-desktop'></i> Essay</a>",
+						addclass: "stack-bottomright",
+				        stack: $.pnotify.defaults.openessayist, 
+				        hide: false,
+				        sticker: true, 
+				        type: 'success',
+				        icon: 'icon-large  icon-comments'
+					}; 
+				
 				$.pnotify(opts);
 				$('body').modalmanager('loading'); 
 			},
