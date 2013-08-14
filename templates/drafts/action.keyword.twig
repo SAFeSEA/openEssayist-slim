@@ -463,7 +463,7 @@ $(document).ready(function() {
 				 opts = {
 						title: 'Hint',
 						text: "The content of your groups have been saved.<br>Why don't you check the effect of the changes by going to the main essay?" + 
-							"<a class='btn btn-small' href='{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'keyword'}) }}'><i class='icon-large icon-desktop'></i> Essay</a>",
+							"<a class='btn btn-small' href='{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'all'}) }}'><i class='icon-large icon-desktop'></i> Essay</a>",
 						addclass: "stack-bottomright",
 				        stack: $.pnotify.defaults.openessayist, 
 				        hide: false,
