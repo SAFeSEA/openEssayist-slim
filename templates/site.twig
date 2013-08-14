@@ -53,7 +53,7 @@
 {% if helpontask is defined %}
 <script id="helpmodal">
 $.pnotify.defaults.history = false;
-$.pnotify.defaults.openessayist = {"push": "top","dir1": "up", "dir2": "left", "firstpos1": 50, "firstpos2": 10, "spacing1":10};
+$.pnotify.defaults.openessayist = {"dir1": "up", "dir2": "left", "firstpos1": 50, "firstpos2": 10, "spacing1":10};
 	
 $(document).ready(function() {
 	$('#help-on-task').click(function(e){
@@ -77,7 +77,7 @@ $(document).ready(function() {
 		$.get("{{ urlFor('ajax.help.topic',{'topic':helpontask}) }}", 
 			function(data) {
 				var data = $(data);
-				var tt = data.find( "ul.icons-ul" ).children();
+				var tt = data.find( "ul.icons-ul" ).children().toArray();
 				var time = 100;
 				var l = tt.length;
 
@@ -88,8 +88,12 @@ $(document).ready(function() {
 				        stack: stack_bottomright, 
 				        hide: false,
 				        sticker: false, 
-				        //animate_speed: 'slow',
-				       // animation: "show",
+				        animate_speed: 100,
+				        animation: {
+					        	
+				        	effect_in: 'slide',
+				        	effect_out: 'slide'
+				        	},
 				        type: 'info',
 				        icon: 'icon-large  icon-comments '
 					}; 
@@ -99,10 +103,10 @@ $(document).ready(function() {
 					tt.push(null);	
 					l = tt.length;				
 				}
-				
+				tt.reverse(); 
 
 					
-				tt.each(function(key, value) {
+				$.each(tt,function(key, value) {
 					console.log(key + " " + l); 
 					setTimeout( function(){
 
@@ -124,7 +128,7 @@ $(document).ready(function() {
 						$.pnotify(opts);
 							
 					} , time );
-					time += 200;     
+					time += 100;     
 				});
 			});
 	});
