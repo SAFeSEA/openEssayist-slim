@@ -247,7 +247,7 @@ p.oe-par:before
     background-color: #D5D5D5 !important;;
     border-right: 8px solid white;
         text-align: center;
-    vertical-align: bottom;
+    vertical-align: top;
     cursor: pointer;
     font-size: 11px;
     font-weight: bolder;
@@ -615,7 +615,7 @@ label.checkbox:before
 			var cbox = this;
 			var indicator = cbox.value;
 			var classname = ".ngram."+indicator;
-			console.log("CHECKL:  " + indicator + " (" + cbox.checked + ")");
+			console.log("Group activated :  " + indicator + " (" + cbox.checked + ")");
 			
 			if (cbox.checked)
 				$(classname).addClass("showKW");
@@ -668,7 +668,7 @@ label.checkbox:before
 	{% if mashup in ['sentence','all'] %}
 		// set the sentence slider
 		smin = 0;
-		smax=15;
+		smax= {{ mashup=='all'? '0' : '15' }};
 		$("#slider-range").slider({
 			range : true,
 			min : 0,
@@ -676,17 +676,21 @@ label.checkbox:before
 			values : [ smin, smax ],
 			slide : highlighSentence,
 			change: function(event, ui) {
-					console.log("DFDFDFDFDF");
+					console.log("Sentences Activated.");
 					highlighSentence(event, ui);
 				}
 		});
 	{%  endif %}	
 	
 		$('.cStructure').trigger('change');
+	{% if mashup in ['keyword','all'] %}
 		$('.cKeyword').trigger('change');
-		$('.cTaskQuestion').trigger('change');
+	{%  endif %}{% if mashup in ['sentence','all'] %}
 		$('#slider-range').slider("value", {'min':smin});
+	{%  endif %}{% if mashup in ['all'] %}
+		$('.cTaskQuestion').trigger('change');
 		//$('#slider-range').trigger('change');
+	{%  endif %}
 	});
 	</script>
 
