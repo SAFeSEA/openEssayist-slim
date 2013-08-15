@@ -562,46 +562,40 @@ class UserController extends Controller
 		$parasenttok = $dr->getParasenttok();
 		$analysis = $dr->getAnalysis();
 
+		
 		// extract structure tags
-		// Need to be done once for all
-		/*$struct2 = array();
-		foreach ($parasenttok as $index => $par)
-		{
-			foreach ($par as $index2 => $sent)
+		$tt= array();
+		$tt[]="#+s:i#";
+		$tt[]="#+s#";
+		$tt[]="#+s:c#";
+		$tt[]="#-s:t#";
+		foreach ($parasenttok as $index => &$par)
+		{	
+			$partag = null;
+			if (count($par ) > 1)
+			{	
+				$struct2 = array();
+				foreach ($par as $index2 => $sent)
+				{
+					$struct2[] = $sent['tag'];
+				}
+				$gg = array_intersect($tt,$struct2);
+				
+				if (count($gg)==0)
+					$partag = "#-s:h#";
+				else
+					$partag =  array_shift ($gg );
+			}	
+			else if (count($par ) != 0)
 			{
-		
-				$struct2[] = $sent['tag'];
+				$partag = $par[0]['tag'];
 			}
+			if ($partag) $par['partag'] =$partag; 
 		}
-		$tt = array_unique($struct2);
-		$tt = array_flip($tt);
-		$tt = array_keys($tt);
-		$tt = array_flip($tt);*/	
-		
-		
-		// Get all ngrams in a single structure
-		//$allkw = array_merge(array(),
-		//		$analysis->nvl_data->quadgrams,
-		//		$analysis->nvl_data->trigrams,
-		//		$analysis->nvl_data->bigrams,
-		//		$analysis->nvl_data->keywords
-		//);
 		
 		$tt = $dr->kwCategories()->find_one();
 		$mydata = $this->GetAllKeywords($analysis,$tt);
 
-		/*$groups = array();
-		if ($tt!=false)
-		{
-			$groups = $tt->getGroups();
-		}
-		else {
-			$kw = array();
-			foreach ($allkw as $key=>$item)
-				$kw[] = $key; 
-			$groups = array(array('id' => 'category_all','keywords' => $kw));
-		}*/
-		
 		
 		$highlighjs = array();
 		

@@ -54,8 +54,9 @@
         
 		<div class="widget-content widget-essay myessay openessay">
 		{% for par in parasenttok %}
-			<div class="par-wrapper" {{ (par[0].tag)?"data-tag=#{ par[0].tag }":"" }}>
-				<div class="par-tag" {{ (par[0].tag)?"data-tag=#{ par[0].tag }":"" }}>
+			
+			<div class="par-wrapper" {{ (par.partag)?"data-tag=#{ par.partag }":"" }}>
+				<div class="par-tag" {{ (par.partag)?"data-tag=#{ par.partag }":"" }}>
 					<span class="icon-stack">
           			<i class="icon-circle-blank  icon-stack-base"></i>
           			<i class="icon-heading "></i>
