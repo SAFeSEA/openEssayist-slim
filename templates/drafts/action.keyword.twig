@@ -158,14 +158,14 @@ ul#category_all
 
 <div class="row-fluid"><div class="span12">
 	<div class="widget">
-		<div class="widget-header"><h3>Your Groups (0)</h3>
+		<div class="widget-header"><h3>Your Groups ({{ groups|length }})</h3>
 	</div>
 	{% if task.isopen %}
 	<div class="widget-toolbar">
 		<div class="btn-toolbar">    
     		<button id="catg-Save" class="btn btn-small btn-primary disabled">Save</button>
-    		<button id="catg-Reset" class="btn btn-small disabled">Reset</button>
-    		<button id="catg-New" class="btn btn-small">New Category...</button>
+    		<button id="catg-Reset" data-toggle="modal" data-target="#modal-reset" class="btn btn-small ">Reset</button>
+    		<button id="catg-New" {{ (groups|length == 10)? "disabled" }} if drafts|length == 0  %} class="btn btn-small">New Group...</button>
     	</div>
 	</div>
 	{% endif %}	
@@ -261,6 +261,23 @@ ul#category_all
 		<button id="dlg_save" class="btn btn-primary" data-dismiss="modal">OK</button>
 	</div>
 </div>
+
+    <div id="modal-reset" tabindex="-1" class="modal hide fade" role="dialog" data-keyboard="true" >
+    <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Reset Groups</h3>
+    </div>
+    <div class="modal-body">
+    	<p>This will clear up all your groups, restoring the key words to their "default" grouping.
+    	 This operation cannot be undone.</p>
+       	<p><b>Are you sure you want to reset the groups?</b></p>
+    	</div>
+    <div class="modal-footer">
+    <button class="btn  btn-primary" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    <button id="catg-Reset-Confirm" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Reset</button>
+    
+    </div>
+    </div>
 
 {% endblock %}
 
@@ -400,18 +417,42 @@ $(document).ready(function() {
 	}
 
 	var resetCategory = function(e) {
-		//location.reload();
+
+		is_dirty = false;	
+		$('body').modalmanager('loading'); 
+		//
+		$.ajax({
+			type : "POST",
+			method: "post",
+			url : "{{ urlFor('profile.reset.keyword',{"idt":task.id}) }}", // URL and function to call
+			data : {	
+					"user": "{{  auth.user.id }}",
+					"task" : "{{ task.id }}", 
+					"draft": "{{ draft.id }}"
+			}, 
+			//contentType : "application/json; charset=utf-8",
+			//processData : true,
+			dataType : "json",
+			success : function(msg, status) {
+				// Set Response outcome
+				console.log(msg);
+				location.reload();
+			},
+			error : function(xhr, msg, e) {
+				// this should only fire if the ajax call did not happen or
+				// there was an unhandled exception
+				console.log(msg);
+				$('body').modalmanager('loading'); 
+			}
+		});		
+		
 	};
 
 	/**
 		Save the groups' content and definition
 	*/
 	var saveCategory = function(e) {
-		if ($(this).hasClass('disabled'))
-		{
-			console.log("FFFFF");
-			return;
-		}
+		if ($(this).hasClass('disabled')) return;
 	
 		//$.blockUI({ message: '<div class="ajax alert alert-info"><img src="/assets/openessayist/img/ajax-loader.gif" /> Saving User Data ...</div>' });
 		$('body').modalmanager('loading'); 
@@ -463,7 +504,7 @@ $(document).ready(function() {
 				 opts = {
 						title: 'Hint',
 						text: "The content of your groups have been saved.<br>Why don't you check the effect of the changes by going to the main essay?" + 
-							"<a class='btn btn-small' href='{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'all'}) }}'><i class='icon-large icon-desktop'></i> Essay</a>",
+							"<p style='margin-top:6px;'><a class='btn ' href='{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'all'}) }}'><i class='icon-large icon-desktop'></i> Essay</a></p>",
 						addclass: "stack-bottomright",
 				        stack: $.pnotify.defaults.openessayist, 
 				        hide: false,
@@ -487,15 +528,18 @@ $(document).ready(function() {
 	
 
 	var onClickNew =  function(e) {
-		console.log("new category...");
+		console.log("new group created ...");
 
 		var holder = $('#widget-content-cats > .row-fluid :last');
+		var allcats = holder.find(".span4");
+		var nCats = allcats.length;
+	
 		var n = holder.children().length;
 		
 		var template = $('#cat_template').clone();
 
 		var title = template.find("div.widget-header > h3 > .cat_name  ");
-		if (title) title.text("New Category");
+		if (title) title.text("Group " + (nCats+1));
 		template.removeClass('hide');
 		template.removeAttr('id');
 
@@ -520,7 +564,7 @@ $(document).ready(function() {
 		}
 
 		var info = template.find('.grp_name');
-		if (info) info.val('New Category');
+		if (info) info.val("Group " + (nCats+1));
 
 		var clr = color.shift();
 		info = template.find('.grp_color');
@@ -529,8 +573,8 @@ $(document).ready(function() {
 		if (g) g.css('background-color',clr);
 		
 		holder = $('#widget-content-cats');
-		var allcats = holder.find(".span4");
-		var nCats = allcats.length;
+		allcats = holder.find(".span4");
+		nCats = allcats.length;
 		allcats.each(function(index)
 			{
 				$(this).attr('id','cat_'+index); 
@@ -541,7 +585,13 @@ $(document).ready(function() {
 				var dropz = $(this).find(".sortable");
 				dropz.attr('id','category_'+index); 
 			});
-		
+
+		if (nCats==9)
+		{
+			$('#catg-New').attr('disabled','disabled');
+		}
+		is_dirty = true;	
+		$("#catg-Save").removeClass("disabled");
 		
 		updateSortables();
 	};
@@ -559,7 +609,7 @@ $(document).ready(function() {
 
 	$("#catg-New").click(onClickNew);
 	$("#catg-Save").click(saveCategory);
-	$("#catg-Reset").click(resetCategory);
+	$("#catg-Reset-Confirm").click(resetCategory);
 		
 	$("#dlg_save").click(saveDialog);
 

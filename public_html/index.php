@@ -193,6 +193,7 @@ $c->app->get('/me/draft/:draft/view/chord', array($userCtrl, 'viewChord'))->name
 $c->app->get('/me/draft/:draft/view/exhibit', array($userCtrl, 'viewExhibit'))->name('me.draft.view.exhibit');
 
 $c->app->post('/profile/data/keywords', array($userCtrl, 'saveKeywords'))->name('profile.save.keyword');
+$c->app->post('/profile/data/keywords/reset', array($userCtrl, 'resetKeywords'))->name('profile.reset.keyword');
 $c->app->get('/profile/data/notes', array($userCtrl, 'saveNotes'))->via('GET', 'POST')->name('profile.save.notes');
 
 $c->app->get('/ajax/draft/:draft/graph/:graph.json', array($userCtrl, 'ajaxGraph'))->name('ajax.graph.json')

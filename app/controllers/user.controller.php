@@ -1478,6 +1478,27 @@ class UserController extends Controller
 		}
 	}
 	
+	public function resetKeywords()
+	{
+		$req = $this->app->request();
+		$post = $req->post();
+		$draftid = $post['draft'];
+		
+		$dr = $this->getDraft($draftid);
+		$tt = $dr->kwCategories()->find_one();
+		if ($tt)
+		{
+			$tt->delete();
+		}
+		$response = $this->app->response();
+		$response['Content-Type'] = 'application/json';
+		$response['X-Powered-By'] = 'openEssayist';
+		$response->status(200);
+		
+		//$response->body(json_encode($parasenttok));
+		$response->body(json_encode(array('result'=> 'done')));
+	}
+	
 	public function saveKeywords()
 	{
 		$req = $this->app->request();
