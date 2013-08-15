@@ -1,10 +1,18 @@
 {% extends 'help/base.modal.twig' %} 
 
 {% block helpcontent %}
-<p>This summary is made up of the sentences that openEssayist thinks are the most prominent 
+<p>This "summary" is made up of the sentences that openEssayist thinks are the most prominent 
 and noticeable sentences in your assignment.</p>
 
-<p>These are the sentences that openEssayist thinks sum up best what your assignment is about. </p> 
+<p>These are the sentences that openEssayist thinks sum up best what your assignment is about. </p>
+
+<p>Using the "Sort by" control, you can change the order of sentences in the "summary":</p>
+
+<ul>
+<li> Use <button class="btn btn-small disabled">Importance</button> to show the most important sentences first, as detected by the system. 
+<li> Use <button class="btn btn-small disabled">Text Order</button> to show the sentences in the order they appear in your text.
+
+</ul> 
 {% endblock %}
 
 {% block hintcontent %}
