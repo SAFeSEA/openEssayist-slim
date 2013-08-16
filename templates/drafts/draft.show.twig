@@ -450,40 +450,167 @@ label.checkbox:before
 <script src="{{ app_base }}/assets/d3.js/colorbrewer.js"></script>
 <script src="{{ app_base }}/assets/highlight.js/highlight.pack.js"></script>
 	
+<script id="tag-popover">
+$(document).ready(function() {
+	var sections = 
+	{
+		'????':		{title:'Unknown Tag', desc: 'There seems to be a problem.'},
+		'#+s:c#': 	{title:'Conclusion', desc: 'This paragraph is part of the conclusion.'}, 
+		'#+s:d_i#':	{title:'Discussion',desc: 'This paragraph is one of the discusssion.'}, 
+		'#+s#': 	{title:'Discussion', desc: ''},
+		'#+s:s#': 	{title:'Summary', desc: ''},
+		'#+s:i#':	{title:'Introduction', desc: ''},
+		'#-s:t#':	{title:'Title', desc: ''},
+		'#+s:p#':	{title:'Preface', desc: ''},
+		'#-s:h#':	{title:'Heading', desc: ''},
+		'#-s:n#':	{title:'Numerics', desc: ''},
+		'#-s:q#':	{title:'Assignment',  desc: ''},
+		'#-s:p#':	{title:'Punctuation',desc: ''},				
+	};	
+
+	keys=[];
+	for (v in sections) keys.push(v);
+		
+	var tag_tooltip = null;
+	$(".par-tag").popover({
+		container: "body",
+		placement: "right",
+		html: true,
+		trigger: "hover ", //"manual"
+		content: function(){ 
+			return "<b>" + sections[$(this).attr('data-tag')].title + "</b>";
+		}
+	});
+
+	$(".par-tagXX").tooltip({
+		title : function(){ 
+				return sections[$(this).attr('data-tag')].title;
+			},
+			container: "body",
+			placement: "right",
+			
+	});
+		
+});
+</script>	
+
 {% if mashup in ['keyword','all'] %}
 	{% include "javascript/hljs.keywords.js.twig" %}
+
+<script id="tag-keywords">
+$(document).ready(function() {
+	
+	// initialise the code highlighting
+	$('.par-container').each(function(i, e) {
+		hljs.highlightBlock(e)
+	});
+
+	$('.cKeyword').change(function() {
+		var cbox = this;
+		var indicator = cbox.value;
+		var classname = ".ngram."+indicator;
+		console.log("Group activated :  " + indicator + " (" + cbox.checked + ")");
+		if (cbox.checked)
+			$(classname).addClass("showKW");
+		else
+			$(classname).removeClass("showKW");
+	});
+
+	$('.cKeyword').prop('checked', true);
+	$('.cKeyword').trigger('change');
+});
+</script>
 {% endif %}
 
-	{#<script>
-	$(document).ready(function()
-	{
-		var jqxhr = $.getJSON("{{ urlFor('ajax.keyword.json',{'draft':draft.id}) }}")
-			.done(function(data) {
-				console.log("OK");
-				$('.ngram').click(function(e){
-					if ($(this).hasClass("showKW"))
-						{
-							var kw = $(this).data("keyword"); 
-							$(this).popover({
-								html: true,
-								trigger:'click',
-								content:function(a,b,c)
-						    	{
-							    	return "FGGFGFGFG";
-						    	}});
-						}
-					});
+{% if mashup in ['sentence','all'] %}
+<script id="tag-sentences">
+$(document).ready(function() {
+
+	function highlighSentence(event, ui) {
+		$("#amount").text(ui.values[0] + " - " + ui.values[1]);
+		$('span.oe-snt[data-rank]').each(function() {
+			var tt = parseInt($(this).attr('data-rank'));
+			var mina = ui.values[0];
+			var maxa = ui.values[1];
+			
+			$(this).removeClass('showmu');
+			$(this).removeClass('dimshowmu');
+			if (mina <= (tt) && (tt) <= maxa) {
+				// if (tt == maxa)
+				$(this).addClass('showmu');
+				//console.log(mina + " " + maxa);
 				
-				})
-			.fail(function(jqxhr,textStatus, error) {
-				console.log("ERROR");
-				});
-	});
-	</script>#}
+				//console.log("show" + tt);
+				// else
+				// $(this).addClass('dimshow');
+
+			}
+		})
+	}	
 	
-	<script>
-	$(document).ready(function() {
-		var sections =  {
+		// set the sentence slider
+		var smin = 0;
+		var smax = {{ mashup=='all'? '0' : '15' }};
+		$("#slider-range").slider({
+			range : true,
+			min : 0,
+			max : 15,
+			values : [ smin, smax ],
+			slide : highlighSentence,
+			change: function(event, ui) {
+					console.log("Sentences Activated.");
+					highlighSentence(event, ui);
+				}
+		});
+
+		$('#slider-range').slider("value", {'min':smin});
+});
+</script>
+{% endif %}
+
+{% if mashup in ['all'] %}
+<script id="tag-all">
+$(document).ready(function() {
+
+
+	$('.cTaskQuestion').change(function() {
+		var cbox = this;
+		var classname = ".widget-content.assignment";
+		if (cbox.checked)
+			//$(classname).show("fast");
+			$(classname).css({'display':'block'});
+		else
+			$(classname).css({'display':'none'});
+	
+	});
+
+
+	
+	$('.cStructure').change(function() {
+		var cbox = this;
+		var indicators = cbox.value.split(";");
+		indicators.forEach(function(elt, idx, arr) {
+			var classname = ".par-wrapper[data-tag='" + elt + "']";
+			if (cbox.checked)
+				//$(classname).show("fast");
+				$(classname).css({'display':'block'});
+			else
+				$(classname).css({'display':'none'});
+				//$(classname).hide("fast");
+		});
+
+	});
+	
+	$('.cTaskQuestion').trigger('change');
+	$('.cStructure').trigger('change');
+});
+</script>
+{% endif %}
+
+
+	{#
+	
+			/* var sections =  {
 					'#-s:t#': 'Title', 
 					'#+s:s#': 'Summary', 
 					'#+s:d#': 'Discussion', 
@@ -502,7 +629,7 @@ label.checkbox:before
 				'????':'',
 				'#+s:c#': 'Conclusion', 
 				'#+s:d_i#':'Discussion', 
-				'#+s:d#': 'Discussion', 
+				'#+s#': 'Discussion', 
 				'#+s:s#': 'Summary', 
 				'#+s:i#': 'Introduction', 
 				'#-s:t#': 'Title', 
@@ -515,8 +642,51 @@ label.checkbox:before
 
 		keys=[];
 		for (v in sections) keys.push(v);
-			
 		
+		var tag_tooltip = null;
+		$(".par-tag").popover({
+			title : function(){ 
+				return "fdfdfddffd"; //sections[$(this).attr('data-tag')];
+			},
+			container: "body",
+			placement: "right",
+			trigger: "hover ", //"manual"
+			content: function(){ 
+				return "fdfdfddffd"; //sections[$(this).attr('data-tag')];
+			}
+			});*/
+		
+		/*$(".par-tag").click(function (e) {
+			console.log("click£");
+			//$(this).popover('show');
+		});
+		$(".par-tag").mouseleave(function (e) {
+			console.log("leave£");
+			//$(this).popover('hide');
+		});*/
+				
+		/*$(".par-tag").addClass("pop-link").popover({
+			animation: true,
+			html: true,
+			
+			content: function(){ 
+				return ""
+			},
+			title: "Discussion",
+			trigger: 'click',
+			container: 'body'
+				});	*/
+/*
+		$(':not(#anything)').on('click', function (e) {
+		    $('.pop-link').each(function () {
+		        //the 'is' for buttons that trigger popups
+		        //the 'has' for icons and other elements within a button that triggers a popup
+		        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+		            $(this).popover('hide');
+		            return;
+		        }
+		    });
+		});*/
 		/*//$("label.checkbox").disableSelection();
 		$(".par-tag[data-tag]").each(function()
 		{
@@ -553,16 +723,7 @@ label.checkbox:before
 		trigger: 'hover'
 			});*/
 
-		/*	$(':not(#anything)').on('click', function (e) {
-			    $('.pop-link').each(function () {
-			        //the 'is' for buttons that trigger popups
-			        //the 'has' for icons and other elements within a button that triggers a popup
-			        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-			            $(this).popover('hide');
-			            return;
-			        }
-			    });
-			});
+		/*	
 		*/
 	{% if mashup in ['keyword','all'] %}		
 		// initialise the code highlighting
@@ -572,9 +733,9 @@ label.checkbox:before
 	{%  endif %}
 
 
-	/*{% if mashup in ['keyword','all'] %}		
+	{% if mashup in ['keyword','all'] %}		
 	
-		$('.ngram').click(function(e){
+	/*$('.ngram').click(function(e){
 			if ($(this).hasClass("showKW"))
 				{
 					if ($(this).hasClass("pop-link"))
@@ -598,8 +759,8 @@ label.checkbox:before
 						$(this).popover('show');
 					}
 				}
-			});
-		{%  endif %}*/
+			});*/
+		{%  endif %}
 			
 		$('.cTaskQuestion').change(function() {
 			var cbox = this;
@@ -692,7 +853,33 @@ label.checkbox:before
 		$('.cTaskQuestion').trigger('change');
 		//$('#slider-range').trigger('change');
 	{%  endif %}
+	
+	<script>
+	$(document).ready(function()
+	{
+		var jqxhr = $.getJSON("{{ urlFor('ajax.keyword.json',{'draft':draft.id}) }}")
+			.done(function(data) {
+				console.log("OK");
+				$('.ngram').click(function(e){
+					if ($(this).hasClass("showKW"))
+						{
+							var kw = $(this).data("keyword"); 
+							$(this).popover({
+								html: true,
+								trigger:'click',
+								content:function(a,b,c)
+						    	{
+							    	return "FGGFGFGFG";
+						    	}});
+						}
+					});
+				
+				})
+			.fail(function(jqxhr,textStatus, error) {
+				console.log("ERROR");
+				});
 	});
-	</script>
+	</script>#}
+
 
 {% endblock %}
