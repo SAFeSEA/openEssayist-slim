@@ -165,18 +165,21 @@
 	<!-- <script src="/bootstrap/openEssayist.js"></script> -->
 	<script src="{{ app_base }}/assets/bootstrap-modal/js/bootstrap-modalmanager.js"></script>
 	<script src="{{ app_base }}/assets/bootstrap-modal/js/bootstrap-modal.js"></script>
-	<script src="{{ app_base }}/assets/log4javascript-1.4.6/log4javascript.min.js"></script>
+	<script src="{{ app_base }}/assets/log4javascript-1.4.6/log4javascript.js"></script>
+	<script src="{{ app_base }}/assets/openessayist/js/openessayist.core.js"></script>
 	<script id="log4js" type="text/javascript">
 	$(document).ready(function() {
-
+		openEssayist.LOG_URL = "{{ urlFor('ajax.log.activity') }}";
+		
 		if ($("[rel=tooltip]").length) {
 		        $("[rel=tooltip]").tooltip();
 		    }
 		
 		var log = log4javascript.getLogger("main");
 		log.setLevel(log4javascript.Level.TRACE);
-
-		{% if auth.user.isadmin %}
+		log4javascript.logLog.setQuietMode(true);
+		
+		{% if auth.user.isadminxx %}
 		var appender = new log4javascript.InPageAppender(null,true,false);
 		appender.setShowCommandLine(false);
 		log.addAppender(appender);
@@ -187,7 +190,6 @@
 			else
 				appender.show();
 			});
-		
 		{% endif %}
 		
 		var ajaxAppender = new log4javascript.AjaxAppender("{{ urlFor('ajax.log.activity') }}");

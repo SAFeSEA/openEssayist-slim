@@ -18,7 +18,7 @@ class LoggerMiddleWare extends \Slim\Middleware
 		
 		
 		
-		$msg = '%method% - [%user% | %IP%] - %message%';
+		$msg = '%method% | [%user% @ %IP%] | %message%';
 		$message = str_replace(array(
 				'%method%',
 				'%user%',

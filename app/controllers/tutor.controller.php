@@ -239,11 +239,27 @@ class TutorController extends Controller
 
 	public function postActivityLog()
 	{
+		$log = $this->app->getLog();
+		$req = $this->app->request();
+		$post = $req->post();
+		$strdata = $post["data"];
+		$action = $post["action"];
+
+		/* decode the log's data */
+		//$logdata = json_decode($strdata,true);
+		
+		//$message = $analysis[0]['message'];
+		//$message = json_decode($message,true);
+	
+		$log->info($action . " | " .json_encode($strdata));
+		//var_dump($post);die();
+		
 		$response = $this->app->response();
 		$response['Content-Type'] = 'application/json';
 		$response['X-Powered-By'] = 'openEssayist';
 		$response->status(200);
-		$response->body(json_encode(array('msg'=>'OK')));
+		$response->body(json_encode(array('msg'=>$strdata)));
+		//$response->body($logdata);
 	}
 	
 	public function getHelpOnTopic($topic)

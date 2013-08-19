@@ -44,6 +44,7 @@ $app = new \Slim\Slim(array(
     'log.writer' => new \Slim\Extras\Log\DateTimeFileWriter(array(
         'path' => '../.logs',
         'name_format' => 'y-m-d',
+    	'message_format' => '%label% | %date% | %message%'
     ))
 ));
 
@@ -212,6 +213,7 @@ $c->app->get('/admin/users/', array($adminCtrl, 'allUsers'))->name('admin.users'
 $c->app->get('/admin/tasks/', array($adminCtrl, 'allTasks'))->name('admin.tasks');
 $c->app->get('/admin/task/:taskid', array($adminCtrl, 'editTask'))->via('GET', 'POST')->name('admin.task.edit');
 $c->app->get('/admin/analyser/', array($adminCtrl, 'showEssayData'))->name('admin.json');
+$c->app->get('/admin/history/', array($adminCtrl, 'showHistory'))->name('admin.history');
 
 //$c->app->get('/demo/draft/:draft/show/', array($demoCtrl, 'showDraft'))->name('demo.draft.show');
 
