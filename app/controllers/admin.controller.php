@@ -96,4 +96,12 @@ class AdminController extends Controller
 		
 	}
 	
+	public function showHistory()
+	{
+		$this->render('admin/history',array(
+		));
+		
+	}
+	
+	
 }

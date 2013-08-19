@@ -1,0 +1,51 @@
+{% extends "site.twig" %} 
+
+{% block title %}Admin / System Changes{% endblock %} 
+
+{% block content %}
+<div class="row-fluid">
+	
+	<div class="span3"><div class="widget">
+		<div class="widget-header">
+			<h3>Versions</h3>
+		</div>
+		<div class="widget-content"> 
+			<p> </p>
+		</div> 
+	</div></div>
+
+	<div class="span9"><div class="widget">
+		<div class="widget-header">
+			<h3>History</h3>
+		</div>
+		<div class="widget-content" id="github-log"> 
+		</div> 
+	</div></div>
+</div></div>
+{% endblock %}
+
+{% block injectJS %}
+	{{ parent() }}
+<script>
+$(document).ready(function() {
+
+	var jqxhr = $.getJSON("https://api.github.com/repos/SAFeSEA/openEssayist-slim/commits?per_page=100")
+	.done(function(data) {
+		console.log("OK");
+		$.each(data, function(index, element) {
+			console.log("element");
+			 $('#github-log').append($('<pre/>', {
+	                text: element.commit.message
+	            }));
+			});
+	})
+	.fail(function(jqxhr,textStatus, error) {
+		console.log("ERROR");
+	});
+
+
+
+	
+});
+</script>
+{% endblock %} 
