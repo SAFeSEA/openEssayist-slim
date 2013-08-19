@@ -23,6 +23,7 @@
 {% block content %}
 
 
+
 <div class="row-fluid"><div class="span12">
 	
 	<div class="widget">
@@ -86,7 +87,7 @@
 	</div>
 	<div class="modal-body">
 	
-	<div class="row-fluid">
+	<form class="row-fluid" id="mashup-options">
 
 	{% if not(config.structure.show is defined and config.structure.show == false) %}
 	{% set cfg = config.structure %}
@@ -94,27 +95,27 @@
 	<div class="widget-content span3"> 
 		<legend>Structure</legend>
     	<label class="checkbox"> 
-			<input  type="checkbox" value="#-s:t#" class="cStructure" {{ ('#-s:t#' is inOption(cfg.check))? "checked=\"checked\""}} {{ dsb }}> 
+			<input  type="checkbox" name="structure" value="#-s:t#" class="cStructure" {{ ('#-s:t#' is inOption(cfg.check))? "checked=\"checked\""}} {{ dsb }}> 
 			Title
 		</label>
 		<label class="checkbox"> 
-			<input  type="checkbox" value="#-s:h#" class="cStructure" {{ ('#-s:h#' is inOption(cfg.check))? "checked=\"checked\""}} {{ dsb }}>  
+			<input  type="checkbox" name="structure" value="#-s:h#" class="cStructure" {{ ('#-s:h#' is inOption(cfg.check))? "checked=\"checked\""}} {{ dsb }}>  
 			Headings
 		</label>
 		<label class="checkbox"> 
-			<input  type="checkbox" value="#+s:i#" class="cStructure" {{ ('#+s:i#' is inOption(cfg.check))? "checked=\"checked\""}} {{ dsb }}>  
+			<input  type="checkbox" name="structure" value="#+s:i#" class="cStructure" {{ ('#+s:i#' is inOption(cfg.check))? "checked=\"checked\""}} {{ dsb }}>  
 			Introduction
 		</label>
 		<label class="checkbox"> 
-			<input  type="checkbox" value="#+s#" class="cStructure" {{ ('#+s#' is inOption(cfg.check))? "checked=\"checked\""}} {{ dsb }}>  
+			<input  type="checkbox" name="structure" value="#+s#" class="cStructure" {{ ('#+s#' is inOption(cfg.check))? "checked=\"checked\""}} {{ dsb }}>  
 			Body
 		</label>
 		<label class="checkbox"> 
-			<input type="checkbox" value="#+s:c#" class="cStructure" {{ ('#+s:c#' is inOption(cfg.check))? "checked=\"checked\""}} {{ dsb }}>  
+			<input type="checkbox" name="structure" value="#+s:c#" class="cStructure" {{ ('#+s:c#' is inOption(cfg.check))? "checked=\"checked\""}} {{ dsb }}>  
 			Conclusion
 		</label>
 		<label class="checkbox"> 
-			<input type="checkbox" value="#-s:q#;#-s:n#;#-s:p#" class="cStructure" {{ ('#-s:q#' is inOption(cfg.check))? "checked=\"checked\""}} {{ dsb }}>  
+			<input type="checkbox" name="structure" value="#-s:q#;#-s:n#;#-s:p#" class="cStructure" {{ ('#-s:q#' is inOption(cfg.check))? "checked=\"checked\""}} {{ dsb }}>  
 			Others
 		</label>
 									
@@ -125,6 +126,11 @@
 	<div class="widget-content span3"> 
 		<legend> Sentences </legend>
 
+		<label class="checkbox"> 
+			<input  type="checkbox" name="sentence" value="show" class="cSentence" {{ dsb }}> 
+			Show the key sentences
+		</label>
+		
 		<div class="controls controls-row">
 			<div class="control-group">
 				<label class="">Top Sentences: <span id="amount" class="input unedidtable-input">0 - 0</span> </label>
@@ -150,7 +156,7 @@
 			{% for key,item in groups %}
 			<div class="controls controls-row">	
 				<label class="checkbox inline">
-					<input type="checkbox" value="{{ item.id }}" class="cKeyword"
+					<input type="checkbox" name="keywords" value="{{ item.id }}" class="cKeyword"
 					{{ (item.id is inOption(cfg.check,false))? "checked=\"checked\""}}> {{ item.attr.name ? item.attr.name : "Default Group" }}
 				</label>
 			</div>								
@@ -172,7 +178,8 @@
 								</div>
 							
 							</div>
-			</div> </div> 
+			</div> 
+		</form> {# end of form #}
 	</div>
 	<div class="modal-footer">
 	
@@ -442,6 +449,28 @@ label.checkbox:before
 }
 {% endfor %}
 
+.popover-content .legend-titlebar
+{
+	display:table-row;
+}
+
+.popover-content .par-tag
+{
+	cursor: default;
+}
+
+.popover-content .legend-title
+{
+	font-weight: bolder; 
+	display: table-cell;
+	width: 100%;
+}
+
+.popover-content .legend-content
+{
+	margin-top: 10px;
+}
+
 </style>
 {% endblock %}
 
@@ -455,9 +484,9 @@ $(document).ready(function() {
 	var sections = 
 	{
 		'????':		{title:'Unknown Tag', desc: 'There seems to be a problem.'},
-		'#+s:c#': 	{title:'Conclusion', desc: 'This paragraph is part of the conclusion.'}, 
-		'#+s:d_i#':	{title:'Discussion',desc: 'This paragraph is one of the discusssion.'}, 
-		'#+s#': 	{title:'Discussion', desc: ''},
+		'#+s:c#': 	{title:'Conclusion', desc: 'This paragraph is part of the conclusion of your essay.'}, 
+		'#+s:d_i#':	{title:'Discussion',desc: 'This paragraph is one of the discusssion parts of your essay.'}, 
+		'#+s#':		{title:'Discussion',desc: 'This paragraph is one of the discusssion parts of your essay.'}, 
 		'#+s:s#': 	{title:'Summary', desc: ''},
 		'#+s:i#':	{title:'Introduction', desc: ''},
 		'#-s:t#':	{title:'Title', desc: ''},
@@ -472,13 +501,20 @@ $(document).ready(function() {
 	for (v in sections) keys.push(v);
 		
 	var tag_tooltip = null;
-	$(".par-tag").popover({
+	$(".par-wrapper .par-tag").popover({
 		container: "body",
 		placement: "right",
 		html: true,
-		trigger: "hover ", //"manual"
+		template: '<div class="popover"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+		trigger: "click hover", //"manual"
 		content: function(){ 
-			return "<b>" + sections[$(this).attr('data-tag')].title + "</b>";
+			
+			return 	"<div class='legend-titlebar'><div data-tag='"+$(this).attr('data-tag')+"' class='par-tag'>"+
+					"<span class='icon-stack'>"+
+  					"<i class='icon-circle-blank  icon-stack-base'></i>"+
+  					"<i class='icon-heading '></i></span>"+
+					"</div><div class='legend-title'>" + sections[$(this).attr('data-tag')].title + "</div></div>"+
+					"<div class='legend-content'>"+ sections[$(this).attr('data-tag')].desc +"</div>";
 		}
 	});
 
@@ -526,6 +562,21 @@ $(document).ready(function() {
 <script id="tag-sentences">
 $(document).ready(function() {
 
+	$('.cSentence').change(function() {
+		var cbox = this;
+		var indicator = cbox.value;
+		var classname = "span.oe-snt[data-rank]";
+		console.log("Sentence activated :  " + indicator + " (" + cbox.checked + ")");
+		if (cbox.checked)
+			$(classname).addClass("showmu");
+		else
+			$(classname).removeClass("showmu");
+	});
+
+	$('.cSentence').prop('checked', true);
+	$('.cSentence').trigger('change');
+
+	
 	function highlighSentence(event, ui) {
 		$("#amount").text(ui.values[0] + " - " + ui.values[1]);
 		$('span.oe-snt[data-rank]').each(function() {
@@ -563,7 +614,7 @@ $(document).ready(function() {
 				}
 		});
 
-		$('#slider-range').slider("value", {'min':smin});
+		//$('#slider-range').slider("value", {'min':smin});
 });
 </script>
 {% endif %}
@@ -571,8 +622,6 @@ $(document).ready(function() {
 {% if mashup in ['all'] %}
 <script id="tag-all">
 $(document).ready(function() {
-
-
 	$('.cTaskQuestion').change(function() {
 		var cbox = this;
 		var classname = ".widget-content.assignment";
@@ -606,9 +655,14 @@ $(document).ready(function() {
 });
 </script>
 {% endif %}
+<script id="tag-all">
+$(document).ready(function() {
+	var h = $("form").serializeArray();
+	openEssayist.log4j("dfdffd",h);
+});
 
-
-	{#
+</script>
+{#
 	
 			/* var sections =  {
 					'#-s:t#': 'Title', 
