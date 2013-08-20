@@ -38,7 +38,7 @@ define('EXT', '.twig');
 $app = new \Slim\Slim(array(
 	'openEssayist.async' => false,
 	'view' => new TwigView,
-	'debug' => true,
+	'debug' => false,
     'log.level' => \Slim\Log::DEBUG,
     'log.enabled' => true,
     'log.writer' => new \Slim\Extras\Log\DateTimeFileWriter(array(
@@ -205,6 +205,7 @@ $c->app->get('/ajax/draft/:draft/keywords.json', array($userCtrl, 'ajaxKeyword')
 $c->app->post('/tutor/logactivity', array($tutorCtrl, 'postActivityLog'))->name('ajax.log.activity');
 
 $c->app->get('/help/:topic', array($tutorCtrl, 'getHelpOnTopic'))->name('ajax.help.topic');
+$c->app->get('/help/:topic/hints', array($tutorCtrl, 'getHelpOnTopic'))->name('ajax.help.hint');
 
 
 $c->app->get('/admin/', array($adminCtrl, 'index'))->name('admin.home');

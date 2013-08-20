@@ -28,10 +28,14 @@ class HomeController extends Controller
 	public function error(Exception $e)
 	{
 		$log = $this->app->getLog();
-		$w = $log->getWriter();
+		$log->error($e->getMessage());
+		
 		
 		$this->app->flashNow('error', $e->getMessage());
-		$this->render('site');
+		$this->render('pages/error',array(
+			'path' => $this->app->request()->headers(),
+			'error' => $e
+		));
 	
 	}
 	

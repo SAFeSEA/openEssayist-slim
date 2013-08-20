@@ -27,43 +27,41 @@ td .btn{white-space: nowrap;}
 			</div>
 			<div class="widget-content"> 
 				<p>These are the assignments (TMAs) that are available for you to use and analyse your drafts.</p>
-				<table class="table table-condensed table-striped table-bordered">
-				<thead>
-					<tr>
-						
-						<th>Name</th>
-						<th>Assignment</th>
-						<th>Deadline</th>
-						<th>Drafts Analysed</th>
-		
-						
-					</tr>
-				</thead>
-				<tbody>
-					{% for task in tasks %}
-					
-					<tr>
-					
-					<td><a class="btn btn-large" title="Go to this assignment"
-						rel="tooltip" data-placement="bottom"
-							href="{{ urlFor('me.draft.action',{"idt":task.id}) }}"><i class="icon-book icon-large"></i> {{ task.name }}</a></td>
-					<td>{{ task.assignment }}</td>
-					<td>{{ task.deadline }}<br>
-					
-						<span class="icon-stack  icon-large" title="{{ task.isopen? 'This is assignment is open' : 'this is assignment is closed' }}">
-  							<i class="{{ task.isopen? 'icon-circle  icon-stack-base' : 'icon-ban-circle icon-stack-base text-error  icon-flip-vertical' }}"></i>
-  							<i class="{{ task.isopen? 'icon-pencil icon-light' : 'icon-pencil' }}"></i>
-						</span>
-					
-					</td>
-					<td><span class="badge">{{ task.draftcount }}</span></td>
-
 				
-					</tr>
-					{% endfor %}
-				</tbody>
-				</table>
-			
+				{% for task in tasks %}
+				<div class="row-fluid" style="border:1px solid #D5D5D5; margin: 10px 0; ">
+					<div class="span3" style="padding:5px;">
+						<a 	class="span12 btn btn-large" style="line-height: 60px;" title="Go to this assignment"
+							rel="tooltip" data-placement="bottom"
+							href="{{ urlFor('me.draft.action',{"idt":task.id}) }}"><i class="icon-book icon-large"></i> {{ task.name }}</a>
+					</div>
+					<div class="span7" style="padding:5px; ">
+						<p>{{ task.assignment }}</p>
+					</div>
+					<div class="span2" style="padding:5px;">
+						<div class="row-fluid">
+							<div class="span12" >
+								<span><b>Deadline:</b> </span>
+								<br class="hidden-phone hidden-tablet"/>
+								<span>{{ task.deadline }}</span>
+								<br class="hidden-phone hidden-tablet"/>
+								<span class="icon-stack  icon-large" title="{{ task.isopen? 'This is assignment is open' : 'this is assignment is closed' }}">
+  									<i class="{{ task.isopen? 'icon-circle  icon-stack-base' : 'icon-ban-circle icon-stack-base text-error  icon-flip-vertical' }}"></i>
+  									<i class="{{ task.isopen? 'icon-pencil icon-light' : 'icon-pencil' }}"></i>
+								</span>
+							</div>
+						</div>
+						<div class="row-fluid">
+							<div class="span12" >
+								<p><span><b>Draft analysed:</b></span>
+								<br class="hidden-phone hidden-tablet"/>
+									<span class="badge">{{ task.draftcount }}</span>
+								</p>
+						
+						</div></div>
+					</div>
+				</div>
+				{% endfor %}
 			</div> 
 		</div>
 	</div>	
@@ -72,6 +70,4 @@ td .btn{white-space: nowrap;}
 		
 	
 </div>
-
-
 {% endblock %}

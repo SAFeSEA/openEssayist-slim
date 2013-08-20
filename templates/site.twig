@@ -74,7 +74,7 @@ $(document).ready(function() {
 	{
 		$('body').modalmanager('loading');
 		$.pnotify_remove_all();
-		$.get("{{ urlFor('ajax.help.topic',{'topic':helpontask}) }}", 
+		$.get("{{ urlFor('ajax.help.hint',{'topic':helpontask}) }}", 
 			function(data) {
 				$('body').modalmanager('loading');
 				var data = $(data);

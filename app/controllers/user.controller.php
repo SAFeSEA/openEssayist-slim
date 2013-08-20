@@ -106,9 +106,7 @@ class UserController extends Controller
 			$this->app->flash("error", "Cannot find the group data");
 			$this->redirect('me.home');
 		}
-		
-	
-		
+
 		$this->render('user/dashboard',array(
 				'group' => $g->as_array(),
 				'nav' => 'nav'));
@@ -1431,14 +1429,14 @@ class UserController extends Controller
 		$log = $this->app->getLog();
 		if ($req && $req->isPost())
 		{
-			$log->info("POST TO NOTES WITH USERID: " . $this->user['id']);	
+			//$log->info("POST TO NOTES WITH USERID: " . $this->user['id']);	
 		}
 		else  if ($req && $req->isGet())
 		{
-			$log->info("GET NOTES FROM USERID: " . $this->user['id']);
+			//$log->info("GET NOTES FROM USERID: " . $this->user['id']);
 		}
 		else {
-			$log->info("UNKOWN ACCESS TO NOTES FROM USERID: " . $this->user['id']);
+			//$log->info("UNKOWN ACCESS TO NOTES FROM USERID: " . $this->user['id']);
 		}
 		
 		/* @var $u Users */

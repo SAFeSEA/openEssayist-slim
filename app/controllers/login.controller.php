@@ -48,11 +48,16 @@ class LoginController extends Controller {
 				$this->app->flash('info', 'Your login was successful');
 				
 				$user=$this->auth->getUser();
-				//var_dump($this->auth->getUser());die();
-				//if ($user['active']==1)
-					$this->redirect('me.tasks');
-				//else
-				//	$this->redirect('consent');
+				
+				$useragent = $this->app->request()->headers('USER_AGENT');
+				if ($useragent)
+				{
+					$log = $this->app->getLog();
+					$log->info(TutorController::ACTION_LOGIN . " | " . 
+							json_encode(array('user_agent'=> $useragent)));
+				}
+				
+				$this->redirect('me.tasks');
 			}
 			else
 				$this->app->flashNow('error', "Username or password is incorrect. Check your details again.");

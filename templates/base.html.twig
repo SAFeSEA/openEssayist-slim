@@ -166,8 +166,10 @@
 	<script src="{{ app_base }}/assets/openessayist/js/openessayist.core.js"></script>
 	<script id="log4js" type="text/javascript">
 	$(document).ready(function() {
+		// Set the URL for the AJAX-based activity logging
 		openEssayist.LOG_URL = "{{ urlFor('ajax.log.activity') }}";
-		
+
+		// Activate the Bootstrap's tooltips
 		if ($("[rel=tooltip]").length) {
 		        $("[rel=tooltip]").tooltip();
 		    }

@@ -7,6 +7,9 @@
  */
 class TutorController extends Controller
 {
+	const ACTION_LOGIN = 'ACTION.LOGIN';
+	const ACTION_MASHUP = 'ACTION.MASHUP';
+	
 	public function getJSON()
 	{
 		$response = $this->app->response();
@@ -245,13 +248,26 @@ class TutorController extends Controller
 		$strdata = $post["data"];
 		$action = $post["action"];
 
-		/* decode the log's data */
-		//$logdata = json_decode($strdata,true);
+		$auth = \Strong\Strong::getInstance();
+		$usr = $auth->getUser();
+				
+		$msg = '%action% | [%user% @ %IP%] | %message%';
+		$message = str_replace(array(
+				'%action%',
+				'%user%',
+				'%IP%',
+				'%message%'
+		), array(
+				$action,
+				$usr['username']?:"anon",
+				$req->getIp(),
+				json_encode($strdata)
+		), $msg);
 		
-		//$message = $analysis[0]['message'];
-		//$message = json_decode($message,true);
+		
+		
 	
-		$log->info($action . " | " .json_encode($strdata));
+		$log->info($message);
 		//var_dump($post);die();
 		
 		$response = $this->app->response();
