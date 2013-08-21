@@ -15,9 +15,9 @@
 			<div class="btn-group pull-right">
 			
 				{% if auth.user.active  %}	
-				<button id="btn-notepad" title="Open your Notepad" class="btn btn-info"><i class="icon-edit icon-large"></i></button>
+				<button id="btn-notepad" title="Open your Notepad" rel="tooltip" data-placement="bottom"  class="btn btn-info"><i class="icon-edit icon-large"></i></button>
 				{% endif %}
-				<a class="btn {{ auth.user.isadmin ? "btn-inverse" : ""}} dropdown-toggle" data-toggle="dropdown"
+				<a class="btn {{ auth.user.isadmin ? "btn-inverse" : ""}} dropdown-toggle" rel="tooltip" data-placement="bottom" data-toggle="dropdown"
 					title="{{ auth.user.username }}" href="#"> <i class="icon-user {{ auth.user.isadmin ? "icon-white" : ""}}"></i>
 					<span class="hidden-phone">{{ auth.user.username }}</span> <span class="caret"></span>
 				</a>

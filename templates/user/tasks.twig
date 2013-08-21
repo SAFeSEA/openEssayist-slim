@@ -27,7 +27,7 @@ td .btn{white-space: nowrap;}
 			</div>
 			<div class="widget-content"> 
 				<p>These are the assignments (TMAs) that are available for you to use and analyse your drafts.</p>
-				
+							
 				{% for task in tasks %}
 				<div class="row-fluid" style="border:1px solid #D5D5D5; margin: 10px 0; ">
 					<div class="span3" style="padding:5px;">
@@ -39,7 +39,15 @@ td .btn{white-space: nowrap;}
 						<p>{{ task.assignment }}</p>
 					</div>
 					<div class="span2" style="padding:5px;">
-						<div class="row-fluid">
+						<div class="row-fluid" style="padding:5px 0;">
+							<div class="span12" >
+								<p><span><b>Draft analysed:</b></span>
+								<br class="hidden-phone hidden-tablet"/>
+									<span class="badge badge-info">{{ task.draftcount }}</span>
+								</p>
+						
+						</div></div>
+						<div class="row-fluid" style="padding:5px 0;">
 							<div class="span12" >
 								<span><b>Deadline:</b> </span>
 								<br class="hidden-phone hidden-tablet"/>
@@ -51,14 +59,6 @@ td .btn{white-space: nowrap;}
 								</span>
 							</div>
 						</div>
-						<div class="row-fluid">
-							<div class="span12" >
-								<p><span><b>Draft analysed:</b></span>
-								<br class="hidden-phone hidden-tablet"/>
-									<span class="badge">{{ task.draftcount }}</span>
-								</p>
-						
-						</div></div>
 					</div>
 				</div>
 				{% endfor %}

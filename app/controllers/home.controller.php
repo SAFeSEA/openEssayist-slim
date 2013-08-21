@@ -13,11 +13,7 @@ class HomeController extends Controller
 	 */
 	public function index()
 	{
-		//throw new Exception("fddf");
-		//$this->app->flashNow('error', 'dffdfd');
-		//$this->app->flashNow('error2', 'ddddddddd');
 		$this->render('pages/welcome');
-		
 	}
 	
 	public function about()

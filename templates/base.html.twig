@@ -70,11 +70,12 @@
       code {
         font-size: 80%;
       }
-      
-	</style>
+     
+</style>
 {% endblock %}
 </head>
 <body>
+	<a id="ou-skip" href="#ou-content">Skip to content</a>
 	<div id="wrap" class="page-container">
 	{% block navbar %}
 		{% include "widgets/navbar.panel.twig" %}
@@ -93,23 +94,29 @@
 			</div>
 		{% endblock %}
 		
-		<div class="row-fluid">
+		<div class="row-fluid anchor" id="ou-content">
 			<div class="span12" style="min-height: 150px;">
 			
 			{% block notification %}
 				<div class="row-fluid">
-					<div class="span10 offset1" id="notification">{% if flash.info %}
-						<div class="alert-box alert alert-info">{{ flash.info|raw }}</div>
+					{% if flash.info %}
+						<div class="span10 offset1 alert-box alert alert-info" id="notification">
+							<button type="button" class="close" data-dismiss="alert">&times;</button>
+							{{ flash.info|raw }}
+						</div>
 					{% endif %}{% if flash.error %}
-						<div class="alert-box alert alert-error">{{ flash.error|raw }}</div>
+						<div class="span10 offset1 alert-box alert alert-error" id="notification">
+							<button type="button" class="close" data-dismiss="alert">&times;</button>
+							{{ flash.error|raw }}
+						</div>
 					{% endif %}{% if flash.tutor %}
-						<div class="alert-block alert alert-success">
+						<div class="span10 offset1 alert-block alert alert-success">
 							<button type="button" class="close" data-dismiss="alert">&times;</button>
 							<h4>Help on the task</h4>
 							<hr>
 							{{ flash.tutor|raw }}
 						</div>
-					{% endif %}</div>
+					{% endif %}
 				</div>
 			{% endblock %}
 			
@@ -132,16 +139,17 @@
 	<footer class="footer">
 		<div class="container">
 		{% block footer %}
+			<p>openEssayist v{{ constant('VERSION') }} - 
+				<span class="hidden-phone hidden-tablet">Designed and built by </span>
+				<a href="https://github.com/vanch3d" target="_blank"><i class="icon-github icon-large icon-dark"></i> vanch3d</a>
+				for the 
+				<a href="http://www.open.ac.uk/researchprojects/safesea/" target="_blank">SAFeSEA</a>
+				project.
+			</p>
 			<p class="pull-right">
 				<a href="#"><i class="icon-chevron-sign-up"></i> Back to top</a>
 			</p>
-			<p>openEssayist v{{ constant('VERSION') }} - Designed and built by <a
-					href="https://github.com/vanch3d" target="_blank"><img
-					alt="GitHub" src="{{ app_base }}/assets/openessayist/img/github.jpg">vanch3d</a>
-					for the <a
-					href="http://www.open.ac.uk/researchprojects/safesea/" target="_blank">SAFeSEA</a> project.
-			</p>
-		{% endblock %}			
+			{% endblock %}			
 		</div>
 	</footer>
 	
