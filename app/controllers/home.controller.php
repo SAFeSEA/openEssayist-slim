@@ -33,6 +33,16 @@ class HomeController extends Controller
 			'error' => $e
 		));
 	
+	}	
+	
+	public function NotFound()
+	{
+		$log = $this->app->getLog();
+		
+		$this->app->flashNow('error', "404 Page Not Found");
+		$this->render('pages/notfound',array(
+		));
+	
 	}
 	
 	public function testConfig()

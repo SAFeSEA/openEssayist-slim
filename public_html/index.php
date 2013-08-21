@@ -219,6 +219,7 @@ $c->app->get('/admin/history/', array($adminCtrl, 'showHistory'))->name('admin.h
 //$c->app->get('/demo/draft/:draft/show/', array($demoCtrl, 'showDraft'))->name('demo.draft.show');
 
 $c->app->error(array($appController, 'error'));
+$c->app->notFound(array($appController, 'NotFound'));
 
 // Run the application
 $c->run();

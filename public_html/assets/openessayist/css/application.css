@@ -306,7 +306,10 @@ div.breadcrumb > h1
 	padding: 0 15px;
 }
 
-
+div.breadcrumb > .navbarhead:empty
+{
+	display: none;
+}
 
 
 ul.breadcrumb {
