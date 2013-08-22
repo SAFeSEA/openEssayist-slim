@@ -16,11 +16,11 @@
 	<link href="{{ app_base }}/assets/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 	<link href="{{ app_base }}/assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" >
 	<link href="{{ app_base }}/assets/jquery-ui-1.9.2.custom/css/bootstrap/jquery-ui-1.9.2.custom.css" rel="stylesheet">
+	<link href="{{ app_base }}/assets/jquery-tour/css/theme4/style.css" rel="stylesheet" title="jTour" >
 	#}
 	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
 	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-lightness/jquery-ui.min.css" rel="stylesheet">
-	<link href="{{ app_base }}/assets/jquery-tour/css/theme4/style.css" rel="stylesheet" title="jTour" >
 	<link href="{{ app_base }}/assets/openessayist/css/application.css" rel="stylesheet">
 	<link href="{{ app_base }}/assets/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" />
 	{% block injectCSS %}
@@ -155,7 +155,7 @@
 	
 	
 	
-		<!-- Le javascript
+	<!-- Le javascript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
 	<!--[if lt IE 9]>
@@ -164,15 +164,18 @@
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 	<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-	{#<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+	{#
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 	<script src="{{ app_base }}/assets/jquery-ui-1.9.2.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
-	<script src="{{ app_base }}/assets/bootstrap/js/bootstrap.js"></script>#}
+	<script src="{{ app_base }}/assets/bootstrap/js/bootstrap.js"></script>
 	<script src="{{ app_base }}/assets/jquery-tour/js/jTour.js"></script>
+	<script src="{{ app_base }}/assets/log4javascript-1.4.6/log4javascript.js"></script>
+	#}
 	<script src="{{ app_base }}/assets/bootstrap-modal/js/bootstrap-modalmanager.js"></script>
 	<script src="{{ app_base }}/assets/bootstrap-modal/js/bootstrap-modal.js"></script>
-	<script src="{{ app_base }}/assets/log4javascript-1.4.6/log4javascript.js"></script>
 	<script src="{{ app_base }}/assets/openessayist/js/openessayist.core.js"></script>
-	<script id="log4js" type="text/javascript">
+	
+	<script id="openessayist-init" type="text/javascript">
 	$(document).ready(function() {
 		// Set the URL for the AJAX-based activity logging
 		openEssayist.LOG_URL = "{{ urlFor('ajax.log.activity') }}";
@@ -181,35 +184,6 @@
 		if ($("[rel=tooltip]").length) {
 		        $("[rel=tooltip]").tooltip();
 		    }
-		
-		var log = log4javascript.getLogger("main");
-		log.setLevel(log4javascript.Level.TRACE);
-		log4javascript.logLog.setQuietMode(true);
-		
-		{% if auth.user.isadminxx %}
-		var appender = new log4javascript.InPageAppender(null,true,false);
-		appender.setShowCommandLine(false);
-		log.addAppender(appender);
-
-		$('#admin-settings-btn').click(function(){
-			if (appender.isVisible())
-				appender.hide();
-			else
-				appender.show();
-			});
-		{% endif %}
-		
-		var ajaxAppender = new log4javascript.AjaxAppender("{{ urlFor('ajax.log.activity') }}");
-		ajaxAppender.setLayout(new log4javascript.JsonLayout());
-		ajaxAppender.setWaitForResponse(false);
-		//ajaxAppender.setSendAllOnUnload(true);
-		//ajaxAppender.setBatchSize(10);
-		log.addAppender(ajaxAppender);
-		//$(window).unload(function() {
-		//	log.sendAll();
-		//});	
-
-
 	});	
 	</script>
 	{% block injectJS %}

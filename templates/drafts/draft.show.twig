@@ -79,9 +79,9 @@
 </div></div>
 
 
-<div id="modal_mashup" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modal_mashupLabel" aria-hidden="true">
+<div id="modal_mashup" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
 	<div class="modal-header">
-		<h3> Display Options</h3>
+		<h3 id="modal-title">Display Options</h3>
 	</div>
 	<div class="modal-body">
 	
@@ -146,11 +146,7 @@
 	{% if not(config.keyword.show is defined and config.keyword.show == false) %}
 	{% set cfg = config.keyword %}
 	<div class="widget-content span3"><fieldset>
-			<legend> Keywords 						
-				<div class="box-icon">
-					<a href="{{ urlFor('me.draft.act.keyword',{"draft":draft.id}) }}" class="btn-setting"><i class="icon-wrench" data-toggle="tooltip" title="Organise the keywords"></i></a>
-				</div>
-			</legend>
+			<legend> Key Words </legend>
 						
 							
 			{% for key,item in groups %}
@@ -159,9 +155,16 @@
 					<input type="checkbox" name="keywords" value="{{ item.id }}" class="cKeyword"
 					{{ (item.id is inOption(cfg.check,false))? "checked=\"checked\""}}> {{ item.attr.name ? item.attr.name : "Default Group" }}
 				</label>
-			</div>								
-			
+			</div>	
 			{% endfor %}
+			{#<hr>
+			<div class="controls controls-row">
+					<a class="btn btn-small" rel="tooltip" title="Organise the keywords" 
+						href="{{ urlFor('me.draft.act.keyword',{"draft":draft.id}) }}">
+							<i class="icon-random"></i>
+							Groups...
+					</a>
+			</div>#}
 	</fieldset> </div>
 	{% endif %}
 	 
@@ -657,7 +660,7 @@ $(document).ready(function() {
 </script>
 {% endif %}
 
-<script id="tag-all">
+<script id="mashup-init">
 $(document).ready(function() {
 	var h = $("form").serializeArray();
 	openEssayist.log4j("{{ constant('TutorController::ACTION_MASHUP_INIT') }}",h);
