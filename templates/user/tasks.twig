@@ -17,6 +17,19 @@ td .btn{white-space: nowrap;}
 </style>
 {% endblock %}
 
+
+
+{% block injectJS %}
+	{{ parent() }}
+<script>
+$(document).ready(function() {
+$(".task-content").dotdotdot({
+	watch: "window"
+	});
+});
+</script>
+{% endblock %}
+
 {% block content %}
 
 <div class="row-fluid">
@@ -35,10 +48,10 @@ td .btn{white-space: nowrap;}
 							rel="tooltip" data-placement="bottom"
 							href="{{ urlFor('me.draft.action',{"idt":task.id}) }}"><i class="icon-book icon-large"></i> {{ task.name }}</a>
 					</div>
-					<div class="span7" style="padding:5px; ">
+					<div class="span6 task-content" style="padding:5px; max-height: 200px;">
 						<p>{{ task.assignment }}</p>
 					</div>
-					<div class="span2" style="padding:5px;">
+					<div class="span3" style="padding:5px;">
 						<div class="row-fluid" style="padding:5px 0;">
 							<div class="span12" >
 								<p><span><b>Draft analysed:</b></span>
@@ -51,22 +64,25 @@ td .btn{white-space: nowrap;}
 							<div class="span12" >
 								<span><b>Deadline:</b> </span>
 								<br class="hidden-phone hidden-tablet"/>
-								<span>{{ task.deadline }}</span>
-								<br/>
-							
-																
+								<span>{{ task.deadline|date("jS F Y") }}</span>
+							</div>
+						</div>
+
+						<div class="row-fluid" style="padding:5px 0;">
+							<div class="span12" >
 								<div class="well" style="padding: 4px;">
-									<span style="display: table-cell;">
-									<span class="icon-stack  icon-large"  title="{{ task.isopen? 'This is assignment is open' : 'this is assignment is closed' }}">
+									<p style="display: table-cell; vertical-align: middle; padding-right: 5px;">
+										<span class="icon-stack  icon-large"  title="{{ task.isopen? 'This is assignment is open' : 'this is assignment is closed' }}">
 		  								<i class="{{ task.isopen? 'icon-circle  icon-stack-base' : 'icon-ban-circle icon-stack-base text-error  icon-flip-vertical' }}"></i>
 		  								<i class="{{ task.isopen? 'icon-pencil icon-light' : 'icon-pencil' }}"></i>
-									</span></span>
-									<span class="small" style="display: table-cell;">{{ task.isopen? 'This assignment is open' : 'this assignment is closed' }}</span>
+									</span></p>
+									<p class="small" style="display: table-cell;vertical-align: middle;">{{ task.isopen? 'This assignment is open' : 'this assignment is closed' }}</p>
 								</div>	
 							
 								
 							</div>
 						</div>
+						
 					</div>
 				</div>
 				{% endfor %}

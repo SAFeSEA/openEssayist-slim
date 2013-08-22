@@ -12,7 +12,7 @@
 				src="{{ app_base }}/assets/openessayist/img/openEssayist-icon.png"><span class="hidden-phone">openEssayist</span></a> 
 				
 			{% if auth.loggedIn()  %}	
-			<div class="btn-group pull-right">
+			<div class=" pull-right">
 			
 				{% if auth.user.active  %}	
 				<button id="btn-notepad" title="Open your Notepad" rel="tooltip" data-placement="bottom"  class="btn btn-info"><i class="icon-edit icon-large"></i></button>
@@ -32,7 +32,7 @@
 			<div class="nav-collapse collapse">
 			
 				<ul class="nav">
-					<li class=""><a href="{{ urlFor('me.home') }}" title="Go to your homepage">
+					<li class=""><a href="{{ urlFor('me.home') }}" rel="tooltip" data-placement="bottom"  title="Go to your homepage">
 						<i class="icon-home"></i> Home</a>
 					</li> 
 					{% if auth.user.isadmin %}	
