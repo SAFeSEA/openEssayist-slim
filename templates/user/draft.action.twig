@@ -15,10 +15,10 @@
 {% block injectCSS %}
 	{{ parent() }}
 <style>
-#demo-trigger h3:before {
+#demo-trigger h2:before {
 	content: "Hide "
 }
-#demo-trigger.collapsed h3:before {
+#demo-trigger.collapsed h2:before {
 	content: "Show "
 }
 </style>
@@ -28,7 +28,7 @@
 <div class="row-fluid"><div class="span12">
 <div class="widget collapsed" id="demo-trigger" data-toggle="collapse" data-target="#demo" style="cursor: pointer;">
 			<div class="widget-header" title="Expand or collapse the details">
-				<h3>Assignment Information</h3>
+				<h2>Assignment Information</h2>
 				<div class="box-icon">
 					<a class="btn-setting" ><i class="icon-chevron-down"></i></a>
 				</div>
@@ -41,7 +41,7 @@
 	<div class="span2">
 		<div class="widget">
 			<div class="widget-header">
-			<h4> {{ group.name }}</h4>
+			<h3> {{ group.name }}</h3>
 			</div>
 			<div class="widget-content"> 
 					<p> 
@@ -52,7 +52,7 @@
 	<div class="span8">
 		<div class="widget">
 			<div class="widget-header">
-			<h4> Assignment</h4>
+			<h3> Assignment</h3>
 			</div>
 			<div class="widget-content"> 
 					<p>{{ task.assignment|nl2br}} </p>
@@ -62,7 +62,7 @@
 	<div class="span2">
 		<div class="widget">
 			<div class="widget-header">
-			<h4> Deadline </h4>
+			<h3> Deadline </h3>
 			</div>
 			<div class="widget-content"> 
 					<p>{{ task.deadline}}</p>
@@ -70,7 +70,7 @@
 		</div>
 		<div class="widget">
 			<div class="widget-header">
-				<h4> Word Limit</h4>
+				<h3> Word Limit</h3>
 			</div>
 			<div class="widget-content"> 
 				<p>{{ task.wordcount}}</p>
@@ -79,7 +79,7 @@
 	</div>	
 </div>
 
-{% if not task.isopen %}
+{% if not task.isopen  %}
 <div class="alert alert-block alert-error"><div class="row-fluid">
 	<span class="icon-stack span2 icon-2x" style="color:black;" title="{{ task.isopen? "This is open" : "this is closed" }}">
 		<i class="{{ task.isopen? "icon-circle  icon-stack-base" : "icon-ban-circle icon-stack-base text-error  icon-flip-vertical " }}"></i>
@@ -87,18 +87,18 @@
 	</span>	
 		
 	<div class="span10">
-		<h4>This assignment is closed.</h4>
+		<h2>This assignment is closed.</h2>
 		<p>You can still explore its content, including all the drafts you wrote and their analysis, 
 			but you will not be able to change any of their content.</p>
 	</div>
 </div></div>
 {% endif %}
 
-{% if drafts|length == 0  %}
+{% if drafts|length == 0  or auth.user.isadmin %}
 <div class="row-fluid"><div class="span12">
 <div class="widget">
 			<div class="widget-header">
-			<h3>To analyse a draft</h3>
+			<h2>To analyse a draft</h2>
 			</div>
 			<div class="widget-content"> 
 				<p>Before going further, you need to have a draft of your assignment ready for analysis.</p>
@@ -112,11 +112,12 @@
 		</div>
 
 </div></div>
-{% elseif drafts|length == 1  %}
+{% endif %}
+{% if drafts|length == 1 or auth.user.isadmin %}
 <div class="row-fluid"><div class="span12">
 <div class="widget">
 			<div class="widget-header">
-			<h3>To review your draft</h3>
+			<h2>To review your first draft</h2>
 			</div>
 			<div class="widget-content"> 
 				<p>You recently had a first draft (Version {{drafts[0].version }}, "{{drafts[0].name }}") analysed by openEssayist.</p>
@@ -137,11 +138,12 @@
 		</div>
 
 </div></div>
-{% elseif drafts|length >= 2 or true %}
+{% endif %}
+{% if drafts|length >= 2 or auth.user.isadmin %}
 <div class="row-fluid"><div class="span12">
 <div class="widget">
 			<div class="widget-header">
-			<h3>Review your drafts</h3>
+			<h2>To review your essay and your drafts</h2>
 			</div>
 			<div class="widget-content"> 
 			<div class="clearfix ">

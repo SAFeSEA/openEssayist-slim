@@ -112,7 +112,7 @@ ul#category_all
 {#
 <div class="row-fluid">
 <div class="widget">
-<div class="widget-header"><h3>Add you own key words ...</h3></div>
+<div class="widget-header"><h2>Add you own key words ...</h2></div>
 			 	
 			<div class="widget-content">
 				<div class="input-append input-fullwidth00">
@@ -131,7 +131,7 @@ ul#category_all
 {% set lkw = (groups['category_all'] is defined)? groups['category_all']['keywords'] : keywords   %}
 <div class="row-fluid"><div class="span12">
 	<div class="widget">
-		<div class="widget-header"><h3>All Key Words ({{ lkw|length }})</h3></div>
+		<div class="widget-header"><h2>All Key Words ({{ lkw|length }})</h2></div>
 		<div class="widget-content">
 		<ul class="sortable" id="category_all">
 
@@ -158,7 +158,7 @@ ul#category_all
 
 <div class="row-fluid"><div class="span12">
 	<div class="widget">
-		<div class="widget-header"><h3>Your Groups ({{ groups|length }})</h3>
+		<div class="widget-header"><h2>Your Groups ({{ groups|length }})</h2>
 	</div>
 	{% if task.isopen %}
 	<div class="widget-toolbar">
@@ -215,7 +215,7 @@ ul#category_all
 
 <!-- Template for Keyword group -->
 <div class="span4 hide" id="cat_template">
-	<div class="widget-header"><h3><span class="cat_color"></span><span class="cat_name"></span></h3>
+	<div class="widget-header"><h3><span class="cat_color"></span><span class="cat_name">Group Template</span></h3>
 		<div class="box-icon">
 			<a href="#" class="btn-setting" data-toggle="modal" data-target="#dlgSetting" data-category="ref_template"><i class="icon-wrench"></i></a>
 		</div>
@@ -235,7 +235,7 @@ ul#category_all
 <div id="dlgSetting" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
-		<h3 id="myModalLabel">Group Properties</h3>
+		<h1 id="myModalLabel">Group Properties</h1>
 	</div>
 	<div class="modal-body">
 	    <form>
@@ -265,7 +265,7 @@ ul#category_all
     <div id="modal-reset" tabindex="-1" class="modal hide fade" role="dialog" data-keyboard="true" >
     <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3>Reset Groups</h3>
+    <h1>Reset Groups</h1>
     </div>
     <div class="modal-body">
     	<p>This will clear up all your groups, restoring the key words to their "default" grouping.
