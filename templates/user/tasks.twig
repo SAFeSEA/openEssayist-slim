@@ -52,11 +52,19 @@ td .btn{white-space: nowrap;}
 								<span><b>Deadline:</b> </span>
 								<br class="hidden-phone hidden-tablet"/>
 								<span>{{ task.deadline }}</span>
-								<br class="hidden-phone hidden-tablet"/>
-								<span class="icon-stack  icon-large" title="{{ task.isopen? 'This is assignment is open' : 'this is assignment is closed' }}">
-  									<i class="{{ task.isopen? 'icon-circle  icon-stack-base' : 'icon-ban-circle icon-stack-base text-error  icon-flip-vertical' }}"></i>
-  									<i class="{{ task.isopen? 'icon-pencil icon-light' : 'icon-pencil' }}"></i>
-								</span>
+								<br/>
+							
+																
+								<div class="well" style="padding: 4px;">
+									<span style="display: table-cell;">
+									<span class="icon-stack  icon-large"  title="{{ task.isopen? 'This is assignment is open' : 'this is assignment is closed' }}">
+		  								<i class="{{ task.isopen? 'icon-circle  icon-stack-base' : 'icon-ban-circle icon-stack-base text-error  icon-flip-vertical' }}"></i>
+		  								<i class="{{ task.isopen? 'icon-pencil icon-light' : 'icon-pencil' }}"></i>
+									</span></span>
+									<span class="small" style="display: table-cell;">{{ task.isopen? 'This assignment is open' : 'this assignment is closed' }}</span>
+								</div>	
+							
+								
 							</div>
 						</div>
 					</div>
