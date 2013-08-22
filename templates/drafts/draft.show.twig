@@ -22,8 +22,6 @@
 
 {% block content %}
 
-
-
 <div class="row-fluid"><div class="span12">
 	
 	<div class="widget">
@@ -41,7 +39,7 @@
 			</div>
 			{% if mashup == 'all' %}
     		<div class="btn-group">
-		    	<button data-target="#myModal" role="button" class="btn btn-small " data-toggle="modal">
+		    	<button data-target="#modal_mashup" role="button" class="btn btn-small " data-toggle="modal">
 					More Options...</button>
 			</div>
 			{% endif  %}
@@ -49,7 +47,7 @@
 		
 		
 		
-		<div class="widget-content assignment myessay openessay" style="display: none;"><i class="icon-quote-left icon-4x pull-left icon-muted"></i>
+		<div class="widget-content assignment myessay openessay par-container" style="display: none;"><i class="icon-quote-left icon-4x pull-left icon-muted"></i>
 			<p>{{ task.assignment | raw | nl2br }}</p>
 		</div>
         
@@ -81,18 +79,20 @@
 </div></div>
 
 
-<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="modal_mashup" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modal_mashupLabel" aria-hidden="true">
 	<div class="modal-header">
 		<h3> Display Options</h3>
 	</div>
 	<div class="modal-body">
+	
+	<p>Select the elements to show with the draft.</p>
 	
 	<form class="row-fluid" id="mashup-options">
 
 	{% if not(config.structure.show is defined and config.structure.show == false) %}
 	{% set cfg = config.structure %}
 	{% set dsb = (cfg.modify is sameas(false))?"disabled" %}
-	<div class="widget-content span3"> 
+	<div class="widget-content span3"><fieldset> 
 		<legend>Structure</legend>
     	<label class="checkbox"> 
 			<input  type="checkbox" name="structure" value="#-s:t#" class="cStructure" {{ ('#-s:t#' is inOption(cfg.check))? "checked=\"checked\""}} {{ dsb }}> 
@@ -119,11 +119,11 @@
 			Others
 		</label>
 									
-	</div>
+	</fieldset></div>
 	{% endif %}
 	
 	{% if not(config.sentence.show is defined and config.sentence.show == false) %}
-	<div class="widget-content span3"> 
+	<div class="widget-content span3"> <fieldset>
 		<legend> Sentences </legend>
 
 		<label class="checkbox"> 
@@ -131,6 +131,7 @@
 			Show the key sentences
 		</label>
 		
+		{#
 		<div class="controls controls-row">
 			<div class="control-group">
 				<label class="">Top Sentences: <span id="amount" class="input unedidtable-input">0 - 0</span> </label>
@@ -138,20 +139,19 @@
 				<span class="help-block">Set range of top sentences to display.</span> 
 			</div>
 		</div>
-	</div> 
+		#}
+	</fieldset></div> 
 	{% endif %}
 	
 	{% if not(config.keyword.show is defined and config.keyword.show == false) %}
 	{% set cfg = config.keyword %}
-	<div class="widget-content span3"> 
+	<div class="widget-content span3"><fieldset>
 			<legend> Keywords 						
 				<div class="box-icon">
 					<a href="{{ urlFor('me.draft.act.keyword',{"draft":draft.id}) }}" class="btn-setting"><i class="icon-wrench" data-toggle="tooltip" title="Organise the keywords"></i></a>
 				</div>
 			</legend>
-			<div class="controls controls-row">	
-				<span class="help-block">Set the groups of keywords to display.</span> 
-			</div>				
+						
 							
 			{% for key,item in groups %}
 			<div class="controls controls-row">	
@@ -162,23 +162,24 @@
 			</div>								
 			
 			{% endfor %}
-	</div>
+	</fieldset> </div>
 	{% endif %}
 	 
 			
-			<div class="widget-content span3"> 
-				<legend> Essay </legend>
+			<div class="widget-content span3"> <fieldset>
+				<legend> Assignment </legend>
 
 							<div class="controls controls-row">
 								<div class="controls">
-									<label class="checkbox inline"> <input type="checkbox"
-										value="1" class="cTaskQuestion"> Show assignment question
+									<label class="checkbox inline"> 
+										<input type="checkbox" value="show" 
+											   name="task" class="cTaskQuestion" checked="checked"> Show the question
 									</label>
 
 								</div>
 							
 							</div>
-			</div> 
+			</fieldset></div> 
 		</form> {# end of form #}
 	</div>
 	<div class="modal-footer">
@@ -577,7 +578,7 @@ $(document).ready(function() {
 	$('.cSentence').trigger('change');
 
 	
-	function highlighSentence(event, ui) {
+	/*function highlighSentence(event, ui) {
 		$("#amount").text(ui.values[0] + " - " + ui.values[1]);
 		$('span.oe-snt[data-rank]').each(function() {
 			var tt = parseInt($(this).attr('data-rank'));
@@ -597,10 +598,10 @@ $(document).ready(function() {
 
 			}
 		})
-	}	
+	}*/	
 	
 		// set the sentence slider
-		var smin = 0;
+		/*var smin = 0;
 		var smax = {{ mashup=='all'? '0' : '15' }};
 		$("#slider-range").slider({
 			range : true,
@@ -612,7 +613,7 @@ $(document).ready(function() {
 					console.log("Sentences Activated.");
 					highlighSentence(event, ui);
 				}
-		});
+		});*/
 
 		//$('#slider-range').slider("value", {'min':smin});
 });
@@ -655,285 +656,19 @@ $(document).ready(function() {
 });
 </script>
 {% endif %}
+
 <script id="tag-all">
 $(document).ready(function() {
 	var h = $("form").serializeArray();
-	openEssayist.log4j("{{ constant('TutorController::ACTION_MASHUP') }}",h);
+	openEssayist.log4j("{{ constant('TutorController::ACTION_MASHUP_INIT') }}",h);
+
+    $('#modal_mashup').on('hide', function ()
+	{
+    	openEssayist.log4j("{{ constant('TutorController::ACTION_MASHUP_SELECT') }}",h);
+		console.log("clode");    
+	});
+	
 });
 
 </script>
-{#
-	
-			/* var sections =  {
-					'#-s:t#': 'Title', 
-					'#+s:s#': 'Summary', 
-					'#+s:d#': 'Discussion', 
-					'#+s:d_i#':'Discussion', 
-					'#+s:i#': 'Introduction', 
-					'#+s:c#': 'Conclusion', 
-					'#-s:q#': 'Assignment',  
-					'#+s:p#': 'Preface', 
-					'#-s:h#': 'Heading', 
-					'#-s:n#': 'Numerics', 
-					'#-s:p#': 'Punctuation'					
-					};
-			          		
-			
-		sections =  {
-				'????':'',
-				'#+s:c#': 'Conclusion', 
-				'#+s:d_i#':'Discussion', 
-				'#+s#': 'Discussion', 
-				'#+s:s#': 'Summary', 
-				'#+s:i#': 'Introduction', 
-				'#-s:t#': 'Title', 
-				'#+s:p#': 'Preface', 
-				'#-s:h#': 'Heading', 
-				'#-s:n#': 'Numerics', 
-				'#-s:q#': 'Assignment',  
-				'#-s:p#': 'Punctuation'					
-				};	
-
-		keys=[];
-		for (v in sections) keys.push(v);
-		
-		var tag_tooltip = null;
-		$(".par-tag").popover({
-			title : function(){ 
-				return "fdfdfddffd"; //sections[$(this).attr('data-tag')];
-			},
-			container: "body",
-			placement: "right",
-			trigger: "hover ", //"manual"
-			content: function(){ 
-				return "fdfdfddffd"; //sections[$(this).attr('data-tag')];
-			}
-			});*/
-		
-		/*$(".par-tag").click(function (e) {
-			console.log("click£");
-			//$(this).popover('show');
-		});
-		$(".par-tag").mouseleave(function (e) {
-			console.log("leave£");
-			//$(this).popover('hide');
-		});*/
-				
-		/*$(".par-tag").addClass("pop-link").popover({
-			animation: true,
-			html: true,
-			
-			content: function(){ 
-				return ""
-			},
-			title: "Discussion",
-			trigger: 'click',
-			container: 'body'
-				});	*/
-/*
-		$(':not(#anything)').on('click', function (e) {
-		    $('.pop-link').each(function () {
-		        //the 'is' for buttons that trigger popups
-		        //the 'has' for icons and other elements within a button that triggers a popup
-		        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-		            $(this).popover('hide');
-		            return;
-		        }
-		    });
-		});*/
-		/*//$("label.checkbox").disableSelection();
-		$(".par-tag[data-tag]").each(function()
-		{
-			//console.log(Object.keys(sections));
-			var tag = $(this).attr('data-tag');
-			var idx = $.inArray(tag,keys);
-			idx = (idx==-1)?2:idx;
-			var clr = colorbrewer.Paired[11][idx];
-			//console.log(tag + " " + idx + " " + clr);
-			if (clr)
-			{
-				 //$(this).attr('style', 'background-color: '+clr+' !important');
-				 //$(this).css('opacity', 0.5);
-			}
-			$(this).attr('title', sections[tag]);
-			$(this).find('.attribute').html(sections[tag]);
-		});
-		
-		$(".par-tag").addClass("pop-link").popover({
-			animation: true,
-			html: true,
-			
-			content: function(){ 
-				return ""
-			},
-			title: "Discussion",
-			trigger: 'click',
-			container: 'body'
-				});		*/
-		/*$("span.keyword").popover({
-		animation: true,
-		content: function(){ return "ffdfddffddfdf"},
-		title: "keyword",
-		trigger: 'hover'
-			});*/
-
-		/*	
-		*/
-	{% if mashup in ['keyword','all'] %}		
-		// initialise the code highlighting
-		$('div.openessay').each(function(i, e) {
-			hljs.highlightBlock(e)
-		});
-	{%  endif %}
-
-
-	{% if mashup in ['keyword','all'] %}		
-	
-	/*$('.ngram').click(function(e){
-			if ($(this).hasClass("showKW"))
-				{
-					if ($(this).hasClass("pop-link"))
-					{
-						$(this).popover('show');
-					}
-					else
-					{
-						var kw = $(this).data("keyword"); 
-						$(this).addClass("pop-link").popover({
-							animation: true,
-							html: true,
-							title: "Key word",
-							trigger:'manual',
-							container: 'body',
-							content:function(a,b,c)
-					    	{
-								return ""
-					    	}
-				    	});
-						$(this).popover('show');
-					}
-				}
-			});*/
-		{%  endif %}
-			
-		$('.cTaskQuestion').change(function() {
-			var cbox = this;
-			var classname = ".widget-content.assignment";
-			if (cbox.checked)
-				//$(classname).show("fast");
-				$(classname).css({'display':'block'});
-			else
-				$(classname).css({'display':'none'});
-		
-		});
-
-		$('.cKeyword').change(function() {
-			var cbox = this;
-			var indicator = cbox.value;
-			var classname = ".ngram."+indicator;
-			console.log("Group activated :  " + indicator + " (" + cbox.checked + ")");
-			
-			if (cbox.checked)
-				$(classname).addClass("showKW");
-			else
-				$(classname).removeClass("showKW");
-		
-		});
-		
-		$('.cStructure').change(function() {
-			var cbox = this;
-			var indicators = cbox.value.split(";");
-			indicators.forEach(function(elt, idx, arr) {
-				var classname = ".par-wrapper[data-tag='" + elt + "']";
-				if (cbox.checked)
-					//$(classname).show("fast");
-					$(classname).css({'display':'block'});
-				else
-					$(classname).css({'display':'none'});
-					//$(classname).hide("fast");
-			});
-
-		});
-		
-
-		function highlighSentence(event, ui) {
-			$("#amount").text(ui.values[0] + " - " + ui.values[1]);
-			$('span.oe-snt[data-rank]').each(function() {
-				var tt = parseInt($(this).attr('data-rank'));
-				var mina = ui.values[0];
-				var maxa = ui.values[1];
-				
-				$(this).removeClass('showmu');
-				$(this).removeClass('dimshowmu');
-				if (mina <= (tt) && (tt) <= maxa) {
-					// if (tt == maxa)
-					$(this).addClass('showmu');
-					//console.log(mina + " " + maxa);
-					
-					//console.log("show" + tt);
-					// else
-					// $(this).addClass('dimshow');
-
-				}
-			})
-		}	
-		
-	{% if mashup in ['keyword','all'] %}
-		$('.cKeyword').prop('checked', true);	
-	{%  endif %}
-	{% if mashup in ['sentence','all'] %}
-		// set the sentence slider
-		smin = 0;
-		smax= {{ mashup=='all'? '0' : '15' }};
-		$("#slider-range").slider({
-			range : true,
-			min : 0,
-			max : 15,
-			values : [ smin, smax ],
-			slide : highlighSentence,
-			change: function(event, ui) {
-					console.log("Sentences Activated.");
-					highlighSentence(event, ui);
-				}
-		});
-	{%  endif %}	
-	
-		$('.cStructure').trigger('change');
-	{% if mashup in ['keyword','all'] %}
-		$('.cKeyword').trigger('change');
-	{%  endif %}{% if mashup in ['sentence','all'] %}
-		$('#slider-range').slider("value", {'min':smin});
-	{%  endif %}{% if mashup in ['all'] %}
-		$('.cTaskQuestion').trigger('change');
-		//$('#slider-range').trigger('change');
-	{%  endif %}
-	
-	<script>
-	$(document).ready(function()
-	{
-		var jqxhr = $.getJSON("{{ urlFor('ajax.keyword.json',{'draft':draft.id}) }}")
-			.done(function(data) {
-				console.log("OK");
-				$('.ngram').click(function(e){
-					if ($(this).hasClass("showKW"))
-						{
-							var kw = $(this).data("keyword"); 
-							$(this).popover({
-								html: true,
-								trigger:'click',
-								content:function(a,b,c)
-						    	{
-							    	return "FGGFGFGFG";
-						    	}});
-						}
-					});
-				
-				})
-			.fail(function(jqxhr,textStatus, error) {
-				console.log("ERROR");
-				});
-	});
-	</script>#}
-
-
 {% endblock %}

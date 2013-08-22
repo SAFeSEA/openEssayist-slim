@@ -499,6 +499,7 @@ $(document).ready(function() {
 			success : function(msg, status) {
 				// Set Response outcome
 				console.log(msg);
+				openEssayist.log4j("{{ constant('TutorController::ACTION_KEYWORD_GROUP') }}",msg);
 				is_dirty = false;
 				$("#catg-Save").addClass("disabled");
 				 opts = {

@@ -8,7 +8,9 @@
 class TutorController extends Controller
 {
 	const ACTION_LOGIN = 'ACTION.LOGIN';
-	const ACTION_MASHUP = 'ACTION.MASHUP';
+	const ACTION_MASHUP_INIT = 'ACTION.MASHUP.INIT';
+	const ACTION_MASHUP_SELECT = 'ACTION.MASHUP.SELECT';
+	const ACTION_KEYWORD_GROUP = 'ACTION.KEYWORD.GROUP';
 	
 	public function getJSON()
 	{
@@ -238,6 +240,11 @@ class TutorController extends Controller
 		);
 		
 		return $configs;
+	}
+	
+	private static function logActivityMessage($event,$msg)
+	{
+		
 	}
 
 	public function postActivityLog()
