@@ -37,9 +37,12 @@ class HomeController extends Controller
 	
 	public function NotFound()
 	{
-		$log = $this->app->getLog();
+		$req = $this->app->request();
+		$path = $req->getPathInfo();
+		$ref = $req->headers('REFERER');
+		//$log = $this->app->getLog();
 		
-		$this->app->flashNow('error', "404 Page Not Found");
+		$this->app->flashNow('error', "404 Page Not Found : " . $path);
 		$this->render('pages/notfound',array(
 		));
 	

@@ -1,16 +1,76 @@
-{% extends "site.twig" %} 
+{% extends "site.twig" %}
 
+{% block title %}500 Internal Server Error{% endblock %} 
 
-{% block title %}Error{% endblock %}
+{% block breadcrumb %}{% endblock %}
 
-{% block subheader %}There's a problem with openEssayist{% endblock %} 
-
-{% block injectCSS %}
-{{ parent() }}
+{% block injectJS %} 
+	{{ parent() }}
+<script type="text/javascript">
+<!--
+	
+//-->
+</script> 
 {% endblock %}
 
-{% block content %}
+{% block injectCSS %} 
+	{{ parent() }}
+<style>
+<!--
+.well
+{
+background: none repeat scroll 0 0 #FFFFFF;
+}
 
+-->
+</style>
+{% endblock %} 
+
+{% block content %}
+<div class="row-fluid"><div class="span12">
+	<div class="error-container">
+		<div class="well">
+			<h1 class="">
+				<span class=""> <i class="icon-wrench icon-animated-wrench"></i></span> Oops... We're sorry.
+			</h1>
+
+			<hr>
+			<p class="lead">Something went wrong but we are working on it.</p>
+				
+
+		<hr>
+			<div>
+				
+
+			
+				<p class="lead">Meanwhile, try one of the following:</p>
+
+				<ul class="unstyled spaced inline bigger-110">
+					<li><i class="icon-hand-right blue"></i> Try again what you were doing.</li>
+					<li><i class="icon-hand-right blue"></i> Give us more info on how this specific error occurred.</li>
+				</ul>
+			</div>
+
+			<hr>
+			<div class="space"></div>
+
+			
+			<div class="row-fluid">
+				<div class="center">
+					<a class="btn btn-grey btn-large" href="javascript:history.back()"> <i class="icon-arrow-left icon-larg"></i>
+						Go Back
+					</a> <a class="btn btn-primary btn-large" href="{{ urlFor('me.home') }}"> <i class="icon-home icon-large"></i> Home
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+		<!--PAGE CONTENT ENDS-->
+	</div>
+	<!--/.span-->
+</div>
+
+{% if auth.user.isadmin %}
 <div class="row-fluid"><div class="span12">
 	<div class="widget">
 		<div class="widget-header">
@@ -20,10 +80,14 @@
 		{{ dump(path) }}
 		</div>
 		<div class="widget-content">
-		{{ dump(error.message) }}
+		{{ dump(error) }}
 		</div>
 	</div>
 </div></div>
+
+
+
+{% endif %}
 
 
 

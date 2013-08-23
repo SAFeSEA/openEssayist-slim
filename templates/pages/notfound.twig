@@ -4,10 +4,6 @@
 
 {% block breadcrumb %}{% endblock %}
 
-{% block injectCSS %} 
-	{{ parent() }} 
-{% endblock %} 
-
 {% block injectJS %} 
 	{{ parent() }}
 <script type="text/javascript">
@@ -15,29 +11,44 @@
 	
 //-->
 </script> 
+{% endblock %}
+
+{% block injectCSS %} 
+	{{ parent() }}
+<style>
+<!--
+.well
+{
+background: none repeat scroll 0 0 #FFFFFF;
+}
+
+-->
+</style>
 {% endblock %} 
 
 {% block content %}
 <div class="row-fluid"><div class="span12">
 	<div class="error-container">
 		<div class="well">
-			<h1 class="grey lighter smaller">
-				<span class="blue bigger-125"> <i class="icon-sitemap"></i> 404
-				</span> Page Not Found
+			<h1 class="">
+				<span class=""> <i class="icon-sitemap"></i></span> Oops... We're sorry.
 			</h1>
 
 			<hr>
 			<p class="lead">We looked everywhere but we couldn't
-				find it!</p>
+				find the page your were looking for.</p>
+				
+			<p class="lead">It might have moved or the URL you entered is incorrect.</p>
 
+		<hr>
 			<div>
 				
 
-				<div class="space"></div>
+			
 				<p class="lead">Try one of the following:</p>
 
 				<ul class="unstyled spaced inline bigger-110">
-					<li><i class="icon-hand-right blue"></i> Re-check the url for
+					<li><i class="icon-hand-right blue"></i> Re-check the URL for
 						typos</li>
 					<li><i class="icon-hand-right blue"></i> Tell us about it</li>
 				</ul>
