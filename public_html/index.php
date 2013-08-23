@@ -31,7 +31,7 @@ require_once "../app/models/draft.model.php";
 
 // System's constants
 define('APPLICATION', 'openEssayist');
-define('VERSION', '2.5');
+define('VERSION', '2.5 beta');
 define('EXT', '.twig');
 
 // Create main Slim application
@@ -204,8 +204,10 @@ $c->app->get('/ajax/draft/:draft/keywords.json', array($userCtrl, 'ajaxKeyword')
 
 $c->app->post('/tutor/logactivity', array($tutorCtrl, 'postActivityLog'))->name('ajax.log.activity');
 
-$c->app->get('/help/:topic', array($tutorCtrl, 'getHelpOnTopic'))->name('ajax.help.topic');
-$c->app->get('/help/:topic/hints', array($tutorCtrl, 'getHelpOnTopic'))->name('ajax.help.hint');
+$c->app->get('/help/on/:topic', array($tutorCtrl, 'getHelpOnTopic'))->name('ajax.help.topic');
+$c->app->get('/help/on/:topic/hints', array($tutorCtrl, 'getHelpOnTopic'))->name('ajax.help.hint');
+$c->app->get('/help/all', array($tutorCtrl, 'getHelpSystem'))->name('system.help');
+
 
 
 $c->app->get('/admin/', array($adminCtrl, 'index'))->name('admin.home');
