@@ -26,7 +26,7 @@ class LoginController extends Controller {
 					$u->active = 1;
 					$u->save();
 					
-					$this->redirect('me.tasks');
+					$this->redirect('me.home');
 					
 				}
 				// @todo Should NEVER go there but, just in case, need to add proper exception
@@ -45,7 +45,7 @@ class LoginController extends Controller {
 	{
 		if ($this->app->request()->isPost()) {
 			if ($this->auth->login($this->post('username'), $this->post('password'))) {
-				$this->app->flash('info', 'Your login was successful');
+				//$this->app->flash('info', 'Your login was successful');
 				
 				$user=$this->auth->getUser();
 				
@@ -57,7 +57,7 @@ class LoginController extends Controller {
 							json_encode(array('user_agent'=> $useragent)));
 				}
 				
-				$this->redirect('me.tasks');
+				$this->redirect('me.home');
 			}
 			else
 				$this->app->flashNow('error', "Username or password is incorrect. Check your details again.");
