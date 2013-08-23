@@ -307,4 +307,9 @@ class TutorController extends Controller
 		else
 			$this->render('help/alltopics');
 	}
+	
+	public function getHelpSystem()
+	{
+		$this->render('help/alltopics');
+	}
 }

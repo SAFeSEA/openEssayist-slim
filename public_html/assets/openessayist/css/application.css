@@ -1,5 +1,13 @@
+@import url('http://fonts.googleapis.com/css?family=Droid+Sans:400,700');
+
 /* Add additional stylesheets below
  -------------------------------------------------- */
+ 
+ .brand.openessayist
+ {
+ 	font-family: 'Droid Sans';
+ 	font-weight: bold;
+ }
 
 /* "Skip to content" button
  -------------------------------------------------- */
@@ -466,6 +474,12 @@ li.bc_debug > .btn-group > .btn
 	padding: 0px;
 	margin: 0px;
 }
+
+.tab-content.openessayist-help
+{
+	max-height: 250px;
+}
+
 
 /* Responsive
  -------------------------------------------------- */

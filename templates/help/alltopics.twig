@@ -1,12 +1,57 @@
-{% extends 'help/base.modal.twig' %} 
+<style>
+<!--
+.nav, .modal-footer  {
+display: none;
+}
 
-{% block content %}
-<div class="alert alert-error">
-Cannot find the relevant topic.
-</div>
-{#
-<p>Select a topic from the list:</p>
-<ul>
-<li><a class="modal-link" href="{{ urlFor('ajax.help.topic',{'topic':'draft.show'}) }}">About the mashup</a>
-</ul>#}
-{% endblock %}
+.tab-content{
+max-height: inherit;
+}
+
+.ngram {
+	
+}
+-->
+</style>
+
+{% block title %}{% endblock %}
+
+{% block breadcrumb %}{% endblock %}
+
+
+<hr>
+{% include 'help/draft.show.twig' %}
+
+<hr>
+
+{% include 'help/draft.keyword.twig' %}
+
+<hr>
+
+
+{% include 'help/draft.sentence.twig' %}
+
+<hr>
+
+{% include 'help/action.keyword.twig' %}
+
+
+<hr>
+
+
+{% include 'help/view.dispersion.twig' %}
+
+<hr>
+
+{% include 'help/view.cloud.twig' %}
+
+<hr>
+
+{% include 'help/view.structure.twig' %}
+
+<hr>
+
+{% include 'help/view.target.twig' %}
+
+<hr>
+
