@@ -115,7 +115,7 @@
 			Conclusion
 		</label>
 		<label class="checkbox"> 
-			<input type="checkbox" name="structure" value="#-s:q#;#-s:n#;#-s:p#" class="cStructure" {{ ('#-s:q#' is inOption(cfg.check))? "checked=\"checked\""}} {{ dsb }}>  
+			<input type="checkbox" name="structure" value="#-s:q#;#-s:n#;#-s:p#;#dummy#;#+s:p#" class="cStructure" {{ ('#-s:q#' is inOption(cfg.check))? "checked=\"checked\""}} {{ dsb }}>  
 			Others
 		</label>
 									
@@ -272,6 +272,11 @@ p.oe-par:before
 	content:"Conclusion";
 }*/
 
+.par-tag[data-tag='#dummy#'] {
+	background-color: rgba( 213, 213 ,213,0.9) !important;
+	color: rgba(85 ,85 ,85 ,0.5) !important;;
+}
+
 .par-tag[data-tag='#+s:i#'] {
 	background-color: rgba( 246, 184, 184,0.25) !important;
 	color: rgba(246, 184, 184,0.5) !important;;
@@ -302,6 +307,12 @@ p.oe-par:before
 	color: rgba(253, 191, 111  ,0.5) !important;;
 }
 
+.par-tag[data-tag='#+s:p#'] {
+	background-color: rgba( 253, 191, 111 ,0.25) !important;;
+	color: rgba(253, 191, 111  ,0.5) !important;;
+}
+
+
 .par-tag[data-tag='#+s#'] .icon-heading:before
 {
 	content:"D";
@@ -330,6 +341,17 @@ p.oe-par:before
 {
 	content:"T";
 }
+
+.par-tag[data-tag="#dummy#"] .icon-heading:before
+{
+	content:"U";
+}
+
+.par-tag[data-tag="#+s:p#"] .icon-heading:before
+{
+	content:"P";
+}
+
 
 /*
 .par-tag[data-tag='#-s:t#'] {
@@ -475,6 +497,11 @@ label.checkbox:before
 	margin-top: 10px;
 }
 
+.popover-content .legend-content:empty
+{
+	display: none;
+}
+
 </style>
 {% endblock %}
 
@@ -487,15 +514,15 @@ label.checkbox:before
 $(document).ready(function() {
 	var sections = 
 	{
-		'????':		{title:'Unknown Tag', desc: 'There seems to be a problem.'},
+		'#dummy#':	{title:'Unknown Tag', desc: 'The system could not decide what is the nature of this paragraph'},
 		'#+s:c#': 	{title:'Conclusion', desc: 'This paragraph is part of the conclusion of your essay.'}, 
-		'#+s:d_i#':	{title:'Discussion',desc: 'This paragraph is one of the discusssion parts of your essay.'}, 
-		'#+s#':		{title:'Discussion',desc: 'This paragraph is one of the discusssion parts of your essay.'}, 
-		'#+s:s#': 	{title:'Summary', desc: ''},
-		'#+s:i#':	{title:'Introduction', desc: ''},
+		'#+s:d_i#':	{title:'Discussion',desc: 'This paragraph is part of the discusssion of your essay.'}, 
+		'#+s#':		{title:'Discussion',desc: 'This paragraph is part of the discusssion of your essay.'}, 
+		'#+s:s#': 	{title:'Summary', desc: 'This paragraph is part of the summary.'},
+		'#+s:i#':	{title:'Introduction', desc: 'This paragraph is part of the introduction.'},
 		'#-s:t#':	{title:'Title', desc: ''},
 		'#+s:p#':	{title:'Preface', desc: ''},
-		'#-s:h#':	{title:'Heading', desc: ''},
+		'#-s:h#':	{title:'Heading', desc: 'The system has identified this paragraph as being a heading.'},
 		'#-s:n#':	{title:'Numerics', desc: ''},
 		'#-s:q#':	{title:'Assignment',  desc: ''},
 		'#-s:p#':	{title:'Punctuation',desc: ''},				
@@ -513,12 +540,13 @@ $(document).ready(function() {
 		trigger: "click hover", //"manual"
 		content: function(){ 
 			
-			return 	"<div class='legend-titlebar'><div data-tag='"+$(this).attr('data-tag')+"' class='par-tag'>"+
-					"<span class='icon-stack'>"+
-  					"<i class='icon-circle-blank  icon-stack-base'></i>"+
-  					"<i class='icon-heading '></i></span>"+
-					"</div><div class='legend-title'>" + sections[$(this).attr('data-tag')].title + "</div></div>"+
-					"<div class='legend-content'>"+ sections[$(this).attr('data-tag')].desc +"</div>";
+			return 	"<div class='legend-titlebar'><div data-tag='"+$(this).attr('data-tag')+"' class='par-tag'>"
+					+ "<span class='icon-stack'>"
+  					+ "<i class='icon-circle-blank  icon-stack-base'></i>"
+  					+ "<i class='icon-heading '></i></span>"
+					+ "</div><div class='legend-title'>" + sections[$(this).attr('data-tag')].title + "</div></div>"
+					//+ "<div class='legend-content'>"+ sections[$(this).attr('data-tag')].desc +"</div>"
+					;
 		}
 	});
 
