@@ -61,6 +61,8 @@ class Application {
 				  UNIQUE (`username`)
 				) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 			");
+			
+			
 		}
 		catch (\PDOException $e)
 		{
@@ -130,6 +132,17 @@ class Application {
 				`id` int(11) NOT NULL AUTO_INCREMENT,
 				`users_id` int(11) NOT NULL,
 				`notes` LONGBLOB,
+				PRIMARY KEY (`id`)
+			)  AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+		");
+
+		// Feedback Table
+		$this->db->exec("
+			CREATE TABLE IF NOT EXISTS `feedback` (
+				`id` int(11) NOT NULL AUTO_INCREMENT,
+				`users_id` int(11) NOT NULL,
+			    `referer` varchar(255) DEFAULT NULL,
+				`text` TEXT,
 				PRIMARY KEY (`id`)
 			)  AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 		");

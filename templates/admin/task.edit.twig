@@ -2,14 +2,16 @@
 
 {% block title %}Admin / Task {% endblock %} 
 
+{% block breadcrumb %}{% endblock %} 
+
 {% block content %}
 
 <div class="row-fluid">
-<div class="span9">
+<div class="span12">
 
 	<div class="widget">
 		<div class="widget-header">
-			<i class="icon-pencil"></i>
+			
 			<h3>{{ task.name }}</h3>
 		</div>
 					
@@ -20,6 +22,12 @@
 			<label class="control-label" for="name">Name</label>
 			<div class="controls">
 				<input type="text" id="name" name="name" placeholder="name" value="{{ task.name }}">
+			</div>
+		</div>
+		 <div class="control-group">
+			<label class="control-label" for="name">Internal Code</label>
+			<div class="controls">
+				<input type="text" id="code" name="code" placeholder="code" value="{{ task.code }}">
 			</div>
 		</div>
 		<div class="control-group">

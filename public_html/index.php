@@ -204,19 +204,21 @@ $c->app->get('/ajax/draft/:draft/keywords.json', array($userCtrl, 'ajaxKeyword')
 
 $c->app->post('/tutor/logactivity', array($tutorCtrl, 'postActivityLog'))->name('ajax.log.activity');
 
+$c->app->get('/me/report', array($tutorCtrl, 'getFeedback'))->via('GET', 'POST')->name('system.report');
+$c->app->get('/help/', array($tutorCtrl, 'getHelpSystem'))->name('system.help');
 $c->app->get('/help/on/:topic', array($tutorCtrl, 'getHelpOnTopic'))->name('ajax.help.topic');
 $c->app->get('/help/on/:topic/hints', array($tutorCtrl, 'getHelpOnTopic'))->name('ajax.help.hint');
-$c->app->get('/help/all', array($tutorCtrl, 'getHelpSystem'))->name('system.help');
 
 
 
 $c->app->get('/admin/', array($adminCtrl, 'index'))->name('admin.home');
 $c->app->get('/admin/reset', array($adminCtrl, 'reset'))->name('admin.reset');
-$c->app->get('/admin/users/', array($adminCtrl, 'allUsers'))->name('admin.users');
-$c->app->get('/admin/tasks/', array($adminCtrl, 'allTasks'))->name('admin.tasks');
+$c->app->get('/admin/users', array($adminCtrl, 'allUsers'))->name('admin.users');
+$c->app->get('/admin/tasks', array($adminCtrl, 'allTasks'))->name('admin.tasks');
 $c->app->get('/admin/task/:taskid', array($adminCtrl, 'editTask'))->via('GET', 'POST')->name('admin.task.edit');
-$c->app->get('/admin/analyser/', array($adminCtrl, 'showEssayData'))->name('admin.json');
-$c->app->get('/admin/history/', array($adminCtrl, 'showHistory'))->name('admin.history');
+$c->app->get('/admin/analyser', array($adminCtrl, 'showEssayData'))->name('admin.json');
+$c->app->get('/admin/history', array($adminCtrl, 'showHistory'))->name('admin.history');
+$c->app->get('/admin/feedback', array($adminCtrl, 'showFeedback'))->name('admin.feedback');
 
 //$c->app->get('/demo/draft/:draft/show/', array($demoCtrl, 'showDraft'))->name('demo.draft.show');
 

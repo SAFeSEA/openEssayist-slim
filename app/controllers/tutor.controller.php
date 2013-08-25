@@ -312,4 +312,44 @@ class TutorController extends Controller
 	{
 		$this->render('help/alltopics');
 	}
+	
+	
+	public function getFeedback()
+	{
+		$req = $this->app->request();
+		if ($req->isPost())
+		{
+			$post = $req->post();
+			
+			
+			
+			$report = Model::factory('Feedback')->create();
+			$report->users_id = $this->user['id'];
+			$report->referer = $post['referer'];
+			$report->text = $post['text'];
+			$report->save();
+			$this->app->flash('info', 'Your report has been posted successfully. Thanks for your help.');
+			if (empty($post['referer']))
+			{
+				$this->redirect("me.home");
+			}
+			else
+			{
+				$this->redirect($post['referer'],false);
+			}
+				 				
+			
+		}
+		else
+		{
+			$form = array();
+			$form['referer'] = $req->headers('REFERER');
+			$this->render('pages/report',array(
+					'form'=>$form
+			));
+		}
+	}
+	
+	
+	
 }

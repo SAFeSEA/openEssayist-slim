@@ -66,14 +66,21 @@ class AdminController extends Controller
 			$post = $req->post();
 			
 			$task->name = $post['name'];
+			$task->code = $post['code'];
 			$task->assignment = $post['assignment'];
 			$task->wordcount = $post['wordcount'];
 			$task->deadline = $post['date'];
 			$task->isopen = ($post['isopen']=="Yes");
 			$task->save();
+			
+			$this->app->flash("info", "The assignment has been saved successfully.");
+			$r= $this->app->urlFor('admin.task.edit',array('taskid' => $id));
+			$this->redirect($r,false);
+			
 		}
+		else
+			$this->render('admin/task.edit',array('task' => $task));
 		
-		$this->render('admin/task.edit',array('task' => $task));
 	
 	}
 	
@@ -103,5 +110,24 @@ class AdminController extends Controller
 		
 	}
 	
+	public function showFeedback()
+	{
+		$reports= Model::factory('Feedback')->order_by_desc('id')->find_many();
+		
+		foreach ($reports as &$feed)
+		{
+			$user = $feed->user()->find_one();
+			
+			$feed->user = $user;
+			//var_dump($feed->as_array());
+			//var_dump($user->as_array());
+		}
+		
+		
+		$this->render('admin/reports',array(
+				'reports' => $reports
+		));
+	
+	}	
 	
 }

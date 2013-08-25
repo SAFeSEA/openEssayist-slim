@@ -2,6 +2,18 @@
 
 {% block title %}Admin / Tasks {% endblock %} 
 
+{% block injectCSS %} 
+	{{ parent() }}
+<style>
+<!--
+code
+{
+	font-size: inherit;
+}
+-->
+</style>
+{% endblock %} 
+
 {% block content %}
 <div class="row-fluid">
 	<div class="span3">
@@ -20,7 +32,7 @@
 	{% for item in data %}
 		<div class="widget">
 			<div class="widget-header">
-				<h3>{{ item.group.name }}</h3>
+				<h2>{{ item.group.name }} (<code>{{ item.group.code }}</code>)</h2>
 			</div>
 			<div class="widget-content"> 
 
@@ -41,7 +53,8 @@
 					
 					<tr>
 					<td><code>{{ task.id }}</code></td>
-					<td><a class="btn"  href="{{ urlFor('admin.task.edit',{"taskid":task.id}) }}">{{ task.name }}</a></td>
+					<td><a class="btn"  href="{{ urlFor('admin.task.edit',{"taskid":task.id}) }}">
+							{{ task.name }} (<code>{{ task.code }}</code>)</a></td>
 					<td>
 					<p data-toggle="collapse" data-target="#long{{ task.id }}">{{ task.short()|escape }} ...</p>
 					<p id="long{{ task.id }}" class="collapse">{{ task.long()|escape }}</p>

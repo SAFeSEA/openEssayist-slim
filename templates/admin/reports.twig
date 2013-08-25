@@ -1,0 +1,31 @@
+{% extends "site.twig" %} 
+
+{% block title %}Admin / Feedback{% endblock %} 
+
+{% block content %}
+
+
+{% for report in reports %}
+
+<div class="row-fluid">
+
+	<div class="span12"><div class="widget">
+		<div class="widget-header">
+			<h2>{{ (report.user.name) }} - </h2>
+		</div>
+		<div class="widget-content" id="feedback-log">
+		{% if report.referer %}
+		{{ (report.referer) }}
+		{% endif %} 
+		{{ (report.text) }}
+		</div> 
+	</div></div>
+</div>
+
+{% endfor %}
+
+{% endblock %}
+
+{% block injectJS %}
+	{{ parent() }}
+{% endblock %} 

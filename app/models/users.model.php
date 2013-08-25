@@ -30,6 +30,15 @@ class Users extends Model {
 	public function Notes() {
 		return $this->has_one('Note');
 	}
+
+	/**
+	 *
+	 * @key		Feedback/users_id
+	 * @return 	ORMWrapper
+	 */
+	public function reports() {
+		return $this->has_many('Feedback');
+	}
 	
 }
 
@@ -104,12 +113,26 @@ class Note extends Model
 {
 	/**
 	 *
-	 * @key		Note/iser_id
+	 * @key		Note/users_id
 	 * @return 	User
 	 * @see 	ORMWrapper
 	 */
-	public function task() {
-		return $this->belongs_to('User');
+	public function user() {
+		return $this->belongs_to('Users');
 	}
 	
+}
+
+class Feedback extends Model
+{
+	/**
+	 *
+	 * @key		Feedback/users_id
+	 * @return 	User
+	 * @see 	ORMWrapper
+	 */
+	public function user() {
+		return $this->belongs_to('Users');
+	}
+
 }
