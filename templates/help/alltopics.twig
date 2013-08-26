@@ -1,30 +1,162 @@
+{% extends "site.twig" %} 
+
+{% block title %}Help{% endblock %} 
+
+
+{% block injectCSS %}
+	{{ parent() }}
+
 <style>
 <!--
-.nav, .modal-footer  {
-display: none;
+.icon-heading
+{
+	vertical-align: middle;
+	color: black;
+	font-family: sans-serif;Arial;
+	font-weight: bolder;
+}
+.par-tag
+{
+    display: table-cell;
+    width: 18px;
+    background-color: #D5D5D5 !important;;
+    
+        text-align: center;
+    vertical-align: top;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: bolder;
+    min-width: 50px;
+   
+}
+.par-tag[data-tag='#dummy#'] {
+	background-color: rgba( 213, 213 ,213,0.9) !important;
+	color: rgba(85 ,85 ,85 ,0.5) !important;;
 }
 
-.tab-content{
-max-height: inherit;
+.par-tag[data-tag='#+s:i#'] {
+	background-color: rgba( 246, 184, 184,0.25) !important;
+	color: rgba(246, 184, 184,0.5) !important;;
 }
 
-.ngram {
-	
+.par-tag[data-tag='#-s:h#'] {
+	background-color: rgba(202 ,178 ,214,0.25) !important;;
+	color: rgba(202 ,178 ,214,0.5) !important;;
 }
+
+.par-tag[data-tag='#+s#'] {
+	background-color: rgba(178 ,223 ,138,0.25) !important;;
+	color: rgba(178 ,223 ,138,0.5) !important;;
+}
+
+.par-tag[data-tag='#+s:c#'] {
+	background-color: rgba(31, 120 ,180 ,0.25) !important;;
+	color: rgba(31, 120 ,180 ,0.5) !important;;
+}
+
+.par-tag[data-tag='#-s:q#'] {
+	background-color: rgba(106, 61, 154  ,0.25) !important;;
+	color: rgba(106, 61, 154  ,0.5) !important;;
+}
+
+.par-tag[data-tag='#-s:t#'] {
+	background-color: rgba( 253, 191, 111 ,0.25) !important;;
+	color: rgba(253, 191, 111  ,0.5) !important;;
+}
+
+.par-tag[data-tag='#+s:p#'] {
+	background-color: rgba( 253, 191, 111 ,0.25) !important;;
+	color: rgba(253, 191, 111  ,0.5) !important;;
+}
+
+
+.par-tag[data-tag='#+s#'] .icon-heading:before
+{
+	content:"D";
+}
+.par-tag[data-tag='#+s:c#'] .icon-heading:before
+{
+	content:"C";
+}
+
+.par-tag[data-tag='#-s:h#'] .icon-heading:before
+{
+	content:"H";
+}
+
+.par-tag[data-tag="#+s:i#"] .icon-heading:before
+{
+	content:"I";
+}
+
+.par-tag[data-tag="#-s:q#"] .icon-heading:before
+{
+	content:"Q";
+}
+
+.par-tag[data-tag="#-s:t#"] .icon-heading:before
+{
+	content:"T";
+}
+
+.par-tag[data-tag="#dummy#"] .icon-heading:before
+{
+	content:"U";
+}
+
+.par-tag[data-tag="#+s:p#"] .icon-heading:before
+{
+	content:"P";
+}
+
+#tabhint
+{
+	display: none;
+}
+
 -->
 </style>
+{% endblock %}
 
-{% block title %}{% endblock %}
 
 {% block breadcrumb %}{% endblock %}
 
 
-<hr>
-{% include 'help/draft.show.twig' %}
 
-<hr>
+{% set navigation = [
+	{src : 'help/draft.show.twig', 	group : 'essay'},
+	
+	{src : 'help/draft.keyword.twig', group : 'analysis'},
+	{src : 'help/draft.sentence.twig', group : 'analysis'},
+	{src : 'help/action.keyword.twig', group : 'analysis'},
+	
+	{src : 'help/view.dispersion.twig', group : 'graphics'},
+	{src : 'help/view.cloud.twig', group : 'graphics'},
+	{src : 'help/view.structure.twig', group : 'graphics'},
+	{src : 'help/view.target.twig', group : 'graphics'},
+] %}
 
-{% include 'help/draft.keyword.twig' %}
+{% block content %}
+<div>
+<h2>Sitemap</h2>
+
+
+							
+
+
+<h2>Exploring your drafts</h2>
+
+
+{% for item in navigation %}
+	{% include item.src with {'helpinline': true } %}
+	<hr>
+{% endfor %}
+
+
+
+
+{#
+
 
 <hr>
 
@@ -54,4 +186,5 @@ max-height: inherit;
 {% include 'help/view.target.twig' %}
 
 <hr>
-
+#}
+{% endblock %}

@@ -1,19 +1,24 @@
-{#<div class="modal-header">
-	<h1><i class="icon-large icon-question-sign"></i> Help on Task</h1>
-</div>#}
-<div class="modal-body">
+<div class="{{ not helpinline?'modal-body' }}">
 	{% block content %}
+	
+	{% if not helpinline %}
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="#tabhelp" data-toggle="tab"><i class="icon-question-sign"></i> About the View</a></li>
 		<li><a href="#tabhint" data-toggle="tab"><i class=" icon-comments"></i> Hints</a></li>
 	</ul>
-	<div class="tab-content openessayist-help">
-		<div class="tab-pane active" id="tabhelp" style="margin-right: 5px;">
+	{% else %}
+	<h3>{% block helptitle %}{% endblock %}</h3>
+		{% block helppath %}{% endblock %}
+	{% endif %}
+	
+	
+	<div class="{{ not helpinline?'tab-content' }} openessayist-help">
+		<div class="{{ not helpinline?'tab-pane active' }}" id="tabhelp" style="margin-right: 5px;">
 		{% block helpcontent %}
 		
 		{% endblock %}
 		</div>
-		<div class="tab-pane" id="tabhint">
+		<div class="{{ not helpinline?'tab-pane':'hints' }}" id="tabhint">
 		{% block hintcontent %}
 		
 		{% endblock %}
@@ -21,6 +26,8 @@
 	</div>
 	{% endblock %}
 </div>
+{% if not helpinline %}
 <div class="modal-footer">
 	<button type="button" data-dismiss="modal" class="btn btn-primary">Ok</button>
 </div>
+{% endif %}

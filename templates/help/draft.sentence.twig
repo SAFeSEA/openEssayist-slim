@@ -1,5 +1,7 @@
 {% extends 'help/base.modal.twig' %} 
 
+{% block helptitle %}Your Draft : Key Sentences{% endblock %}
+
 {% block helpcontent %}
 <p>This "summary" is made up of the sentences that openEssayist thinks are the most prominent 
 and noticeable sentences in your assignment.</p>
@@ -11,8 +13,68 @@ and noticeable sentences in your assignment.</p>
 <ul>
 <li> Use <button class="btn btn-small disabled">Importance</button> to show the most important sentences first, as detected by the system. 
 <li> Use <button class="btn btn-small disabled">Text Order</button> to show the sentences in the order they appear in your text.
+</ul>
 
+<p>As in the main view of your draft, sentences are identified by a colour and a symbol:</p>
+<ul>
+<li>The assignment question with  
+		<div style="display: inline-block;" data-tag="#-s:q#" class="par-tag">
+			<span class="icon-stack">
+          			<i class="icon-circle-blank  icon-stack-base"></i>
+          			<i class="icon-heading "></i>
+        	</span>
+		</div>
+<li>The title of you essay with 
+		<div style="display: inline-block;" data-tag="#-s:t#" class="par-tag">
+			<span class="icon-stack">
+          			<i class="icon-circle-blank  icon-stack-base"></i>
+          			<i class="icon-heading "></i>
+        	</span>
+		</div>
+<li>The preface of you essay with 
+		<div style="display: inline-block;" data-tag="#+s:p#" class="par-tag">
+			<span class="icon-stack">
+          			<i class="icon-circle-blank  icon-stack-base"></i>
+          			<i class="icon-heading "></i>
+        	</span>
+		</div>
+<li>The introduction with
+		<div style="display: inline-block;" data-tag="#+s:i#" class="par-tag">
+			<span class="icon-stack">
+          			<i class="icon-circle-blank  icon-stack-base"></i>
+          			<i class="icon-heading "></i>
+        	</span>
+		</div>
+<li>The discussion with 
+		<div style="display: inline-block;" data-tag="#+s#" class="par-tag">
+			<span class="icon-stack">
+          			<i class="icon-circle-blank  icon-stack-base"></i>
+          			<i class="icon-heading "></i>
+        	</span>
+		</div>
+<li>The conclusion with 
+		<div style="display: inline-block;" data-tag="#+s:c#" class="par-tag">
+			<span class="icon-stack">
+          			<i class="icon-circle-blank  icon-stack-base"></i>
+          			<i class="icon-heading "></i>
+        	</span>
+		</div>
+<li>Headings and other formatting elements with 
+		<div style="display: inline-block;" data-tag="#-s:h#" class="par-tag">
+			<span class="icon-stack">
+          			<i class="icon-circle-blank  icon-stack-base"></i>
+          			<i class="icon-heading "></i>
+        	</span>
+		</div>
+<li>Any paragraph that could not be identified is marked with
+		<div style="display: inline-block;" data-tag="#dummy#" class="par-tag">
+			<span class="icon-stack">
+          			<i class="icon-circle-blank  icon-stack-base"></i>
+          			<i class="icon-heading "></i>
+        	</span>
+		</div>		
 </ul> 
+
 {% endblock %}
 
 {% block hintcontent %}

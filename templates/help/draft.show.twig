@@ -1,71 +1,81 @@
 {% extends 'help/base.modal.twig' %} 
 
+{% block helptitle %}Your Draft : Overview{% endblock %}
+
 {% block helpcontent %}
 <p>Your draft is shown on this page, after having been analysed and marked up by OpenEssayist. 
 On it, you can explore the three elements extracted by the system and their meaning(s) for your essay: structure, key words and key sentences.</p>
 
-{% block helpStruct %}
 <h4>Structure</h4>
-<p>The different parts of your draft are highlighted by vertical bars of different colours on the left of the text:</p>
+<p>The different parts of your draft are highlighted by vertical bars on the left of the text. 
+Different colours and icons are used to identify the different parts:</p>
 <ul>
-<li>The assignment question is in purple: 
+<li>The assignment question with  
 		<div style="display: inline-block;" data-tag="#-s:q#" class="par-tag">
 			<span class="icon-stack">
           			<i class="icon-circle-blank  icon-stack-base"></i>
           			<i class="icon-heading "></i>
         	</span>
 		</div>
-<li>The title of you essay is in orange: 
+<li>The title of you essay with 
 		<div style="display: inline-block;" data-tag="#-s:t#" class="par-tag">
 			<span class="icon-stack">
           			<i class="icon-circle-blank  icon-stack-base"></i>
           			<i class="icon-heading "></i>
         	</span>
 		</div>
-<li>The introduction is in pink: 
+<li>The preface of you essay with 
+		<div style="display: inline-block;" data-tag="#+s:p#" class="par-tag">
+			<span class="icon-stack">
+          			<i class="icon-circle-blank  icon-stack-base"></i>
+          			<i class="icon-heading "></i>
+        	</span>
+		</div>
+<li>The introduction with
 		<div style="display: inline-block;" data-tag="#+s:i#" class="par-tag">
 			<span class="icon-stack">
           			<i class="icon-circle-blank  icon-stack-base"></i>
           			<i class="icon-heading "></i>
         	</span>
 		</div>
-<li>The discussion is in green: 
+<li>The discussion with 
 		<div style="display: inline-block;" data-tag="#+s#" class="par-tag">
 			<span class="icon-stack">
           			<i class="icon-circle-blank  icon-stack-base"></i>
           			<i class="icon-heading "></i>
         	</span>
 		</div>
-<li>The conclusion is in blue: 
+<li>The conclusion with 
 		<div style="display: inline-block;" data-tag="#+s:c#" class="par-tag">
 			<span class="icon-stack">
           			<i class="icon-circle-blank  icon-stack-base"></i>
           			<i class="icon-heading "></i>
         	</span>
 		</div>
-<li>Headings and other formatting elements are in grey: 
+<li>Headings and other formatting elements with 
 		<div style="display: inline-block;" data-tag="#-s:h#" class="par-tag">
 			<span class="icon-stack">
           			<i class="icon-circle-blank  icon-stack-base"></i>
           			<i class="icon-heading "></i>
         	</span>
 		</div>
+<li>Any paragraph that could not be identified is marked with
+		<div style="display: inline-block;" data-tag="#dummy#" class="par-tag">
+			<span class="icon-stack">
+          			<i class="icon-circle-blank  icon-stack-base"></i>
+          			<i class="icon-heading "></i>
+        	</span>
+		</div>		
 </ul> 
-{% endblock %}
-
-{% block helpKeyword %}
 	
 <h4>Key words and Key phrases</h4>
 <p>Key words identified by the system are marked up on the text 
 	<span class="ngram category_all showKW" data-keyword="pray">
 		<span class="keyword">like this</span>
 	</span>.</p>
-<p>Initially, the system groups all key words and key phrases in a single group.</p>
-<p>Different coulours will be used if you have defined your own group(s) and re-organised the key words in them  (see the Organise page).</p>
-{% endblock %}
+<p>Initially, the system groups all key words and key phrases in a single group, called "Default Group".
+Different coulours will be used if you have defined your own group(s) and re-organised the key words in them  (see the Organise page).</p>
 
-
-{% block helpSentence %}
 <h4>Key Sentences</h4>
 <p>Sentences that are considered are important by the system are marked up on the text 
 	<span data-rank="1" data-tag="#+s#" data-index="42" class="oe-snt showmu">
@@ -74,7 +84,19 @@ On it, you can explore the three elements extracted by the system and their mean
 </p>
 <p>The number indicates the importance of the sentence, from <span data-rank="1" data-tag="#+s#" data-index="42" class="oe-snt showmu"></span> 
 for the most important, down to <span data-rank="15" data-tag="#+s#" data-index="42" class="oe-snt showmu"></span>.</p>
-{% endblock %}
+
+<h4>Display Options</h4>
+<p>You can switch between different mode of visualisation of the essay by using the "Show" toolbar:
+</p>		
+<ul>
+  <li> <button class="btn btn-small" disabled="disabled">Text</button> only show the text and the structure of your essay </li>
+  <li> <button class="btn btn-small " disabled="disabled">Key Words</button> adds the key words and key phrases on the essay</li>
+  <li> <button class="btn btn-small " disabled="disabled">Key Sentences</button> adds the key sentences on the essay</li>
+  <li> <button class="btn btn-small " disabled="disabled">All</button> shows all elements at once.
+  	You can then use <button class="btn btn-small " disabled="disabled">More Options...</button> to open a dialog and select
+  	invidual elements, as you see fit.	 
+  </li>
+</ul>
 
 {% endblock %}
 

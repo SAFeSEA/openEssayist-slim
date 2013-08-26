@@ -1,5 +1,9 @@
 {% extends 'help/base.modal.twig' %} 
 
+{% block helptitle %}Your Draft : Key Words Dispersion{% endblock %}
+
+
+
 {% block helpcontent %}
 <p>This graph shows the positions of the key words in your assignment.</p>
 
@@ -13,6 +17,15 @@ occurs in the introduction (if openEssayist can find an introduction, it will ma
 in pink here). You can look at the conclusion and see if it contains any of the key words (if
 openEssayist can find a conclusion, it will mark its findings in blue here).</p>
 
+<h4>Zoom</h4>
+<p>Click and drag in the plot area to zoom in</p>
+<p>Use <span class="btn-group">
+ 				<button class="btn btn-small" disabled="disabled">Essay</button>
+				<button class="btn btn-small" disabled="disabled">Key Words</button>
+				<button class="btn btn-small active" disabled="disabled">Both</button>
+			</span>
+	to switch between the different modes of the zoom.
+			</p>
 {% endblock %}
 
 {% block hintcontent %}
