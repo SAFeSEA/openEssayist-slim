@@ -31,11 +31,19 @@
 		<div class="widget-toolbar "><div class="btn-toolbar form-inline">    
 			
 			<div class="btn-group">
-				<label style="margin-right: 5px;" class="checkbox">Show: </label>	
-				<a class="btn btn-small {{ mashup=='text' ? 'active'}}" href="{{ urlFor('me.draft.show',{'draft':draft.id,'cmd':''}) }}">Text</a>
-				<a class="btn btn-small {{ mashup=='keyword' ? 'active'}}" href="{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'keyword'}) }}">Key Words</a>
-				<a class="btn btn-small {{ mashup=='sentence' ? 'active'}}" href="{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'sentence'}) }}">Key Sentences</a>
-				<a class="btn btn-small {{ mashup=='all' ? 'active'}}" href="{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'all'}) }}">All</a>
+				<span class="group-label">Show: </span>		
+				<a class="btn btn-small {{ mashup=='text' ? 'active'}}" 
+					title="Show only text and structure of essay"  
+					href="{{ urlFor('me.draft.show',{'draft':draft.id,'cmd':''}) }}">Text</a>
+				<a class="btn btn-small {{ mashup=='keyword' ? 'active'}}" 
+					title="Show key words and key phrases"  
+					href="{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'keyword'}) }}">Key Words</a>
+				<a class="btn btn-small {{ mashup=='sentence' ? 'active'}}" 
+					title="Show key sentences"  
+					href="{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'sentence'}) }}">Key Sentences</a>
+				<a class="btn btn-small {{ mashup=='all' ? 'active'}}" 
+					title="Combine all elements in the essay"  
+					href="{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'all'}) }}">All</a>
 			</div>
 			{% if mashup == 'all' %}
     		<div class="btn-group">
