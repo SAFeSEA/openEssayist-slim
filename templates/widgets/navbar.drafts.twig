@@ -5,7 +5,7 @@
 	{% set allnavs = ["none", "menu","short"]  %}
 	{% set navigation = allnavs[2]  %}
 	{% if auth.user.isadmin %}
-		{% set navigation = allnavs[1]  %}
+		{% set navigation = allnavs[2]  %}
 	{% endif %}		
 		
 	{% if navigation == "short" %}		
@@ -244,13 +244,20 @@
 		</ul>
 		{% if helpontask is defined %}
 		<ul class="nav pull-right">
-			<li class=""><a href="javascript:void(0);" id="hint-on-task"
-			rel="tooltip" data-placement="bottom" title="Show Hints on how to exploit this view."><i
-					class="icon-large  icon-comments "></i></a></li>
+			<li class="alert-success">
+				<a href="javascript:void(0);" id="hint-on-task"
+					rel="tooltip" data-placement="bottom" title="Show Hints on how to exploit this view.">
+						<i class="icon-large  icon-comments "></i>
+						<span class="hidden-phone hidden-tablet"> Hints</span>
+				</a>
+			</li>
 		
-		<li class=""><a href="javascript:void(0);" id="help-on-task"
-			rel="tooltip" data-placement="bottom" title="Show Help and Hints on how to use this view."><i
-					class="icon-large icon-question-sign "></i></a></li>
+			<li class="alert-success">
+				<a href="javascript:void(0);" id="help-on-task"
+					rel="tooltip" data-placement="bottom" title="Show Help and Hints on how to use this view.">
+						<i class="icon-large icon-question-sign "></i>
+						<span class="hidden-phone hidden-tablet"> Help</span>
+				</a></li>
 		</ul>
 		{% endif %}
 </div></div>

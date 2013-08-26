@@ -7,22 +7,22 @@
 <li><span class="divider"><i class="icon-angle-right icon-large"></i></span>
 	<a title="Go back to the drafts for this assignment"
 		href="{{ urlFor('me.draft.action',{"idt":task.id}) }}"><i class="icon-book icon-large"></i>
-		<span class="hidden-phone">{{ task.name }}</span></a> 
+		<span class="">{{ task.name }}</span></a> 
 </li>
 	
 <li class="active"><span class="divider"><i class="icon-angle-right icon-large"></i></span>
 		<i class="icon-pencil icon-large"></i>
-		<span class="hidden-phone">Version {{ draft.version }}</span> 
+		<span class="">Version {{ draft.version }}</span> 
 </li>
 
 {% elseif task is defined %}
 <li class="active"><span class="divider"><i class="icon-angle-right icon-large"></i></span>
 	<i class="icon-book icon-large"></i>
-		<span class="hidden-phone">{{ task.name }}</span> 
+		<span class="">{{ task.name }}</span> 
 </li>
 {% endif %}
 
-{% if auth.user.isadmin and task is defined  %}
+{% if auth.user.isadmin and task is defined and false  %}
 <li class="bc_debug"><div class="btn-group">
 	<button class="btn btn-mini disabled " disabled="disabled"><i class="icon-cog"></i></button>
 	<button class="btn btn-mini btn-info disabled " disabled="disabled"><i class="icon-book icon-white"></i> {{ task.id }}</button>
