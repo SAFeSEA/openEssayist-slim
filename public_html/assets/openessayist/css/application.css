@@ -3,6 +3,13 @@
 /* Add additional stylesheets below
  -------------------------------------------------- */
  
+.btn-group > .group-label 
+{
+    font-size: 14px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+ 
  .brand.openessayist
  {
  	font-family: 'Droid Sans';
@@ -328,7 +335,7 @@ ul.breadcrumb {
     border-radius: 4px 4px 0 0;
     border-bottom: 1px solid #D4D4D4;
     margin: 0px;
-    padding: 8px 15px;
+    padding: 4px 15px;
    
 }
 
@@ -343,6 +350,18 @@ ul.breadcrumb a
 	text-decoration: none;
 	
 }
+
+ul.breadcrumb [class^="icon-"]
+{
+	display: none;
+}
+
+ul.breadcrumb .divider [class^="icon-"]
+{
+	display: inline-block;
+}
+
+
 
 .navbarhead .brand
 {

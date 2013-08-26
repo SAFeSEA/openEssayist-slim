@@ -13,7 +13,6 @@ class LoginController extends Controller {
 	{
 		if ($this->app->request()->isPost()) 
 		{
-			var_dump($this->post());
 			if ($this->post('action') == 'Submit' && 
 				$this->post('consent') == 'Accept')
 			{
