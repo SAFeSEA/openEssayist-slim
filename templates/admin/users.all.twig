@@ -42,7 +42,7 @@
 						<th>Email</th>
 						<th>IP Address</th>
 						<th>Active</th>
-						<th class="td-actions">Actions</th>
+						<th class="td-actions">Drafts</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -53,8 +53,9 @@
 					<td>{{ user.name }}</td>
 					<td>{{ user.email }}</td>
 					<td>{{ user.ip_address }}</td>
-					<td>{{ user.active }}</td>
-					<td></td>
+					<td>{% if user.active %}<i class="icon-check"></i>{% endif %}
+					<td><span class="badge {{ user.drafts?'badge-info' }}">{{ user.drafts?:""}}</span></td>
+				
 					</tr>
 					{% endfor %}
 				</tbody>

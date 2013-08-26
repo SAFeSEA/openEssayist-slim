@@ -31,10 +31,19 @@ class AdminController extends Controller
 		foreach ($groups as $gr)
 		{
 			$users = $gr->users()->find_many();
+			foreach ($users as &$user)
+			{
+				/* @var $dr Draft */
+				$drs = $user->drafts();
+				//$dr = $drs->find_many();
+				//if ($dr)var_dump($dr[0]->as_array());
+				$user->drafts = $drs->count();
+			}
 			$data[] = array(
 					'group' => $gr,
 					'users' => $users
 			);
+				
 		}
 		$this->render('admin/users.all',array('data' => $data));
 	
