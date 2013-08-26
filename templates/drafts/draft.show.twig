@@ -194,7 +194,7 @@
 		</form> {# end of form #}
 	</div>
 	<div class="modal-footer">
-	
+		<button class="btn pull-left" id="modal-reset" aria-hidden="true">Reset</button>
 		<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">OK</button>
 	</div>
 </div>
@@ -662,11 +662,11 @@ $(document).ready(function() {
 {% if mashup in ['all'] %}
 <script id="tag-all">
 $(document).ready(function() {
+
 	$('.cTaskQuestion').change(function() {
 		var cbox = this;
 		var classname = ".widget-content.assignment";
 		if (cbox.checked)
-			//$(classname).show("fast");
 			$(classname).css({'display':'block'});
 		else
 			$(classname).css({'display':'none'});
@@ -690,8 +690,24 @@ $(document).ready(function() {
 
 	});
 	
+
+	$('#modal-reset').click(function(){
+		var nb = $('#mashup-options input[type=checkbox]:not(:checked)').length;
+		if (nb ==0) return;
+
+		$('#mashup-options input[type=checkbox]').each(function(){
+		    $(this).prop('checked','checked');
+		});
+		$('.cKeyword').trigger('change');
+		$('.cTaskQuestion').trigger('change');
+		$('.cStructure').trigger('change');
+		$('.cSentence').trigger('change');
+		
+	});
+
 	$('.cTaskQuestion').trigger('change');
 	$('.cStructure').trigger('change');
+	
 });
 </script>
 {% endif %}
