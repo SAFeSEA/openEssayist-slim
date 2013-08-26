@@ -43,7 +43,10 @@
 					<div class="sent" data-tag="{{ sentence.tag}}" 
 						 			  data-rank="{{ sentence.rank}}" 
 						 			  data-id="{{ sentence.id}}" >
-						<div class="par-tag" data-tag="{{ sentence.tag}}"></div>		
+						<div class="par-tag" data-tag="{{ sentence.tag}}"><span class="icon-stack">
+          			<i class="icon-circle-blank  icon-stack-base"></i>
+          			<i class="icon-heading "></i>
+        </span></div>		
 						<div class="par-container">				 			  
 							<span>{{ sentence.text}}</span>
 						</div>
@@ -130,7 +133,7 @@ sections =  {
 		'#-s:p#': 'Punctuation'					
 		};	
 
-$(".par-tag[data-tag]").each(function()
+/*$(".par-tag[data-tag]").each(function()
 		{
 			console.log(Object.keys(sections));
 			var tag = $(this).attr('data-tag');
@@ -144,7 +147,7 @@ $(".par-tag[data-tag]").each(function()
 				 $(this).css('opacity', 0.5);
 			}
 			$(this).attr('title', sections[tag]);
-		});
+		});*/
 	
     
     
@@ -211,6 +214,106 @@ div.sent{
 	display: table-cell;
 }
 
+.par-tag
+{
+    display: table-cell;
+    width: 18px;
+    background-color: #D5D5D5 !important;;
+    border-right: 8px solid white;
+        text-align: center;
+    vertical-align: top;
+    
+    font-size: 11px;
+    font-weight: bolder;
+    min-width: 50px;
+   
+}
+
+/*.par-tag[data-tag='#+s:c#']:after
+{
+	content:"Conclusion";
+}*/
+
+.par-tag[data-tag='#dummy#'] {
+	background-color: rgba( 213, 213 ,213,0.9) !important;
+	color: rgba(85 ,85 ,85 ,0.5) !important;;
+}
+
+.par-tag[data-tag='#+s:i#'] {
+	background-color: rgba( 246, 184, 184,0.25) !important;
+	color: rgba(246, 184, 184,0.5) !important;;
+}
+
+.par-tag[data-tag='#-s:h#'] {
+	background-color: rgba(202 ,178 ,214,0.25) !important;;
+	color: rgba(202 ,178 ,214,0.5) !important;;
+}
+
+.par-tag[data-tag='#+s#'] {
+	background-color: rgba(178 ,223 ,138,0.25) !important;;
+	color: rgba(178 ,223 ,138,0.5) !important;;
+}
+
+.par-tag[data-tag='#+s:c#'] {
+	background-color: rgba(31, 120 ,180 ,0.25) !important;;
+	color: rgba(31, 120 ,180 ,0.5) !important;;
+}
+
+.par-tag[data-tag='#-s:q#'] {
+	background-color: rgba(106, 61, 154  ,0.25) !important;;
+	color: rgba(106, 61, 154  ,0.5) !important;;
+}
+
+.par-tag[data-tag='#-s:t#'] {
+	background-color: rgba( 253, 191, 111 ,0.25) !important;;
+	color: rgba(253, 191, 111  ,0.5) !important;;
+}
+
+.par-tag[data-tag='#+s:p#'] {
+	background-color: rgba( 253, 191, 111 ,0.25) !important;;
+	color: rgba(253, 191, 111  ,0.5) !important;;
+}
+
+
+.par-tag[data-tag='#+s#'] .icon-heading:before
+{
+	content:"D";
+}
+.par-tag[data-tag='#+s:c#'] .icon-heading:before
+{
+	content:"C";
+}
+
+.par-tag[data-tag='#-s:h#'] .icon-heading:before
+{
+	content:"H";
+}
+
+.par-tag[data-tag="#+s:i#"] .icon-heading:before
+{
+	content:"I";
+}
+
+.par-tag[data-tag="#-s:q#"] .icon-heading:before
+{
+	content:"Q";
+}
+
+.par-tag[data-tag="#-s:t#"] .icon-heading:before
+{
+	content:"T";
+}
+
+.par-tag[data-tag="#dummy#"] .icon-heading:before
+{
+	content:"U";
+}
+
+.par-tag[data-tag="#+s:p#"] .icon-heading:before
+{
+	content:"P";
+}
+
 /*@media (min-width: 1200px) {
 
 .span12 {
@@ -236,7 +339,13 @@ div.sent{
   	content: "[" attr(data-tag) "][" attr(data-rank) "][" attr(data-id) "]";
   }
 */
-
+.icon-heading
+{
+	vertical-align: middle;
+	color: black;
+	font-family: sans-serif;Arial;
+	font-weight: bolder;
+}
 
 .isotope,
 .isotope .isotope-item {
