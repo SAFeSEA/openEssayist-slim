@@ -32,18 +32,18 @@
 			
 			<div class="btn-group">
 				<span class="group-label">Show: </span>		
-				<a class="btn btn-small {{ mashup=='text' ? 'active'}}" 
-					title="Show only text and structure of essay"  
-					href="{{ urlFor('me.draft.show',{'draft':draft.id,'cmd':''}) }}">Text</a>
-				<a class="btn btn-small {{ mashup=='keyword' ? 'active'}}" 
+				<a class="btn btn-small {{ mashup=='text' ? 'active disabled'}}" 
+					title="Show only text and structure of essay" 
+					{{ not (mashup=='text') ? 'href='~urlFor('me.draft.show',{'draft':draft.id,'cmd':''}) }}>Text</a>
+				<a class="btn btn-small {{ mashup=='keyword' ? 'active disabled'}}" 
 					title="Show key words and key phrases"  
-					href="{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'keyword'}) }}">Key Words</a>
-				<a class="btn btn-small {{ mashup=='sentence' ? 'active'}}" 
+					{{ not (mashup=='keyword') ? 'href='~urlFor('me.draft.showext',{'draft':draft.id,'cmd':'keyword'}) }}>Key Words</a>
+				<a class="btn btn-small {{ mashup=='sentence' ? 'active disabled'}}" 
 					title="Show key sentences"  
-					href="{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'sentence'}) }}">Key Sentences</a>
-				<a class="btn btn-small {{ mashup=='all' ? 'active'}}" 
+					{{ not (mashup=='sentence') ? 'href='~urlFor('me.draft.showext',{'draft':draft.id,'cmd':'sentence'}) }}>Key Sentences</a>
+				<a class="btn btn-small {{ mashup=='all' ? 'active disabled'}}" 
 					title="Combine all elements in the essay"  
-					href="{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'all'}) }}">All</a>
+					{{ not (mashup=='all') ? 'href='~urlFor('me.draft.showext',{'draft':draft.id,'cmd':'all'}) }}>All</a>
 			</div>
 			{% if mashup == 'all' %}
     		<div class="btn-group">
