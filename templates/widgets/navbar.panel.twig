@@ -8,11 +8,11 @@
 					class="icon-bar"></span>
 			</button>
 
-			<a class="brand openessayist" href="{{ urlFor('home') }}" title="openEssayist" ><img class="brand-ico" alt="icon"
+			<a class="brand openessayist" href="{{ urlFor('home') }}" title="openEssayist" role="banner"><img class="brand-ico" alt="icon"
 				src="{{ app_base }}/assets/openessayist/img/openEssayist-icon.png"><span class="hidden-phone">openEssayist</span></a> 
 				
 			{% if auth.loggedIn()  %}	
-			<div class=" btn-group pull-right">
+			<div class=" btn-group pull-right" role="navigation">
 				<a class="btn {{ auth.user.isadmin ? "btn-inverse" : ""}} dropdown-toggle" rel="taooltip" data-placement="baottom" data-toggle="dropdown"
 					title="{{ auth.user.username }}" href="#"> <i class="icon-user {{ auth.user.isadmin ? "icon-white" : ""}}"></i>
 					<span class="hidden-phone">{{ auth.user.username }}</span> <span class="caret"></span>
@@ -28,7 +28,7 @@
 
 
 			
-			<div class="nav-collapse collapse">
+			<div class="nav-collapse collapse" role="navigation">
 			
 				<ul class="nav">
 					<li class=""><a href="{{ urlFor('me.home') }}" rel="tooltip" data-placement="bottom"  title="Go to your homepage">

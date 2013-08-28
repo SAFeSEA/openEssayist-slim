@@ -88,13 +88,13 @@
 		
 		{% block breadcrumb %}
 		<div class="breadcrumb">
-			<ul class="breadcrumb">{% block bccontainer %}{% endblock %}</ul>
+			<ul class="breadcrumb" role="navigation">{% block bccontainer %}{% endblock %}</ul>
 			<h1 class="subdhead">{% block subheader %}{% endblock %}</h1>
-			<div class="navbarhead">{% block navsubheader %}{% endblock %}</div>
+			<div class="navbarhead" role="navigation">{% block navsubheader %}{% endblock %}</div>
 			</div>
 		{% endblock %}
 		
-		<div class="row-fluid anchor" id="ou-content">
+		<div class="row-fluid anchor" id="ou-content" role="main">
 			<div class="span12" style="min-height: 150px;">
 			
 			{% block notification %}
@@ -136,7 +136,7 @@
 	
 	
 	<!-- Footer ================================================== -->
-	<footer class="footer">
+	<footer class="footer" role="contentinfo">
 		<div class="container">
 		{% block footer %}
 			<p><span class="brand openessayist">openEssayist v{{ constant('VERSION') }}</span>  - 
