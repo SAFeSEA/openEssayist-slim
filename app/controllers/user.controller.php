@@ -1033,10 +1033,10 @@ class UserController extends Controller
 		
 		$categories=array();
 		$series=array();
-		$series2= array(
-					'name' => "TEST",
-					'data' => array()
-					);
+		//$series2= array(
+		//			'name' => "TEST",
+		//			'data' => array()
+		//			);
 		
 		
 		$yaxis=0;
@@ -1119,14 +1119,14 @@ class UserController extends Controller
 			{
 				$series[$groupid] = $dispers;
 			}
-			$series2['data'] = array_merge($series2['data'],$dispers);
+			//$series2['data'] = array_merge($series2['data'],$dispers);
 			$categories[] = "".join($ngram," ");
 		}
 		
 		//var_dump($limit);
 		//die();
 		$series3=array();
-		
+		$series4=array();
 		
 		
 		$groups2 = array();
@@ -1148,9 +1148,27 @@ class UserController extends Controller
 					'data' => $ser,
 					'color' =>$color
 			);
+			
+			foreach ($ser as $key2=>$data)
+			{
+				$series4[$data[1]]['index'] = $data[1];
+				$series4[$data[1]]['keyword'] = $categories[$data[1]];
+				$series4[$data[1]]['group'] = $name;
+				//$series4[$data[1]]['data'][] = $data[0];
+				$series4[$data[1]]['data'][] = intval ($data[0] / $inc * 10);
+			}
+			
+			
+			
+		}
+		foreach ($series4 as &$data)
+		{
+			$count = array_count_values($data['data']);
+			$data['data'] = $count + array(0,0,0,0,0,0,0,0,0,0);
+			
 		}
 		
-		$series2['data'] = array_slice($series2['data'],0, 1000);
+		//$series2['data'] = array_slice($series2['data'],0, 1000);
 		
 		$tags = array();
 		foreach ($limit as $item)
@@ -1164,6 +1182,7 @@ class UserController extends Controller
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
 				'series' => $series3,
+				'table' => $series4,
 				'ticks' => $ticks,
 				'tags' =>$tags,
 				'categories' => $categories,
