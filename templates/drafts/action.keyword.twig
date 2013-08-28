@@ -138,12 +138,12 @@ ul#category_all
 		{% if groups.category_all is defined %}
 		
 			{% for key2,item2 in groups.category_all.keywords  %}
-			<li id="{{ item2 }}">{{ ngram.toBtn(keywords[item2],false) }}</li>
+			<li id="{{ item2 }}">{{ ngram.toBtnExt(keywords[item2]) }}</li>
 			{% endfor %}
 			{% else %}
 		
 			{% for key,item in keywords %}
-			<li id="{{ key }}">{{ ngram.toBtn(item,false) }}</li>
+			<li id="{{ key }}">{{ ngram.toBtnExt(item) }}</li>
 			{% endfor %}
 		{% endif %}
 		
@@ -192,7 +192,7 @@ ul#category_all
 					<div class="widget-content" id="">
 					<ul class="sortable" id="{{ key }}"> 
 						{% for key2,item2 in item.keywords  %}
-								<li class="" id="{{ item2 }}">{{ ngram.toBtn(keywords[item2],false) }}</li>
+								<li class="" id="{{ item2 }}">{{ ngram.toBtnExt(keywords[item2]) }}</li>
 							{% endfor %}
 					</ul>
 					</div>

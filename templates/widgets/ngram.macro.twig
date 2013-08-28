@@ -38,7 +38,7 @@
 			data-placement="top"
 			data-title="{{ ngram.ngram|join(" ") }}"
 		{% endif %}
-	>
+	tabindex="0" >
 		<span>{{ ngram.ngram|join(" ") }}</span>
 		<span class="label label-info">{{ ngram.count }}</span>
 		{% if options.showScore %}
