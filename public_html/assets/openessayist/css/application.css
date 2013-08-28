@@ -16,13 +16,14 @@
     vertical-align: middle;
 }
  
- .brand.openessayist
+.brand.openessayist
  {
  	font-family: 'Droid Sans';
  	font-weight: bold;
  }
  
-  .brand.openessayist:hover, .brand.openessayist:focus  
+ .navbar .brand.openessayist:hover, 
+ .navbar .brand.openessayist:focus  
  {
   background-color: #E5E5E5;
  }
