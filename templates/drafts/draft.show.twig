@@ -470,6 +470,17 @@ label.checkbox:before
 	color: #880000 !important;
 }
 
+
+.ngram.showKW > .keyword:first-child:before {
+    content: " !Keyword: ";
+    font-size: 10;
+}
+
+.ngram.showKW > .keyword:last-child:after {
+    content: "!     ";
+    font-size: 10;
+}
+
 {% for key,item in groups[1:] %}
 .ngram.{{item.id}} .keyword {
 }
