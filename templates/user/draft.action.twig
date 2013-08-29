@@ -25,7 +25,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="row-fluid"><div class="span12">
+{#<div class="row-fluid"><div class="span12">
 <div class="widget collapsed" id="demo-trigger" data-toggle="collapse" data-target="#demo" style="cursor: pointer;">
 			<div class="widget-header" title="Expand or collapse the details">
 				<h2>Assignment Information</h2>
@@ -35,9 +35,9 @@
 			</div>
 			</div> 
 
-</div></div>
+</div></div>#}
 
-<div class="row-fluid collapse" id="demo">
+<div class="row-fluid" id="demo">
 	{#<div class="span2">
 		<div class="widget">
 			<div class="widget-header">
@@ -52,7 +52,7 @@
 	<div class="span10">
 		<div class="widget">
 			<div class="widget-header">
-			<h3> Assignment</h3>
+			<h2> Assignment</h2>
 			</div>
 			<div class="widget-content"> 
 					<p>{{ task.assignment|nl2br}} </p>

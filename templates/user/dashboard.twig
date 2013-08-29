@@ -74,12 +74,13 @@
 		<h3>Help within the system</h3>
 		<div class="row-fluid">
 			
-			<button class="btn btn-large disabled span2 offset1" id="help-on-task">
-			<i class="icon-large icon-question-sign "></i> Help</button>
+			<a a href="{{ urlFor('system.help') }}" class="btn btn-large span2 offset1"
+				rel="tooltip" data-placement="bottom" title="Go to the help pages" >
+			<i class="icon-large icon-question-sign "></i> Help</a>
 		
 			<div class="span8 offset1">
 				<p>For a description of the content of the different aspects of the system,
-					check the on-board help pages. The command is always available on the top 
+					check the help pages. The command is always available on the top 
 					navigation bar.</p>
 				
 				
@@ -89,13 +90,14 @@
 
 		<div class="row-fluid">
 			
-			<button class="btn btn-large span2 offset1 disabled" id="help-on-task">
+			<button class="btn btn-large span2 offset1 disabled" id="help-on-task" disabled="disabled">
 				<i class="icon-large icon-comments "></i> Hints</button>
 		
 			<div class="span8 offset1">
 				<p>Once you are exploring your drafts and their analyses, you will have access 
 					to some hints on how to use the analysis, interpret the results and exploit 
-					them for revising your essay. Look for the <i class="icon-large icon-comments "> </i> icon. 
+					them for revising your essay. Look for the <i class="icon-large icon-comments "> </i> Hints button
+					in the page navigation bar. 
 				</p>
 				
 			</div>
