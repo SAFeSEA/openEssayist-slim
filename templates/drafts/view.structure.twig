@@ -168,6 +168,9 @@ $(document).ready(function() {
 
 	$('#struct_pie').highcharts($.extend(true,{}, hcOptions,{
          tooltip: {
+             followPointer: true,
+             followTouchMove: true,
+             hideDelay: 100,
 			formatter: function () {
                  return this.point.name + ": <b>" + this.point.y +"</b> words (out of "+ this.total +")<br>" +  
                  this.series.name + ': <b>' + Highcharts.numberFormat(this.percentage, 1) + '%</b>';

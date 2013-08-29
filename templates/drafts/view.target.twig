@@ -51,7 +51,7 @@
 		{% endfor %}
 		{% for item in breakdown %}
 		<tr>
-			<td>{{ item.color }}</td>
+			<td>{{ item.tag }}</td>
 			<td>{{ item.name }}</td>
 			<td>{{ item.y }}</td>
 			<td>{{ (100 * item.y / sumratings)|number_format(1) ~' %'}}</td>
@@ -174,7 +174,10 @@ $(document).ready(function() {
 	$('#struct_bullet').highcharts($.extend(true,{}, hcOptions,{
 		chart:{type:'bar'},
         tooltip: {
-			formatter: function () {
+            followPointer: true,
+            followTouchMove: true,
+            hideDelay: 100,
+            formatter: function () {
 				if (this.series.type == 'scatter')
 					return this.series.name + ": <b>" + Highcharts.numberFormat(this.y,0) + "</b> words";
 				else

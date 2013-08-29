@@ -11,6 +11,7 @@ class UserController extends Controller
 	public static function GetStructureData($id=null)
 	{
 		$arr = array(
+			'#dummy#'	=> array('name'=>'Unknown','idx'=>'8'),
 			'#+s:c#'	=> array('name'=>'Conclusion','idx'=>'1'),
 			'#+s:d_i#'	=> array('name'=>'Discussion','idx'=>'2'),
 			'#+s:d#'	=> array('name'=>'Discussion','idx'=>'3'),
@@ -863,6 +864,7 @@ class UserController extends Controller
 		{
 			$std = UserController::GetStructureData($id);
 			$tt = array(
+					'tag' => $id,
 					'name' => $std['name'],
 					'color' => $std['idx'],
 					'y'=>$count);
@@ -874,6 +876,7 @@ class UserController extends Controller
 			}
 			$distribution[] = $tt;
 			$bullet[] = array(
+					'tag' => $id,
 					'name' => $std['name'],
 					'color' => $std['idx'],
 					'data'=> array($count));
