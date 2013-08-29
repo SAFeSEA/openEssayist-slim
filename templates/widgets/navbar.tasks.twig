@@ -5,19 +5,19 @@
  			<li class="{{ navsrc == 'me.draft.action' ? 'active' }}"><a title="Overview of your progress on this assignment" 
  					href="{{ urlFor('me.draft.action',{"idt":task.id}) }}" rel="tooltip" data-placement="bottom">
 				<i class="icon-large icon-desktop"></i> 
-				<span class="hidden-phone hidden-tablet">Review</span>
+				<span class="hidden-phone ">Review</span>
 			</a></li>
 			{% if task.isopen %}
     		<li class="{{ navsrc == 'me.draft.submit' ? 'active' }}"><a title="Analyse a new draft for this assignment"
 					href="{{ urlFor('me.draft.submit',{"idt":task.id}) }}" rel="tooltip" data-placement="bottom">
 				<i class="icon-large icon-upload-alt"></i>
-				<span class="hidden-phone hidden-tablet">New draft</span>
+				<span class="hidden-phone ">New draft</span>
 			</a></li>
 			{% endif %}
     		<li class="{{ navsrc == 'me.draft.history' ? 'active' }}"><a title="Show all the drafts analysed for this assignment"
     				href="{{ urlFor('me.draft.history',{"idt":task.id}) }}" rel="tooltip" data-placement="bottom">
 				<i class=" icon-large icon-archive"></i>
-				<span class="hidden-phone hidden-tablet">History</span>
+				<span class="hidden-phone ">History</span>
 			</a></li>
     	</ul>
     </div>

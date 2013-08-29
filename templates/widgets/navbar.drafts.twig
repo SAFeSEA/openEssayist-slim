@@ -14,7 +14,7 @@
 				rel="tooltip" data-placement="bottom" 
 				href="{{ urlFor('me.draft.show',{"draft":draft.id}) }}">
 					<i class="icon-large icon-desktop"></i>
-					<span class="hidden-phone hidden-tablet"> Essay</span>
+					<span class="hidden-phone "> Essay</span>
 			</a>
 
 		<li class="{{ navsrc == 'me.draft.group.texts' ? 'active' }} dropdown-split-left">
@@ -22,7 +22,7 @@
 				rel="tooltip" data-placement="bottom" 
 				href="{{ urlFor('me.draft.group.texts',{"draft":draft.id}) }}">
 					<i class="icon-beaker icon-large"></i>
-					<span class="hidden-phone hidden-tablet"> Analysis</span>
+					<span class="hidden-phone "> Analysis</span>
 			</a>
           
 		<li class="{{ navsrc == 'me.draft.group.graphics' ? 'active' }}">
@@ -30,7 +30,7 @@
 				rel="tooltip" data-placement="bottom"
 				href="{{ urlFor('me.draft.group.graphics',{"draft":draft.id}) }}">
 					<i class="icon-large icon-bar-chart"></i>
-					<span class="hidden-phone hidden-tablet"> Graphics</span>
+					<span class="hidden-phone "> Graphics</span>
 			</a>
 					
 	{% elseif navigation == "menu" %}		
@@ -39,7 +39,7 @@
 				rel="tooltip" data-placement="bottom" 
 				href="{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'all'}) }}">
 					<i class="icon-large icon-desktop"></i>
-					<span class="hidden-phone hidden-tablet"> Essay</span>
+					<span class="hidden-phone "> Essay</span>
 			</a>
 			
 			{#<li class="dropdown dropdown-split-right active">
@@ -64,7 +64,7 @@
 		<li class="dropdown">
 			<a 	class="dropdown-toggle" data-toggle="dropdown" href="#">
 				<i class="icon-large icon-beaker"></i>
-				<span class="hidden-phone hidden-tablet"> Analysis</span>
+				<span class="hidden-phone "> Analysis</span>
 				<span class="caret"></span>
 			</a>
 			
@@ -90,7 +90,7 @@
 					
 		<li class="dropdown"><a class="dropdown-toggle"
 			data-toggle="dropdown" href="#"><i class="icon-large icon-bolt "></i> 
-				<span class="hidden-phone hidden-tablet"> Actions</span>
+				<span class="hidden-phone "> Actions</span>
 				<span class="caret"></span></a>
 			
 			<ul class="dropdown-menu pull-right">
@@ -107,7 +107,7 @@
 					
 		<li class="dropdown"><a class="dropdown-toggle"
 			data-toggle="dropdown" href="#"><i class="icon-large icon-bar-chart"></i>
-				<span class="hidden-phone hidden-tablet"> Graphics</span> 
+				<span class="hidden-phone "> Graphics</span> 
 				<span class="caret"></span></a>
 			
 			<ul class="dropdown-menu pull-right">
@@ -135,7 +135,7 @@
 		<li class="dropdown">
 			<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 				<i class="icon-large icon-rotate-270 icon-puzzle-piece"></i> 
-				<span class="hidden-phone hidden-tablet"> Sandbox</span>
+				<span class="hidden-phone "> Sandbox</span>
 				<span class="caret"></span>
 			</a>		
 			
@@ -244,8 +244,23 @@
 		</ul>
 		{% if helpontask is defined %}
 		<ul class="nav pull-right">
-			<li class="alert-success">
-				<a href="javascript:void(0);" id="hint-on-task"
+			<li>
+				<button class="btn btn-success" id="hint-on-task"
+					rel="tooltip" data-placement="bottom" title="Show Hints on how to exploit this view.">
+						<i class="icon-large  icon-comments "></i>
+						<span class="hidden-phone "> Hints</span>
+				</button>
+			</li>
+			<li>
+				<button class="btn btn-success" id="help-on-task"
+					rel="tooltip" data-placement="bottom" title="Show Help and Hints on how to use this view.">
+						<i class="icon-large icon-question-sign "></i>
+						<span class="hidden-phone "> Help</span>
+				</button>
+			</li>
+			
+			{#<li class="alert-success">
+				<a href="#" id="hint-on-task"
 					rel="tooltip" data-placement="bottom" title="Show Hints on how to exploit this view.">
 						<i class="icon-large  icon-comments "></i>
 						<span class="hidden-phone hidden-tablet"> Hints</span>
@@ -253,11 +268,11 @@
 			</li>
 		
 			<li class="alert-success">
-				<a href="javascript:void(0);" id="help-on-task"
+				<a href="#" id="help-on-task"
 					rel="tooltip" data-placement="bottom" title="Show Help and Hints on how to use this view.">
 						<i class="icon-large icon-question-sign "></i>
 						<span class="hidden-phone hidden-tablet"> Help</span>
-				</a></li>
+				</a></li>#}
 		</ul>
 		{% endif %}
 </div></div>

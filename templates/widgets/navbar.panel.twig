@@ -8,17 +8,17 @@
 					class="icon-bar"></span>
 			</button>
 
-			<a class="brand openessayist" href="{{ urlFor('home') }}" title="Go to openEssayist front page" role="banner"><img class="brand-ico" alt="icon"
+			<a class="brand openessayist" href="{{ urlFor('home') }}" title="Go to openEssayist front page" role="banner"><img class="brand-ico" alt="Go to openEssayist front page"
 				src="{{ app_base }}/assets/openessayist/img/openEssayist-icon.png"><span class="hidden-phone">openEssayist</span></a> 
 				
 			{% if auth.loggedIn()  %}	
 			<div class=" btn-group pull-right" role="navigation">
 				<a class="btn {{ auth.user.isadmin ? "btn-inverse" : ""}} dropdown-toggle" rel="taooltip" data-placement="baottom" data-toggle="dropdown"
-					title="{{ auth.user.username }}" href="#"> <i class="icon-user {{ auth.user.isadmin ? "icon-white" : ""}}"></i>
-					<span class="hidden-phone">{{ auth.user.username }}</span> <span class="caret"></span>
+					title="Your account menu" href="#"> <i class="icon-user {{ auth.user.isadmin ? "icon-white" : ""}}"></i>
+					<span class="">{{ auth.user.username }}</span> <span class="caret"></span>
 				</a>
 				<ul class="dropdown-menu">
-					<li class="disabled"><a href="">Profile</a></li>
+					<li class="disabled"><a >Profile</a></li>
 					<li class="divider"></li>
 					<li><a href="{{ urlFor('logout') }}">Sign Out</a></li>
 				</ul>
