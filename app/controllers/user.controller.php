@@ -811,8 +811,8 @@ class UserController extends Controller
 				$allfreq2[]= $item2;
 		}
 	
-		$tmpl = array('drag'=>'drafts/action.keyword','table'=>'drafts/action.keyword.table');
-		$this->render($tmpl['drag'],array(
+		//$tmpl = array('drag'=>'drafts/action.keyword','table'=>'drafts/action.keyword.table');
+		$this->render('drafts/action.keyword.aria',array(
 				'helpontask' => 'action.keyword',
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),
