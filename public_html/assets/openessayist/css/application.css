@@ -2,7 +2,23 @@
 
 /* Add additional stylesheets below
  -------------------------------------------------- */
+
+    /* fix for modals position */
+      .modal.fade.in {
+			top: 100px;
+			position: fixed;
+		}
+
+.icon-white, .nav-pills > .active > a > [class^="icon-"], .nav-pills > .active > a > [class*=" icon-"], .nav-list > .active > a > [class^="icon-"], .nav-list > .active > a > [class*=" icon-"], .navbar-inverse .nav > .active > a > [class^="icon-"], .navbar-inverse .nav > .active > a > [class*=" icon-"], .dropdown-menu > li > a:hover > [class^="icon-"], .dropdown-menu > li > a:focus > [class^="icon-"], .dropdown-menu > li > a:hover > [class*=" icon-"], .dropdown-menu > li > a:focus > [class*=" icon-"], .dropdown-menu > .active > a > [class^="icon-"], .dropdown-menu > .active > a > [class*=" icon-"], .dropdown-submenu:hover > a > [class^="icon-"], .dropdown-submenu:focus > a > [class^="icon-"], .dropdown-submenu:hover > a > [class*=" icon-"], .dropdown-submenu:focus > a > [class*=" icon-"]
+{
+	background-image: none;
+}
  
+ .pull-right > .btn-group > .dropdown-menu {
+    left: auto;
+    right: 0;
+}
+
  .btn.active.disabled {
     background-image: none;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -557,12 +573,23 @@ li.bc_debug > .btn-group > .btn
 	}
 	
 
-	
+				    /* fix for modals position */
+      .modal.fade.in {
+			top: 1%;
+			position: fixed;
+		}
 }
 
 /* Tablet
  ------------------------- */
 @media (max-width: 767px) {
+
+				    /* fix for modals position */
+      .modal.fade.in {
+			top: 1%;
+			position: fixed;
+		}
+	
 	
 		/* Remove any padding from the body */
 	body {
@@ -572,11 +599,24 @@ li.bc_debug > .btn-group > .btn
     margin-right: -20px;
     margin-left: -20px;
   }
+  
+  .nav-collapse .nav > li > a, .nav-collapse .dropdown-menu a
+{
+	display: none;
+}
+
+.nav-collapse.in .nav > li > a, .nav-collapse.in .dropdown-menu a
+{
+	display: block;
+}
+
 }
 
 /* Landscape phones
  ------------------------- */
 @media (max-width: 480px) {
+	
+
 	
 		/* Remove padding above jumbotron */
 	body {
