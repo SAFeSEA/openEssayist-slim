@@ -64,7 +64,9 @@ $(document).ready(function() {
 			 
 		$modal.load("{{ urlFor('ajax.help.topic',{'topic':helpontask}) }}", "", 
 			function(){
+				
 				$modal.modal();
+				$('body').modalmanager('loading');
 		});
 
 	});

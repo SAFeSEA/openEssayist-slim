@@ -21,8 +21,8 @@
 	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
 	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-lightness/jquery-ui.min.css" rel="stylesheet">
-	<link href="{{ app_base }}/assets/openessayist/css/application.css" rel="stylesheet">
 	<link href="{{ app_base }}/assets/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" />
+	<link href="{{ app_base }}/assets/openessayist/css/application.css" rel="stylesheet">
 	{% block injectCSS %}
 	{% endblock %}
 	
@@ -66,10 +66,6 @@
       .container .credit {
         margin: 20px 0;
       }
-
-      /*code {
-        font-size: 80%;
-      }*/
      
 </style>
 {% endblock %}
@@ -172,7 +168,7 @@
 	<script src="{{ app_base }}/assets/log4javascript-1.4.6/log4javascript.js"></script>
 	#}
 	<script src="{{ app_base }}/assets/bootstrap-modal/js/bootstrap-modalmanager.js"></script>
-	<script src="{{ app_base }}/assets/bootstrap-modal/js/bootstrap-modal.js"></script>
+	{#<script src="{{ app_base }}/assets/bootstrap-modal/js/bootstrap-modal.js"></script>#}
 	<script src="{{ app_base }}/assets/dotdotdot-1.6.3/jquery.dotdotdot.min.js"></script>
 	<script src="{{ app_base }}/assets/openessayist/js/openessayist.core.js"></script>
 	
@@ -185,6 +181,30 @@
 		if ($("[rel=tooltip]").length) {
 		        $("[rel=tooltip]").tooltip();
 		    }
+
+		// Fix for preventing scrolling behinf the overlay, when in modals.
+	    $(".modal").on('show', function () {
+	    	$('body').css('overflow', 'hidden');
+
+	    	// fix for setting focus on labels containing checkbox
+	    	$('.modal-body :input').focus(function() {
+	    		$(this).parent("label.checkbox").css('outline', 'thin dotted #333333');
+	    		$(this).parent("label.checkbox").css('outline-offset', '2px');
+	    		
+		    }); 
+	    	$('.modal-body :input').blur(function() {
+	    		$(this).parents("label.checkbox").css('background-color', 'inherit');
+	    		$(this).parents("label.checkbox").css('outline', 'none');
+			}); 
+	    		
+	    	$('input:text:visible:first').focus();
+
+
+	    	
+	    });
+		$(".modal").on('hidden', function () {
+	    	$('body').css('overflow', 'auto');
+	    });
 	});	
 	</script>
 	{% block injectJS %}
