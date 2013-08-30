@@ -2,31 +2,18 @@
 <div class="navbar navbar-fixed-top">
 	<div class="navbar-inner">
 		<div class="container-fluid">
+
+			<a class="brand openessayist" href="{{ urlFor('home') }}" title="Go to openEssayist front page" role="banner"><img class="brand-ico" alt="Go to openEssayist front page"
+				src="{{ app_base }}/assets/openessayist/img/openEssayist-icon.png"><span class="hidden-phone">openEssayist</span></a> 
+
 			<button type="button" class="btn btn-navbar" data-toggle="collapse"
+				title="Show or hide the navigation menu"
 				data-target=".nav-collapse">
 				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-
-			<a class="brand openessayist" href="{{ urlFor('home') }}" title="Go to openEssayist front page" role="banner"><img class="brand-ico" alt="Go to openEssayist front page"
-				src="{{ app_base }}/assets/openessayist/img/openEssayist-icon.png"><span class="hidden-phone">openEssayist</span></a> 
 				
 			{% if auth.loggedIn()  %}	
-			<div class=" btn-group pull-right" role="navigation">
-				<a class="btn {{ auth.user.isadmin ? "btn-inverse" : ""}} dropdown-toggle" rel="taooltip" data-placement="baottom" data-toggle="dropdown"
-					title="Your account menu" href="#"> <i class="icon-user {{ auth.user.isadmin ? "icon-white" : ""}}"></i>
-					<span class="">{{ auth.user.username }}</span> <span class="caret"></span>
-				</a>
-				<ul class="dropdown-menu">
-					<li class="disabled"><a >Profile</a></li>
-					<li class="divider"></li>
-					<li><a href="{{ urlFor('logout') }}">Sign Out</a></li>
-				</ul>
-			</div>
-			
-			
-
-
 			
 			<div class="nav-collapse collapse" role="navigation">
 			
@@ -46,25 +33,46 @@
 								data-toggle="dropdown">
 									<i class="icon-cog"></i> Admin<b class="caret"></b></a>
 						<ul class="dropdown-menu">
-								<li><a href="{{ urlFor('admin.home') }}">openEssayist</a></li>
-								<li class="divider"></li>
-								<li class="nav-header visible-desktop">Configuration</li>
-								<li><a href="{{ urlFor('admin.users') }}">Users</a></li>
-								<li><a href="{{ urlFor('admin.tasks') }}">Assignments</a></li>
+								<li><a href="{{ urlFor('admin.home') }}" title="System Management">openEssayist</a></li>
+								<li class="divider" aria-hidden="true"></li>
+								<li class="nav-header visible-desktop" aria-hidden="true">Configuration</li>
+								<li><a href="{{ urlFor('admin.users') }}" title="User Management">Users</a></li>
+								<li><a href="{{ urlFor('admin.tasks') }}" title="Task Management">Assignments</a></li>
 						</ul>
 					</li> 
 					{% endif %}
 				</ul>
 				
-							<div class=" btn-group pull-right">
+			
+				
+			</div>
+			
+
+			<div  class="pull-right">
+
+			<div class="btn-group ">
 			
 				{% if auth.user.active  %}	
 				<button id="btn-notepad" title="Edit and save your notes" rel="tooltip" data-placement="bottom"  
 						class="btn btn-info"><i class="icon-edit icon-large"></i><span class=""> Notepad</span></button>
 				{% endif %}
+			</div>			
+			
+			<div class="btn-group" role="navigation">
+				<a class="btn {{ auth.user.isadmin ? "btn-inverse" : ""}} dropdown-toggle" rel="taooltip" data-placement="bottom" data-toggle="dropdown"
+					title="Your account menu" href="#"> <i class="icon-user {{ auth.user.isadmin ? "icon-white" : ""}}"></i>
+					<span class="">{{ auth.user.username }}</span> <span class="caret"></span>
+				</a>
+				<ul class="dropdown-menu">
+					<li class="disabled"><a><i class="icon-fixed-width icon-user"></i> Profile</a></li>
+					<li class="divider"></li>
+					<li><a href="{{ urlFor('logout') }}"><i class="icon-fixed-width icon-off"></i> Sign Out</a></li>
+				</ul>
 			</div>
-				
+
+			
 			</div>
+			
 			{% endif %}
 
 		</div>
