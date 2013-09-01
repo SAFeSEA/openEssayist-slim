@@ -6,9 +6,9 @@
 			<a class="brand openessayist" href="{{ urlFor('home') }}" title="Go to openEssayist front page" role="banner"><img class="brand-ico" alt="Go to openEssayist front page"
 				src="{{ app_base }}/assets/openessayist/img/openEssayist-icon.png"><span class="hidden-phone">openEssayist</span></a> 
 
-			<button type="button" class="btn btn-navbar" data-toggle="collapse"
+			<button class="btn btn-navbar collapsed" data-toggle="collapse"
 				title="Show or hide the navigation menu"
-				data-target=".nav-collapse">
+				data-target=".nav-collapse" role="button" aria-haspopup="true" aria-expanded="false">
 				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
@@ -30,8 +30,8 @@
 					{% if auth.user.isadmin %}	
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-placement="bottom" 
 								title="Restricted access to administrative tools"
-								data-toggle="dropdown">
-									<i class="icon-cog"></i> Admin<b class="caret"></b></a>
+								data-toggle="dropdown" aria-haspopup="true">
+									<i class="icon-cog"></i> Admin <i class="caret"></i></a>
 						<ul class="dropdown-menu">
 								<li><a href="{{ urlFor('admin.home') }}" title="System Management">openEssayist</a></li>
 								<li class="divider" aria-hidden="true"></li>
@@ -50,7 +50,7 @@
 
 			<div  class="pull-right">
 
-			<div class="btn-group ">
+			<div class="btn-group " role="navigation">
 			
 				{% if auth.user.active  %}	
 				<button id="btn-notepad" title="Edit and save your notes" rel="tooltip" data-placement="bottom"  
@@ -59,10 +59,11 @@
 			</div>			
 			
 			<div class="btn-group" role="navigation">
-				<a class="btn {{ auth.user.isadmin ? "btn-inverse" : ""}} dropdown-toggle" rel="taooltip" data-placement="bottom" data-toggle="dropdown"
-					title="Your account menu" href="#"> <i class="icon-user {{ auth.user.isadmin ? "icon-white" : ""}}"></i>
+				<button class="btn {{ auth.user.isadmin ? "btn-inverse" : ""}} dropdown-toggle" rel="taooltip" data-placement="bottom" data-toggle="dropdown"
+					title="Your account menu" aria-haspopup="true"> 
+					<i class="icon-user {{ auth.user.isadmin ? "icon-white" : ""}}"></i>
 					<span class="">{{ auth.user.username }}</span> <span class="caret"></span>
-				</a>
+				</button>
 				<ul class="dropdown-menu">
 					<li class="disabled"><a><i class="icon-fixed-width icon-user"></i> Profile</a></li>
 					<li class="divider"></li>
