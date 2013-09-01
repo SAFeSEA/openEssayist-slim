@@ -4,22 +4,15 @@
 {{ parent() }}
 
 {% if draft is defined %}
-<li><span class="divider"><i class="icon-angle-right icon-large"></i></span>
-	<a title="Go back to the drafts for this assignment"
-		href="{{ urlFor('me.draft.action',{"idt":task.id}) }}"><i class="icon-book icon-large"></i>
+<li><a title="Go back to the drafts for this assignment"
+		href="{{ urlFor('me.draft.action',{"idt":task.id}) }}">
 		<span class="">{{ task.name }}</span></a> 
 </li>
 	
-<li class="active"><span class="divider"><i class="icon-angle-right icon-large"></i></span>
-		<i class="icon-pencil icon-large"></i>
-		<span class="">Version {{ draft.version }}</span> 
-</li>
+<li class="active"><span class="">Version {{ draft.version }}</span></li>
 
 {% elseif task is defined %}
-<li class="active"><span class="divider"><i class="icon-angle-right icon-large"></i></span>
-	<i class="icon-book icon-large"></i>
-		<span class="">{{ task.name }}</span> 
-</li>
+<li class="active"><span class="">{{ task.name }}</span></li>
 {% endif %}
 
 {% if auth.user.isadmin and task is defined and false  %}

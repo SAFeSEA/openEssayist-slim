@@ -3,13 +3,29 @@
 /* Add additional stylesheets below
  -------------------------------------------------- */
 
-    /* fix for modals position */
-      .modal.fade.in {
-			top: 100px;
-			position: fixed;
-		}
+/* fix for modals position */
+.modal.fade.in {
+	top: 100px;
+	position: fixed;
+}
 
-.icon-white, .nav-pills > .active > a > [class^="icon-"], .nav-pills > .active > a > [class*=" icon-"], .nav-list > .active > a > [class^="icon-"], .nav-list > .active > a > [class*=" icon-"], .navbar-inverse .nav > .active > a > [class^="icon-"], .navbar-inverse .nav > .active > a > [class*=" icon-"], .dropdown-menu > li > a:hover > [class^="icon-"], .dropdown-menu > li > a:focus > [class^="icon-"], .dropdown-menu > li > a:hover > [class*=" icon-"], .dropdown-menu > li > a:focus > [class*=" icon-"], .dropdown-menu > .active > a > [class^="icon-"], .dropdown-menu > .active > a > [class*=" icon-"], .dropdown-submenu:hover > a > [class^="icon-"], .dropdown-submenu:focus > a > [class^="icon-"], .dropdown-submenu:hover > a > [class*=" icon-"], .dropdown-submenu:focus > a > [class*=" icon-"]
+/* fix for icon background while active */
+.icon-white, .nav-pills > .active > a > [class^="icon-"], 
+.nav-pills > .active > a > [class*=" icon-"], 
+.nav-list > .active > a > [class^="icon-"], 
+.nav-list > .active > a > [class*=" icon-"], 
+.navbar-inverse .nav > .active > a > [class^="icon-"], 
+.navbar-inverse .nav > .active > a > [class*=" icon-"], 
+.dropdown-menu > li > a:hover > [class^="icon-"], 
+.dropdown-menu > li > a:focus > [class^="icon-"], 
+.dropdown-menu > li > a:hover > [class*=" icon-"], 
+.dropdown-menu > li > a:focus > [class*=" icon-"], 
+.dropdown-menu > .active > a > [class^="icon-"], 
+.dropdown-menu > .active > a > [class*=" icon-"], 
+.dropdown-submenu:hover > a > [class^="icon-"], 
+.dropdown-submenu:focus > a > [class^="icon-"], 
+.dropdown-submenu:hover > a > [class*=" icon-"], 
+.dropdown-submenu:focus > a > [class*=" icon-"]
 {
 	background-image: none;
 }
@@ -366,6 +382,33 @@ ul.breadcrumb {
     padding: 4px 15px;
    
 }
+
+ul.breadcrumb > li {
+    display: inline-flex;
+}
+
+ul.breadcrumb > li:after
+{
+	content: "";
+	font-family: FontAwesome;
+	color: #CCCCCC;
+	padding: 0 6px;
+}
+
+
+ul.breadcrumb > li:only-child:after
+{
+	content: "";
+	padding: 0px;
+}
+
+ul.breadcrumb > li:Last-child:after
+{
+	content: "";
+	padding: 0 6px;
+	font-family: inherit;
+}
+
 
 ul.breadcrumb a:hover, ul.breadcrumb a:focus
 {

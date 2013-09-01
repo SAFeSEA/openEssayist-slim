@@ -1,41 +1,22 @@
 {% block bccontainer %} 
 
 {% if navsrc=='me.home' %}
-<li class="active"><i class="icon-home icon-large"></i>
-		<span class="hidden-phone hidden-tablet">Home</span>
+<li class="active"><span class="">Home</span></li>
 
-</li>
 {% elseif navsrc=='me.tasks' %}
 <li><a title="Go back to your homepage"
-		href="{{ urlFor('me.home') }}"><i class="icon-home icon-large"></i>
-		<span class="">Home</span></a>
-		
-</li>
+		href="{{ urlFor('me.home') }}"><span class="">Home </span></a></li>
 
-<li class="active"><span class="divider"><i class="icon-angle-right icon-large"></i></span>
-	<i class="icon-folder-open icon-large"></i>
-		<span class="">Assignments</span>
-</li>
+<li class="active"><span class="">Assignments</span></li>
 
 {% else %}
 <li><a title="Go back to your homepage"
-		href="{{ urlFor('me.home') }}"><i class="icon-home icon-large"></i>
-		<span class="">Home</span></a>
-		
-</li>
+		href="{{ urlFor('me.home') }}"><span class="">Home </span></a></li>
 
-<li class="active"><span class="divider"><i class="icon-angle-right icon-large"></i></span>
+<li class="active">
 		<a title="Go back to your assignments"
-			href="{{ urlFor('me.tasks') }}"><i class="icon-folder-open icon-large"></i>
-			<span class="">Assignments</span></a> 
-	</li>
-
-
+			href="{{ urlFor('me.tasks') }}"><span class="">Assignments</span></a></li>
 {% endif %}
-
-
-
-
 {% endblock %}
 
 
