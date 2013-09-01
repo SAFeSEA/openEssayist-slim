@@ -1,10 +1,16 @@
-<div class="{{ not helpinline?'modal-body' }}">
+<div class="{{ not helpinline?'modal-body' }}" role="application">
 	{% block content %}
 	
 	{% if not helpinline %}
-	<ul class="nav nav-tabs">
-		<li class="active"><a href="#tabhelp" data-toggle="tab"><i class="icon-question-sign"></i> About the View</a></li>
-		<li><a href="#tabhint" data-toggle="tab"><i class=" icon-comments"></i> Hints</a></li>
+	<ul class="nav nav-tabs" role="tablist">
+		<li class="active" id="tab1" role="tab"  aria-controls="tabhelp" aria-labelledby="tab1-name">
+			<a href="#tabhelp" id="tab1-name" data-toggle="tab">
+				<i class="icon-question-sign"></i> About the View</a>
+		</li>
+		<li id="tab2" role="tab"  aria-controls="tabhint" aria-labelledby="tab2-name">
+			<a href="#tabhint" id="tab2-name"  data-toggle="tab" >
+				<i class=" icon-comments"></i> Hints</a>
+		</li>
 	</ul>
 	{% else %}
 	<h3>{% block helptitle %}{% endblock %}</h3>
@@ -13,12 +19,14 @@
 	
 	
 	<div class="{{ not helpinline?'tab-content' }} openessayist-help">
-		<div class="{{ not helpinline?'tab-pane active' }}" id="tabhelp" style="margin-right: 5px;">
+		<div class="{{ not helpinline?'tab-pane active' }}" id="tabhelp" style="margin-right: 5px;" 
+			aria-labelledby="tab1" role="tabpanel" aria-hidden="false" tabindex="0">
 		{% block helpcontent %}
 		
 		{% endblock %}
 		</div>
-		<div class="{{ not helpinline?'tab-pane':'hints' }}" id="tabhint">
+		<div class="{{ not helpinline?'tab-pane':'hints' }}" id="tabhint" 
+			aria-labelledby="tab2" role="tabpanel" aria-hidden="true" tabindex="0">
 		{% block hintcontent %}
 		
 		{% endblock %}

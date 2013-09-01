@@ -86,7 +86,7 @@ $(document).ready(function() {
 
 				var options = {
 						title: 'Hint',
-						text: 'Sorry, not hints at this point in time. Try asking later on.',
+						text: "<p role='alert'>Sorry, not hints at this point in time. Try asking later on.</p>",
 						addclass: "stack-bottomright",
 				        stack: stack_bottomright, 
 				        hide: false,
@@ -100,7 +100,11 @@ $(document).ready(function() {
 				        	effect_out: 'slide'
 				        	},
 				        type: 'info',
-				        icon: 'icon-large  icon-comments '
+				        icon: 'icon-large  icon-comments ',
+				        before_open: function(pnotify) {
+					        $(pnotify.text_container).attr('aria-live', 'polite');   
+					        $(pnotify.text_container).attr('aria-relevant', 'all');
+				        },
 					}; 
 				
 				if (l==0)
@@ -118,23 +122,32 @@ $(document).ready(function() {
 						var locals = {};
 						
 						if (value != null) 
-							locals.text= $(value).text();
+							locals.text=  $(value).text();
 						else
 							locals.type = 'error';
 						
 						
 						
-						if (l==(key+1)) locals.after_open =  function(pnotify) {
-									console.log('I\'m called after the notice opens. I\'m passed the pnotify object for the current notice: ' + pnotify);
-									
-								};
+						
 								
 						opts = $.extend({}, options, locals);								
 						$.pnotify(opts);
+						
 							
 					} , time );
 					time += 100;     
 				});
+
+				setTimeout( function(){
+					console.log("dfdd");
+					$(".ui-pnotify-text").each(function(){
+					    var g = $(this).html();
+					    $(this).html(g);
+					});
+				},500);
+
+
+			
 				
 			});
 	});
@@ -150,7 +163,7 @@ var $modal = null;
 $('#btn-notepad').on('click', function(){
 	if ($modal==null)
 	{
-			$modal = $('#ajax-modal');
+			$modal = $('#modal-notes');
 			$modal.on('hidden', function () {
 				{% if (auth.user.isdemo==0) %}
     			var jqxhr = $.post("{{ urlFor('profile.save.notes') }}", 
@@ -181,7 +194,7 @@ $('#btn-notepad').on('click', function(){
 {% endblock %} 
 
 {% block toolcontainer %}
-	<div id="help-modal" class="modal hide fade" tabindex="-1">
+	<div id="help-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
 	</div>
 
 	{% if auth.user %}
@@ -196,9 +209,9 @@ $('#btn-notepad').on('click', function(){
 	{% endif %}
 </div>#}
 
-	<div id="ajax-modal" class="modal container hide fade" tabindex="-1">
+	<div id="modal-notes" class="modal container hide fade" tabindex="-1" role="dialog" aria-labelledby="modal-notes-title" aria-hidden="true">
 	<div class="modal-header">
-		<h1>Your Personal Notes</h1>
+		<h1 id="modal-notes-title">Your Personal Notes</h1>
 	</div>
 	<div class="modal-toolbar">
 		<div data-target="#editor" data-role="editor-toolbar" class="btn-toolbar">

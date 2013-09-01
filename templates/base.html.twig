@@ -84,9 +84,9 @@
 		
 		{% block breadcrumb %}
 		<div class="breadcrumb">
-			<ul class="breadcrumb" role="navigation">{% block bccontainer %}{% endblock %}</ul>
+			<ul class="breadcrumb" role="navigation" aria-label="breadcrumb">{% block bccontainer %}{% endblock %}</ul>
 			<h1 class="subdhead">{% block subheader %}{% endblock %}</h1>
-			<div class="navbarhead" role="navigation">{% block navsubheader %}{% endblock %}</div>
+			<div class="navbarhead" role="navigation" aria-label="page navigation">{% block navsubheader %}{% endblock %}</div>
 			</div>
 		{% endblock %}
 		
@@ -181,6 +181,12 @@
 		if ($("[rel=tooltip]").length) {
 		        $("[rel=tooltip]").tooltip();
 		    }
+
+		 $(".btn[data-toggle='collapse']").on('click', function () {
+				 clp = $(this).hasClass("collapsed");
+				 console.log("collapse : " + clp);
+				 $(this).attr('aria-expanded',clp);
+		 });
 
 		// Fix for preventing scrolling behinf the overlay, when in modals.
 	    $(".modal").on('show', function () {
