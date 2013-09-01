@@ -74,6 +74,8 @@ function draw(words) {
 	 .style("display", "block")
       .attr("width", "800")
       .attr("height", "600")
+      .attr("role","img")
+      .attr("aria-label","Word cloud of the key words and key phrases")
     .append("g")
       .attr("transform", "translate(400,300)")
     .selectAll("text")
