@@ -47,7 +47,7 @@
 			</div>
 			{% if mashup == 'all' %}
     		<div class="btn-group">
-		    	<button data-target="#modal_mashup" role="button" class="btn btn-small " data-toggle="modal">
+		    	<button data-target="#modal_mashup" class="btn btn-small " data-toggle="modal">
 					More Options...</button>
 			</div>
 			{% endif  %}
@@ -59,7 +59,7 @@
 			<p>{{ task.assignment | raw | nl2br }}</p>
 		</div>
         
-		<div class="widget-content widget-essay myessay openessay">
+		<div class="widget-content widget-essay myessay openessay" role="application">
 		{% for par in parasenttok %}
 			
 			<div class="par-wrapper" {{ (par.partag)?"data-tag=#{ par.partag }":"" }}>
@@ -91,7 +91,7 @@
 	<div class="modal-header">
 		<h1 id="modal-title">Display Options</h1>
 	</div>
-	<div class="modal-body">
+	<div class="modal-body" >
 	
 	<p>Select the elements to show with the draft.</p>
 	
@@ -100,8 +100,8 @@
 	{% if not(config.structure.show is defined and config.structure.show == false) %}
 	{% set cfg = config.structure %}
 	{% set dsb = (cfg.modify is sameas(false))?"disabled" %}
-	<div class="widget-content span3"><fieldset> 
-		<legend>Structure</legend>
+	<div class="widget-content span3"><fieldset role="group" aria-labelledby="legend-struct"> 
+		<legend id="legend-struct" role="description">Structure</legend>
     	<label class="checkbox"> 
 			<input  type="checkbox" name="structure" value="#-s:t#" class="cStructure" {{ ('#-s:t#' is inOption(cfg.check))? "checked=\"checked\""}} {{ dsb }}> 
 			Title
@@ -131,71 +131,55 @@
 	{% endif %}
 	
 	{% if not(config.sentence.show is defined and config.sentence.show == false) %}
-	<div class="widget-content span3"> <fieldset>
-		<legend> Sentences </legend>
+	<div class="widget-content span3"><fieldset role="group" aria-labelledby="legend-sent">
+		<legend id="legend-sent" role="description"> Sentences </legend>
 
 		<label class="checkbox"> 
 			<input  type="checkbox" name="sentence" value="show" class="cSentence" {{ dsb }}> 
 			Show the key sentences
 		</label>
-		
-		{#
-		<div class="controls controls-row">
-			<div class="control-group">
-				<label class="">Top Sentences: <span id="amount" class="input unedidtable-input">0 - 0</span> </label>
-				<div id="slider-range"></div>
-				<span class="help-block">Set range of top sentences to display.</span> 
-			</div>
-		</div>
-		#}
 	</fieldset></div> 
 	{% endif %}
 	
 	{% if not(config.keyword.show is defined and config.keyword.show == false) %}
 	{% set cfg = config.keyword %}
-	<div class="widget-content span3"><fieldset>
-			<legend> Key Words </legend>
+	<div class="widget-content span3"><fieldset role="group" aria-labelledby="legend-keyword">
+		<legend id="legend-keyword" role="description"> Key Words </legend>
 						
 							
-			{% for key,item in groups %}
-			<div class="controls controls-row">	
-				<label class="checkbox inline">
-					<input type="checkbox" name="keywords" value="{{ item.id }}" class="cKeyword"
+		{% for key,item in groups %}
+		<div class="controls controls-row">	
+			<label class="checkbox inline">
+				<input type="checkbox" name="keywords" value="{{ item.id }}" class="cKeyword"
 					{{ (item.id is inOption(cfg.check,false))? "checked=\"checked\""}}> {{ item.attr.name ? item.attr.name : "Default Group" }}
-				</label>
-			</div>	
-			{% endfor %}
-			{#<hr>
-			<div class="controls controls-row">
-					<a class="btn btn-small" rel="tooltip" title="Organise the keywords" 
-						href="{{ urlFor('me.draft.act.keyword',{"draft":draft.id}) }}">
-							<i class="icon-random"></i>
-							Groups...
-					</a>
-			</div>#}
+			</label>
+		</div>	
+		{% endfor %}
 	</fieldset> </div>
 	{% endif %}
 	 
-			
-			<div class="widget-content span3"> <fieldset>
-				<legend> Assignment </legend>
-
-							<div class="controls controls-row">
-								<div class="controls">
-									<label class="checkbox inline"> 
-										<input type="checkbox" value="show" 
-											   name="task" class="cTaskQuestion" checked="checked"> Show the question
-									</label>
-
-								</div>
+	<div class="widget-content span3"> <fieldset role="group" aria-labelledby="legend-task">
+		<legend id="legend-task" role="description"> Assignment </legend>
+		<div class="controls controls-row">
+			<div class="controls">
+				<label class="checkbox inline"> 
+					<input type="checkbox" value="show" 
+							name="task" class="cTaskQuestion" checked="checked"> Show the question
+				</label>
+			</div>
 							
-							</div>
-			</fieldset></div> 
-		</form> {# end of form #}
-	</div>
+		</div>
+	</fieldset></div> 
+	
+	</form> {# end of form #}
+	
+	<div class="alert alert-success" id="modal-notification" aria-live="polite"></div>
+
+	</div>	{# end of modal body #}
+
 	<div class="modal-footer">
-		<button class="btn pull-left" id="modal-reset" aria-hidden="true">Reset</button>
-		<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">OK</button>
+		<button class="btn pull-left" id="modal-reset" title="Reset the dialog box with its default values">Reset</button>
+		<button class="btn btn-primary" data-dismiss="modal" title="Close the dialog box">OK</button>
 	</div>
 </div>
 
@@ -472,7 +456,7 @@ label.checkbox:before
 
 
 .ngram.showKW > .keyword:first-child:before {
-    content: " !Keyword: ";
+    content: " !Key: ";
     font-size: 10;
 }
 
@@ -521,6 +505,10 @@ label.checkbox:before
 	display: none;
 }
 
+#modal-notification
+{
+	margin-bottom: 0px;
+}
 </style>
 {% endblock %}
 
@@ -592,6 +580,7 @@ $(document).ready(function() {
 		hljs.highlightBlock(e)
 	});
 
+
 	$('.cKeyword').change(function() {
 		var cbox = this;
 		var indicator = cbox.value;
@@ -601,10 +590,18 @@ $(document).ready(function() {
 			$(classname).addClass("showKW");
 		else
 			$(classname).removeClass("showKW");
+		var indlabel = $.trim($(this).parent("label").text());
+		$("#modal-notification").html("The key words from the group <strong>" +  indlabel + "</strong> are now " + (cbox.checked? "visible with" : "hidden from") +
+		 " the text of your draft.");
 	});
 
 	$('.cKeyword').prop('checked', true);
 	$('.cKeyword').trigger('change');
+
+	$(".ngram[data-keyword]").each(function(){
+		$(this).attr("aria-label"," :Keyword " + $(this).data("keyword")+ "; ");
+	});	
+	
 });
 </script>
 {% endif %}
@@ -613,7 +610,7 @@ $(document).ready(function() {
 <script id="tag-sentences">
 $(document).ready(function() {
 
-	$('.cSentence').change(function() {
+	$('.cSentence').change(function(a,b,c) {
 		var cbox = this;
 		var indicator = cbox.value;
 		var classname = "span.oe-snt[data-rank]";
@@ -622,50 +619,12 @@ $(document).ready(function() {
 			$(classname).addClass("showmu");
 		else
 			$(classname).removeClass("showmu");
+		$("#modal-notification").html("Key sentences are now " + (cbox.checked? "visible in" : "hidden from") +
+				 " the text of your draft.");
 	});
 
 	$('.cSentence').prop('checked', true);
 	$('.cSentence').trigger('change');
-
-	
-	/*function highlighSentence(event, ui) {
-		$("#amount").text(ui.values[0] + " - " + ui.values[1]);
-		$('span.oe-snt[data-rank]').each(function() {
-			var tt = parseInt($(this).attr('data-rank'));
-			var mina = ui.values[0];
-			var maxa = ui.values[1];
-			
-			$(this).removeClass('showmu');
-			$(this).removeClass('dimshowmu');
-			if (mina <= (tt) && (tt) <= maxa) {
-				// if (tt == maxa)
-				$(this).addClass('showmu');
-				//console.log(mina + " " + maxa);
-				
-				//console.log("show" + tt);
-				// else
-				// $(this).addClass('dimshow');
-
-			}
-		})
-	}*/	
-	
-		// set the sentence slider
-		/*var smin = 0;
-		var smax = {{ mashup=='all'? '0' : '15' }};
-		$("#slider-range").slider({
-			range : true,
-			min : 0,
-			max : 15,
-			values : [ smin, smax ],
-			slide : highlighSentence,
-			change: function(event, ui) {
-					console.log("Sentences Activated.");
-					highlighSentence(event, ui);
-				}
-		});*/
-
-		//$('#slider-range').slider("value", {'min':smin});
 });
 </script>
 {% endif %}
@@ -681,7 +640,9 @@ $(document).ready(function() {
 			$(classname).css({'display':'block'});
 		else
 			$(classname).css({'display':'none'});
-	
+		$("#modal-notification").html("The <strong>assignment question</strong> is now " + (cbox.checked? "visible with" : "hidden from") +
+		 " the text of your draft.");
+			
 	});
 
 
@@ -689,6 +650,7 @@ $(document).ready(function() {
 	$('.cStructure').change(function() {
 		var cbox = this;
 		var indicators = cbox.value.split(";");
+		var indlabel = $.trim($(this).parent("label").text());
 		indicators.forEach(function(elt, idx, arr) {
 			var classname = ".par-wrapper[data-tag='" + elt + "']";
 			if (cbox.checked)
@@ -698,7 +660,9 @@ $(document).ready(function() {
 				$(classname).css({'display':'none'});
 				//$(classname).hide("fast");
 		});
-
+		$("#modal-notification").html("The <strong>" + indlabel + "</strong> paragraphs are now " + (cbox.checked? "visible in" : "hidden from") +
+		 " the text of your draft.");
+		
 	});
 	
 
@@ -728,7 +692,14 @@ $(document).ready(function() {
 	var h = $("form").serializeArray();
 	openEssayist.log4j("{{ constant('TutorController::ACTION_MASHUP_INIT') }}",h);
 
-    $('#modal_mashup').on('hide', function ()
+    $('#modal_mashup').on('show', function ()
+	{
+    	console.log("open");    
+		$("#modal-notification").html("");
+});
+
+
+	$('#modal_mashup').on('hide', function ()
 	{
     	openEssayist.log4j("{{ constant('TutorController::ACTION_MASHUP_SELECT') }}",h);
 		console.log("clode");    
