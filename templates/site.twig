@@ -94,16 +94,23 @@ $(document).ready(function() {
 				        closer_hover: false,
 				        sticker_hover: false,
 				        animate_speed: 100,
+				        append_to: $("#ou-content"),
 				        animation: {
-					        	
 				        	effect_in: 'slide',
 				        	effect_out: 'slide'
 				        	},
 				        type: 'info',
-				        icon: 'icon-large  icon-comments ',
+				        icon: 'icon-large icon-comments ',
 				        before_open: function(pnotify) {
-					        $(pnotify.text_container).attr('aria-live', 'polite');   
-					        $(pnotify.text_container).attr('aria-relevant', 'all');
+					        //$(pnotify.text_container).attr('aria-live', 'polite');   
+					        //$(pnotify.text_container).attr('aria-relevant', 'all');
+					        $(pnotify.text_container).attr('role', 'alert');
+
+					        $(pnotify.closer).attr('role', 'button');
+					        $(pnotify.closer).attr('tabindex', '0');
+					        $(pnotify.closer).attr('title', 'Close this hint');
+					        $(pnotify.closer).addClass('btn btn-mini');
+					        
 				        },
 					}; 
 				
@@ -135,11 +142,11 @@ $(document).ready(function() {
 						
 							
 					} , time );
-					time += 100;     
+					time += 900;     
 				});
 
 				setTimeout( function(){
-					console.log("dfdd");
+					// update the text of the alert
 					$(".ui-pnotify-text").each(function(){
 					    var g = $(this).html();
 					    $(this).html(g);
