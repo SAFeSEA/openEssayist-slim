@@ -506,7 +506,13 @@
 			pnotify.pnotify_display = function() {
 				// If the notice is not in the DOM, append it.
 				if (!pnotify.parent().length)
-					pnotify.appendTo(body);
+				{
+					// NVL: Added option for appending notifications to different element in DOM
+					if (opts.append_to)
+						pnotify.appendTo(opts.append_to);
+					else
+						pnotify.appendTo(body);
+				}
 				// Run callback.
 				if (opts.before_open) {
 					if (opts.before_open(pnotify) === false)
@@ -623,7 +629,7 @@
 			};
 
 			// Provide a button to close the notice.
-			pnotify.closer = $("<div />", {
+			pnotify.closer = $("<button />", {
 				"class": "ui-pnotify-closer",
 				"css": {"cursor": "pointer", "visibility": opts.closer_hover ? "hidden" : "visible"},
 				"click": function(){
@@ -638,7 +644,7 @@
 				pnotify.closer.css("display", "none");
 
 			// Provide a button to stick the notice.
-			pnotify.sticker = $("<div />", {
+			pnotify.sticker = $("<button />", {
 				"class": "ui-pnotify-sticker",
 				"css": {"cursor": "pointer", "visibility": opts.sticker_hover ? "hidden" : "visible"},
 				"click": function(){
