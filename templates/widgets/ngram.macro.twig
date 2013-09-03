@@ -46,3 +46,11 @@
 		{% endif %}
 	</a>
 {% endmacro %}
+
+{% macro toLI(ngram,options=null) %}
+	
+	<li draggable="true" aria-grabbed="false" role="listitem" tabindex="0" 
+		id="{{ ngram.ngram|join("") }}">
+		<span>{{ ngram.ngram|join(" ") }}</span>
+	</li>
+{% endmacro %}
