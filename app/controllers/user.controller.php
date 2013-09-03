@@ -578,18 +578,27 @@ class UserController extends Controller
 				{
 					$struct2[] = $sent['tag'];
 				}
-				$gg = array_intersect($tt,$struct2);
 				
-				if (count($gg)==0)
-					$partag = "#-s:h#";
-				else
-					$partag =  array_shift ($gg );
+				$alltags = array_unique($struct2);
+				
+				if (count($alltags)==1)
+					$partag = array_shift ($alltags );
+				else 
+				{
+					$gg = array_intersect($tt,$struct2);
+				
+					if (count($gg)==0)
+						$partag = "#-s:h#";//"#-s:h#";
+					else
+						$partag =  array_shift ($gg );
+				}
 			}	
 			else if (count($par ) != 0)
 			{
 				$partag = $par[0]['tag'];
 			}
 			if ($partag) $par['partag'] =$partag; 
+			
 		}
 		
 		$tt = $dr->kwCategories()->find_one();
@@ -812,7 +821,8 @@ class UserController extends Controller
 		}
 	
 		//$tmpl = array('drag'=>'drafts/action.keyword','table'=>'drafts/action.keyword.table');
-		$this->render('drafts/action.keyword.aria',array(
+		//$this->render('drafts/action.keyword.aria',array(
+		$this->render('drafts/action.keyword',array(
 				'helpontask' => 'action.keyword',
 				'task' => $tsk->as_array(),
 				'draft' => $dr->as_array(),

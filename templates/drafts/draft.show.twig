@@ -60,6 +60,7 @@
 		</div>
         
 		<div class="widget-content widget-essay myessay openessay">
+		
 		{% for par in parasenttok %}
 			
 			<div class="par-wrapper" {{ (par.partag)?"data-tag=#{ par.partag }":"" }}>
@@ -72,8 +73,10 @@
 				<div class="par-container">
 					<p id="{{ loop.index0 }}" class='oe-par' >
 			{% for sent in par %}
+				{%  if sent is iterable %}
 						<span class="oe-snt" data-index="{{ sent.id }}" data-tag="{{ sent.tag }}" {{ (sent.rank is defined)? "data-rank="~(sent.rank+1):"" }}>
 						  {{ sent.text }}</span>
+				{% endif %}
 			{% endfor %}
 					</p>
 				</div>
@@ -540,7 +543,7 @@ $(document).ready(function() {
 		
 	var tag_tooltip = null;
 	$(".par-wrapper .par-tag")
-	.attr('aria-label','This is an aria label')
+		.attr('aria-label','This is an aria label')
 		.attr('title','This is a title')
 		.attr('role','region')
 		.attr('tabindex','0')
