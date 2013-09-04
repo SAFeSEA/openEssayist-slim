@@ -23,6 +23,8 @@
 	</div>
 	<div class="widget-content">
 		<div id="struct_bullet" style="height: 500px;margin: 0 auto"></div>
+		<div id="legend_bullet" class="btn-group" style='white-space: inherit;' data-toggle="buttons-checkbox"
+		</div>
 	</div>
 </div></div>
 </div>
@@ -79,6 +81,16 @@
 	{{ parent() }}
 <style>
 	
+button .legendcolor
+{
+    background-color: white;
+    float: left;
+    height: 14px;
+    margin-right: 5px;
+    margin-top: 2px;
+    width: 20px;
+}
+	
 table.table thead .sorting,
 table.table thead .sorting_asc,
 table.table thead .sorting_desc,
@@ -108,6 +120,79 @@ table.table thead .sorting_desc_disabled { }
 <script src="{{ app_base }}/assets/jquery.dataTables/js/jquery.dataTables.min.js"></script>
 <script src="{{ app_base }}/assets/jquery.dataTables/js/plugin.dataTableExt.js"></script>
 <script type="text/javascript">
+/**
+ * Highcharts pattern fill plugin
+ *
+ * Author:         Torstein Hønsi
+ * Last revision:  2013-02-06
+ * License:        MIT License
+ *
+ * Options:
+ * - pattern:      The URL for a pattern image file
+ * - width:        The width of the image file
+ * - height:       The height of the image file
+ * - color1:       In oldIE, bright colors in the pattern image are replaced by this color. 
+ *                 Not yet implemented in SVG.
+ * - color2:       In oldIE, dark colors are replaced by this. 
+ * see http://jsfiddle.net/singingbush/8rkJh/
+ */
+(function() {
+    var idCounter = 0;
+    
+    Highcharts.wrap(Highcharts.Renderer.prototype, 'color', function(proceed, color, elem, prop) {
+        var markup;
+        if (color && color.pattern && prop === 'fill') {
+            // SVG renderer
+            if (this.box.tagName == 'svg') {
+                var id = 'highcharts-pattern-'+ idCounter++;
+                var pattern = this.createElement('pattern')
+                        .attr({
+                            id: id,
+                            patternUnits: 'userSpaceOnUse',
+                            width: color.width,
+                            height: color.height
+                        })
+                        .add(this.defs),
+                    image = this.image(
+                        color.pattern, 0, 0, color.width, color.height
+                    )
+                    .add(pattern);
+                return 'url(' + this.url + '#' + id + ')';
+            
+            // VML renderer
+            } else {
+                
+                // Remove previous fills
+                if (elem.getElementsByTagName('fill').length) {
+                    elem.removeChild(elem.getElementsByTagName('fill')[0]);                  
+                }
+                 
+                // If colors are given, use those, else use the original colors
+                // of the pattern tile
+                if (color.color1 && color.color2) {
+                    markup = ['<hcv:', prop, ' color="', color.color1, '" color2="', 
+                              color.color2, '" type="pattern" src="', color.pattern, '" />'].join('');
+                } else {
+                    markup = this.prepVML(['<', prop, ' type="tile" src="', color.pattern, '" />']);
+                }
+                
+                elem.appendChild(
+                    document.createElement(markup)
+                );   
+               
+                // Work around display bug on updating attached nodes
+                if (elem.parentNode.nodeType === 1) {
+                    elem.outerHTML = elem.outerHTML
+                }
+            }
+            
+        } else {
+            return proceed.call(this, color, elem, prop);
+        }
+    });    
+})();
+
+	
 $(document).ready(function() {
 	$('#data-table').dataTable( {
 		"bPaginate": false,
@@ -150,6 +235,16 @@ $(document).ready(function() {
 	var bullet = {{ bullet|json_encode|raw }};
 	bullet = bullet.map(getColor);  
 
+	var pattern = {
+            pattern: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iNjAiIGhlaWdodD0iMzAiPgo8ZGVmcz4KPHJlY3QgaWQ9InIiIHdpZHRoPSIzMCIgaGVpZ2h0PSIxNSIgZmlsbD0iI2JiMDg1ZiIgc3Ryb2tlLXdpZHRoPSIyLjUiIHN0cm9rZT0iIzdhMDU0ZCI+PC9yZWN0Pgo8ZyBpZD0icCI+Cjx1c2UgeGxpbms6aHJlZj0iI3IiPjwvdXNlPgo8dXNlIHk9IjE1IiB4bGluazpocmVmPSIjciI+PC91c2U+Cjx1c2UgeT0iMzAiIHhsaW5rOmhyZWY9IiNyIj48L3VzZT4KPHVzZSB5PSI0NSIgeGxpbms6aHJlZj0iI3IiPjwvdXNlPgo8L2c+CjwvZGVmcz4KPHVzZSB4bGluazpocmVmPSIjcCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAtMjUpIHNrZXdZKDQwKSI+PC91c2U+Cjx1c2UgeGxpbms6aHJlZj0iI3AiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMwIDApIHNrZXdZKC00MCkiPjwvdXNlPgo8L3N2Zz4=',
+            width: 10,
+            height: 10,
+         // VML only:
+            color1: 'red',
+            color2: 'yellow'
+        };
+	//bullet[1]['color'] = pattern;
+
 	// Add the target to the bullet graph series
 	bullet.push({name:"Target",color: "{{ (target.inlimit)?'green':'red' }}",pointWidth:100,type: "scatter",data:[{{task.wordcount}}],});
 
@@ -167,7 +262,12 @@ $(document).ready(function() {
 				plotBackgroundColor: null,
 		        plotBorderWidth: null,
 		        plotShadow: false
-			}
+			},
+			legend: {
+				enabled: false,
+	            itemStyle: {
+	                color: '#000000',
+	            }}
 	};
 
 	// Build the Bullet Graph
@@ -216,6 +316,36 @@ $(document).ready(function() {
         },
 		series: bullet
 	}));
+
+	$.each(bullet,function(index,item){
+		var that = item;
+		$('#legend_bullet').append(
+				$('<button/>', {
+				    type: 'button',
+				    title: 'Show or hide this structure element',
+				    text: item.name,
+				    id: "legend-tag"+index,
+				    'data-tag': item.tag,
+				    'class': 'btn btn-small active',
+				}).prepend($('<div/>')
+					.addClass('legendcolor')
+					.css('background-color',item.color)
+				).click(function() {
+					var chart = $('#struct_bullet').highcharts();
+					var series = chart.series[index];
+			        if (series.visible) {
+			            series.hide();
+			            if (!('tag' in that))
+			            	chart.yAxis[0].plotLinesAndBands[0].svgElem.hide();
+			        } else {
+			            series.show();
+			            if (!('tag' in that))
+			            	chart.yAxis[0].plotLinesAndBands[0].svgElem.show();
+			            
+			        }
+				})
+		);
+	});
 
 });
 </script>
