@@ -9,6 +9,10 @@
 	position: fixed;
 }
 
+.btn:focus {
+    outline: thin dotted #333333;
+}
+
 /* fix for icon background while active */
 .icon-white, .nav-pills > .active > a > [class^="icon-"], 
 .nav-pills > .active > a > [class*=" icon-"], 
