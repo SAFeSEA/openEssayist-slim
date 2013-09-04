@@ -98,7 +98,11 @@
 <div class="row-fluid"><div class="span12">
 <div class="widget">
 			<div class="widget-header">
-			<h2>To analyse a draft</h2>
+			<h2>To analyse a draft
+				{% if auth.user.isadmin %}
+					<span class="label {{ drafts|length == 0? 'label-success' : 'label-important' }}" aria-hidden="true"><strong>ADMIN NOTE: </strong> only visible when no draft</span>
+				{% endif %}
+			</h2>
 			</div>
 			<div class="widget-content"> 
 				<p>Before going further, you need to have a draft of your assignment ready for analysis.</p>
@@ -117,7 +121,11 @@
 <div class="row-fluid"><div class="span12">
 <div class="widget">
 			<div class="widget-header">
-			<h2>To review your first draft</h2>
+			<h2>To review your first draft
+				{% if auth.user.isadmin %}
+					<span class="label {{ drafts|length == 1? 'label-success' : 'label-important' }}" aria-hidden="true"><strong>ADMIN NOTE: </strong> visible when only one draft submitted (ie first)</span>
+				{% endif %}
+			</h2>
 			</div>
 			<div class="widget-content"> 
 				<p>You recently had a first draft (Version {{drafts[0].version }}, "{{drafts[0].name }}") analysed by openEssayist.</p>
@@ -128,12 +136,20 @@
 				</p> 
 				<p>You can go to the analysis here: </p>
 				<p>
+				{% if drafts[0] %}
 				<a class="btn btn-large span3"  
 						title="Go to the analysis of your first draft" 
 						rel="tooltip" data-placement="bottom"
 						href="{{ urlFor('me.draft.show',{"draft":drafts[0].id}) }}">
-					<i class="icon-large icon-pencil"></i> Version {{drafts[0].version }}</a>    					
-    					</p>
+					<i class="icon-large icon-pencil"></i> Version {{drafts[0].version }}</a>
+				{% else %} <a class="btn btn-large span3" 
+						disabled="disabled"
+						title="Go to the analysis of your first draft" rel="tooltip"
+						data-placement="bottom">
+						<i class="icon-large icon-pencil"></i> Version XX</a>
+				{% endif %}    					
+				</p>
+    			
 			</div> 
 		</div>
 
@@ -143,19 +159,30 @@
 <div class="row-fluid"><div class="span12">
 <div class="widget">
 			<div class="widget-header">
-			<h2>To review your essay and your drafts</h2>
+			<h2>To review your essay and your drafts
+				{% if auth.user.isadmin %}
+					<span class="label {{ drafts|length >= 2? 'label-success' : 'label-important' }}" aria-hidden="true"><strong>ADMIN NOTE: </strong> visible when several submitted</span>
+				{% endif %}
+			</h2>
 			</div>
 			<div class="widget-content"> 
 			<div class="clearfix ">
 				<p>You have analysed several drafts so far.</p>
 				<p>You can always go and review the analysis of the latest draft (Version {{drafts[0].version }}, "{{drafts[0].name }}") here: </p>
 				<p>
-				<a class="btn btn-large span3"
-						title="Show the analysis of the latest draft" 
+				{% if drafts[0] %}
+				<a class="btn btn-large span3"  
+						title="Go to the analysis of your first draft" 
 						rel="tooltip" data-placement="bottom"
-					 	href="{{ urlFor('me.draft.show',{"draft":drafts[0].id}) }}">
-					<i class="icon-large icon-pencil"></i> Version {{drafts[0].version }}</a>    					
-    			</p>
+						href="{{ urlFor('me.draft.show',{"draft":drafts[0].id}) }}">
+					<i class="icon-large icon-pencil"></i> Version {{drafts[0].version }}</a>
+				{% else %} <a class="btn btn-large span3" 
+						disabled="disabled"
+						title="Go to the analysis of your first draft" rel="tooltip"
+						data-placement="bottom">
+						<i class="icon-large icon-pencil"></i> Version XX</a>
+				{% endif %}    					
+				</p>
     		</div><div class="clearfix ">
 				<p>Alternatively, You can go and check previous drafts and their analysis: </p>
 				<p><a class="btn btn-large span3"  title="Show all the drafts analysed for this assignment"
