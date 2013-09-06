@@ -11,6 +11,8 @@
 
 {% block injectCSS %}
 	{{ parent() }}
+<link href="{{ app_base }}/assets/jquery.minicolors/jquery.minicolors.css" rel="stylesheet">
+	
  <style>
  .sortable li.ui-state-highlight:empty
 {
@@ -19,6 +21,39 @@
 	height: 40px;
     width: 80px;display: inline-block;
 }
+
+.btn-setting
+{
+	padding: 1px 10px;
+}
+
+.widget-header .box-icon i {
+    opacity: 1;
+}
+
+ul.sortable
+{
+	min-height: 60px;
+}
+
+.input-append
+{
+	margin-left: 25px;
+	
+}
+
+.input-append input
+{
+ 	font-size: 11.9px;
+   	padding: 2px 6px;
+}
+
+.input-append > .group-label {
+    font-size: 11.9px;
+    margin-right: 0px;
+    vertical-align: middle;
+}
+
 
  [role="list"] {
     -moz-box-sizing: content-box;
@@ -81,7 +116,7 @@
     outline: 1px solid transparent;
     cursor: -moz-grab;
 
-	background: url("images/ui-bg_highlight-soft_75_ffe45c_1x100.png") repeat-x scroll 50% top #FFE45C;
+	background: repeat-x scroll 50% top #FFE45C;
 	
 }
 #container-user-group > .span4
@@ -89,6 +124,14 @@
 	margin: 5px;	
 }
 
+h3 > .cat_color
+{
+    border: 1px solid #D5D5D5;
+    margin-right: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    white-space: inherit;
+}
 
 
 </style>
@@ -111,33 +154,35 @@
 	</div>
 	{% if task.isopen %}
 	<div class="widget-toolbar">
-		<div class="btn-toolbar">    
+		<div class="btn-toolbar form-inline">    
     		<button id="catg-Save" class="btn btn-small btn-primary disabled">Save</button>
     		<button id="catg-Reset" data-toggle="modal" data-target="#modal-reset" class="btn btn-small ">Reset</button>
     		<button id="catg-New" {{ (groups|length == 10)? "disabled" }} class="btn btn-small">New Group...</button>
+			<div class="input-append">
+				<span class="group-label">Filter: </span>
+    			<input placeholder="key word" class="input-mini" id="catg_Filter" type="text">
+    			<button class="btn btn-small" id="catg_Clear" type="button">Clear</button>
+    		</div>
+    		
+    		<button id="full-screen" class="btn btn-small pull-right"><i class="icon icon-fullscreen"></i></button>
+    		
     	</div>
 	</div>
 	{% endif %}
 <div class="widget-content" id="container-groups">
-	
-	
-
-	
 
 {% set lkw = (groups['category_all'] is defined)? groups['category_all']['keywords'] : keywords   %}
 <div class="row-fluid"><div class="span12">
-<div class="widget">
+<div class="widget inner">
 	<div class="widget-header">
 		<h2 id="app-src-title">"Default Group" - All Key Words ({{ lkw|length }})</h2></div>
 	<div class="source group">
 	<ul class="sortable" id="category_all" aria-labelledby="app-src-title" aria-dropeffect="move" role="list">
 		{% if groups.category_all is defined %}
-		
 			{% for key2,item2 in groups.category_all.keywords  %}
 			{{ ngram.toLI(keywords[item2]) }}
 			{% endfor %}
-			{% else %}
-		
+		{% else %}
 			{% for key,item in keywords %}
 			{{ ngram.toLI(item) }}
 			{% endfor %}
@@ -151,124 +196,267 @@
 
 
 			
-			<div class="row-fluid" id="container-user-group">
-			{% set groups = {"rr":"edd","test" : {"dd": "a","df":"b" }
-,"test1" : {"dd": "a","df":"b" }
-,"test2" : {"dd": "a","df":"b" }
-,"test3" : {"dd": "a","df":"b" }
-						} %}
-			
-			{% for key,item in groups[1:] %}
-				<div class="span4" id="cat_{{ loop.index0 }}">
-					
-					<div class="widget-header"><h3>
-								<span class="cat_color" style="background-color: {{ item.attr.color }};"></span>
-								<span class="cat_name" id="app-dest{{ loop.index0 }}-title">{{ item.attr.name }}</span></h3>
-							{% if task.isopen %}
-							<div class="box-icon">
-							<a href="#" class="btn-setting" title="Edit the group properties" data-toggle="modal" data-target="#dlgSetting" data-category="cat_{{ loop.index0 }}"><i class="icon-wrench"></i></a>
-							</div>
-							{% endif %}
-						</div>
-					<div class="source group" id="">
-					<ul class="sortable" id="{{ key }}" aria-labelledby="app-dest{{ loop.index0 }}-title" aria-dropeffect="none" role="list"> 
-						{% for key2,item2 in item.keywords  %}
-								{{ ngram.toLI(keywords[item2]) }}
-							{% endfor %}
-					</ul>
-					</div>
-					<div class="widget-content info hide" >
-							<input class="grp_name" type="text" placeholder="Type something..." value="{{ item.attr.name }}">
-							<input class="grp_color" type="text" value="{{ item.attr.color }}">
-							<textarea class="grp_desc" placeholder="Type something...">{{ item.attr.desc }}</textarea>
-					</div>
-				</div>
-			{% endfor %}
-		
-			
-			
+<div class="row-fluid" id="container-user-group">
+{% for key,item in groups[1:] %}
+	<div class="span4" id="cat_{{ loop.index0 }}">
+		<div class="widget-header"><h3>
+			<span class="cat_color" style="background-color: {{ item.attr.color }};"></span>
+			<span class="cat_name" id="app-dest{{ loop.index0 }}-title">{{ item.attr.name }}</span></h3>
+			{% if task.isopen %}
+			<div class="box-icon">
+				<button class="btn btn-small btn-setting" title="Edit the group properties" data-toggle="modal" data-target="#dlgSetting" data-category="cat_{{ loop.index0 }}"><i class="icon-wrench"></i></button>
+			</div>
+			{% endif %}
 		</div>
+		<div class="source group" id="">
+			<ul class="sortable" id="{{ key }}" aria-labelledby="app-dest{{ loop.index0 }}-title" aria-dropeffect="none" role="list"> 
+			{% for key2,item2 in item.keywords  %}
+				{{ ngram.toLI(keywords[item2]) }}
+			{% endfor %}
+			</ul>
+		</div>
+		<div class="widget-content info hide" >
+				<span class="cat_desc">{{ item.attr.desc }}</span>
+		</div>
+	</div>
+{% endfor %}
+		
+</div>
 	
 	
 	</div></div>
 </div></div>
 
 
+{% endblock %}
+
+{% block toolcontainer %}
+{{ parent() }}
+
 <!-- Template for Keyword group -->
-<div class="span4 hide" id="cat_template">
-	<div class="widget-header"><h3><span class="cat_color"></span><span class="cat_name">Group Template</span></h3>
-		<div class="box-icon">
-			<a href="#" class="btn-setting" data-toggle="modal" data-target="#dlgSetting" data-category="ref_template"><i class="icon-wrench"></i></a>
+<div class="span4 hide" id="cat_template" data-color="white" data-name="name" data-desc="description">
+		<div class="widget-header"><h3>
+			<span class="cat_color"></span>
+			<span class="cat_name"></span></h3>
+			<div class="box-icon">
+				<button class="btn btn-small btn-setting" title="Edit the group properties" data-toggle="modal" data-target="#dlgSetting" data-category=""><i class="icon-wrench"></i></button>
+			</div>
 		</div>
+		<div class="source group" id="">
+			<ul class="sortable" id="" aria-labelledby="" aria-dropeffect="move" role="list"> 
+			</ul>
 		</div>
-	<div class="widget-content" id="">
-		<ul class="nonsortable" id="sort_template" style="min-height: 50px">
-		</ul>
+		<div class="widget-content info hide" >
+				<span class="cat_desc"></span>
+		</div>
+</div>
+
+<!-- Modal -->
+<div id="dlgSetting" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
+		<h1 id="myModalLabel">Group Properties</h1>
 	</div>
-	<div class="widget-content info hide" id="">
-		<input class="grp_name" type="text" placeholder="Type something...">
-		<input class="grp_color" type="text" value="#3b98bd">
-		<textarea class="grp_desc" placeholder="Type something..."></textarea>
+	<div class="modal-body">
+	    <form>
+	    	<div class=" controls-row">
+		    	<div class="controls ">
+	    			<label>Name</label>
+	    			<input id="dlg_name" type="text" placeholder="Type something...">
+	    		</div>
+	    		<div class="controls ">
+	    			<label>Color</label>
+	    			<input class="minicolors" id="dlg_color" type="text" value="#3b98bd">
+	    		</div>
+ 		<div class=" controls">
+		    	<label>Description</label>
+    			<textarea id="dlg_desc" class="input-block-level" placeholder="Type something..." rows="5" style="resize: vertical;"></textarea>
+    		</div>
+    		<input type="hidden" id="dlg_category" value="">
+	    		</div>
+   		</form>
+	</div>
+	<div class="modal-footer">
+		<button id="dlg_close" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		<button id="dlg_save" class="btn btn-primary" data-dismiss="modal">OK</button>
 	</div>
 </div>
 
+    <div id="modal-reset" tabindex="-1" class="modal hide fade" role="dialog" data-keyboard="true" >
+    <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h1>Reset Groups</h1>
+    </div>
+    <div class="modal-body">
+    	<p>This will clear up all your groups, restoring the key words to their "default" grouping.
+    	 This operation cannot be undone.</p>
+       	<p><b>Are you sure you want to reset the groups?</b></p>
+    	</div>
+    <div class="modal-footer">
+    <button class="btn  btn-primary" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    <button id="catg-Reset-Confirm" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Reset</button>
+    
+    </div>
+    </div>
+
 
 {% endblock %}
-
 
 {% block injectJS %}
 	{{ parent() }}
 <script src="{{ app_base }}/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
 <script src="{{ app_base }}/assets/d3.js/d3.v3.min.js"></script>
 <script src="{{ app_base }}/assets/keyboardjs/keyboard.js"></script>
+<script src="{{ app_base }}/assets/jquery.minicolors/jquery.minicolors.js"></script>
 	{#<script src="{{ app_base }}/assets/openessayist/js/utils.js"></script>
 <script src="{{ app_base }}/assets/openessayist/js/dnd.js"></script>#}
 <script>
 DnDWrapper = function() {
+	
 	var DnDWrapper = {
-			version		: "1.0" ,
-	    	STATE_CLEAR : 'clear',	// No action started
-	    	STATE_ITEM	: 'item',	// item has been selected
-	    	STATE_LIST	: 'list',	// list has been selected
-	    };
+			STATE_CLEAR : 'clear',	// No action started
+	    	STATE_ITEM	: 'item',	// item has been selected by keyboard
+	    	STATE_LIST	: 'list',	// list has been selected by keyboard
+	    	STATE_DND	: 'dnd',	// drag-and-drop in operation
+	};
+
+	// current state of the DnD finite-state machine
 	DnDWrapper.state = DnDWrapper.STATE_CLEAR;
 
-	var _selectItem  = null;
-	var _selectList = null;
+	var _placeholder = null;	// placeholder for item in lists
+	var _selectItem  = null;	// keyboard-selected item
+	var _selectList = null;		// list containing the keyboard-selected item 
 
 	DnDWrapper.init = function()
 	{
 		KeyboardJS.on('shift + tab, tab', this.onTab);
 		KeyboardJS.on('esc', this.onClear);
 		KeyboardJS.on('enter', this.onEnter);
+		this.initSortables();
+
+		$("#dlg_save").click(saveDialog);
 	
+	};
+
+	DnDWrapper.initSortables = function()
+	{
+		$( "#container-groups .sortable" ).sortable({
+			placeholder : "ui-state-highlight",
+			connectWith : ".sortable",
+			/*zIndex: 1070,*/
+			out : function(event, ui) {},
+			over : function(event, ui) {},
+			create : function(event, ui) {},
+			change : function(event, ui) {},
+			update : function(event, ui) {},
+			receive : function(event, ui) {},
+			beforeStop : function(event, ui) {},
+			deactivate : function(event, ui) {
+				$(ui.item).attr("aria-grabbed",'false');
+				$(this).removeClass("activated");
+				DnDWrapper.state = DnDWrapper.STATE_CLEAR;
+				//$.unblockUI(); 
+				//$("#container-groups").each(function(e){
+				//	$(this).css("z-index","auto");
+				//	});
+			},
+			activate : function(event, ui) {
+				console.log($(this).attr('id'));
+				$(ui.item).attr("aria-grabbed",'true');
+				$(this).addClass("activated");
+				DnDWrapper.state = DnDWrapper.STATE_DND;
+				//$.blockUI({ message: null, overlayCSS: { "z-index" : '1040' } });
+				//$("#container-groups").each(function(e){
+				//	$(this).css({'position': 'relative', 'z-index':'1500'});
+				//});
+			},
+
+			
+			
+		}).disableSelection();		
+
+		$(".btn-setting").unbind('click');
+		$(".btn-setting").click(bindDialog);
+		
+	};
+
+	var saveDialog = function(e) {
+    	var groupID = $('#dlg_category').val() ;
+        console.log("save > " + groupID);
+		var uiSortable = $("#"+ groupID);
+        if (uiSortable)
+        {
+            var name = $('#dlg_name').val();
+            var color = $('#dlg_color').val();
+            var desc = $('#dlg_desc').val();
+
+            uiSortable.data("name",name);
+            uiSortable.data("color",color);
+            uiSortable.data("desc",desc);
+            
+            g = uiSortable.parents(".span4").find(".cat_color");
+            if (g) g.css('background-color',color);
+            g = uiSortable.parents(".span4").find(".cat_name");
+            if (g) g.text(name);
+            
+			//is_dirty = true;	
+			//$("#catg-Save").removeClass("disabled");
+		}
+    };
+
+
+	var bindDialog = function(e) {
+		var groupID = $(this).data('category');
+		console.log(groupID);
+		var uiSortable = $("#"+ groupID);
+		if (uiSortable)
+		{
+			data = uiSortable.data();
+			
+			$('#dlg_name').val(data.name); 
+			$('#dlg_desc').val(data.desc); 
+
+			$('#dlg_dlg').val(data.color); 
+			$('#dlg_color').minicolors('value',data.color);
+			$('#dlg_category').val(groupID); 
+						
+		}
+		//$('#dlg_color').val(dd);
+		//$('#dlg_color').minicolors('value',dd);
 	};
 
 	DnDWrapper.onClear = function()
 	{
+		if (DnDWrapper.state == DnDWrapper.STATE_DND) return;
 		if (DnDWrapper.state == DnDWrapper.STATE_ITEM)
 		{
-			console.log("ESCAPE");
-			//var focused = $(':focus');
+			// Item was selected, clean and reset the GUI 
+			//console.log("ESCAPE");
+			$( "#container-groups .sortable" ).sortable( "option", "disabled", false);
 			$(_selectItem).attr("aria-grabbed",'false');
 			$(_selectItem).parent().removeClass("activated");
 			$.unblockUI(); 
 			$("#container-groups").each(function(e){
 				$(this).css("z-index","auto");
 			});
-			$("[role='list']").attr( 'tabindex', -1);
+			$("#container-groups [role='list']").attr( 'tabindex', -1);
 			$(_selectItem).parent().attr( 'tabindex', -1);
 			$(_selectItem).focus();
+			$(_placeholder).remove();
 		}
+		_placeholder = null;
 		_selectItem = null;
 		_selectList = null;
 		DnDWrapper.state = DnDWrapper.STATE_CLEAR;
-	}
+	};
 
 	DnDWrapper.onTab = function(e,i,code)
 	{
+		if (DnDWrapper.state == DnDWrapper.STATE_DND) return;
 		if (DnDWrapper.state != DnDWrapper.STATE_ITEM) return;
-		var focusables = $("[role='list']");
+
+		// Item was selected, tab throughs the listitems in the container
+		var focusables = $("#container-groups [role='list']");
 		var current = focusables.index(_selectList);
 		var next = null;
 		if ("tab" == code)
@@ -277,12 +465,14 @@ DnDWrapper = function() {
 			next = focusables.eq(current-1).length ? focusables.eq(current-1) : focusables.eq(eq.length-1);
 		next.focus();
 		_selectList = next;
-		console.log("  " + _selectItem.attr("id"));	
-	}
+		$(_placeholder).hide().appendTo(_selectList).show('slow');
+		//console.log("  " + _selectItem.attr("id"));	
+	};
 	
 	
 	DnDWrapper.onEnter = function()
 	{
+		if (DnDWrapper.state == DnDWrapper.STATE_DND) return;
 		if (DnDWrapper.state == DnDWrapper.STATE_ITEM)
 		{
 			$(_selectItem).hide().appendTo(_selectList).show('slow');
@@ -293,16 +483,20 @@ DnDWrapper = function() {
 			var focused = $(':focus');
 			var role = focused.attr("role");
 			if (!focused || "listitem" != role) return;
-			_selectItem = focused;
+			$( "#container-groups .sortable" ).sortable( "option", "disabled", true);
 			
-			console.log("  " + _selectItem.attr("id") + " " + role);
+			_selectItem = focused;
+
+			//console.log("  " + _selectItem.attr("id") + " " + role);
 			$(_selectItem).attr("aria-grabbed",'true');
 			$("#container-groups").each(function(e){
 				$(this).css({'position': 'relative', 'z-index':'5000'});
 				});
-			$("[role='list']").attr( 'tabindex', 0);
+			$("#container-groups [role='list']").attr( 'tabindex', 0);
 			$.blockUI({  bindEvents: true, constrainTabKey: true, message: null, overlayCSS: { "z-index" : '1040' } });
 			_selectList = $(_selectItem).parent();
+			_placeholder = $("<li/>",{ "class" : "ui-state-highlight"}).appendTo($(_selectList));
+			
 			$(_selectList).focus(); 
 			DnDWrapper.state = DnDWrapper.STATE_ITEM;
 		}
@@ -318,142 +512,68 @@ $(document).ready(function() {
 	$.pnotify.defaults.delay = 1000;
 	var color = d3.scale.category10().range(); 
 	color = color.slice({{ groups|length ? groups|length-1:0  }});
-	console.log(color);
 
 	DnDWrapper.init();
 	
-	$( ".sortable" ).sortable({
-		placeholder : "ui-state-highlight",
-		connectWith : ".sortable",
-		/*zIndex: 1070,*/
-		out : function(event, ui) {
-			// triggered when DOM has changed after DnD
-			console.log("OUT > " + $(ui.item).attr("id") + " | " + $(this).attr("id"));
-			},
-			
-		over : function(event, ui) {
-				// triggered when DOM has changed after DnD
-				console.log("OVER > " + $(ui.item).attr("id")+ " | " + $(this).attr("id"));
-				},
-				receive : function(event, ui) {
-					// triggered when DOM has changed after DnD
-					console.log("RECEIVE > " + $(ui.item).attr("id")+ " | " + $(this).attr("id"));
-					},
-		deactivate : function(event, ui) {
-			// triggered when DOM has changed after DnD
-			console.log("DEACTIVATE > " + $(ui.item).attr("id")+ " | " + $(this).attr("id"));
-			$(ui.item).attr("aria-grabbed",'false');
-			$(this).removeClass("activated");
-			//$(".modal-backdrop").remove();
-			//$.unblockUI(); 
-			$("#container-groups").each(function(e){
-				$(this).css("z-index","auto");
-				});
-			
-		},
-		create : function(event, ui) {
-			// triggered when DOM has changed after DnD
-			console.log("CREATE > " + $(ui.item).attr("id")+ " | " + $(this).attr("id"));
-			},
-		update : function(event, ui) {
-			// triggered when DOM has changed after DnD
-			console.log("UPDATE > " + $(ui.item).attr("id")+ " | " + $(this).attr("id"));
-			},
-		change : function(event, ui) {
-				// triggered when DOM has changed after DnD
-				console.log("CHANGE > " + $(ui.item).attr("id")+ " | " + $(this).attr("id"));
-				},
-		activate : function(event, ui) {
-				// triggered when DOM has changed after DnD
-			console.log("ACTIVATE > " + $(ui.item).attr("id")+ " | " + $(this).attr("id"));
-			$(ui.item).attr("aria-grabbed",'true');
-			$(this).addClass("activated");
-			//$.blockUI({ message: null, overlayCSS: { "z-index" : '1040' } });
-			$("#container-groups").each(function(e){
-				//$(this).css({'position': 'relative', 'z-index':'1500'});
-				});
-			
-			//if ( !$(".modal-backdrop").length)
-			//	$('<div class="modal-backdrop"></div>').appendTo(document.body);
-			//$.blockUI({ message: null, overlayCSS: { "z-index" : '1040' } });					
-		},
-		beforeStop : function(event, ui) {
-				// triggered when DOM has changed after DnD
-			console.log("BEFORESTOP > " + $(ui.item).attr("id")+ " | " + $(this).attr("id"));
-		}
-		
-	}).disableSelection();
+	$("#catg_Filter").keyup(function(){
+		var txt = $( this ).val();
+		$('.sortable > li').hide(); 
+		$('.sortable li:contains(' + txt + ')').show();
+	});
 
-	
-	
+	$("#catg_Clear").click(function(){
+		$("#catg_Filter").val('');
+		$('#catg_Filter').trigger('keyup');
+		
+	});
+
+	$("#full-screen").click(function(){
+		var gg = $(this).parents(".widget");
+		$(gg).siblings().not(".hide").toggle();
+		$(gg).parents().siblings().not(".hide").toggle();
+	});
 
 	var onClickNew =  function(e) {
 		console.log("new group created ...");
 
-		var holder = $('#container-user-group > .row-fluid :last');
+		var clr = color.shift();
+		
+		var holder = $('#container-user-group');
 		var allcats = holder.find(".span4");
 		var nCats = allcats.length;
 	
-		var n = holder.children().length;
-		
 		var template = $('#cat_template').clone();
-
-		var title = template.find("div.widget-header > h3 > .cat_name  ");
-		if (title) title.text("Group " + (nCats+1));
 		template.removeClass('hide');
 		template.removeAttr('id');
-
-		var info = template.find('.nonsortable');
-		if (info)
-			{	info.removeClass('nonsortable');
-				info.addClass('sortable');
-			}
-				
 		
-		if (n!=3)
-		{
-			template.appendTo(holder);
-		}
-		else
-		{
-			var newElement = $('<div class="row-fluid"></div>');
-			template.appendTo(newElement);
+		template.find(".cat_name").text("Group " + (nCats+1));
+		template.find('.cat_color').css('background-color',clr);
+		
+
+		template.find(".sortable")
+			.attr('id','category_'+(nCats+1))
+			.data("color",clr)
+			.data("name","Group " + (nCats+1))
+			.data("desc","");
 			
-			newElement.appendTo("#widget-content-cats");
-			// set the dropable widgets
-		}
-
-		var info = template.find('.grp_name');
-		if (info) info.val("Group " + (nCats+1));
-
-		var clr = color.shift();
-		info = template.find('.grp_color');
-		if (info) info.val(clr);
-		g = template.find('.cat_color');
-		if (g) g.css('background-color',clr);
+			 
+		var setting = template.find(".btn-setting");
+		if (setting) setting.attr('data-category','category_'+(nCats+1));
+		var close = $(this).find(".btn-close");
+		if (close) close.attr('data-category','category_'+(nCats+1));
 		
-		holder = $('#widget-content-cats');
-		allcats = holder.find(".span4");
-		nCats = allcats.length;
-		allcats.each(function(index)
-			{
-				$(this).attr('id','cat_'+index); 
-				var setting = $(this).find(".btn-setting");
-				if (setting) setting.attr('data-category','cat_'+index);
-				var close = $(this).find(".btn-close");
-				if (close) close.attr('data-category','cat_'+index);
-				var dropz = $(this).find(".sortable");
-				dropz.attr('id','category_'+index); 
-			});
-
-		if (nCats==9)
+		
+		template.appendTo(holder);
+	
+		if (nCats==8)
 		{
 			$('#catg-New').attr('disabled','disabled');
 		}
 		is_dirty = true;	
 		$("#catg-Save").removeClass("disabled");
 		
-		//updateSortables();
+
+		DnDWrapper.initSortables();
 	};
 
 	$("li[role='listitem']").click(function(){
@@ -463,8 +583,12 @@ $(document).ready(function() {
 	$("#catg-New").click(onClickNew);
 	$("#catg-Reset").click(function()
 		{
-			$.blockUI({ message: null, overlayCSS: { "z-index" : '1040' } });
+			
 		});
+
+
+		
+	$('input.minicolors').minicolors({animationSpeed: 100,control: "wheel"});
 	
 	
 });

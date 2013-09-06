@@ -191,10 +191,13 @@ img.brand-ico
 .widget {
     clear: both;
     margin-bottom: 2em;
-    /*overflow: hidden;
-    position: relative;*/
     width: auto;
-        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+}
+
+.widget.inner {
+    margin-bottom: 5px;
+    box-shadow: none;
 }
 
 .widget-header {
