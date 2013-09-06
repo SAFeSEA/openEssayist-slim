@@ -87,7 +87,7 @@ ul.sortable
     /*float: left;*/
     font-size: 0.9em;
     letter-spacing: -0.08em;
-    line-height: 14px;
+    line-height: 30px;
     margin: 0 10px 10px 0;
     position: relative;
     text-align: center;
@@ -95,7 +95,7 @@ ul.sortable
     vertical-align: bottom;
     
    
-    height: 40px;
+    /*height: 40px;*/
     padding: 5px;
     min-width: 60px;
     /*z-index: 1001;*/
@@ -155,13 +155,13 @@ h3 > .cat_color
 	{% if task.isopen %}
 	<div class="widget-toolbar">
 		<div class="btn-toolbar form-inline">    
-    		<button id="catg-Save" class="btn btn-small btn-primary disabled">Save</button>
+    		<button id="catg-Save" class="btn btn-small btn-primary" disabled="disabled">Save</button>
     		<button id="catg-Reset" data-toggle="modal" data-target="#modal-reset" class="btn btn-small ">Reset</button>
     		<button id="catg-New" {{ (groups|length == 10)? "disabled" }} class="btn btn-small">New Group...</button>
 			<div class="input-append">
 				<span class="group-label">Filter: </span>
-    			<input placeholder="key word" class="input-mini" id="catg_Filter" type="text">
-    			<button class="btn btn-small" id="catg_Clear" type="button">Clear</button>
+    			<input placeholder="key words" aria-label="Filter the key words" class="input-mini" id="catg_Filter" type="text">
+    			<button class="btn btn-small" id="catg_Clear" title="Clear the filter" type="button">Clear</button>
     		</div>
     		
     		<button id="full-screen" class="btn btn-small pull-right"><i class="icon icon-fullscreen"></i></button>
@@ -209,7 +209,9 @@ h3 > .cat_color
 			{% endif %}
 		</div>
 		<div class="source group" id="">
-			<ul class="sortable" id="{{ key }}" aria-labelledby="app-dest{{ loop.index0 }}-title" aria-dropeffect="none" role="list"> 
+			<ul class="sortable" id="{{ key }}" 
+				data-color="{{ item.attr.color }}" data-name="{{ item.attr.name }}" data-desc="{{ item.attr.desc }}"
+				aria-labelledby="app-dest{{ loop.index0 }}-title" aria-dropeffect="none" role="list"> 
 			{% for key2,item2 in item.keywords  %}
 				{{ ngram.toLI(keywords[item2]) }}
 			{% endfor %}
@@ -308,6 +310,8 @@ h3 > .cat_color
 <script src="{{ app_base }}/assets/d3.js/d3.v3.min.js"></script>
 <script src="{{ app_base }}/assets/keyboardjs/keyboard.js"></script>
 <script src="{{ app_base }}/assets/jquery.minicolors/jquery.minicolors.js"></script>
+<script src="{{ app_base }}/assets/jquery-ui-1.9.2.custom/js/jquery.ui.touch-punch.min.js"></script>
+
 	{#<script src="{{ app_base }}/assets/openessayist/js/utils.js"></script>
 <script src="{{ app_base }}/assets/openessayist/js/dnd.js"></script>#}
 <script>
@@ -323,10 +327,16 @@ DnDWrapper = function() {
 	// current state of the DnD finite-state machine
 	DnDWrapper.state = DnDWrapper.STATE_CLEAR;
 
+	// whether changes have been made or not
+	DnDWrapper.isDirty = false;
+
 	var _placeholder = null;	// placeholder for item in lists
 	var _selectItem  = null;	// keyboard-selected item
 	var _selectList = null;		// list containing the keyboard-selected item 
 
+	var color = d3.scale.category10().range(); 
+	color = color.slice({{ groups|length ? groups|length-1:0  }});
+	
 	DnDWrapper.init = function()
 	{
 		KeyboardJS.on('shift + tab, tab', this.onTab);
@@ -335,7 +345,19 @@ DnDWrapper = function() {
 		this.initSortables();
 
 		$("#dlg_save").click(saveDialog);
-	
+		$("#catg-Reset-Confirm").click(resetCategory);
+		
+		$("#catg-New").click(DnDWrapper.onNewGroup);
+		$("#catg-Save").click(DnDWrapper.onSaveGroup);			
+	};
+
+	DnDWrapper.setDirty = function(dirty)
+	{
+		DnDWrapper.isDirty = (dirty)?true:false;
+		if (DnDWrapper.isDirty)
+			$("#catg-Save").removeAttr('disabled','disabled');
+		else
+			$("#catg-Save").attr('disabled','disabled');
 	};
 
 	DnDWrapper.initSortables = function()
@@ -347,7 +369,9 @@ DnDWrapper = function() {
 			out : function(event, ui) {},
 			over : function(event, ui) {},
 			create : function(event, ui) {},
-			change : function(event, ui) {},
+			change : function(event, ui) {
+				DnDWrapper.setDirty(true);
+				},
 			update : function(event, ui) {},
 			receive : function(event, ui) {},
 			beforeStop : function(event, ui) {},
@@ -380,49 +404,137 @@ DnDWrapper = function() {
 		
 	};
 
-	var saveDialog = function(e) {
-    	var groupID = $('#dlg_category').val() ;
-        console.log("save > " + groupID);
-		var uiSortable = $("#"+ groupID);
-        if (uiSortable)
-        {
-            var name = $('#dlg_name').val();
-            var color = $('#dlg_color').val();
-            var desc = $('#dlg_desc').val();
-
-            uiSortable.data("name",name);
-            uiSortable.data("color",color);
-            uiSortable.data("desc",desc);
-            
-            g = uiSortable.parents(".span4").find(".cat_color");
-            if (g) g.css('background-color',color);
-            g = uiSortable.parents(".span4").find(".cat_name");
-            if (g) g.text(name);
-            
-			//is_dirty = true;	
-			//$("#catg-Save").removeClass("disabled");
-		}
-    };
-
-
-	var bindDialog = function(e) {
-		var groupID = $(this).data('category');
-		console.log(groupID);
-		var uiSortable = $("#"+ groupID);
-		if (uiSortable)
-		{
-			data = uiSortable.data();
+	DnDWrapper.onSaveGroup =  function(e) {
+		
+		var json = {};
+		$('body').modalmanager('loading'); 
+		var allcats = $('#container-groups .sortable');
+		allcats.each(function(index) {
+			var setting = $(this).sortable('toArray');
+			var id = $(this).attr('id');
+			json[id] = { 
+				'keywords': setting,
+				'id': id
+			};
+			json[id].attr = {
+					'name' : $(this).data('name'),
+					'desc' : $(this).data('desc'),
+					'color': $(this).data('color') 
+				};
 			
-			$('#dlg_name').val(data.name); 
-			$('#dlg_desc').val(data.desc); 
+		});
+		console.log(json);
+		$.ajax({
+			type : "POST",
+			method: "post",
+			url : "{{ urlFor('profile.save.keyword',{"idt":task.id}) }}", // URL and function to call
+			data : {	
+					"user": "{{  auth.user.id }}",
+					"task" : "{{ task.id }}", 
+					"draft": "{{ draft.id }}",
+					"data" : json
+			}, 
+			//contentType : "application/json; charset=utf-8",
+			//processData : true,
+			dataType : "json",
+			success : function(msg, status) {
+				// Set Response outcome
+				console.log(msg);
+				openEssayist.log4j("{{ constant('TutorController::ACTION_KEYWORD_GROUP') }}",msg);
+				DnDWrapper.setDirty(false);
+				 opts = {
+						title: 'Hint',
+						text: "The content of your groups have been saved.<br>Why don't you check the effect of the changes by going to the main essay?" + 
+							"<p style='margin-top:6px;'><a class='btn ' href='{{ urlFor('me.draft.showext',{'draft':draft.id,'cmd':'all'}) }}'><i class='icon-large icon-desktop'></i> Essay</a></p>",
+						addclass: "stack-bottomright",
+				        stack: $.pnotify.defaults.openessayist, 
+				        hide: false,
+				        sticker: true, 
+				        type: 'success',
+				        icon: 'icon-large  icon-comments'
+					}; 
+				
+				$.pnotify(opts);
+				$('body').modalmanager('loading'); 
+			},
+			error : function(xhr, msg, e) {
+				// this should only fire if the ajax call did not happen or
+				// there was an unhandled exception
+				console.log(msg);
+				$('body').modalmanager('loading'); 
+			}
+		});	
 
-			$('#dlg_dlg').val(data.color); 
-			$('#dlg_color').minicolors('value',data.color);
-			$('#dlg_category').val(groupID); 
-						
+		
+	};
+	
+	DnDWrapper.onNewGroup =  function(e) {
+		console.log("new group created ...");
+
+		var clr = color.shift();
+		
+		var holder = $('#container-user-group');
+		var allcats = holder.find(".span4");
+		var nCats = allcats.length;
+	
+		var template = $('#cat_template').clone();
+		template.removeClass('hide');
+		template.removeAttr('id');
+		
+		template.find(".cat_name").text("Group " + (nCats+1));
+		template.find('.cat_color').css('background-color',clr);
+		
+
+		template.find(".sortable")
+			.attr('id','category_'+(nCats+1))
+			.data("color",clr)
+			.data("name","Group " + (nCats+1))
+			.data("desc","");
+			
+			 
+		var setting = template.find(".btn-setting");
+		if (setting) setting.attr('data-category','category_'+(nCats+1));
+		var close = $(this).find(".btn-close");
+		if (close) close.attr('data-category','category_'+(nCats+1));
+		
+		
+		template.appendTo(holder);
+	
+		if (nCats==8)
+		{
+			$('#catg-New').attr('disabled','disabled');
 		}
-		//$('#dlg_color').val(dd);
-		//$('#dlg_color').minicolors('value',dd);
+		DnDWrapper.setDirty(true);
+		DnDWrapper.initSortables();
+	};
+
+	var resetCategory = function(e) {
+		$('body').modalmanager('loading'); 
+		$.ajax({
+			type : "POST",
+			method: "post",
+			url : "{{ urlFor('profile.reset.keyword',{"idt":task.id}) }}", // URL and function to call
+			data : {	
+					"user": "{{  auth.user.id }}",
+					"task" : "{{ task.id }}", 
+					"draft": "{{ draft.id }}"
+			}, 
+			//contentType : "application/json; charset=utf-8",
+			//processData : true,
+			dataType : "json",
+			success : function(msg, status) {
+				// Set Response outcome
+				console.log(msg);
+				location.reload();
+			},
+			error : function(xhr, msg, e) {
+				// this should only fire if the ajax call did not happen or
+				// there was an unhandled exception
+				console.log(msg);
+				$('body').modalmanager('loading'); 
+			}
+		});		
+		
 	};
 
 	DnDWrapper.onClear = function()
@@ -477,6 +589,7 @@ DnDWrapper = function() {
 		{
 			$(_selectItem).hide().appendTo(_selectList).show('slow');
 			DnDWrapper.onClear();
+			 DnDWrapper.setDirty(true);
 		}
 		else if (DnDWrapper.state == DnDWrapper.STATE_CLEAR)
 		{
@@ -503,15 +616,58 @@ DnDWrapper = function() {
 	
 	};
 
+
+	var saveDialog = function(e) {
+    	var groupID = $('#dlg_category').val() ;
+        console.log("save > " + groupID);
+		var uiSortable = $("#"+ groupID);
+        if (uiSortable)
+        {
+            var name = $('#dlg_name').val();
+            var color = $('#dlg_color').val();
+            var desc = $('#dlg_desc').val();
+
+            uiSortable.data("name",name);
+            uiSortable.data("color",color);
+            uiSortable.data("desc",desc);
+            
+            g = uiSortable.parents(".span4").find(".cat_color");
+            if (g) g.css('background-color',color);
+            g = uiSortable.parents(".span4").find(".cat_name");
+            if (g) g.text(name);
+
+            
+            DnDWrapper.setDirty(true);
+		}
+    };
+
+
+	var bindDialog = function(e) {
+		var groupID = $(this).data('category');
+		console.log(groupID);
+		var uiSortable = $("#"+ groupID);
+		if (uiSortable)
+		{
+			data = uiSortable.data();
+			
+			$('#dlg_name').val(data.name); 
+			$('#dlg_desc').val(data.desc); 
+
+			$('#dlg_dlg').val(data.color); 
+			$('#dlg_color').minicolors('value',data.color);
+			$('#dlg_category').val(groupID); 
+						
+		}
+		//$('#dlg_color').val(dd);
+		//$('#dlg_color').minicolors('value',dd);
+	};
+	
 	return DnDWrapper;
 }();
 
 $(document).ready(function() {
-	var is_dirty = false;
 	var stack_bar_bottom = {"dir1": "up", "dir2": "right", "spacing1": 0, "spacing2": 0};
 	$.pnotify.defaults.delay = 1000;
-	var color = d3.scale.category10().range(); 
-	color = color.slice({{ groups|length ? groups|length-1:0  }});
 
 	DnDWrapper.init();
 	
@@ -533,60 +689,10 @@ $(document).ready(function() {
 		$(gg).parents().siblings().not(".hide").toggle();
 	});
 
-	var onClickNew =  function(e) {
-		console.log("new group created ...");
-
-		var clr = color.shift();
-		
-		var holder = $('#container-user-group');
-		var allcats = holder.find(".span4");
-		var nCats = allcats.length;
-	
-		var template = $('#cat_template').clone();
-		template.removeClass('hide');
-		template.removeAttr('id');
-		
-		template.find(".cat_name").text("Group " + (nCats+1));
-		template.find('.cat_color').css('background-color',clr);
-		
-
-		template.find(".sortable")
-			.attr('id','category_'+(nCats+1))
-			.data("color",clr)
-			.data("name","Group " + (nCats+1))
-			.data("desc","");
-			
-			 
-		var setting = template.find(".btn-setting");
-		if (setting) setting.attr('data-category','category_'+(nCats+1));
-		var close = $(this).find(".btn-close");
-		if (close) close.attr('data-category','category_'+(nCats+1));
-		
-		
-		template.appendTo(holder);
-	
-		if (nCats==8)
-		{
-			$('#catg-New').attr('disabled','disabled');
-		}
-		is_dirty = true;	
-		$("#catg-Save").removeClass("disabled");
-		
-
-		DnDWrapper.initSortables();
-	};
 
 	$("li[role='listitem']").click(function(){
 		$(this).focus();
 		})
-
-	$("#catg-New").click(onClickNew);
-	$("#catg-Reset").click(function()
-		{
-			
-		});
-
-
 		
 	$('input.minicolors').minicolors({animationSpeed: 100,control: "wheel"});
 	
