@@ -33,21 +33,28 @@
 			<div class="btn-group">
 				<span class="group-label">Show: </span>		
 				<a class="btn btn-small {{ mashup=='text' ? 'active disabled'}}" 
+					rel="tooltip" data-placement="bottom"
 					title="Show only text and structure of essay" 
 					{{ not (mashup=='text') ? 'href='~urlFor('me.draft.show',{'draft':draft.id,'cmd':''}) }}>Text</a>
 				<a class="btn btn-small {{ mashup=='keyword' ? 'active disabled'}}" 
+					rel="tooltip" data-placement="bottom"
 					title="Show key words and key phrases"  
 					{{ not (mashup=='keyword') ? 'href='~urlFor('me.draft.showext',{'draft':draft.id,'cmd':'keyword'}) }}>Key Words</a>
 				<a class="btn btn-small {{ mashup=='sentence' ? 'active disabled'}}" 
+					rel="tooltip" data-placement="bottom"
 					title="Show key sentences"  
 					{{ not (mashup=='sentence') ? 'href='~urlFor('me.draft.showext',{'draft':draft.id,'cmd':'sentence'}) }}>Key Sentences</a>
 				<a class="btn btn-small {{ mashup=='all' ? 'active disabled'}}" 
+					rel="tooltip" data-placement="bottom"
 					title="Combine all elements in the essay"  
 					{{ not (mashup=='all') ? 'href='~urlFor('me.draft.showext',{'draft':draft.id,'cmd':'all'}) }}>All</a>
 			</div>
 			{% if mashup == 'all' %}
     		<div class="btn-group">
-		    	<button data-target="#modal_mashup" class="btn btn-small " data-toggle="modal">
+		    	<button class="btn btn-small " 
+		    		rel="tooltip" data-placement="bottom" 
+		    		title="Select elements to display on the essay" 
+		    		data-target="#modal_mashup" data-toggle="modal">
 					More Options...</button>
 			</div>
 			{% endif  %}

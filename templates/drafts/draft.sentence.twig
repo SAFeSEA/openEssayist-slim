@@ -19,11 +19,17 @@
 				<h2> Sentences </h2>
 			</div>
 			<div class="widget-toolbar">
-				<div class="btn-toolbar form-inline" id="options">
+				<div class="btn-toolbar form-inline" id="options" role="toolbar">
 				    <div class="btn-group option-set"  data-toggle="buttons-radio" data-option-key="sortBy">
-    					<label style="margin-right: 5px;" class="checkbox">Sort by: </label>	
-    					<button class="btn btn-small active" data-option-value="rank">Importance</button>
-					    <button class="btn btn-small" data-option-value="id">Text Order</button>
+    					<span class="btn-label">Sort by: </span>	
+    					<button class="btn btn-small active" id="sort-rank"
+    						rel="tooltip" data-placement="bottom"
+							title="Rank the sentences by their importance" 
+							data-option-value="rank">Importance</button>
+					    <button class="btn btn-small" 
+					    	rel="tooltip" data-placement="bottom"
+							title="Rank the sentences by their order in the text" 
+					    	data-option-value="id">Text Order</button>
 					    {#<button class="btn" data-option-value="tag">Structure</button>#}
     				</div>
 				</div>
