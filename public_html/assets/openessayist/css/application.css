@@ -3,6 +3,16 @@
 /* Add additional stylesheets below
  -------------------------------------------------- */
 
+.btn-toolbar .btn-label
+{
+    margin-right: 5px;
+    margin-bottom: 0;
+    padding-left: 0;
+    vertical-align: middle;
+    display: inline-block;
+font-size: 11.9px;
+}
+
 /* fix for modals position */
 .modal.fade.in {
 	top: 100px;
