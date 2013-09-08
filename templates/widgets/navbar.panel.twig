@@ -3,8 +3,13 @@
 	<div class="navbar-inner">
 		<div class="container-fluid">
 
-			<a class="brand openessayist" href="{{ urlFor('home') }}" title="Go to openEssayist front page" role="banner"><img class="brand-ico" alt="Go to openEssayist front page"
-				src="{{ app_base }}/assets/openessayist/img/openEssayist-icon.png"><span class="hidden-phone">openEssayist</span></a> 
+			<a class="brand openessayist" href="{{ urlFor('home') }}" 
+				rel="tooltip" data-placement="bottom"
+				title="Go to openEssayist front page" role="banner">
+					<img class="brand-ico" alt="Go to openEssayist front page"
+							src="{{ app_base }}/assets/openessayist/img/openEssayist-icon.png">
+					<span class="hidden-phone">openEssayist</span>
+			</a> 
 
 			<button class="btn btn-navbar collapsed" data-toggle="collapse"
 				title="Show or hide the navigation menu"
@@ -18,56 +23,74 @@
 			<div class="nav-collapse collapse" role="navigation">
 			
 				<ul class="nav">
-					<li class=""><a href="{{ urlFor('me.home') }}" rel="tooltip" data-placement="bottom"  title="Go to your homepage">
+					<li class=""><a href="{{ urlFor('me.home') }}" 
+							rel="tooltip" data-placement="bottom"  
+							title="Go to your homepage">
 						<i class="icon-home"></i> Home</a>
 					</li> 
-					<li class=""><a href="{{ urlFor('system.help') }}" rel="tooltip" data-placement="bottom"  title="Go to the help pages">
+					<li class=""><a href="{{ urlFor('system.help') }}" 
+						rel="tooltip" data-placement="bottom" 
+						title="Go to the help pages">
 						<i class="icon-question-sign"></i> Help</a>
 					</li> 
-					<li class=""><a href="{{ urlFor('system.report') }}" rel="tooltip" data-placement="bottom"  title="Go to the feedback form">
+					<li class=""><a href="{{ urlFor('system.report') }}" 
+						rel="tooltip" data-placement="bottom"  
+						title="Go to the feedback form">
 						<i class="icon-bullhorn"></i> Report</a>
 					</li> 
 					{% if auth.user.isadmin %}	
-					<li class="dropdown"><a href="#" class="dropdown-toggle" data-placement="bottom" 
+					<li class="dropdown"><a href="#" class="dropdown-toggle" 
 								title="Restricted access to administrative tools"
 								data-toggle="dropdown" aria-haspopup="true">
 									<i class="icon-cog"></i> Admin <i class="caret"></i></a>
 						<ul class="dropdown-menu">
-								<li><a href="{{ urlFor('admin.home') }}" title="System Management">openEssayist</a></li>
+								<li><a href="{{ urlFor('admin.home') }}" 
+											title="System Management">
+											System Management</a></li>
 								<li class="divider" aria-hidden="true"></li>
-								<li class="nav-header visible-desktop" aria-hidden="true">Configuration</li>
-								<li><a href="{{ urlFor('admin.users') }}" title="User Management">Users</a></li>
-								<li><a href="{{ urlFor('admin.tasks') }}" title="Task Management">Assignments</a></li>
+								<li class="nav-header visible-desktop" aria-hidden="true">
+										Configuration</li>
+								<li><a href="{{ urlFor('admin.users') }}" 
+										title="User Management">
+										Users</a></li>
+								<li><a href="{{ urlFor('admin.tasks') }}" 
+										title="Task Management">
+										Assignments</a></li>
 						</ul>
 					</li> 
 					{% endif %}
 				</ul>
-				
-			
-				
 			</div>
-			
 
 			<div  class="pull-right">
 
-			<div class="btn-group " role="navigation">
+			<div class="btn-group " >
 			
 				{% if auth.user.active  %}	
-				<button id="btn-notepad" title="Edit and save your notes" rel="tooltip" data-placement="bottom"  
-						class="btn btn-info"><i class="icon-edit icon-large"></i><span class=""> Notepad</span></button>
+				<button class="btn btn-info" id="btn-notepad" 
+						rel="tooltip" data-placement="bottom"  
+						title="Edit and save your notes">
+						<i class="icon-edit icon-large"></i><span class=""> Notepad</span>
+				</button>
 				{% endif %}
 			</div>			
 			
-			<div class="btn-group" role="navigation">
-				<button class="btn {{ auth.user.isadmin ? "btn-inverse" : ""}} dropdown-toggle" rel="taooltip" data-placement="bottom" data-toggle="dropdown"
-					title="Your account menu" aria-haspopup="true"> 
-					<i class="icon-user {{ auth.user.isadmin ? "icon-white" : ""}}"></i>
-					<span class="">{{ auth.user.username }}</span> <span class="caret"></span>
+			<div class="btn-group">
+				<button class="btn {{ auth.user.isadmin ? "btn-inverse" : ""}} dropdown-toggle"
+					title="Your account menu"  
+					rel="taooltip" data-placement="bottom" 
+					data-toggle="dropdown" aria-haspopup="true"> 
+						<i class="icon-user {{ auth.user.isadmin ? "icon-white" : ""}}"></i>
+						<span class="">{{ auth.user.username }}</span> <span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
 					<li class="disabled"><a><i class="icon-fixed-width icon-user"></i> Profile</a></li>
 					<li class="divider"></li>
-					<li><a href="{{ urlFor('logout') }}"><i class="icon-fixed-width icon-off"></i> Sign Out</a></li>
+					<li><a  href="{{ urlFor('logout') }}"
+							title="Sign out of openEssayist"  
+							rel="taooltip" data-placement="bottom">
+						<i class="icon-fixed-width icon-off"></i> Sign Out</a>
+					</li>
 				</ul>
 			</div>
 
