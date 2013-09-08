@@ -40,7 +40,7 @@
 		{% endif %}
 	tabindex="0" >
 		<span>{{ ngram.ngram|join(" ") }}</span>
-		<span class="label label-info">{{ ngram.count }}</span>
+		<span class="label label-info" aria-label="Frequency">{{ ngram.count }}</span>
 		{% if options.showScore %}
 			<span class="inlinebar">{{ ngram.score|join(',') }}</span>
 		{% endif %}
@@ -48,9 +48,29 @@
 {% endmacro %}
 
 {% macro toLI(ngram,options=null) %}
-	
 	<li draggable="true" aria-grabbed="false" role="listitem" tabindex="0" 
 		id="{{ ngram.ngram|join("") }}">
 		<span>{{ ngram.ngram|join(" ") }}</span>
 	</li>
+{% endmacro %}
+
+{% macro toDIV(ngram,options=null) %}
+	<button class="btn {{ options.isLarge?"btn-large":"btn-small" }} btn-ngram {{ options.userdefined?"btn-warning":"" }} {{ options.isDisabled?"disabled" }}" id="{{ ngram.ngram|join("") }}"
+		{% if options.showPopover %}
+			data-score="{{ ngram.score|join(',') }}"
+			data-source="{{ ngram.source|join(', ') }}"
+			data-count="{{ ngram.count }}"
+			data-trend="{{ ngram.trend|join(',') }}"
+			data-dim={{ ngram.ngram|length }}
+			data-toggle="popover"
+			data-placement="top"
+			data-title="{{ ngram.ngram|join(" ") }}"
+			tabindex="0"
+		{% endif %}>
+		<span>{{ ngram.ngram|join(" ") }}</span>
+		<span class="label label-info" aria-hidden="true">{{ ngram.count }}</span>
+		{% if options.showScore %}
+			<span class="inlinebar">{{ ngram.score|join(',') }}</span>
+		{% endif %}
+	</button>
 {% endmacro %}

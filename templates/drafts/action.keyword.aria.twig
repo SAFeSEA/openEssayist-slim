@@ -50,7 +50,8 @@ ul.sortable
 
 .input-append > .group-label {
     font-size: 11.9px;
-    margin-right: 0px;
+    margin-bottom: 0;
+    margin-right: 5px;
     vertical-align: middle;
 }
 
@@ -148,23 +149,39 @@ h3 > .cat_color
 
 <div class="row-fluid"><div class="span12">
 
-<div class="widget" aria-describedby="app-group-title" aria-labelledby="app-group-title" role="application">
+<div class="widget" aria-labelledby="app-group-title" role="application">
 	<div class="widget-header">
-		<h2 id="app-group-title">Your Groups ({{ groups|length }})</h2>
+		<h2 id="app-group-title">Your Groups</h2>
 	</div>
 	{% if task.isopen %}
 	<div class="widget-toolbar">
-		<div class="btn-toolbar form-inline">    
-    		<button id="catg-Save" class="btn btn-small btn-primary" disabled="disabled">Save</button>
-    		<button id="catg-Reset" data-toggle="modal" data-target="#modal-reset" class="btn btn-small ">Reset</button>
-    		<button id="catg-New" {{ (groups|length == 10)? "disabled" }} class="btn btn-small">New Group...</button>
+		<div class="btn-toolbar form-inline" role="toolbar" aria-controls="container-groups">    
+    		<button id="catg-Save" class="btn btn-small btn-primary"
+    			rel="tooltip" data-placement="bottom"
+    			title="Save the changes made to the groups" 
+    			disabled="disabled">Save</button>
+    		<button id="catg-Reset" data-toggle="modal" data-target="#modal-reset"
+    			rel="tooltip" data-placement="bottom"
+    			title="Reset key words to their original group"
+    			class="btn btn-small ">Reset</button>
+    		<button id="catg-New" {{ (groups|length == 10)? "disabled" }}
+    		    rel="tooltip" data-placement="bottom"
+   				title="Create a new group to add the key words" 
+    			class="btn btn-small">New Group...</button>
 			<div class="input-append">
-				<span class="group-label">Filter: </span>
-    			<input placeholder="key words" aria-label="Filter the key words" class="input-mini" id="catg_Filter" type="text">
-    			<button class="btn btn-small" id="catg_Clear" title="Clear the filter" type="button">Clear</button>
+				<label for="catg_Filter" class="group-label">Filter: </label>
+    			<input placeholder="key words" class="input-mini" id="catg_Filter" type="text">
+    			<button class="btn btn-small" id="catg_Clear" 
+    				rel="tooltip" data-placement="bottom"
+    				title="Clear the filter" 
+    				type="button">Clear</button>
     		</div>
-    		
-    		<button id="full-screen" class="btn btn-small pull-right"><i class="icon icon-fullscreen"></i></button>
+    		<button id="full-screen" 
+    			rel="tooltip" data-placement="bottom"
+    			aria-label="Full Screen"
+    			title="Swap between full screen and page modes" 
+    			class="btn btn-small pull-right">
+    				<i class="icon icon-fullscreen"></i></button>
     		
     	</div>
 	</div>
@@ -172,10 +189,10 @@ h3 > .cat_color
 <div class="widget-content" id="container-groups">
 
 {% set lkw = (groups['category_all'] is defined)? groups['category_all']['keywords'] : keywords   %}
-<div class="row-fluid"><div class="span12">
+<div class="row-fluid"><div class="span12" >
 <div class="widget inner">
 	<div class="widget-header">
-		<h2 id="app-src-title">"Default Group" - All Key Words ({{ lkw|length }})</h2></div>
+		<h2 id="app-src-title">All Key Words</h2></div>
 	<div class="source group">
 	<ul class="sortable" id="category_all" aria-labelledby="app-src-title" aria-dropeffect="move" role="list">
 		{% if groups.category_all is defined %}
@@ -203,15 +220,22 @@ h3 > .cat_color
 			<span class="cat_color" style="background-color: {{ item.attr.color }};"></span>
 			<span class="cat_name" id="app-dest{{ loop.index0 }}-title">{{ item.attr.name }}</span></h3>
 			{% if task.isopen %}
-			<div class="box-icon">
-				<button class="btn btn-small btn-setting" title="Edit the group properties" data-toggle="modal" data-target="#dlgSetting" data-category="cat_{{ loop.index0 }}"><i class="icon-wrench"></i></button>
+			<div class="box-icon" role="toolbar">
+				<button class="btn btn-small btn-setting" 
+					aria-controls="{{ key }}"
+					aria-label="Properties"
+					rel="tooltip" data-placement="bottom"
+					title="Edit the group properties" 
+					data-toggle="modal" data-target="#dlgSetting" data-category="cat_{{ loop.index0 }}">
+						<i class="icon-wrench"></i>
+				</button>
 			</div>
 			{% endif %}
 		</div>
 		<div class="source group" id="">
 			<ul class="sortable" id="{{ key }}" 
 				data-color="{{ item.attr.color }}" data-name="{{ item.attr.name }}" data-desc="{{ item.attr.desc }}"
-				aria-labelledby="app-dest{{ loop.index0 }}-title" aria-dropeffect="none" role="list"> 
+				aria-labelledby="app-dest{{ loop.index0 }}-title" aria-dropeffect="move" role="list"> 
 			{% for key2,item2 in item.keywords  %}
 				{{ ngram.toLI(keywords[item2]) }}
 			{% endfor %}
@@ -240,8 +264,13 @@ h3 > .cat_color
 		<div class="widget-header"><h3>
 			<span class="cat_color"></span>
 			<span class="cat_name"></span></h3>
-			<div class="box-icon">
-				<button class="btn btn-small btn-setting" title="Edit the group properties" data-toggle="modal" data-target="#dlgSetting" data-category=""><i class="icon-wrench"></i></button>
+			<div class="box-icon" role="toolbar">
+				<button class="btn btn-small btn-setting" 					
+					aria-label="Properties"
+					rel="tooltip" data-placement="bottom" 
+					title="Edit the group properties" 
+					data-toggle="modal" data-target="#dlgSetting" data-category="">
+						<i class="icon-wrench"></i></button>
 			</div>
 		</div>
 		<div class="source group" id="">
