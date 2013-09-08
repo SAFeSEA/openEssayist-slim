@@ -11,27 +11,59 @@
 	{% include "widgets/navbar.drafts.twig" with {'navsrc': 'me.draft.keywords'} %}
 {% endblock %}
 
-    
 {% block content %}
 
-
-
-	{% for key,items in keywords %}
+{% for key,items in keywords %}
 <div class="row-fluid">
 	<div class="span12">
 	
 		<div class="widget">
-			<div class="widget-header">
+			<div class="widget-header" id="cat{{ loop.index0 }}">
 				<h2> {{ key|title }} ({{ items|length }})</h2>
 			</div>
-			<div class="widget-content"> 
+			<div class="widget-content" role="region" aria-label="List of {{ key|title }}"> 
 				{% for item in items %}
-					 {{ ngram.toBtn(item,false,true,false,true) }}
+					 {{ ngram.toDIV(item, {"showPopover": true,"isLarge": true}) }}
 				{% endfor %}
 			</div> 
 		</div>
 	</div>
 </div>	{%  endfor %}
+
+<div class="row-fluid">
+<div class="span12"><div class="widget">
+	<div class="widget-header">
+		<h2>Key Words and Key Phrases</h2>
+	</div>
+	<div class="widget-content">
+	
+	<table id="data-table" class="table table-striped  table-hover table-condensed">
+	<thead>
+		<tr>
+			<th>Type</th>
+			<th>Key Word</th>
+			<th>Frequency</th>
+			<th>Forms in text</th>
+		</tr>	
+	</thead>
+	<tbody>
+	{% for key,items in keywords %}
+		{% for item in items %}
+		<tr>
+			<td>{{ key|title }}</td>
+			<td><strong>{{ item.ngram|join(" ") }}</strong></td>
+			<td>{{ item.count }}</td>
+			<td>{{ (item.ngram|length==1)? item.source|join(', ') }}</td>
+		</tr>
+		{% endfor %}
+	{% endfor %}
+	</tbody>
+	
+	</table>
+	</div>
+</div></div>
+
+</div>
 
 {% endblock %}
 
@@ -98,23 +130,82 @@
 .dl-horizontal dd {
 	margin-left:110px;
 }
+
+	
+button .legendcolor
+{
+    background-color: white;
+    float: left;
+    height: 14px;
+    margin-right: 5px;
+    margin-top: 2px;
+    width: 20px;
+}
+	
+table.table thead .sorting,
+table.table thead .sorting_asc,
+table.table thead .sorting_desc,
+table.table thead .sorting_asc_disabled,
+table.table thead .sorting_desc_disabled {
+    cursor: pointer;
+    *cursor: hand;
+}
+
+
+ 
+table.table thead .sorting:after { font-family: FontAwesome; content: "   ";}
+table.table thead .sorting_asc:after { font-family: FontAwesome; content: "   ";}
+table.table thead .sorting_desc:after { font-family: FontAwesome; content: "   ";}
+
+table.table thead .sorting_asc_disabled {  }
+table.table thead .sorting_desc_disabled { }	
 </style>
 {% endblock %}
 
 {% block injectJS %}
 	{{ parent() }}
 <script src="{{ app_base }}/assets/jquery.sparkline/jquery.sparkline.js"></script>
+<script src="{{ app_base }}/assets/jquery.dataTables/js/jquery.dataTables.min.js"></script>
 <script>
 
 $(document).ready(function() {
+	$.fn.dataTableExt.oStdClasses.sLength ="dataTables_length span6 ";
+	$.fn.dataTableExt.oStdClasses.sFilter  ="dataTables_filter span6 ";
+	$.fn.dataTableExt.oStdClasses.sInfo  ="dataTables_info span6 ";
+	$.fn.dataTableExt.oStdClasses.sPaging   ="dataTables_paginate span6 pull-right ";
+	
+	$.fn.dataTableExt.oStdClasses.sPageButton="btn btn-small";
+	$.fn.dataTableExt.oStdClasses.sPageButtonActive="btn btn-small active";
+	$.fn.dataTableExt.oStdClasses.sPageButtonStaticDisabled="btn btn-small disabled";
+	$.fn.dataTableExt.oStdClasses.sPagePrevEnabled="btn btn-small";
+	$.fn.dataTableExt.oStdClasses.sPagePrevDisabled ="btn btn-small disabled";
+	$.fn.dataTableExt.oStdClasses.sPageNextEnabled ="btn btn-small";
+	$.fn.dataTableExt.oStdClasses.sPageNextDisabled ="btn btn-small disabled";
+	$('#data-table').dataTable( {
+		"sDom": '<"row-fluid"lf>rt<"row-fluid"ip>',
+		"bPaginate": 	true,
+        "bLengthChange": true,
+        "bFilter": true,
+        "bSort": true,
+        "bInfo": true,
+        "bAutoWidth": false,
+        "aaSorting": [[ 2, "desc" ]],
+        "aoColumnDefs": [
+			{ "bSearchable": false, "bSortable": false, "aTargets": [ 0,3 ] },
+		],
+		"oLanguage": {
+            "sSearch": "Filter by: "
+        }
+    } );
 
+	
 	$(document).dblclick(function(event){ 
 	   // alert("click"); 
-		   $("a[data-toggle=popover]").popover('hide');
+		   $(".btn-ngram[data-toggle=popover]").popover('hide');
 	}); 
 
 	$(':not(#anything)').on('click', function (e) {
-	    $('a[data-toggle=popover]').each(function () {
+	    $('.btn-ngram[data-toggle=popover]').each(function () {
 	        //the 'is' for buttons that trigger popups
 	        //the 'has' for icons and other elements within a button that triggers a popup
 	        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
@@ -126,7 +217,7 @@ $(document).ready(function() {
 	
 	
 	 // popover demo
-	$("a[data-toggle=popover]")
+	$(".btn-ngram[data-toggle=popover]")
 	.popover({
 		html: true,
 		trigger: 'click',
@@ -148,7 +239,7 @@ $(document).ready(function() {
     			score.join(",");
     			    			
 
-    			$newDiv = $('<div />').addClass("pop");
+    			$newDiv = $('<div />').addClass("pop").attr("role","status");
 
     			$r1 = $('<div />').addClass("pop-line").appendTo($newDiv);
 				$r1.append($('<div />',{ "text": "Frequency:", "class": "pop-title" }));
@@ -163,7 +254,7 @@ $(document).ready(function() {
         	    			$('<span />',{ "text": forms})));
         		}	    	
 
-    			{% if auth.user.isadmin %}
+    			{% if auth.user.isadmin and false %}
     			$r2 = $('<div />').addClass("pop-line").appendTo($newDiv);
 				$r2.append($('<div />',{ "text": "Centrality:", "class": "pop-title"}));
 				$r2.append($('<div />',{ "class": "pop-desc"}).append(
