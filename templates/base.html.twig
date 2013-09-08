@@ -177,18 +177,26 @@
 		// Set the URL for the AJAX-based activity logging
 		openEssayist.LOG_URL = "{{ urlFor('ajax.log.activity') }}";
 
+	
+		    
 		// Activate the Bootstrap's tooltips
 		if ($("[rel=tooltip]").length) {
-		        $("[rel=tooltip]").tooltip();
+		        $("[rel=tooltip]").tooltip({container: 'body'});
 		    }
 
+		// fix for changing aria-expanded status on dropdown
 		 $(".btn[data-toggle='collapse']").on('click', function () {
 				 clp = $(this).hasClass("collapsed");
 				 console.log("collapse : " + clp);
 				 $(this).attr('aria-expanded',clp);
 		 });
-
-		// Fix for preventing scrolling behinf the overlay, when in modals.
+		 $("[data-toggle='dropdown']").on('click', function () {
+				 clp = $(this).parent(".dropdown").hasClass("open");
+				 console.log("collapse : " + clp);
+				 $(this).attr('aria-expanded',!clp);
+		 });
+		 
+		// Fix for preventing scrolling behind the overlay, when in modals.
 	    $(".modal").on('show', function () {
 	    	$('body').css('overflow', 'hidden');
 
