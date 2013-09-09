@@ -54,6 +54,13 @@
 	</li>
 {% endmacro %}
 
+{% macro toTD(ngram,options=null) %}
+	<td><div id="{{ ngram.ngram|join("") }}" class="ngram">
+		<span>{{ ngram.ngram|join(" ") }}</span>
+		</div>
+	</td>
+{% endmacro %}
+
 {% macro toDIV(ngram,options=null) %}
 	<button class="btn {{ options.isLarge?"btn-large":"btn-small" }} btn-ngram {{ options.userdefined?"btn-warning":"" }} {{ options.isDisabled?"disabled" }}" id="{{ ngram.ngram|join("") }}"
 		{% if options.showPopover %}
