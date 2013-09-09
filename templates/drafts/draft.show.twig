@@ -465,7 +465,7 @@ label.checkbox:before
 }
 
 
-.ngram.showKW > .keyword:first-child:before {
+/*.ngram.showKW > .keyword:first-child:before {
     content: " !Key: ";
     font-size: 10;
 }
@@ -473,9 +473,9 @@ label.checkbox:before
 .ngram.showKW > .keyword:last-child:after {
     content: "!     ";
     font-size: 10;
-}
+}*/
 
-{% for key,item in groups[1:] %}
+{% for key,item in groups[1:] %}		
 .ngram.{{item.id}} .keyword {
 }
 
