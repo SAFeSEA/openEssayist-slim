@@ -27,6 +27,7 @@
 			<th>Key Word</th>
 			<th>Frequency</th>
 			<th>Forms in text</th>
+			<th>Centrality</th>
 		</tr>	
 	</thead>
 	<tbody>
@@ -35,8 +36,9 @@
 		<tr>
 			<td>{{ key|title }}</td>
 			{{ ngram.toTD(item, {}) }}
-			<td><span class="">{{ item.count }}</span></td>
+			<td>{{ item.count}}</td>
 			<td>{{ (item.ngram|length==1)? item.source|join(', ') }}</td>
+			<td>{{ (item.ngram|length==1)?item.score[0]|number_format(3):0}}</td>
 		</tr>
 		{% endfor %}
 	{% endfor %}
@@ -48,7 +50,7 @@
 
 </div>
 
-{#
+
 {% for key,items in keywords %}
 <div class="row-fluid">
 	<div class="span12">
@@ -65,7 +67,7 @@
 		</div>
 	</div>
 </div>	{%  endfor %}
-#}
+
 
 {% endblock %}
 
