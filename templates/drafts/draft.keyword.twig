@@ -13,23 +13,6 @@
 
 {% block content %}
 
-{% for key,items in keywords %}
-<div class="row-fluid">
-	<div class="span12">
-	
-		<div class="widget">
-			<div class="widget-header" id="cat{{ loop.index0 }}">
-				<h2> {{ key|title }} ({{ items|length }})</h2>
-			</div>
-			<div class="widget-content" role="region" aria-label="List of {{ key|title }}"> 
-				{% for item in items %}
-					 {{ ngram.toDIV(item, {"showPopover": true,"isLarge": true}) }}
-				{% endfor %}
-			</div> 
-		</div>
-	</div>
-</div>	{%  endfor %}
-
 <div class="row-fluid">
 <div class="span12"><div class="widget">
 	<div class="widget-header">
@@ -51,8 +34,8 @@
 		{% for item in items %}
 		<tr>
 			<td>{{ key|title }}</td>
-			<td><strong>{{ item.ngram|join(" ") }}</strong></td>
-			<td>{{ item.count }}</td>
+			{{ ngram.toTD(item, {}) }}
+			<td><span class="">{{ item.count }}</span></td>
 			<td>{{ (item.ngram|length==1)? item.source|join(', ') }}</td>
 		</tr>
 		{% endfor %}
@@ -65,12 +48,55 @@
 
 </div>
 
+{#
+{% for key,items in keywords %}
+<div class="row-fluid">
+	<div class="span12">
+	
+		<div class="widget">
+			<div class="widget-header" id="cat{{ loop.index0 }}">
+				<h2> {{ key|title }} ({{ items|length }})</h2>
+			</div>
+			<div class="widget-content" role="region" aria-label="List of {{ key|title }}"> 
+				{% for item in items %}
+					 {{ ngram.toDIV(item, {"showPopover": true,"isLarge": true, "tag": "div"}) }}
+				{% endfor %}
+			</div> 
+		</div>
+	</div>
+</div>	{%  endfor %}
+#}
+
 {% endblock %}
 
 
 {% block injectCSS %}
 	{{ parent() }}
 <style>
+	
+td div.ngram {
+    -moz-box-sizing: border-box;
+    background: none repeat scroll 0 0 rgba(170, 200, 250, 0.5);
+    border: 2px solid rgba(0, 0, 0, 0.25);
+    border-radius: 10px 10px 10px 10px;
+    box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.5);
+    color: #445566;
+    display: inline-block;
+    /*font-size: 0.9em;*/
+    /*letter-spacing: -0.08em;*/
+    /*line-height: 20px;*/
+    margin: 0;
+    text-align: center;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+    font-weight: bold;
+   
+    /*height: 40px;*/
+    padding: 5px;
+    min-width: 60px;
+    /*z-index: 1001;*/
+	
+}	
+	
 .btn-ngram { 
 	white-space: nowrap; 
 	margin:0 0 5px 5px; 
@@ -181,10 +207,10 @@ $(document).ready(function() {
 	$.fn.dataTableExt.oStdClasses.sPagePrevDisabled ="btn btn-small disabled";
 	$.fn.dataTableExt.oStdClasses.sPageNextEnabled ="btn btn-small";
 	$.fn.dataTableExt.oStdClasses.sPageNextDisabled ="btn btn-small disabled";
-	$('#data-table').dataTable( {
+	oTable = $('#data-table').dataTable( {
 		"sDom": '<"row-fluid"lf>rt<"row-fluid"ip>',
-		"bPaginate": 	true,
-        "bLengthChange": true,
+		"bPaginate": 	false,
+        "bLengthChange": false,
         "bFilter": true,
         "bSort": true,
         "bInfo": true,
@@ -192,14 +218,15 @@ $(document).ready(function() {
         "aaSorting": [[ 2, "desc" ]],
         "aoColumnDefs": [
 			{ "bSearchable": false, "bSortable": false, "aTargets": [ 0,3 ] },
+					
 		],
 		"oLanguage": {
             "sSearch": "Filter by: "
         }
     } );
-
 	
-	$(document).dblclick(function(event){ 
+	{#
+		$(document).dblclick(function(event){ 
 	   // alert("click"); 
 		   $(".btn-ngram[data-toggle=popover]").popover('hide');
 	}); 
@@ -213,7 +240,7 @@ $(document).ready(function() {
 	            return;
 	        }
 	    });
-	});
+	});#}
 	
 	
 	 // popover demo
