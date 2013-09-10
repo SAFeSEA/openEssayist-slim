@@ -343,7 +343,8 @@ h3 > .cat_color
 
 	{#<script src="{{ app_base }}/assets/openessayist/js/utils.js"></script>
 <script src="{{ app_base }}/assets/openessayist/js/dnd.js"></script>#}
-<script>
+{% if task.isopen %}
+<script id="script-dnd">
 DnDWrapper = function() {
 	
 	var DnDWrapper = {
@@ -725,6 +726,12 @@ $(document).ready(function() {
 		
 	$('input.minicolors').minicolors({animationSpeed: 100,control: "wheel"});
 	
+	
+});
+</script>
+{% endif %}
+<script id="script-dnd">
+$(document).ready(function() {
 	
 });
 </script>
