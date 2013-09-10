@@ -19,6 +19,13 @@
 	<div class="widget-header">
 		<h2>Word Count</h2>
 	</div>
+	<div class="widget-toolbar">
+		<div class="btn-toolbar" role="toolbar" aria-controls="struct_bullet">
+			<div id="legend_bullet" class="btn-group" style="white-space: normal;" data-toggle="buttons-checkbox">
+			</div>
+		</div>
+	</div>
+	
 	<div class="widget-content">
 		<div id="struct_pie" style="height: 500px;margin: 0 auto"></div>
 	</div>
@@ -75,7 +82,15 @@
 	{{ parent() }}
 	
 	<style>
-	
+	button .legendcolor
+{
+    background-color: white;
+    float: left;
+    height: 14px;
+    margin-right: 5px;
+    margin-top: 2px;
+    width: 20px;
+}
 table.table thead .sorting,
 table.table thead .sorting_asc,
 table.table thead .sorting_desc,
@@ -122,6 +137,7 @@ $(document).ready(function() {
 			{ "sType": "percent", "aTargets": [ 3 ] }
 		]
 	} );
+	$('#data-table tbody').removeAttr("role").removeAttr("aria-live").removeAttr("aria-relevant");
 	
 	// Create a RGBa color from a HEX string
 	function hexToRgba(hex,opacity) {
@@ -152,10 +168,9 @@ $(document).ready(function() {
 	// General HighCharts configuration 
 	var hcOptions = {
 			credits:{enabled:false},
-		    exporting:{enabled:false},
 		    title:{text:'Breakdown of word count per structure parts'},
 	        exporting: {
-	            enabled: true,
+	            enabled: false,
 	            sourceWidth: 1175 ,
 	            sourceHeight: 825,
 	        },
@@ -163,7 +178,12 @@ $(document).ready(function() {
 				plotBackgroundColor: null,
 		        plotBorderWidth: null,
 		        plotShadow: false
-			}
+			},
+			legend: {
+				enabled: false,
+	            itemStyle: {
+	                color: '#000000',
+	            }}
 	};
 
 	$('#struct_pie').highcharts($.extend(true,{}, hcOptions,{
@@ -199,6 +219,38 @@ $(document).ready(function() {
         	
         }]
     }));
+
+	$.each(breakdown,function(index,item){
+		var that = item;
+		$('#legend_bullet').append(
+				$('<button/>', {
+				    type: 'button',
+				    title: 'Show or hide this structure element',
+				    text: item.name,
+				    id: "legend-tag"+index,
+				    'data-tag': item.tag,
+				    'class': 'btn btn-small active',
+				})
+				.attr("role","checkbox")
+				.attr("aria-checked","true")
+				.prepend($('<div/>')
+					.addClass('legendcolor')
+					.attr("aria-hidden","true")
+					.css('background-color',item.color)
+				).click(function() {
+					var chart = $('#struct_pie').highcharts();
+					var series = chart.series[0].data[index];
+					$(this).attr("aria-checked",!series.visible);
+			        if (series.visible) {
+			            series.setVisible(false);
+			        } else {
+			            series.setVisible(true);
+			            
+			        }
+				})
+		);
+	});
+    
 
 });
 </script>
