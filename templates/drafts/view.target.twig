@@ -13,21 +13,25 @@
 
 {% block content %}
 
-<div class="row-fluid">
+<div class="row-fluid"><div class="span12">
 
-
-
-<div class="span12"><div class="widget">
+<div class="widget">
 	<div class="widget-header">
 		<h2>Word Limit</h2>
 	</div>
-	<div class="widget-content">
-		<div id="struct_bullet" style="height: 500px;margin: 0 auto"></div>
-		<div id="legend_bullet" class="btn-group" style='white-space: inherit;' data-toggle="buttons-checkbox"
+	<div class="widget-toolbar">
+		<div class="btn-toolbar" role="toolbar" aria-controls="struct_bullet">
+			<div id="legend_bullet" class="btn-group" style="white-space: normal;" data-toggle="buttons-checkbox">
+			</div>
 		</div>
 	</div>
-</div></div>
+	<div class="widget-content">
+		<div id="struct_bullet" style="height: 500px;margin: 0 auto"></div>
+		
+	</div>
 </div>
+
+</div></div>
 
 <div class="row-fluid">
 <div class="span12"><div class="widget">
@@ -327,12 +331,16 @@ $(document).ready(function() {
 				    id: "legend-tag"+index,
 				    'data-tag': item.tag,
 				    'class': 'btn btn-small active',
-				}).prepend($('<div/>')
+				})
+				.attr("role","checkbox")
+				.attr("aria-checked","true")
+				.prepend($('<div/>')
 					.addClass('legendcolor')
 					.css('background-color',item.color)
 				).click(function() {
 					var chart = $('#struct_bullet').highcharts();
 					var series = chart.series[index];
+					$(this).attr("aria-checked",!series.visible);
 			        if (series.visible) {
 			            series.hide();
 			            if (!('tag' in that))
