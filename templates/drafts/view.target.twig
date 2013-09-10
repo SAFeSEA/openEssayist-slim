@@ -198,6 +198,7 @@ table.table thead .sorting_desc_disabled { }
 
 	
 $(document).ready(function() {
+	
 	$('#data-table').dataTable( {
 		"bPaginate": false,
         "bLengthChange": false,
@@ -211,6 +212,9 @@ $(document).ready(function() {
 			{ "sType": "percent", "aTargets": [ 3 ] }
 		]
     } );
+	$('#data-table tbody').removeAttr("role").removeAttr("aria-live").removeAttr("aria-relevant");
+    
+
 
 	// Create a RGBa color from a HEX string
 	function hexToRgba(hex,opacity) {
@@ -255,10 +259,9 @@ $(document).ready(function() {
 	// General HighCharts configuration 
 	var hcOptions = {
 			credits:{enabled:false},
-		    exporting:{enabled:false},
 		    title:{text:'Word count compared to the word limit of the assignment'},
 	        exporting: {
-	            enabled: true,
+	            enabled: false,
 	            sourceWidth: 1175 ,
 	            sourceHeight: 825,
 	        },
@@ -336,6 +339,7 @@ $(document).ready(function() {
 				.attr("aria-checked","true")
 				.prepend($('<div/>')
 					.addClass('legendcolor')
+					.attr("aria-hidden","true")
 					.css('background-color',item.color)
 				).click(function() {
 					var chart = $('#struct_bullet').highcharts();
@@ -354,7 +358,6 @@ $(document).ready(function() {
 				})
 		);
 	});
-
 });
 </script>
 {% endblock %}
