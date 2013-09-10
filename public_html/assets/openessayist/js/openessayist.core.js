@@ -43,6 +43,8 @@ openEssayist.prototype = {
 };
 
 $(document).ready(function() {
+	var n1=null;
+	$.pnotify.defaults.history = false;
 	optsQ1 = {
 			title: 'Self-reflective tool',
 			text: "At this point in time, do you think you have enough information to rewrite your essay?" + 
@@ -50,15 +52,29 @@ $(document).ready(function() {
 			addclass: "stack-bottomright",
 	        stack: $.pnotify.defaults.openessayist, 
 	        hide: false,
-	        sticker: true, 
+	        closer_hover: false,
+	        sticker_hover: false,
+	        sticker: false, 
 	        icon: 'icon-large  icon-comments',
+	        before_open: function(pnotify) {
+		        $(pnotify.text_container).attr('role', 'alert');
+		        $(pnotify.closer).attr('role', 'button');
+		        $(pnotify.closer).attr('tabindex', '0');
+		        $(pnotify.closer).attr('title', 'Close this notice');
+		        $(pnotify.closer).addClass('btn btn-mini');
+		        
+	        },
 	        after_open: function(pnotify) {
 	        	$("#reflect1-yes").click(function() {
 	        		pnotify.pnotify_remove();
 				});
 	        	$("#reflect1-no").click(function() {
-	        		pnotify.pnotify_remove();
 	        		$.pnotify(optsQ2);
+	        		pnotify.pnotify_remove();
+	        		//setTimeout(function(){
+	        		//	pnotify.pnotify_remove();
+	        		//},1000);
+	        		
 				});
 	        }
 		}; 
@@ -69,8 +85,18 @@ $(document).ready(function() {
 			addclass: "stack-bottomright",
 	        stack: $.pnotify.defaults.openessayist, 
 	        hide: false,
-	        sticker: true, 
+	        closer_hover: false,
+	        sticker_hover: false,
+	        sticker: false, 
 	        icon: 'icon-large  icon-comments',
+	        before_open: function(pnotify) {
+		        $(pnotify.text_container).attr('role', 'alert');
+		        $(pnotify.closer).attr('role', 'button');
+		        $(pnotify.closer).attr('tabindex', '0');
+		        $(pnotify.closer).attr('title', 'Close this notice');
+		        $(pnotify.closer).addClass('btn btn-mini');
+		        
+	        },
 	        after_open: function(pnotify) {
 	        	$("#reflect2-yes").click(function() {
 	        		pnotify.pnotify_remove();
@@ -80,7 +106,10 @@ $(document).ready(function() {
 				});
 	        }
 		}; 
-	$.pnotify(optsQ1);
+	setTimeout(function(){
+		$.pnotify(optsQ1);
+	},2000);
+	
 });
 
 
