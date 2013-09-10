@@ -227,6 +227,9 @@ $(document).ready(function() {
             "sSearch": "Filter by: "
         }
     } );
+
+	$('#data-table tbody').removeAttr("role").removeAttr("aria-live").removeAttr("aria-relevant");
+    
 	
 	{#
 		$(document).dblclick(function(event){ 
