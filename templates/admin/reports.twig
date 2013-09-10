@@ -6,7 +6,6 @@
 
 
 {% for report in reports %}
-
 <div class="row-fluid">
 
 	<div class="span12"><div class="widget">
@@ -18,7 +17,15 @@
 		</div> 
 	</div></div>
 </div>
+{% else %}
+<div class="alert alert-block alert-error"><div class="row-fluid">
 
+	<i class="icon-quote-left icon-5 span2" style="font-size: 7em;"></i>
+		
+	<div class="span10">
+		<h2>No reports so far.</h2>
+	</div>
+</div></div>
 {% endfor %}
 
 {% endblock %}
