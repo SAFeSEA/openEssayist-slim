@@ -22,12 +22,15 @@
 	</div>
 	
 	<div class="widget-toolbar">
-		<div class="btn-toolbar form-inline" id="options">
+		<div class="btn-toolbar" id="options" role="toolbar" aria-controls="container">
 			<div class="btn-group option-set"  data-toggle="buttons-radio" data-option-key="sortBy">
-  				<label style="margin-right: 5px;" class="checkbox">Zoom by axis : </label>	
- 				<button title="Zoom by essay structure" class="btn-setting btn btn-small active" data-option-value="x">Essay</button>
+				<span class="btn-label">Zoom by axis : </span>
+				<button title="Zoom by essay structure" class="btn-setting btn btn-small active" data-option-value="x">Essay</button>
 				<button title="Zoom by key word" class="btn-setting btn btn-small" data-option-value="y">Key Words</button>
 				<button title="Zoom by both side" class="btn-setting btn btn-small" data-option-value="xy">Both</button>
+			</div>
+			<button id="zoom-reset" title="Reset Zoom" class="btn btn-small">Reset Zoom</button>
+			<div id="legend_bullet" class="btn-group" style="white-space: normal;" data-toggle="buttons-checkbox">
 			</div>
 		</div>
 	</div>
@@ -35,9 +38,7 @@
 	
 	<div class="widget-content">
 		<div id="container" style="height: 600px;margin: 0 auto">
-			<div id="resizer" >
-				<div id="inner-resizer"></div>
-			</div>
+			
 		</div>
 	</div>
 </div>
@@ -102,6 +103,8 @@ $(document).ready(function() {
 	var chart = null;
 	var chartOptions = null;
 
+	var $series = {{ series|json_encode|raw }};
+
 	$('#data-table').dataTable( {
 		"bPaginate": false,
         "bLengthChange": false,
@@ -113,6 +116,7 @@ $(document).ready(function() {
     	"aoColumnDefs": [
 		]
 	} );
+	$('#data-table tbody').removeAttr("role").removeAttr("aria-live").removeAttr("aria-relevant");
 	
 
 	$('.btn-setting').click(function(){
@@ -122,6 +126,10 @@ $(document).ready(function() {
 
 		chartOptions.chart.zoomType = data;
 		chart = new Highcharts.Chart(chartOptions);;
+	});
+
+	$('#zoom-reset').click(function() {
+	    chart.zoomOut();
 	});
 
 	sections =  {
@@ -178,8 +186,13 @@ $(document).ready(function() {
 		credits: {
             enabled: false
         },
+        legend: {
+			enabled: false,
+            itemStyle: {
+                color: '#000000',
+            }},
         exporting: {
-            enabled: true,
+            enabled: false,
             sourceWidth: 1175 ,
             sourceHeight: 825,
         },
@@ -187,7 +200,12 @@ $(document).ready(function() {
 			renderTo: 'container',
 			type: 'scatter',
 			zoomType: 'x',
-			reflow: true
+			reflow: true,
+			resetZoomButton: {
+		        theme: {
+		            display: 'none'
+		        }
+		    }
 		},
 		title: {
 			text: 'Occurrence of key words & key phrases throughout the essay'
@@ -283,12 +301,41 @@ $(document).ready(function() {
 				}
 			}
 		},
-		series: {{ series|json_encode|raw }}
+		series: $series
 			
 	};
 
 	chart = new Highcharts.Chart(chartOptions);
 
+	$.each($series,function(index,item){
+		var that = item;
+		$('#legend_bullet').append(
+				$('<button/>', {
+				    type: 'button',
+				    title: 'Show or hide key words from this group',
+				    text: item.name,
+				    id: "legend-tag"+index,
+				    'data-tag': item.tag,
+				    'class': 'btn btn-small active',
+				})
+				.attr("role","checkbox")
+				.attr("aria-checked","true")
+				.prepend($('<div/>')
+					.addClass('legendcolor')
+					.attr("aria-hidden","true")
+					.css('background-color',item.color)
+				).click(function() {
+					var chart = $('#container').highcharts();
+					var series = chart.series[index];
+					$(this).attr("aria-checked",!series.visible);
+			        if (series.visible) {
+			            series.hide();
+			        } else {
+			            series.show();
+			        }
+				})
+		);
+	});
 	
 });
 
@@ -298,7 +345,16 @@ $(document).ready(function() {
 {% block injectCSS %}
 	{{ parent() }}
 <style type="text/css">
-		
+			
+button .legendcolor
+{
+    background-color: white;
+    float: left;
+    height: 14px;
+    margin-right: 5px;
+    margin-top: 2px;
+    width: 20px;
+}
 table.table thead .sorting,
 table.table thead .sorting_asc,
 table.table thead .sorting_desc,
