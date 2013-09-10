@@ -41,3 +41,46 @@ openEssayist.log4j = function(action,data) {
  */
 openEssayist.prototype = {
 };
+
+$(document).ready(function() {
+	optsQ1 = {
+			title: 'Self-reflective tool',
+			text: "At this point in time, do you think you have enough information to rewrite your essay?" + 
+				"<p style='margin-top:6px;'><button id='reflect1-yes'>Yes</button><button id='reflect1-no'>No</button></p>",
+			addclass: "stack-bottomright",
+	        stack: $.pnotify.defaults.openessayist, 
+	        hide: false,
+	        sticker: true, 
+	        icon: 'icon-large  icon-comments',
+	        after_open: function(pnotify) {
+	        	$("#reflect1-yes").click(function() {
+	        		pnotify.pnotify_remove();
+				});
+	        	$("#reflect1-no").click(function() {
+	        		pnotify.pnotify_remove();
+	        		$.pnotify(optsQ2);
+				});
+	        }
+		}; 
+	optsQ2 = {
+			title: 'Self-reflective tool',
+			text: "Do you need to explore more content?" + 
+				"<p style='margin-top:6px;'><button id='reflect2-yes'>Yes</button><button id='reflect2-no'>No</button></p>",
+			addclass: "stack-bottomright",
+	        stack: $.pnotify.defaults.openessayist, 
+	        hide: false,
+	        sticker: true, 
+	        icon: 'icon-large  icon-comments',
+	        after_open: function(pnotify) {
+	        	$("#reflect2-yes").click(function() {
+	        		pnotify.pnotify_remove();
+				});
+	        	$("#reflect2-no").click(function() {
+	        		pnotify.pnotify_remove();
+				});
+	        }
+		}; 
+	$.pnotify(optsQ1);
+});
+
+
