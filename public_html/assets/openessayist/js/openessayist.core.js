@@ -42,8 +42,8 @@ openEssayist.log4j = function(action,data) {
 openEssayist.prototype = {
 };
 
-$(document).ready(function() {
-	var n1=null;
+openEssayist.showSRTool = function()
+{
 	$.pnotify.defaults.history = false;
 	optsQ1 = {
 			title: 'Self-reflective tool',
@@ -108,8 +108,8 @@ $(document).ready(function() {
 		}; 
 	setTimeout(function(){
 		$.pnotify(optsQ1);
-	},2000);
-	
-});
+	},2000);	
+};
+
 
 
