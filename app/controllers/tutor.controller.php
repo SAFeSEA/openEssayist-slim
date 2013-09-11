@@ -7,10 +7,17 @@
  */
 class TutorController extends Controller
 {
+	// fired when user log in
 	const ACTION_LOGIN = 'ACTION.LOGIN';
+	// fired when mashup is initialised
 	const ACTION_MASHUP_INIT = 'ACTION.MASHUP.INIT';
+	// fired when mashup is changed by user
 	const ACTION_MASHUP_SELECT = 'ACTION.MASHUP.SELECT';
+	// fired when keywords are reorganised
 	const ACTION_KEYWORD_GROUP = 'ACTION.KEYWORD.GROUP';
+	
+	// fired when self-report tool is used
+	const REPORT_USEFULNESS = 'REPORT.USEFULNESS';
 	
 	public function getJSON()
 	{

@@ -56,7 +56,10 @@ $.pnotify.defaults.history = false;
 $.pnotify.defaults.openessayist = {"dir1": "up", "dir2": "left", "firstpos1": 50, "firstpos2": 10, "spacing1":10};
 	
 $(document).ready(function() {
-	openEssayist.showSRTool();
+	$('#reflect-on-task').click(function(e){
+		openEssayist.showSRTool();
+	});
+	
 	
 	$('#help-on-task').click(function(e){
 		var $modal = $('#help-modal');
@@ -88,7 +91,7 @@ $(document).ready(function() {
 
 				var options = {
 						title: 'Hint',
-						text: "<p role='alert'>Sorry, not hints at this point in time. Try asking later on.</p>",
+						text: "<p role='alert'>Sorry, not hints for this page.</p>",
 						addclass: "stack-bottomright",
 				        stack: stack_bottomright, 
 				        hide: false,
