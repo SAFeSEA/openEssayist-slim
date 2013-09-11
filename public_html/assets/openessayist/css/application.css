@@ -2,6 +2,13 @@
 
 /* Add additional stylesheets below
  -------------------------------------------------- */
+*:focus
+{
+	outline-color: #2F96B4 !important;
+	outline-style: dashed !important;
+	outline-width: 1px !important;
+    outline-offset: 2px !important;
+}
 
 .btn-toolbar .btn-label
 {
@@ -21,6 +28,7 @@ font-size: 11.9px;
 
 .btn:focus {
     outline: thin dotted #333333;
+
 }
 
 /* fix for icon background while active */
