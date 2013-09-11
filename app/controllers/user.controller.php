@@ -335,7 +335,10 @@ class UserController extends Controller
 									'module' => $post["module"],
 									'task' => $post["task"],
 								),
-							array('timeout' => 30));
+							array(
+									'timeout' => 300,
+									'blocking' => true
+					));
 					
 					if ($request->status_code === 200)
 					{
