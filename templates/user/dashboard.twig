@@ -28,7 +28,7 @@
 <div class="row-fluid">
 <div class="span12"><div class="widget">
 	<div class="widget-header">
-		<h2>Quick Links</h2>
+		<h2>To start</h2>
 	</div>
 			
 	<div class="widget-content">
@@ -76,30 +76,33 @@
 			
 			<a a href="{{ urlFor('system.help') }}" class="btn btn-large span2 offset1"
 				rel="tooltip" data-placement="bottom" title="Go to the help pages" >
-			<i class="icon-large icon-question-sign "></i> Help</a>
+			<i class="icon-large icon-question-sign "></i> <div>Help</div></a>
 		
 			<div class="span8 offset1">
 				<p>For a description of the content of the different aspects of the system,
 					check the help pages. The command is always available on the top 
-					navigation bar.</p>
-				
-				
+					navigation bar. In some pages, the section specific to that page will also be available
+					by a button on the page navigation bar.</p>
 			</div>
-
-		</div>	
+		</div>
+		
+		<hr>	
 
 		<div class="row-fluid">
 			
-			<button class="btn btn-large span2 offset1 disabled" id="help-on-task" disabled="disabled">
+			<button class="btn btn-large span2 offset1 disabled" id="help-on-task" 
+					disabled="disabled">
 				<i class="icon-large icon-comments "></i> Hints</button>
 		
 			<div class="span8 offset1">
 				<p>Once you are exploring your drafts and their analyses, you will have access 
 					to some hints on how to use the analysis, interpret the results and exploit 
-					them for revising your essay. Look for the <i class="icon-large icon-comments "> </i> Hints button
+					them for revising your essay. Look for the <strong><i class="icon-large icon-comments "> </i> Hints</strong> button
 					in the page navigation bar. 
 				</p>
-				
+								<div class="alert  alert-success ">
+					<p>We are strongly encouraging you to make use of them.</p>
+				</div>	
 			</div>
 
 		</div>	
@@ -110,37 +113,42 @@
 	
 		{% if group.url is not null  %}
 		<div class="row-fluid">
-			<a class="btn span4" 
-					href="{{ group.url }}">
-				<i class="icon-2x pull-left icon-group"></i> 
-					<div>Go to the <span class="brand openessayist">openEssayist</span><br>forum</div>
+			<a class="btn span4" href="{{ group.url }}"
+				rel="tooltip" data-placement="bottom" 	
+				title="Go to the {{ group.name }} Technical Self Help Forum">
+				<i class="icon-2x icon-group"></i> 
+					<div>Self Help Forum</div>
 			</a>
 			<div class="span8">
-				<p> On the Open University page for the course, you will find a self-help technical forum where questions about 
+				<p> On the Open University page for the course (Study planner), you will find a <strong>Technical Self Help Forum</strong> where questions about 
 					openEssayist can be asked to other users. </p>
-				<p>This is you primary source for help, as problems can be shared and solved for everybody's benefit. 
+				<div class="alert  alert-success ">
+					<p>This is you primary source for help, as problems can be shared and solved for everybody's benefit. 
+				</div>					
 				
 				
 			</div>
-
+		
 		</div>
+		<hr>	
 		{% endif %}
 		
 		{% if group.email is not null %}
 		<div class="row-fluid">
-			<a class="btn span4" 
-			 			href="mailto:{{ group.email }}" >
-					<i class="icon-2x pull-left icon-envelope"></i> 
-					Send an email to the<br><b>SAFeSEA</b> team ...
-				</a>
+			<a class="btn span4" href="mailto:{{ group.email }}" 
+				rel="tooltip" data-placement="bottom" 
+				title="Send an email to the SAFeSEA team">
+					<i class="icon-2x icon-envelope"></i> 
+				<div>Email</div>
+			</a>
 			
 	
 			<div class="span8">
-				<p> 
+				<p>Finally, we have a dedicated email for <span class="brand openessayist">openEssayist</span>, which you can use to contact us about the system.  
 				</p>
-				<div class="alert alert-block alert-error ">
-    		<p class="lead">To use for emergencies only</p>
-    	</div>
+				<div class="alert  alert-error ">
+    				<p>To use for emergencies only</p>
+    				</div>
 				<p></p>
 			</div>
 
