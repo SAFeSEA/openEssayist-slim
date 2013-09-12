@@ -25,11 +25,11 @@
 		<div class="btn-toolbar" id="options" role="toolbar" aria-controls="container">
 			<div class="btn-group option-set"  data-toggle="buttons-radio" data-option-key="sortBy">
 				<span class="btn-label">Zoom by axis : </span>
-				<button title="Zoom by essay structure" class="btn-setting btn btn-small active" data-option-value="x">Essay</button>
-				<button title="Zoom by key word" class="btn-setting btn btn-small" data-option-value="y">Key Words</button>
-				<button title="Zoom by both side" class="btn-setting btn btn-small" data-option-value="xy">Both</button>
+				<button title="Zoom by essay structure" class="btn-setting btn  active" data-option-value="x">Essay</button>
+				<button title="Zoom by key word" class="btn-setting btn " data-option-value="y">Key Words</button>
+				<button title="Zoom by both side" class="btn-setting btn " data-option-value="xy">Both</button>
 			</div>
-			<button id="zoom-reset" title="Reset Zoom" class="btn btn-small">Reset Zoom</button>
+			<button id="zoom-reset" title="Reset Zoom" class="btn ">Reset Zoom</button>
 			<div id="legend_bullet" class="btn-group" style="white-space: normal;" data-toggle="buttons-checkbox">
 			</div>
 		</div>
@@ -316,7 +316,7 @@ $(document).ready(function() {
 				    text: item.name,
 				    id: "legend-tag"+index,
 				    'data-tag': item.tag,
-				    'class': 'btn btn-small active',
+				    'class': 'btn active',
 				})
 				.attr("role","checkbox")
 				.attr("aria-checked","true")

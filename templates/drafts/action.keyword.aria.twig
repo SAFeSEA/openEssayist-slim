@@ -44,12 +44,12 @@ ul.sortable
 
 .input-append input
 {
- 	font-size: 11.9px;
-   	padding: 2px 6px;
+ 	/*font-size: 11.9px;
+   	padding: 2px 6px;*/
 }
 
 .input-append > .group-label {
-    font-size: 11.9px;
+    /*font-size: 11.9px;*/
     margin-bottom: 0;
     margin-right: 5px;
     vertical-align: middle;
@@ -131,22 +131,22 @@ h3 > .cat_color
 	{% if task.isopen %}
 	<div class="widget-toolbar">
 		<div class="btn-toolbar form-inline" role="toolbar" aria-controls="container-groups">    
-    		<button id="catg-Save" class="btn btn-small btn-primary"
+    		<button id="catg-Save" class="btn  btn-primary"
     			rel="tooltip" data-placement="bottom"
     			title="Save the changes made to the groups" 
     			disabled="disabled">Save</button>
     		<button id="catg-Reset" data-toggle="modal" data-target="#modal-reset"
     			rel="tooltip" data-placement="bottom"
     			title="Reset key words to their original group"
-    			class="btn btn-small ">Reset</button>
+    			class="btn  ">Reset</button>
     		<button id="catg-New" {{ (groups|length == 10)? "disabled" }}
     		    rel="tooltip" data-placement="bottom"
    				title="Create a new group to add the key words" 
-    			class="btn btn-small">New Group...</button>
+    			class="btn ">New Group...</button>
 			<div class="input-append">
 				<label for="catg_Filter" class="group-label">Filter: </label>
     			<input placeholder="key words" class="input-mini" id="catg_Filter" type="text">
-    			<button class="btn btn-small" id="catg_Clear" 
+    			<button class="btn " id="catg_Clear" 
     				rel="tooltip" data-placement="bottom"
     				title="Clear the filter" 
     				type="button">Clear</button>
@@ -155,7 +155,7 @@ h3 > .cat_color
     			rel="tooltip" data-placement="bottom"
     			aria-label="Full Screen"
     			title="Swap between full screen and page modes" 
-    			class="btn btn-small pull-right">
+    			class="btn  pull-right">
     				<i class="icon icon-fullscreen"></i></button>
     		
     	</div>
