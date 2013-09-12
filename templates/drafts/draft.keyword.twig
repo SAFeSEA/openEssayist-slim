@@ -57,17 +57,25 @@
 	<div class="span12">
 	
 		<div class="widget">
-			<div class="widget-header" id="cat{{ loop.index0 }}">
-				<h2> {{ key|title }} ({{ items|length }})</h2>
+			<div class="widget-header">
+				<h2 id="app-title{{ loop.index0 }}"> {{ key|title }} <span aria-hidden="true">({{ items|length }})</span></h2>
 			</div>
-			<div class="widget-content" role="region" aria-label="List of {{ key|title }}"> 
-				{% for item in items %}
-					 {{ ngram.toDIV(item, {"showPopover": true,"isLarge": true, "tag": "div"}) }}
-				{% endfor %}
-			</div> 
+			<div class="widget-content">
+				<ul id="app-list{{ loop.index0 }}" aria-labelledby="app-title{{ loop.index0 }}" role="list">
+					{% for item in items %}
+						 {{ ngram.toLI(item,{
+						 		"showBadge": true,
+						 		"showPopover": true
+							}) }}
+					{% endfor %}
+				</ul>
+			</div>
+		
+			 
 		</div>
 	</div>
-</div>	{%  endfor %}
+</div>	
+{%  endfor %}
 
 
 {% endblock %}
@@ -77,11 +85,16 @@
 	{{ parent() }}
 <style>
 	
+.widget-content ul
+{
+	margin: 0;
+}
 
 	
 .btn-ngram { 
 	white-space: nowrap; 
 	margin:0 0 5px 5px; 
+	
 }
 
 .btn-ngram.btn-large 
@@ -174,8 +187,7 @@ table.table thead .sorting_desc_disabled { }
 	{{ parent() }}
 <script src="{{ app_base }}/assets/jquery.sparkline/jquery.sparkline.js"></script>
 <script src="{{ app_base }}/assets/jquery.dataTables/js/jquery.dataTables.min.js"></script>
-<script>
-
+<script id="keyword-datatable">
 $(document).ready(function() {
 	$.fn.dataTableExt.oStdClasses.sLength ="dataTables_length span6 ";
 	$.fn.dataTableExt.oStdClasses.sFilter  ="dataTables_filter span6 ";
@@ -208,145 +220,100 @@ $(document).ready(function() {
     } );
 
 	$('#data-table tbody').removeAttr("role").removeAttr("aria-live").removeAttr("aria-relevant");
-    
-	
-	
-		$(document).dblclick(function(event){ 
-	   // alert("click"); 
-		   $(".btn-ngram[data-toggle=popover]").popover('hide');
-	}); 
+});
+</script> 
 
-	$(':not(#anything)').on('click', function (e) {
-	    $('.btn-ngram[data-toggle=popover]').each(function () {
-	        //the 'is' for buttons that trigger popups
-	        //the 'has' for icons and other elements within a button that triggers a popup
-	        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-	            $(this).popover('hide');
-	            return;
-	        }
-	    });
-	});
 	
-	
+<script id="keyword-popover">
+$(document).ready(function() {
+
+	var popOptions ={
+			html: true,
+			trigger: 'click manual',
+		    content:function(a,b,c)
+		    	{
+		    		var dim= $(this).attr("data-dim");
+	    			var score= $(this).attr("data-score");
+	    			var trend= $(this).attr("data-trend");
+	    			var forms= $(this).attr("data-source");
+	    			var count= $(this).attr("data-count");
+
+	    			score2 = score.split(",");
+	    			score = [];
+	    			score.push(score2[0]);
+	    			score.push("1");
+	    			score.push("0.5");
+	    			score.push("0.2");
+	    			score.push("0.1");
+	    			score.join(",");
+	    			    			
+
+	    			$newDiv = $('<div />').addClass("pop").attr("tabindex","0");
+
+	    			$r1 = $('<div />').addClass("pop-line").appendTo($newDiv);
+					$r1.append($('<div />',{ "text": "Frequency:", "class": "pop-title" }));
+					$r1.append($('<div />',{"class": "pop-desc"}).append(
+	    	    			$('<span />',{ "text": count, "class": "label label-info"})));
+	    				    			
+	    			if (dim=="1")
+	        		{
+	        			$r1 = $('<div />').addClass("pop-line").appendTo($newDiv);
+	    				$r1.append($('<div />',{ "text": "Forms in text:", "class": "pop-title" }));
+	    				$r1.append($('<div />',{ "class" : "pop-desc"}).append(
+	        	    			$('<span />',{ "text": forms})));
+	        		}	    	
+
+	    			{% if auth.user.isadmin and false %}
+	    			$r2 = $('<div />').addClass("pop-line").appendTo($newDiv);
+					$r2.append($('<div />',{ "text": "Centrality:", "class": "pop-title"}));
+					$r2.append($('<div />',{ "class": "pop-desc"}).append(
+	    	    			$('<span />',{"class": 'inlinebar bartodo',"text":score})));	    			
+
+	    			$r2 = $('<div />').addClass("pop-line").appendTo($newDiv);
+					$r2.append($('<div />',{ "text": "Trend:", "class": "pop-title"}));
+					$r2.append($('<div />',{ "class": "pop-desc"}).append(
+	    	    			$('<span />',{"class": 'inlinebar trendtodo',"text":trend})));	    			
+					{% endif %}	
+						
+	        		return $newDiv;
+			 	}
+		    }; 
+
 	 // popover demo
-	$(".btn-ngram[data-toggle=popover]")
-	.popover({
-		html: true,
-		trigger: 'click',
-	    content:function(a,b,c)
-	    	{
-	    		var dim= $(this).attr("data-dim");
-    			var score= $(this).attr("data-score");
-    			var trend= $(this).attr("data-trend");
-    			var forms= $(this).attr("data-source");
-    			var count= $(this).attr("data-count");
+	$(".ngram[data-toggle=popover]").popover(popOptions);
 
-    			score2 = score.split(",");
-    			score = [];
-    			score.push(score2[0]);
-    			score.push("1");
-    			score.push("0.5");
-    			score.push("0.2");
-    			score.push("0.1");
-    			score.join(",");
-    			    			
 
-    			$newDiv = $('<div />').addClass("pop").attr("role","status");
-
-    			$r1 = $('<div />').addClass("pop-line").appendTo($newDiv);
-				$r1.append($('<div />',{ "text": "Frequency:", "class": "pop-title" }));
-				$r1.append($('<div />',{"class": "pop-desc"}).append(
-    	    			$('<span />',{ "text": count, "class": "label label-info"})));
-    				    			
-    			if (dim=="1")
-        		{
-        			$r1 = $('<div />').addClass("pop-line").appendTo($newDiv);
-    				$r1.append($('<div />',{ "text": "Forms in text:", "class": "pop-title" }));
-    				$r1.append($('<div />',{ "class" : "pop-desc"}).append(
-        	    			$('<span />',{ "text": forms})));
-        		}	    	
-
-    			{% if auth.user.isadmin and false %}
-    			$r2 = $('<div />').addClass("pop-line").appendTo($newDiv);
-				$r2.append($('<div />',{ "text": "Centrality:", "class": "pop-title"}));
-				$r2.append($('<div />',{ "class": "pop-desc"}).append(
-    	    			$('<span />',{"class": 'inlinebar bartodo',"text":score})));	    			
-
-    			$r2 = $('<div />').addClass("pop-line").appendTo($newDiv);
-				$r2.append($('<div />',{ "text": "Trend:", "class": "pop-title"}));
-				$r2.append($('<div />',{ "class": "pop-desc"}).append(
-    	    			$('<span />',{"class": 'inlinebar trendtodo',"text":trend})));	    			
-				{% endif %}	
-					
-        		return $newDiv;
-		 	}
-	    }).click(function(e) {
-
-	    	{% verbatim %}
-	    		    	var bullet= {
-	    			type: 'bullet',
-	    			disableHiddenCheck : true,
-	    			height : '18px',
-	    			width : '100px',
-	    			  targetColor: '#f33',
-	                  targetWidth: 5, // width of the target bar in pixels
-	                  //performanceColor: '#238B45',
-	                  //rangeColors: ['#EDF8E9', '#BAE4B3', '#74C476'],
-	                  base: undefined, // set this to a number to change the base start number
-	                  tooltipFormat: $.spformat("{{fieldkey:fields}} - {{value}}"),
-	    			tooltipValueLookups: { fields: {r: 'XXXXX', p: '', t: 'Centrality'} },
-	    			numberFormatter: function(v)
-	    				{ return parseFloat(v).toFixed(2);
-	    					 
-	    				}
-	    			{% endverbatim %}		    			
-	    	   };
-	    	
-			var bar =  {
-	    			type : 'bar',
-	    			chartRangeMin : 0,
-	    			chartRangeMax : .25,
-	    			tooltipPrefix : '',
-	    			tooltipSuffix : '',
-	    			disableHiddenCheck : true,
-	    			height : '18px',
-	    			width : '100px',
-	    			barColor : 'red',
-	    			numberDigitGroupCount : 5,
-	    			colorMap : {
-	    				'.25:1' : 'green',
-	    				'.1:.2499999' : 'red',
-	    				'0:.0999999' : 'lightblue'
-	    			}};
-
-		    
-	    	$('.bartodo').sparkline("html",bullet).removeClass('bartodo');
-			
-	    	$('.trendtodo').sparkline("html",{type:'bar',barWidth: 6}).removeClass('trendtodo');
-			
-							e.preventDefault();
-	});
-
-	
-	// initialise the code highlighting
-	// define the sparkline for the keyword's ranking
-	/*$('.inlinebar').sparkline('html', {
-		type : 'bar',
-		chartRangeMin : 0,
-		chartRangeMax : .25,
-		tooltipPrefix : '',
-		tooltipSuffix : '',
-		disableHiddenCheck : true,
-		height : '18px',
-		width : '100px',
-		barColor : 'red',
-		numberDigitGroupCount : 5,
-		colorMap : {
-			'.25:1' : 'green',
-			'.1:.2499999' : 'red',
-			'0:.0999999' : 'lightblue'
+	$(".ngram[data-toggle=popover]").keypress(function(e) {
+		if(e.which == 13)
+		{
+		    $('.ngram[data-toggle=popover]').each(function () {
+		        //the 'is' for buttons that trigger popups
+		        //the 'has' for icons and other elements within a button that triggers a popup
+		        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+		            $(this).popover('hide');
+		            return;
+		        }
+		    });
+		    $(this).popover("toggle");
 		}
-	});*/
+	});
+	
+	
+
+		$(':not(#anything)').on('click', function (e) {
+		    $('.ngram[data-toggle=popover]').each(function () {
+		        //the 'is' for buttons that trigger popups
+		        //the 'has' for icons and other elements within a button that triggers a popup
+		        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+		            $(this).popover('hide');
+		            return;
+		        }
+		    });
+		});
+
+	 
+	
+
 });
 
 </script>

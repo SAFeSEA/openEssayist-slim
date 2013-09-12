@@ -38,7 +38,7 @@
 			data-placement="top"
 			data-title="{{ ngram.ngram|join(" ") }}"
 		{% endif %}
-	tabindex="0" >
+			tabindex="0" >
 		<span>{{ ngram.ngram|join(" ") }}</span>
 		<span class="label label-info" aria-label="Frequency">{{ ngram.count }}</span>
 		{% if options.showScore %}
@@ -48,9 +48,23 @@
 {% endmacro %}
 
 {% macro toLI(ngram,options=null) %}
-	<li draggable="true" aria-grabbed="false" class="" role="listitem" tabindex="0" 
-		id="{{ ngram.ngram|join("") }}">
+	<li class="ngram" {{ options.draggable?"draggable=true aria-grabbed=false" }} role="listitem" tabindex="0" 
+		id="{{ ngram.ngram|join("") }}"
+		{% if options.showPopover %}
+			data-score="{{ ngram.score|join(',') }}"
+			data-source="{{ ngram.source|join(', ') }}"
+			data-count="{{ ngram.count }}"
+			data-trend="{{ ngram.trend|join(',') }}"
+			data-dim={{ ngram.ngram|length }}
+			data-toggle="popover"
+			data-placement="top"
+			data-title="{{ ngram.ngram|join(" ") }}"
+		{% endif %}		
+		>
 		<span>{{ ngram.ngram|join(" ") }}</span>
+		{% if options.showBadge %}
+		<span class="badge badge-info" aria-hidden="false"  aria-label="! Frequency {{ ngram.count }}">{{ ngram.count }}</span>
+		{% endif %}
 	</li>
 {% endmacro %}
 

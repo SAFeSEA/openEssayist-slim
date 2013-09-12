@@ -73,35 +73,11 @@ ul.sortable
 	
 }
 
- [role="list"]:focus {
+[role="list"]:focus {
     box-shadow: 0 1px 2px 7px red inset
 }
  
-[role="listitem"] {
-    -moz-box-sizing: border-box;
-    background: none repeat scroll 0 0 rgba(170, 200, 250, 0.5);
-    border: 2px solid rgba(0, 0, 0, 0.25);
-    border-radius: 10px 10px 10px 10px;
-    box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.5);
-    color: #445566;
-    display: inline-block;
-    /*float: left;*/
-    font-size: 0.9em;
-    letter-spacing: -0.08em;
-    line-height: 30px;
-    margin: 0 10px 10px 0;
-    position: relative;
-    text-align: center;
-    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
-    vertical-align: bottom;
-    
-   
-    /*height: 40px;*/
-    padding: 5px;
-    min-width: 60px;
-    /*z-index: 1001;*/
-    
-} 
+
 
 [role="listitem"]:hover, [role="listitem"]:focus
 {
@@ -111,12 +87,11 @@ ul.sortable
     cursor: -moz-grab;
 }
 
-[aria-grabbed='true']
+li.ngram[aria-grabbed='true']
 {    box-shadow: 0 0 2px 4px #6496FA, 0.04em 0.04em 0.1em rgba(0, 0, 0, 0.5);
     cursor: move;
     outline: 1px solid transparent;
     cursor: -moz-grab;
-
 	background: repeat-x scroll 50% top #FFE45C;
 	
 }
@@ -195,6 +170,7 @@ h3 > .cat_color
 		<h2 id="app-src-title">All Key Words</h2></div>
 	<div class="source group">
 	<ul class="sortable" id="category_all" aria-labelledby="app-src-title" aria-dropeffect="move" role="list">
+		
 		{% if groups.category_all is defined %}
 			{% for key2,item2 in groups.category_all.keywords  %}
 			{{ ngram.toLI(keywords[item2]) }}
