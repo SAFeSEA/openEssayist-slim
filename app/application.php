@@ -143,6 +143,7 @@ class Application {
 				`users_id` int(11) NOT NULL,
 			    `referer` varchar(255) DEFAULT NULL,
 				`text` TEXT,
+				`date` DATETIME,				
 				PRIMARY KEY (`id`)
 			)  AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 		");
