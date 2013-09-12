@@ -39,8 +39,7 @@ $(".task-content").dotdotdot({
 				<h2>Assignments in the course {{ group.name }}</h2>
 			</div>
 			<div class="widget-content"> 
-				<p>These are the assignments (TMAs) that are available for you to use and analyse your drafts.</p>
-							
+				<p>These are the assignment question for {{ group.name }}. Choose a TMA to analyse and review your drafts.</p>
 				{% for task in tasks %}
 				<div class="row-fluid" style="border:1px solid #D5D5D5; margin: 10px 0; ">
 					<div class="span3" style="padding:5px;">
@@ -48,13 +47,13 @@ $(".task-content").dotdotdot({
 							rel="tooltip" data-placement="bottom"
 							href="{{ urlFor('me.draft.action',{"idt":task.id}) }}"><i class="icon-book icon-large"></i> {{ task.name }}</a>
 					</div>
-					<div class="span6 task-content" style="padding:5px; max-height: 180px;">
+					<div class="span6 task-content" style="padding:5px; max-height: 150px;">
 						<p>{{ task.assignment }}</p>
 					</div>
 					<div class="span3" style="padding:5px;">
 						<div class="row-fluid" style="padding:5px 0;">
 							<div class="span12" >
-								<p><span><b>Draft analysed:</b></span>
+								<p><span><b>Drafts analysed:</b></span>
 								<br class="hidden-phone hidden-tablet"/>
 									<span class="badge badge-info">{{ task.draftcount }}</span>
 								</p>
@@ -86,6 +85,10 @@ $(".task-content").dotdotdot({
 					</div>
 				</div>
 				{% endfor %}
+								<div class="alert  alert-error	">
+    				<p>Please remember that this system is not part of the module and will not submit your final essay to the tutors.</p>
+    			</div>			
+				
 			</div> 
 		</div>
 	</div>	
