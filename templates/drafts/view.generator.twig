@@ -20,9 +20,16 @@
 			<h2>Adjacency Matrix</h2>
 		</div>
 		<div class="widget-content" >
-		{{ dump(parasenttok) }}
+		
+		{% for par in parasenttok %}
+			<p>{% for sent in par %}
+				<span>{{ sent.text }}</span>
+			{% endfor %}</p>
+		{% endfor %}
+		
+		
 		</div>
-		</div>
+	</div>
 
 </div></div>
 {% endblock %}

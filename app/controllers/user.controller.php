@@ -1760,11 +1760,18 @@ class UserController extends Controller
 		
 		$parasenttok = $dr->getParasenttok();
 		
-		foreach ($parasenttok as $par)
+		foreach ($parasenttok as &$par)
 		{
-			foreach ($par as $sent)
+			foreach ($par as &$sent)
 			{
-				
+				$n = str_word_count($sent['text']);
+				$sent['oldtext'] = $sent['text'];
+				$n2 = count($sent['lemma']);
+				$add = array();
+				for ($i = 0; $i < ($n-$n2); $i++) {
+					$add[] = "the";
+				}
+				$sent['text'] = join(" ", array_merge($sent['lemma'],$add));
 			}
 		}
 	
