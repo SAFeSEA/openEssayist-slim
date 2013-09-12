@@ -10,6 +10,44 @@
     outline-offset: 2px !important;
 }
 
+div.ngram, li.ngram {
+    -moz-box-sizing: border-box;
+    background: none repeat scroll 0 0 rgba(170, 200, 250, 0.5);
+    border: 2px solid rgba(0, 0, 0, 0.25);
+    border-radius: 10px 10px 10px 10px;
+    box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.5);
+    color: #445566;
+    display: inline-block;
+    /*font-size: 0.9em;*/
+    /*letter-spacing: -0.08em;*/
+    /*line-height: 20px;*/
+    margin: 0;
+    text-align: center;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+    font-weight: bold;
+   
+    /*height: 40px;*/
+    padding: 5px;
+    min-width: 60px;
+    margin-bottom: 3px;
+    /*z-index: 1001;*/
+	
+}
+
+div.ngram.small {
+	border-width: 1px;
+    font-weight: normal;
+    font-size: 11.9px;
+    padding: 2px 5px;
+}
+
+div.ngram > .label, div.ngram > .badge
+{
+	margin-left: 10px;
+	font-size: 0.9em;
+} 
+
+
 .btn-toolbar .btn-label
 {
     margin-right: 5px;
@@ -17,7 +55,7 @@
     padding-left: 0;
     vertical-align: middle;
     display: inline-block;
-font-size: 11.9px;
+	font-size: 11.9px;
 }
 
 /* fix for modals position */

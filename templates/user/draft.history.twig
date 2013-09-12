@@ -46,7 +46,7 @@
 					<td style="white-space: nowrap;">{{ draft.date | date("Y-m-d")}}<br><i class="icon-time icon-large"></i> <small>{{ draft.datesince }} ago</small></td>
 					<td>{{ draft.wordcount }}</td>
 					<td>{% for item in draft.keywords[0:10] %} 
-						{{ ngram.toBtnExt(item,{isDisabled:true}) }}
+						{{ ngram.toDIV(item,{isDisabled:true}) }}
 						{% endfor %}
 				</tr>
 				{% endfor %}
