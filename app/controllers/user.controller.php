@@ -107,9 +107,29 @@ class UserController extends Controller
 			$this->app->flash("error", "Cannot find the group data");
 			$this->redirect('me.home');
 		}
+		
+		$drafts = $u->drafts()->order_by_desc('id')->find_array();
+		$tasks = $g->tasks()->find_array();
+		$tasks2 = array();
+		
+		foreach ($tasks as $t)
+		{
+			$tasks2[$t['id']] = $t;
+		}
+		foreach ($drafts as $key => &$d)
+		{
+			$t = $tasks2[$d['task_id']];
+			$gg = $this->timeSince(strtotime($d['date']));
+			$d['datesince'] = $gg;
+			$d['version'] = count($drafts)-$key;
+			$d['task'] = $t['name'];
+			unset($d['analysis']);
+		}
+		
 
 		$this->render('user/dashboard',array(
 				'group' => $g->as_array(),
+				'activity' => $drafts,
 				'nav' => 'nav'));
 	}
 

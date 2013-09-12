@@ -65,6 +65,44 @@
 
 <div class="row-fluid">
 
+<div class="span4"><div class="widget">
+	<div class="widget-header" >
+		<h2>Activity Log</h2>
+	</div>
+			
+	<div class="widget-content widget-log">
+		{% for item in activity[:10] %}
+		
+		<div class="body">
+			<div class="time">
+				<i class="icon-time"></i>
+				<span class="green">{{ item.datesince }}</span>
+			</div>
+			
+			<div class="text">
+			<a title="Go to this draft" href="{{ urlFor('me.draft.show',{"draft":item.id}) }}">Version {{ item.version }}</a> 
+			of your draft for 
+			<a href="{{ urlFor('me.draft.action',{"idt":item.task_id}) }}">{{ item.task }}</a>
+    		has been analysed.
+			</div>
+			{#<div class="tools">
+				<a class="btn btn-mini btn-info"
+							title="Go to this draft"
+							rel="tooltip" data-placement="bottom" 
+							href="{{ urlFor('me.draft.show',{"draft":item.id}) }}">
+					<i class="icon-only icon-share-alt"></i></a>
+			</div>#}
+		</div>
+
+		{% else %}
+	    <div class="alert">
+    		No activity yet.
+    	</div>
+		{% endfor %}		
+	</div>
+	
+</div></div>	
+
 <div class="span8"><div class="widget">
 	<div class="widget-header">
 		<h2>Getting Help and Support</h2>
@@ -159,19 +197,7 @@
 	
 </div></div>
 
-		<div class="span4"><div class="widget">
-	<div class="widget-header" >
-		<h2>Activity Log</h2>
-	</div>
-			
-	<div class="widget-content">
-	    <div class="alert alert-block ">
-    		This functionality has not be implemented yet.
-    	</div>
-		
-	</div>
-	
-</div></div>	
+
 						
 </div>
 
@@ -184,6 +210,46 @@
 {% block injectCSS %}
 	{{ parent() }}
 <style>
+.widget-log > .body {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #DDE4ED;
+    border-image: none;
+    border-style: solid;
+    border-width: 1px 1px 1px 2px;
+    margin-right: 1px;
+    margin-bottom: 6px;
+    padding: 5px 8px 8px;
+    position: relative;
+}	
+
+.widget-log > .body > .text {
+    display: block;
+    font-size: 13px;
+    margin-top: 15px;
+    padding-left: 2px;
+    position: relative;
+}
+	
+.widget-log > .body > .time {
+    float: right;
+    position: absolute;
+    color: #666666;
+    display: block;
+    font-size: 11px;
+    font-weight: bold;
+    right: 9px;
+    top: 0;
+}	
+
+.widget-log > .body > .tools {
+    bottom: 2px;
+    position: absolute;
+    right: 2px;
+}
+	
 .notification {
     border-radius: 50em 50em 50em 50em;
     border-style: solid;
