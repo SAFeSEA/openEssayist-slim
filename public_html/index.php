@@ -192,6 +192,7 @@ $c->app->get('/me/draft/:draft/view/matrix', array($userCtrl, 'viewMatrix'))->na
 $c->app->get('/me/draft/:draft/view/cloud', array($userCtrl, 'viewCloud'))->name('me.draft.view.cloud');
 $c->app->get('/me/draft/:draft/view/chord', array($userCtrl, 'viewChord'))->name('me.draft.view.chord');
 $c->app->get('/me/draft/:draft/view/exhibit', array($userCtrl, 'viewExhibit'))->name('me.draft.view.exhibit');
+$c->app->get('/me/draft/:draft/view/generator', array($userCtrl, 'viewGenerator'))->name('me.draft.view.generator');
 
 $c->app->post('/profile/data/keywords', array($userCtrl, 'saveKeywords'))->name('profile.save.keyword');
 $c->app->post('/profile/data/keywords/reset', array($userCtrl, 'resetKeywords'))->name('profile.reset.keyword');

@@ -1751,4 +1751,27 @@ class UserController extends Controller
 		$response->body($this->indent(json_encode($mydata)));
 		
 	}
+	
+	public function viewGenerator($draft)
+	{
+		$dr = $this->getDraft($draft);
+		$tsk = $dr->task()->find_one();
+	
+		
+		$parasenttok = $dr->getParasenttok();
+		
+		foreach ($parasenttok as $par)
+		{
+			foreach ($par as $sent)
+			{
+				
+			}
+		}
+	
+		$this->render('drafts/view.generator',array(
+				'task' => $tsk->as_array(),
+				'draft' => $dr->as_array(),
+				'parasenttok' => $parasenttok
+		));
+	}
 }

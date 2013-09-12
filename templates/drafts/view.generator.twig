@@ -1,0 +1,40 @@
+{% extends "site.twig" %} 
+
+{% block title %}Draft - Visualisation (Adjacency Matrix){% endblock %} 
+{% block subheader %}Draft - Visualisation (Adjacency Matrix){% endblock %} 
+
+
+{% block bccontainer %}		
+	{% include "widgets/breadcrumb.task.twig" %}
+{% endblock %}
+
+{% block navsubheader %}
+	{% include "widgets/navbar.drafts.twig" with {'navsrc': 'me.draft.view.matrix'} %}
+{% endblock %}
+
+{% block content %}
+	<div class="row-fluid"><div class="span12">
+
+	<div class="widget">
+		<div class="widget-header" data-toggle="collapse" data-target="#demo">
+			<h2>Adjacency Matrix</h2>
+		</div>
+		<div class="widget-content" >
+		{{ dump(parasenttok) }}
+		</div>
+		</div>
+
+</div></div>
+{% endblock %}
+
+{% block injectJS %}
+	{{ parent() }}
+<script type="text/javascript">
+</script>
+{% endblock %}
+
+{% block injectCSS %}
+	{{ parent() }}
+<style type="text/css">
+</style>
+{% endblock %}
