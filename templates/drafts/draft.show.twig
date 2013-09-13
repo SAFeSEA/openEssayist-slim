@@ -549,11 +549,14 @@ $(document).ready(function() {
 	for (v in sections) keys.push(v);
 		
 	var tag_tooltip = null;
-	$(".par-wrapper .par-tag")
-		.attr('aria-label','This is an aria label')
-		.attr('title','This is a title')
-		.attr('role','region')
-		.attr('tabindex','0')
+	$(".par-wrapper .par-tag").each(function()
+	{
+		var title = "Structure: " + sections[$(this).attr('data-tag')].title;
+		$(this).attr('aria-label',title)
+			.attr('title',title)
+			.attr('role','region')
+			.attr('tabindex','0');
+	});
 		/*	.popover({
 		container: "body",
 		placement: "right",
@@ -573,14 +576,14 @@ $(document).ready(function() {
 	});*/
 	;
 
-	$(".par-tagXX").tooltip({
+	/*$(".par-tagXX").tooltip({
 		title : function(){ 
 				return sections[$(this).attr('data-tag')].title;
 			},
 			container: "body",
 			placement: "right",
 			
-	});
+	});*/
 		
 });
 </script>	
