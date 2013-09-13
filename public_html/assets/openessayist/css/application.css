@@ -1,7 +1,17 @@
-@import url('http://fonts.googleapis.com/css?family=Droid+Sans:400,700');
+@import url('//fonts.googleapis.com/css?family=Droid+Sans:400,700');
 
 /* Add additional stylesheets below
  -------------------------------------------------- */
+
+.tooltip {
+}
+
+.tooltip-inner {
+  border-color: #000000;
+  border-width: 1px;
+  border-style: solid;
+}
+
 
 /* a {
     color: #0000ee;
