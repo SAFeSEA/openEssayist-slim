@@ -14,12 +14,12 @@
 
 {% block content %}
 <div class="row-fluid"><div class="span12 offset0">
-	<div class="widget">
+	<div class="widget" role="application" aria-labelledby="app-group-title">
 			<div class="widget-header">
-				<h2> Sentences </h2>
+				<h2 id="app-group-title"> Key Sentences </h2>
 			</div>
 			<div class="widget-toolbar">
-				<div class="btn-toolbar form-inline" id="options" role="toolbar">
+				<div class="btn-toolbar form-inline" id="options" role="toolbar" aria-controls="sentence-container">
 				    <div class="btn-group option-set"  data-toggle="buttons-radio" data-option-key="sortBy">
     					<span class="btn-label">Sort by: </span>	
     					<button class="btn  active" id="sort-rank"
@@ -36,7 +36,7 @@
 			</div>
 	
 	
-	<div class="widget-content clearfix " id="container">
+	<div class="widget-content clearfix " id="sentence-container"  role="list" aria-labelledby="app-group-title">
 				{#<table class="table table-condensed table-striped table-bordered">
 				<tbody>
 				{% for sentence in sentences %}
@@ -45,14 +45,15 @@
 				</tbody>
 				</table>#} 
 				{% for sentence in sentences %}
-					
 					<div class="sent" data-tag="{{ sentence.tag}}" 
 						 			  data-rank="{{ sentence.rank}}" 
-						 			  data-id="{{ sentence.id}}" >
-						<div class="par-tag" data-tag="{{ sentence.tag}}"><span class="icon-stack">
-          			<i class="icon-circle-blank  icon-stack-base"></i>
-          			<i class="icon-heading "></i>
-        </span></div>		
+						 			  data-id="{{ sentence.id}}" 
+						 			   role="listitem">
+						<div class="par-tag" data-tag="{{ sentence.tag}}">
+							<span class="icon-stack">
+	          					<i class="icon-circle-blank  icon-stack-base"></i>
+    	      					<i class="icon-heading "></i>
+        					</span></div>		
 						<div class="par-container">				 			  
 							<span>{{ sentence.text}}</span>
 						</div>

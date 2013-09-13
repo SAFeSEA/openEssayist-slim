@@ -24,12 +24,12 @@
 
 <div class="row-fluid"><div class="span12">
 	
-	<div class="widget">
+	<div class="widget" role="application" aria-labelledby="app-group-title">
 		<div class="widget-header">
-			<h2>Your essay</h2>
+			<h2 id="app-group-title">Your essay</h2>
 		</div>
-		<div class="widget-toolbar "><div class="btn-toolbar form-inline">    
-			
+		<div class="widget-toolbar" role="toolbar" aria-controls="draft-container">
+			<div class="btn-toolbar form-inline">    
 			<div class="btn-group">
 				<span class="group-label">Show: </span>		
 				<a class="btn  {{ mashup=='text' ? 'active disabled'}}" 
@@ -62,20 +62,20 @@
 		
 		
 		
-		<div class="widget-content assignment myessay openessay par-container" style="display: none;"><i class="icon-quote-left icon-4x pull-left icon-muted"></i>
+		<div id="task-container" class="widget-content assignment myessay openessay par-container" style="display: none;"><i class="icon-quote-left icon-4x pull-left icon-muted"></i>
 			<p>{{ task.assignment | raw | nl2br }}</p>
 		</div>
         
-		<div class="widget-content widget-essay myessay openessay">
+		<div id="draft-container" class="widget-content widget-essay myessay openessay">
 		
 		{% for par in parasenttok %}
 			
 			<div class="par-wrapper" {{ (par.partag)?"data-tag=#{ par.partag }":"" }}>
 				<div class="par-tag" {{ (par.partag)?"data-tag=#{ par.partag }":"" }}>
-					<span class="icon-stack">
-          			<i class="icon-circle-blank  icon-stack-base"></i>
-          			<i class="icon-heading "></i>
-        </span>
+					<span class="icon-stack" aria-hidden="true">
+          				<i class="icon-circle-blank  icon-stack-base"></i>
+          				<i class="icon-heading "></i>
+        			</span>
 				</div>
 				<div class="par-container">
 					<p id="{{ loop.index0 }}" class='oe-par' >
@@ -616,9 +616,11 @@ $(document).ready(function() {
 
 	$(".ngram[data-keyword]").each(function(){
 		$(this).attr("aria-label"," :Keyword " + $(this).data("keyword")+ "; ");
+		$(this).attr("role","note");
+		$(this).attr("tabindex","0");
 	});	
 	
-});
+});	
 </script>
 {% endif %}
 
