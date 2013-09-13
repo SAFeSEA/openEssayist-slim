@@ -2,6 +2,59 @@
 
 /* Add additional stylesheets below
  -------------------------------------------------- */
+
+/* a {
+    color: #0000ee;
+    text-decoration: none;
+
+}	
+ .breadcrumb a, .footer a {
+	 color: #00547D;
+}*/
+ 
+ 
+
+ .navbar .nav > li > a
+ {
+ 	color: #494949;
+ }
+ 
+ .navbar .brand {
+    color: #494949;
+
+}
+
+.alert, .alert h4 {
+    color: #735B32;
+}
+
+.alert-danger, .alert-error {
+    color: #712E2C;
+} 
+
+.alert-info, .alert-info h4 {
+    color: #1F475A;
+}
+
+.alert-success {
+    color: #2D572E;
+}
+
+
+
+.breadcrumb > .active {
+    color: #505050;
+}
+
+
+.label-info, .badge-info {
+    background-color: #24536A;
+}
+
+[class^="icon-"]:before, [class*=" icon-"]:before {
+    text-decoration: none;
+}
+
 *:focus
 {
 	outline-color: #2F96B4 !important;
@@ -489,13 +542,13 @@ ul.breadcrumb > li:Last-child:after
 
 ul.breadcrumb a:hover, ul.breadcrumb a:focus
 {
-	text-decoration: none;
+	/*text-decoration: none;*/
 	
 }
 
 ul.breadcrumb a
 {
-	text-decoration: none;
+	/*text-decoration: none;*/
 	
 }
 
