@@ -78,7 +78,7 @@
 
 function createIsotope()
 {
-    var $container = $('#container');
+    var $container = $('#sentence-container');
 
 	$container.isotope({
 		layoutMode : 'straightDown',
@@ -100,7 +100,7 @@ function createIsotope()
 
 
 $(window).on("beforeprint",function() {
-	var $container = $('#container');
+	var $container = $('#sentence-container');
 	$container.isotope('destroy');
 });	
 
@@ -183,7 +183,7 @@ sections =  {
           changeLayoutMode( $this, options )
         } else {
           // otherwise, apply new options
-          var $container = $('#container');
+          var $container = $('#sentence-container');
           $container.isotope( options );
         }
         
