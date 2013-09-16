@@ -13,7 +13,7 @@
 
 {% block content %}
 
-<div class="row-fluid">
+{#<div class="row-fluid">
 <div class="span12"><div class="widget">
 	<div class="widget-header">
 		<h2>Key Words and Key Phrases</h2>
@@ -48,9 +48,7 @@
 	</div>
 </div></div>
 
-</div>
-
-
+</div>#}
 
 {% for key,items in keywords %}
 <div class="row-fluid">
@@ -186,7 +184,7 @@ table.table thead .sorting_desc_disabled { }
 {% block injectJS %}
 	{{ parent() }}
 <script src="{{ app_base }}/assets/jquery.sparkline/jquery.sparkline.js"></script>
-<script src="{{ app_base }}/assets/jquery.dataTables/js/jquery.dataTables.min.js"></script>
+{#<script src="{{ app_base }}/assets/jquery.dataTables/js/jquery.dataTables.min.js"></script>
 <script id="keyword-datatable">
 $(document).ready(function() {
 	$.fn.dataTableExt.oStdClasses.sLength ="dataTables_length span6 ";
@@ -221,7 +219,7 @@ $(document).ready(function() {
 
 	$('#data-table tbody').removeAttr("role").removeAttr("aria-live").removeAttr("aria-relevant");
 });
-</script> 
+</script> #}
 
 	
 <script id="keyword-popover">
