@@ -281,7 +281,7 @@ $(document).ready(function() {
 	$(".ngram[data-toggle=popover]").popover(popOptions);
 
 
-	$(".ngram[data-toggle=popover]").keypress(function(e) {
+	$(".ngram[data-toggle=popover]").keydown(function(e) {
 		if(e.which == 13)
 		{
 		    $('.ngram[data-toggle=popover]').each(function () {
