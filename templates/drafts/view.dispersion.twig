@@ -81,7 +81,7 @@
 		{% endfor %}
 	</tbody>
 	<tfoot></tfoot>
-	<caption>Occurrence of key words & key phrases throughout the essay (per decile)</caption>
+	<caption>Occurrence of key words & key phrases throughout the essay (per 10% chunks)</caption>
 	</table>
 	</div>
 </div></div>
@@ -95,13 +95,36 @@
 <script src="{{ app_base }}/assets/d3.js/colorbrewer.js"></script>
 <script src="{{ app_base }}/assets/highcharts/js/highcharts.js"></script>
 <script src="{{ app_base }}/assets/highcharts/js/modules/exporting.js"></script>
-<script src="{{ app_base }}/assets/jquery.dataTables/js/jquery.dataTables.min.js"></script>
+<script src="{{ app_base }}/assets/jquery.dataTables/js/jquery.dataTables.js"></script>
 <script src="{{ app_base }}/assets/jquery.dataTables/js/plugin.dataTableExt.js"></script>
 
 <script type="text/javascript">
+/*
+ * TO DO: DataTable internal function _fnBindAction needs to be changed to that one
+ * 	for better accessibility (keep focus on clicked header, intercept keydown rather than keypress)
+ */
+$.fn.DataTable._fnBindAction = function( n, oData, fn )
+{
+	$(n)
+		.bind( 'click.DT', oData, function (e) {
+				//n.blur(); // Remove focus outline for mouse users
+				fn(e);
+			} )
+		.bind( 'keydown.DT', oData, function (e){
+			if ( e.which === 13 ) {
+				fn(e);
+			} } )
+		.bind( 'selectstart.DT', function () {
+			/* Take the brutal approach to cancelling text selection */
+			return false;
+			} );
+};
+
 $(document).ready(function() {
 	var chart = null;
 	var chartOptions = null;
+
+
 
 	var $series = {{ series|json_encode|raw }};
 
