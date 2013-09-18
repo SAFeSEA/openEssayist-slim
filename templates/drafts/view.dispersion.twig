@@ -107,10 +107,12 @@ $.fn.DataTable._fnBindAction = function( n, oData, fn )
 {
 	$(n)
 		.bind( 'click.DT', oData, function (e) {
+				//NVL: DO NOT REMOVE FOCUS
 				//n.blur(); // Remove focus outline for mouse users
 				fn(e);
 			} )
 		.bind( 'keydown.DT', oData, function (e){
+			//NVL: changed from keypress to keydown
 			if ( e.which === 13 ) {
 				fn(e);
 			} } )
@@ -211,6 +213,7 @@ $(document).ready(function() {
         },
         legend: {
 			enabled: false,
+			useHTML: true,
             itemStyle: {
                 color: '#000000',
             }},
@@ -220,7 +223,7 @@ $(document).ready(function() {
             sourceHeight: 825,
         },
 		chart: {
-	    	backgroundColor: "#fbfbf8",			    
+	    	backgroundColor: null,			    
 			renderTo: 'container',
 			type: 'scatter',
 			zoomType: 'x',
@@ -232,7 +235,8 @@ $(document).ready(function() {
 		    }
 		},
 		title: {
-			text: 'Occurrence of key words & key phrases throughout the essay'
+			text: 'Occurrence of key words & key phrases throughout the essay',
+			useHTML: true
 		},
 		tooltip: {
             followPointer: true,
@@ -331,12 +335,35 @@ $(document).ready(function() {
 
 	chart = new Highcharts.Chart(chartOptions);
 
+	//$(".highcharts-container svg")
+	//	.prepend("<title>xxxx</title>");
+	
+	/*$('.highcharts-legend')
+		.attr("role","navigation")
+		.attr("aria-label","Legend")
+		.attr("aria-controls","container");
+	
+	$('.highcharts-legend-item').each(function()
+		{
+			var cnt = $(this).find("span").html();
+			//if (!cnt) return;
+			
+			$(this).attr("role","checkbox")
+					.attr("title",'Show or hide key words from '+cnt)
+					.attr("tabindex","0")
+					.click(function() {
+						$(this).focus();
+						});
+					
+		
+		});*/
+		
 	$.each($series,function(index,item){
 		var that = item;
 		$('#legend_bullet').append(
 				$('<button/>', {
 				    type: 'button',
-				    title: 'Show or hide key words from this group',
+				    title: 'Show or hide key words from '+item.name,
 				    text: item.name,
 				    id: "legend-tag"+index,
 				    'data-tag': item.tag,
@@ -352,6 +379,7 @@ $(document).ready(function() {
 					var chart = $('#container').highcharts();
 					var series = chart.series[index];
 					$(this).attr("aria-checked",!series.visible);
+					
 			        if (series.visible) {
 			            series.hide();
 			        } else {
