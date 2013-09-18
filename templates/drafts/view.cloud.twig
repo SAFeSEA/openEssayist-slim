@@ -56,7 +56,7 @@ var words = {{ keywords|json_encode|raw  }};
 d3.layout.cloud().size([800, 600])
     .words(words.map(function(d) {
         
-      return {text: d.ngram.join(" "), size: 10 + d.count};
+      return {text: d.ngram.join(" "), count: d.count, size: 10 + d.count};
     }))
     .rotate(function() { return 0; })
     .font("Impact")
@@ -66,29 +66,38 @@ d3.layout.cloud().size([800, 600])
     .start();
 
  function progress(d) {
-	  console.log(d);
+	  //console.log(d);
 	}
-function draw(words) {
-	 d3.select("#svg-container").append("svg:svg")
-	 .style("margin", "auto auto")
-	 .style("display", "block")
-      .attr("width", "800")
-      .attr("height", "600")
-      .attr("role","img")
-      .attr("aria-label","Word cloud of the key words and key phrases")
-    .append("g")
-      .attr("transform", "translate(400,300)")
+
+ function draw(words) {
+	 svg = d3.select("#svg-container").append("svg:svg")
+	 	.attr("role","img")
+	 	.attr("aria-label","Word cloud of the key words and key phrases")
+
+	//svg.append("desc").text("Word cloud of the key words and key phrases");
+	svg.append("title")
+	 	.text("Word cloud of the key words and key phrases");
+	 
+	svg.style("margin", "auto auto")
+		.style("display", "block")
+		.attr("width", "800")
+		.attr("height", "600")
+	.append("g")
+    	.attr("transform", "translate(400,300)")
     .selectAll("text")
-      .data(words)
-    .enter().append("text")
-      .style("font-size", function(d) { return d.size + "px"; })
-      .style("font-family", "Impact")
-      .style("fill", function(d, i) { return fill(i); })
-      .attr("text-anchor", "middle")
-      .attr("transform", function(d) {
-        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-      })
-      .text(function(d) { return d.text; });
+    	.data(words)
+    	.enter().append("text")
+    		.attr("aria-label",function(d) { return d.text + ". Frequency  " + (d.count) + "!"; })
+     		.style("font-size", function(d) { return d.size + "px"; })
+      		.style("font-family", "Impact")
+      		.style("fill", function(d, i) { return fill(i); })
+      		.attr("text-anchor", "middle")
+      		.attr("transform", function(d) {
+        		return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+      		})
+      		.text(function(d) { return d.text; })
+      		.append("title")
+	 			.text(function(d) {return d.text + ", Frequency: " + (d.count); });
 }
 
 (function() {
