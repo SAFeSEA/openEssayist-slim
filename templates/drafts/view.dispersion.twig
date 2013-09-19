@@ -62,7 +62,7 @@
 			{% for i in 0..9 %}
 			<th>{{ (i+1)*10 }}%</th>
 			{% endfor %}
-			<th>Total</th>
+			
 		</tr>	
 	</thead>
 	<tbody>
@@ -76,7 +76,7 @@
 				{% set tot = tot + item.data[i] %}
 			<td>{{ item.data[i]?:'' }}</td>
 			{% endfor %}
-			<th>{{ tot }}</th>
+			
 		</tr>
 		{% endfor %}
 	</tbody>
