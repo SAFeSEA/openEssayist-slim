@@ -552,7 +552,8 @@ $(document).ready(function() {
 	$(".par-wrapper .par-tag").each(function()
 	{
 		var title = "Structure: " + sections[$(this).attr('data-tag')].title;
-		$(this).attr('aria-label',title)
+		$(this)
+			.attr('aria-label',title)
 			.attr('title',title)
 			.attr('role','region')
 			.attr('tabindex','0');
@@ -620,6 +621,7 @@ $(document).ready(function() {
 	$(".ngram[data-keyword]").each(function(){
 		$(this).attr("aria-label"," :Keyword " + $(this).data("keyword")+ "; ");
 		$(this).attr("role","note");
+		$(this).attr("title","Key word :" + $(this).data("keyword"));
 		$(this).attr("tabindex","0");
 	});	
 	
@@ -637,9 +639,19 @@ $(document).ready(function() {
 		var classname = "span.oe-snt[data-rank]";
 		console.log("Sentence activated :  " + indicator + " (" + cbox.checked + ")");
 		if (cbox.checked)
+		{
 			$(classname).addClass("showmu");
+			$(classname).attr("tabindex","0");
+			$(classname).attr("title","rank: 20");
+			$(classname).attr("aria-label","rank: 20");
+}
 		else
+		{
 			$(classname).removeClass("showmu");
+			$(classname).removeAttr("tabindex");
+			$(classname).removeAttr("title");
+			$(classname).removeAttr("aria-label");
+		}
 		$("#modal-notification").html("Key sentences are now " + (cbox.checked? "visible in" : "hidden from") +
 				 " the text of your draft.");
 	});
