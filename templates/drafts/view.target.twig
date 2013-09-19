@@ -121,7 +121,7 @@ table.table thead .sorting_desc_disabled { }
 <script src="{{ app_base }}/assets/highcharts/js/highcharts.js"></script>
 <script src="{{ app_base }}/assets/highcharts/js/modules/exporting.js"></script>
 <script src="{{ app_base }}/assets/d3.js/colorbrewer.js"></script>
-<script src="{{ app_base }}/assets/jquery.dataTables/js/jquery.dataTables.min.js"></script>
+<script src="{{ app_base }}/assets/jquery.dataTables/js/jquery.dataTables.js"></script>
 <script src="{{ app_base }}/assets/jquery.dataTables/js/plugin.dataTableExt.js"></script>
 <script type="text/javascript">
 /**
@@ -309,13 +309,7 @@ $(document).ready(function() {
 	    plotOptions: {
             series: {stacking: 'normal'},
             scatter:{
-                marker:{symbol:'diamond',radius:8},
-                tooltip: {
-        			formatter: function () {
-        				return "fddfdf";
-                     }
-            	   
-                },
+                marker:{symbol:'diamond',radius:8}
             },
             bar: {
                
@@ -330,7 +324,7 @@ $(document).ready(function() {
 		$('#legend_bullet').append(
 				$('<button/>', {
 				    type: 'button',
-				    title: 'Show or hide this structure element',
+				    title: 'Show or hide "'+ item.name +'" from the chart',
 				    text: item.name,
 				    id: "legend-tag"+index,
 				    'data-tag': item.tag,
