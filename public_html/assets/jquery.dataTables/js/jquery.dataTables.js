@@ -4795,10 +4795,12 @@
 		{
 			$(n)
 				.bind( 'click.DT', oData, function (e) {
-						n.blur(); // Remove focus outline for mouse users
+						//	NVL: DO NOT REMOVE FOCUS
+						//n.blur(); // Remove focus outline for mouse users
 						fn(e);
 					} )
-				.bind( 'keypress.DT', oData, function (e){
+				.bind( 'keydown.DT', oData, function (e){
+					//NVL: changed event from keypress to keydown
 					if ( e.which === 13 ) {
 						fn(e);
 					} } )
