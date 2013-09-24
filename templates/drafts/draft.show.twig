@@ -555,8 +555,9 @@ $(document).ready(function() {
 		$(this)
 			.attr('aria-label',title)
 			.attr('title',title)
-			.attr('role','region')
-			.attr('tabindex','0');
+			.attr('role','note')
+			//.attr('tabindex','0')
+		;
 	});
 		/*	.popover({
 		container: "body",
@@ -606,10 +607,28 @@ $(document).ready(function() {
 		var indicator = cbox.value;
 		var classname = ".ngram."+indicator;
 		console.log("Group activated :  " + indicator + " (" + cbox.checked + ")");
-		if (cbox.checked)
-			$(classname).addClass("showKW");
-		else
-			$(classname).removeClass("showKW");
+
+		$(classname).each(function(){
+			var cnt = $(this).text();
+			
+			//$(this).attr("tabindex","0");
+			if (cbox.checked)
+			{
+				$(this).addClass("showKW");
+				$(this).attr("aria-label","  Keyword  " + cnt + ";  ");
+				$(this).attr("role","note");
+				$(this).attr("title","Key word: " + cnt);
+			}
+			else
+			{
+				$(this).removeClass("showKW");
+				$(this).removeAttr("title");
+				$(this).removeAttr("role");
+				$(this).removeAttr("aria-label");
+			}
+				
+		});	
+		
 		var indlabel = $.trim($(this).parent("label").text());
 		$("#modal-notification").html("The key words from the group <strong>" +  indlabel + "</strong> are now " + (cbox.checked? "visible with" : "hidden from") +
 		 " the text of your draft.");
@@ -617,13 +636,6 @@ $(document).ready(function() {
 
 	$('.cKeyword').prop('checked', true);
 	$('.cKeyword').trigger('change');
-
-	$(".ngram[data-keyword]").each(function(){
-		$(this).attr("aria-label"," :Keyword " + $(this).data("keyword")+ "; ");
-		$(this).attr("role","note");
-		$(this).attr("title","Key word :" + $(this).data("keyword"));
-		$(this).attr("tabindex","0");
-	});	
 	
 });	
 </script>
@@ -638,20 +650,29 @@ $(document).ready(function() {
 		var indicator = cbox.value;
 		var classname = "span.oe-snt[data-rank]";
 		console.log("Sentence activated :  " + indicator + " (" + cbox.checked + ")");
-		if (cbox.checked)
-		{
-			$(classname).addClass("showmu");
-			$(classname).attr("tabindex","0");
-			$(classname).attr("title","rank: 20");
-			$(classname).attr("aria-label","rank: 20");
-}
-		else
-		{
-			$(classname).removeClass("showmu");
-			$(classname).removeAttr("tabindex");
-			$(classname).removeAttr("title");
-			$(classname).removeAttr("aria-label");
-		}
+
+
+		$(classname).each(function(){
+			if (cbox.checked)
+			{
+				var rank = $(this).data("rank");
+				$(this).addClass("showmu");
+				$(this).attr("role","note");
+				//$(this).attr("tabindex","0");
+				$(this).attr("title","Key sentence, rank: " + rank);
+				$(this).attr("aria-label","Key sentence, rank: " + rank);
+			}
+			else
+			{
+				$(this).removeClass("showmu");
+				//$(this).removeAttr("tabindex");
+				$(this).removeAttr("title");
+				$(this).removeAttr("role");
+				$(this).removeAttr("aria-label");
+			}
+		});			
+		
+
 		$("#modal-notification").html("Key sentences are now " + (cbox.checked? "visible in" : "hidden from") +
 				 " the text of your draft.");
 	});
