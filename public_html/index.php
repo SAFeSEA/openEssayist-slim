@@ -31,7 +31,7 @@ require_once "../app/models/draft.model.php";
 
 // System's constants
 define('APPLICATION', 'openEssayist');
-define('VERSION', '2.5 beta');
+define('VERSION', '2.6 beta');
 define('EXT', '.twig');
 
 // Create main Slim application
