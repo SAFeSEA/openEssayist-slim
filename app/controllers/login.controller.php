@@ -46,16 +46,26 @@ class LoginController extends Controller {
 			if ($this->auth->login($this->post('username'), $this->post('password'))) {
 				//$this->app->flash('info', 'Your login was successful');
 				
-				$user=$this->auth->getUser();
+				$user= $this->auth->getUser();
+				$req = $this->app->request();
 				
-				$useragent = $this->app->request()->headers('USER_AGENT');
-				if ($useragent)
-				{
-					$log = $this->app->getLog();
-					$log->info(TutorController::ACTION_LOGIN . " | " . 
-							json_encode(array('user_agent'=> $useragent)));
-				}
+				$useragent = $req->headers('USER_AGENT') ?: "";
 				
+				$tmpl = '%action% | [%user% @ %IP%] | %message%';
+				$message = str_replace(array(
+						'%action%',
+						'%user%',
+						'%IP%',
+						'%message%'
+				), array(
+						TutorController::ACTION_LOGIN,
+						$user['username']?:"anon",
+						$req->getIp(),
+						json_encode(array('user_agent'=> $useragent))
+				), $tmpl);
+				
+				$log = $this->app->getLog();
+				$log->info($message);
 				$this->redirect('me.home');
 			}
 			else
