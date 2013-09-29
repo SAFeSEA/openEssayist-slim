@@ -139,4 +139,59 @@ class AdminController extends Controller
 	
 	}	
 	
+	public function getLogs()
+	{
+		// read all log files in the logs directory
+		$logfiles = glob('../.logs/*.log',GLOB_BRACE);
+		
+		$csvArr = array();
+		foreach ($logfiles as $logfile)
+		{
+			$csvArr = array_merge($csvArr,
+				$this->csv_to_array(file_get_contents($logfile)," | ",
+						array("level","date","action","user","message")));
+		}
+		// Filter events
+		$csvArr = array_filter($csvArr,function(&$var)
+		{
+			//return ($var['level']=='INFO' &&  strpos($var['message'], '/me/draft/')!==FALSE);
+			return ($var['level']=='INFO' &&  strpos($var['action'], 'ACTION.LOGIN')!==FALSE);
+		});
+		
+		$json['items']=array();
+		foreach ($csvArr as $var)
+		{
+			// fix bug with missing user identification in old logs
+			if ($var['action'] == 'ACTION.LOGIN' && $var['message']==null)
+			{
+				$var['message'] = $var['user'];
+				$var['user'] = '[admin @ 127.0.0.1]';
+			}
+			// get path of view, if relevant log event
+			if ($var['action'] == 'GET' && strpos($var['message'], '/me/draft/')!==FALSE)
+			{
+				$keywords = preg_split("/[0-9]+/",$var['message']);
+				$var['view'] = array_pop($keywords);
+				
+			}
+				
+			//extract username
+			$keywords = preg_split("/[\[\@ \]]+/", $var['user'] );
+			$var['username'] = $keywords[1];
+			$json['items'][] = $var;
+		}
+			
+		$response = $this->app->response();
+		$response['Content-Type'] = 'application/x-javascript';
+		$response['X-Powered-By'] = 'openEssayist';
+		$response->status(200);
+		$response->body(json_encode($json));
+	}
+	
+	public function showLogs()
+	{
+		$this->render('admin/logs');
+		
+	}
+	
 }

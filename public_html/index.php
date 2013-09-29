@@ -220,6 +220,8 @@ $c->app->get('/admin/task/:taskid', array($adminCtrl, 'editTask'))->via('GET', '
 $c->app->get('/admin/analyser', array($adminCtrl, 'showEssayData'))->name('admin.json');
 $c->app->get('/admin/history', array($adminCtrl, 'showHistory'))->name('admin.history');
 $c->app->get('/admin/feedback', array($adminCtrl, 'showFeedback'))->name('admin.feedback');
+$c->app->get('/admin/data/logs.js', array($adminCtrl, 'getLogs'))->name('admin.data.logs');
+$c->app->get('/admin/logs', array($adminCtrl, 'showLogs'))->name('admin.logs');
 
 //$c->app->get('/demo/draft/:draft/show/', array($demoCtrl, 'showDraft'))->name('demo.draft.show');
 
