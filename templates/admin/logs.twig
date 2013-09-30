@@ -27,69 +27,79 @@
 	<script src="{{ app_base }}/assets/links.timeline/timeline.js"></script>
 		
 	<script id="exhibit-init" type="text/javascript">
+	var timeline = null;
 	links.Timeline.prototype._do_base = links.Timeline.prototype.unselectItem;
 	links.Timeline.prototype.unselectItem = function() {
 		this._do_base(); 
 	    $('#event-details').hide();
 	};
 
-	
+	    
+	// specify options
+	var options = {
+		width:  "100%",
+		height: "500px",
+		style: "box",
+		showNavigation: true,
+		showButtonNew: true,
+		eventMargin: 30,  // minimal margin between events
+		enableKeys: true,
+		min: new Date(2013, 02, 01),
+		max: new Date(2013, 11, 31),
+		cluster: true,
+		axisOnTop: true,
+	};
+
+	function onselect() {
+		if (!timeline) return;
+		var sel = timeline.getSelection();
+		  
+		if (sel.length) {
+			if (sel[0].row != undefined) {
+		    	var row = sel[0].row;
+		      	var gg = timeline.getItem(row);
+		      	var hh = timeline.getData()[row];
+		      	$('#event-details').text(JSON.stringify(hh));
+		      	$('#event-details').show();
+		    }
+		}
+	}
+
+	{% block config %}
 	$(document).ready(function() {
         // Instantiate our timeline object.
-        var timeline = new links.Timeline(document.getElementById('activity-log'));
-	
-		function onselect() {
-			  var sel = timeline.getSelection();
-			  
-			  if (sel.length) {
-			    if (sel[0].row != undefined) {
-			      var row = sel[0].row;
-			      var gg = timeline.getItem(row);
-			      var hh = timeline.getData()[row];
-			      //console.log(gg,hh);
-			      $('#event-details').text(JSON.stringify(hh));
-			      $('#event-details').show();
-			    }
-			  }
-			}
+        timeline =new links.Timeline(document.getElementById('activity-log'));
 
-		$.getJSON("{{ urlFor('admin.data.logs') }}", function( data ) {
+        $.getJSON("{{ urlFor('admin.data.logs') }}", function( data ) {
 			var items = [];
 			 $.each( data.items, function( key, val ) {
+				 if (val.action!="ACTION.LOGIN") return;
+				 
 				 val.start = new Date(val.date);
 				 val.content = val.username;
 				 val.className = val.username;
-				 val.group =  val.username;
+
+				 grp =  val.username.split(/[0-9]+/);
+				 //val.group =  grp[0];
+
 				 items.push( val );
 				 });
 
-	          
-	             
-			 // specify options
-	        var options = {
-	          width:  "100%",
-	          height: "500px",
-	          style: "box",
-	          showNavigation: true,
-              showButtonNew: true,          
-              eventMargin: 30,  // minimal margin between events
-               
-              enableKeys: true,
-	          min: new Date(2013, 02, 01),
-              max: new Date(2013, 11, 31),
-              cluster: true,
-              //axisOnTop: true,
-	        };
-
-
-	        // Draw our timeline with the created data and options
+			// Draw our timeline with the created data and options
 	        timeline.draw(items, options);
 	        links.events.addListener(timeline, 'select', onselect);	
-			
-			});
+	        /*$( "#activity-log" ).resizable({ 
+		        ghost: true, 
+		        handles: "s",
+		        stop: function( event, ui ) {
+		        	timeline.checkResize();
+			        }
+			});*/
+		});
 	
 	});
 	</script>
+	{% endblock %}
 {% endblock %} 
 
 

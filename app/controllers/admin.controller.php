@@ -151,11 +151,12 @@ class AdminController extends Controller
 				$this->csv_to_array(file_get_contents($logfile)," | ",
 						array("level","date","action","user","message")));
 		}
-		// Filter events
+		// Filter non-INFO events (usually ERROR)
 		$csvArr = array_filter($csvArr,function(&$var)
 		{
 			//return ($var['level']=='INFO' &&  strpos($var['message'], '/me/draft/')!==FALSE);
-			return ($var['level']=='INFO' &&  strpos($var['action'], 'ACTION.LOGIN')!==FALSE);
+			//return ($var['level']=='INFO' &&  strpos($var['action'], 'ACTION.LOGIN')!==FALSE);
+			return ($var['level']=='INFO');
 		});
 		
 		$json['items']=array();
@@ -192,6 +193,12 @@ class AdminController extends Controller
 	{
 		$this->render('admin/logs');
 		
+	}
+	public function showUserLogs($user)
+	{
+		$this->render('admin/logs.user',array(
+			'userlog' => $user
+		));
 	}
 	
 }

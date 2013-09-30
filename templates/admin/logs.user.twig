@@ -1,0 +1,84 @@
+{% extends "admin/logs.twig" %} 
+
+{% block config %}
+	$(document).ready(function() {
+        // Instantiate our timeline object.
+        timeline =new links.Timeline(document.getElementById('activity-log'));
+        
+        classmap = {
+        	"ACTION.LOGIN" 	: "act-login",
+            "ACTION.MASHUP.SELECT" 	: "act-login",
+        	"ACTION.MASHUP.INIT"	: "act-action",
+        	"ACTION.KEYWORD.GROUP"		: "act-login",
+        	"REPORT.USEFULNESS"		: "act-login",
+        	"/me/essay/"			: "group-action"
+        };
+	
+		$.getJSON("{{ urlFor('admin.data.logs') }}", function( data ) {
+			var items = [];
+			 $.each( data.items, function( key, val ) {
+			 	 if (val.username!="{{ userlog }}") return;
+			 	 if (val.action=="ACTION.MASHUP.INIT") return;
+				 
+				 val.className = classmap[val.action] || "";
+			 	 val.content = val.action;
+			 	 if (val.action=="GET")
+			 	 {
+			 	 	if (val.message.indexOf("/me/draft/") != -1)
+			 	 	{
+			 	 		val.className = "act-view";
+						var gg = val.message.split(/[0-9]+/);
+						if (gg.length>1)
+							val.content = gg[1];
+			 	 	}
+			 	 	else if (val.message.indexOf("/me/essay") != -1)
+			 	 	{
+						var gg = val.message.split(/[0-9]+/);
+						if (gg.length>1)
+						{
+							val.content = gg[1];
+							val.className = classmap[gg[0]] || "group-action";
+						}
+			 	 	}
+			 	 	else
+			 	 		val.content = "MANAGEMENT";
+			 	 	
+			 	 }
+			 	 //if (val.action=="GET" && val.message.indexOf("/me/draft/") == -1) return;
+			 	 if (val.action=="POST" && val.message.indexOf("/tutor/logactivity") != -1) return;
+			 	 val.start = new Date(val.date);
+			 	 
+					//grp =  val.username.split(/[0-9]+/);
+					//val.group =  val.action;
+				 items.push( val );
+			});
+
+			options.cluster = false;
+			options.eventMargin= 10;
+	        // Draw our timeline with the created data and options
+	        timeline.draw(items, options);
+	        links.events.addListener(timeline, 'select', onselect);	
+		});
+	
+	});
+	</script>
+{% endblock %} 
+
+
+{% block injectCSS %}
+{{ parent() }}
+<style>
+<!--
+div.timeline-event.act-login {
+    background-color: #F6D6D6;
+    border-color: #F89898;
+}
+
+div.timeline-event.act-view {
+    background-color: #D8F6D6;
+    border-color: #98F89E;
+}
+-->
+</style>
+{% endblock %} 
+

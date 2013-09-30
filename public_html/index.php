@@ -222,6 +222,7 @@ $c->app->get('/admin/history', array($adminCtrl, 'showHistory'))->name('admin.hi
 $c->app->get('/admin/feedback', array($adminCtrl, 'showFeedback'))->name('admin.feedback');
 $c->app->get('/admin/data/logs.js', array($adminCtrl, 'getLogs'))->name('admin.data.logs');
 $c->app->get('/admin/logs', array($adminCtrl, 'showLogs'))->name('admin.logs');
+$c->app->get('/admin/logs/:userid/', array($adminCtrl, 'showUserLogs'))->name('admin.logs.user');
 
 //$c->app->get('/demo/draft/:draft/show/', array($demoCtrl, 'showDraft'))->name('demo.draft.show');
 
