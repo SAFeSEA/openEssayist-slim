@@ -1,0 +1,78 @@
+{% extends "site.twig" %} 
+
+{% block title %}Draft - Sentence Hive Plot (D3.js){% endblock %} 
+{% block subheader %}Draft - Sentence Hive Plot (D3.js){% endblock %} 
+
+
+{% block bccontainer %}		
+	{% include "widgets/breadcrumb.task.twig" %}
+{% endblock %}
+
+
+{% block content %}
+
+<div class="row-fluid"><div class="span12">
+
+<div class="widget">
+			<div class="widget-header" data-toggle="collapse" data-target="#demo">
+				<h2>Graph</h2>
+		
+			</div>
+			<div class="widget-content" id="graph-container">
+				<div id='svg-container'></div>
+			</div>
+</div>
+
+</div></div>
+
+{% endblock %}
+
+{% block injectJS %}
+	{{ parent() }}
+<script src="{{ app_base }}/assets/d3.js/d3.v3.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function()
+{
+	// load graph JSON data
+	var url = "{{ urlFor('ajax.graph.json',{'draft':draft.id,'graph':'graphse'}) }}";
+	d3.json(url,setupGraph);
+});
+
+function setupGraph(err, data)
+{
+	var width = $('#svg-container').width(),
+	    height = $('#svg-container').height(),
+    	innerRadius = 40,
+    	outerRadius = 640,
+    	majorAngle = 2 * Math.PI / 3,
+    	minorAngle = 1 * Math.PI / 12;
+
+	var angle = d3.scale.ordinal()
+    	.domain(["source", "source-target", "target-source", "target"])
+    	.range([0, majorAngle - minorAngle, majorAngle + minorAngle, 2 * majorAngle]);
+
+	var radius = d3.scale.linear()
+	    .range([innerRadius, outerRadius]);
+
+	var color = d3.scale.category10();
+	
+	
+};
+
+</script>
+{% endblock %}
+
+{% block injectCSS %}
+	{{ parent() }}
+<style type="text/css">
+	#graph-container {
+  height: 600px;
+  
+}
+
+#svg-container {
+  height: 100%;
+	width: 100%;
+}
+</style>
+{% endblock %}

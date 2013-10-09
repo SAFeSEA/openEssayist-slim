@@ -183,6 +183,11 @@ $c->app->get('/me/draft/:draft/group/actions', array($demoCtrl, 'groupActions'))
 $c->app->get('/me/draft/:draft/view/network/ke', array($userCtrl, 'viewKeGraph'))->name('me.draft.view.kegraph');
 $c->app->get('/me/draft/:draft/view/network/se', array($userCtrl, 'viewSeGraph'))->name('me.draft.view.segraph');
 $c->app->get('/me/draft/:draft/view/cytoscape/se', array($userCtrl, 'viewCytoScape'))->name('me.draft.view.cytoscape');
+$c->app->get('/me/draft/:draft/view/links/se', array($userCtrl, 'viewLinksNetwork'))->name('me.draft.view.linksgraph');
+$c->app->get('/me/draft/:draft/view/vivagraph/se', array($userCtrl, 'viewVivaGraph'))->name('me.draft.view.vivagraph');
+$c->app->get('/me/draft/:draft/view/sigma/se', array($userCtrl, 'viewSigmaGraph'))->name('me.draft.view.sigma');
+$c->app->get('/me/draft/:draft/view/voronoi/se', array($userCtrl, 'viewVoronoiGraph'))->name('me.draft.view.voronoi');
+$c->app->get('/me/draft/:draft/view/hive/se', array($userCtrl, 'viewHivePlot'))->name('me.draft.view.hive');
 
 
 $c->app->get('/me/draft/:draft/view/dispersion', array($userCtrl, 'viewDispersion'))->name('me.draft.view.dispersion');

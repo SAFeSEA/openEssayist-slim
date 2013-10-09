@@ -1,0 +1,176 @@
+{% extends "site.twig" %} 
+
+{% block title %}Draft - Sentence Network (links.Network){% endblock %} 
+{% block subheader %}Draft - Sentence Network (links.Network){% endblock %} 
+
+{% block bccontainer %}		
+	{% include "widgets/breadcrumb.task.twig" %}
+{% endblock %}
+
+{% block navsubheader %}
+	{% include "widgets/navbar.drafts.twig" with {'navsrc': 'me.draft.view.cytoscape'} %}
+{% endblock %}
+
+{% block content %}
+
+<div class="row-fluid"><div class="span12">
+
+<div class="widget">
+			<div class="widget-header" data-toggle="collapse" data-target="#demo">
+				<h2>Sentence Graph</h2>
+			</div>
+			<div class="widget-content" id='mynetwork'>
+		
+
+   			 
+   			 </div>
+			<p id="selection"></p>
+			</div>
+</div></div>
+
+{% endblock %}
+
+{% block injectJS %}
+	{{ parent() }}
+<script src="{{ app_base }}/assets/d3.js/d3.v3.min.js"></script>
+<script src="{{ app_base }}/assets/links.timeline/network.js"></script>
+<script type="text/javascript">
+
+links.Network.NodeNVL = links.Network.Node.prototype;
+
+links.Network.Node = function (properties, imagelist, grouplist, constants) {
+    this.selected = false;
+
+    this.links = []; // all links connected to this node
+    this.group = constants.nodes.group;
+
+    this.fontSize = constants.nodes.fontSize;
+    this.fontFace = constants.nodes.fontFace;
+    this.fontColor = constants.nodes.fontColor;
+
+    this.borderColor = constants.nodes.borderColor;
+    this.backgroundColor = constants.nodes.backgroundColor;
+    this.highlightColor = constants.nodes.highlightColor;
+
+    // set defaults for the properties
+    this.id = undefined;
+    this.style = constants.nodes.style;
+    this.image = constants.nodes.image;
+    this.x = 0;
+    this.y = 0;
+    this.xFixed = false;
+    this.yFixed = false;
+    this.radius = constants.nodes.radius;
+    this.radiusFixed = false;
+    this.radiusMin = constants.nodes.radiusMin;
+    this.radiusMax = constants.nodes.radiusMax;
+
+    this.imagelist = imagelist;
+    this.grouplist = grouplist;
+
+    this.setProperties(properties, constants);
+
+    // mass, force, velocity
+    this.mass = 50;  // kg (mass is adjusted for the number of connected edges)
+    this.fx = 0.0;  // external force x
+    this.fy = 0.0;  // external force y
+    this.vx = 0.0;  // velocity x
+    this.vy = 0.0;  // velocity y
+    this.minForce = constants.minForce;
+    this.damping = 0.9; // damping factor
+};
+
+/*links.Network.Link.prototype._getLineWidth = function() {
+    if (this.from.selected || this.to.selected) {
+        return Math.min(this.width * 50, this.widthMax);
+    }
+    else {
+        return this.width;
+    }
+};*/
+
+links.Network.Link.prototype._line = function (ctx) {
+	if (this.from.selected || this.to.selected) {
+		ctx.strokeStyle = 'red';
+    }
+	else
+		ctx.strokeStyle = this.color;
+    // draw a straight line
+    ctx.beginPath();
+    ctx.moveTo(this.from.x, this.from.y);
+    ctx.lineTo(this.to.x, this.to.y);
+    ctx.stroke();
+};
+
+links.Network.Node.prototype = links.Network.NodeNVL;
+	
+$(document).ready(function(){
+	var nodesTable = null;
+	var linksTable = null;
+	var network = null;
+
+	$.getJSON("{{ urlFor('ajax.graph.json',{'draft':draft.id,'graph':'graphse'}) }}", 
+		function( data ) {
+  			nodesTable = [];
+  			linksTable = [];
+
+  			var n = data.nodes.length;
+  			var color = d3.scale.linear()
+  		    	.domain([0,n/2,n])
+  		    	.range(["#d7191c", "#ffffbf", "#2c7bb6"])
+	  		    //.domain([0,n])
+  			    //.range(["hsl(62,100%,90%)", "hsl(228,30%,20%)"]);
+  			    .interpolate(d3.interpolateHcl);
+  	  			
+  			$.each( data.nodes, function( key, val ) {
+  				nodesTable.push({
+  		      		'id': val.id ,
+  		      		'text': String(val.id),
+  		      		'style' : "circle",
+  		      		backgroundColor: color(key),
+  		      	});
+  			});
+  			$.each( data.links, function( key, val ) {
+  				linksTable.push({
+  		            'from': data.nodes[val.source].id, 
+  		            'to': data.nodes[val.target].id
+  		          });
+  			});
+
+	  		// specify options
+  			var options = {
+  			    'width': '100%',
+  			    'height': '600px',
+  			    stabilize: false,
+  			    'links': {
+  				      'length': 190,
+  				      color: '#E6E6E6'
+  				    },
+  			  };
+
+  			  // Instantiate our graph object.
+  			  network = new links.Network(document.getElementById('mynetwork'));
+
+  			  // Draw our graph with the created data and options 
+  			  network.draw(nodesTable, linksTable, options);
+  			  
+  			  // Add event listeners
+  			  links.events.addListener(network, 'select', function(params) {
+  			    document.getElementById('selection').innerHTML = 
+  			      'Selection: ' + JSON.stringify(network.getSelection());
+  			  });
+	});	
+
+
+});
+</script>
+{% endblock %}
+
+{% block injectCSS %}
+	{{ parent() }}
+<style type="text/css">
+
+	
+	
+</style>
+{% endblock %}
