@@ -38,18 +38,19 @@
 	// specify options
 	var options = {
 		width:  "100%",
-		height: "500px",
-		style: "box",
+		height: "auto",
+		style: "dot",
 		showNavigation: true,
-		showButtonNew: true,
-		eventMargin: 30,  // minimal margin between events
+		showButtonNew: false,
+		//eventMargin: 30,  // minimal margin between events
 		enableKeys: true,
 		min: new Date(2013, 02, 01),
 		max: new Date(2013, 11, 31),
-		cluster: true,
+		cluster: false,
 		axisOnTop: true,
 	};
 
+	{% block config %}
 	function onselect() {
 		if (!timeline) return;
 		var sel = timeline.getSelection();
@@ -59,13 +60,37 @@
 		    	var row = sel[0].row;
 		      	var gg = timeline.getItem(row);
 		      	var hh = timeline.getData()[row];
-		      	$('#event-details').text(JSON.stringify(hh));
+
+		      	var msg = $.parseJSON(hh.message);
+		      	$('#event-details').text(msg.user_agent);
 		      	$('#event-details').show();
 		    }
 		}
 	}
 
-	{% block config %}
+	function updateUserLinks()
+	{
+		$(".timeline-groups-text").each(function(i,e) {
+			var username = $(this).text();
+			$(this).empty().append(
+					$('<a/>', {
+						href: "{{ urlFor('admin.logs') }}/" + username + "/" ,
+						title: 'Become a Googler',
+						text: username
+					}));
+		});
+	}
+
+	function onReady() {
+		console.log("READY");
+		updateUserLinks();
+	}
+	
+	
+	function onTimeChanged() {
+		updateUserLinks();
+	}
+	
 	$(document).ready(function() {
         // Instantiate our timeline object.
         timeline =new links.Timeline(document.getElementById('activity-log'));
@@ -74,13 +99,17 @@
 			var items = [];
 			 $.each( data.items, function( key, val ) {
 				 if (val.action!="ACTION.LOGIN") return;
-				 
+				 //if (val.username == "admin") return;
+				 if (val.username == "anon") return;
+				 if (val.username.indexOf("safesea")!=-1) return;
 				 val.start = new Date(val.date);
+				 //val.end = new Date(val.start.getTime() + 60000);
 				 val.content = val.username;
 				 val.className = val.username;
 
 				 grp =  val.username.split(/[0-9]+/);
-				 //val.group =  grp[0];
+				 val.group =  grp[0];
+				 val.group =  val.username;
 
 				 items.push( val );
 				 });
@@ -88,13 +117,8 @@
 			// Draw our timeline with the created data and options
 	        timeline.draw(items, options);
 	        links.events.addListener(timeline, 'select', onselect);	
-	        /*$( "#activity-log" ).resizable({ 
-		        ghost: true, 
-		        handles: "s",
-		        stop: function( event, ui ) {
-		        	timeline.checkResize();
-			        }
-			});*/
+	        links.events.addListener(timeline, 'rangechanged', onTimeChanged);
+	        updateUserLinks();
 		});
 	
 	});
@@ -116,6 +140,16 @@ div.timeline-event.admin {
 div.timeline-event.demo {
     background-color: #D8F6D6;
     border-color: #98F89E;
+}
+
+div.timeline-event-dot-container > .timeline-event-content
+{
+	width: 0px;
+}
+
+div.timeline-event-dot-container.timeline-event-cluster > .timeline-event-content
+{
+	width: inherit;
 }
 -->
 </style>

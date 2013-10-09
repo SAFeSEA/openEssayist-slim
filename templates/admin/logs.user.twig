@@ -2,26 +2,41 @@
 
 {% block config %}
 	$(document).ready(function() {
+		options.style= "dot";
+		options.cluster= false;
+		options.eventMargin = 0;
+		options.eventMarginAxis = 0;
+		
+		
         // Instantiate our timeline object.
         timeline =new links.Timeline(document.getElementById('activity-log'));
         
         classmap = {
-        	"ACTION.LOGIN" 	: "act-login",
-            "ACTION.MASHUP.SELECT" 	: "act-login",
-        	"ACTION.MASHUP.INIT"	: "act-action",
-        	"ACTION.KEYWORD.GROUP"		: "act-login",
-        	"REPORT.USEFULNESS"		: "act-login",
-        	"/me/essay/"			: "group-action"
+        	"ACTION.LOGIN" 	: { class: "act-login", content:"<i class='icon icon-off'></i>"},
+            "ACTION.MASHUP.SELECT" 	: { class: "act-login", content:""},
+        	"ACTION.MASHUP.INIT"	: { class: "act-action", content:""},
+        	"ACTION.KEYWORD.GROUP"		: { class: "act-login", content:""},
+        	"REPORT.USEFULNESS"		: { class: "act-login", content:""},
+        	"/me/essay/"			: { class: "group-action", content:""}
         };
 	
 		$.getJSON("{{ urlFor('admin.data.logs') }}", function( data ) {
 			var items = [];
+			var previtem = null;
 			 $.each( data.items, function( key, val ) {
 			 	 if (val.username!="{{ userlog }}") return;
 			 	 if (val.action=="ACTION.MASHUP.INIT") return;
 				 
-				 val.className = classmap[val.action] || "";
+				 //val.className = (classmap[val.action]) ? classmap[val.action].class : "";
+			 	 //val.content = (classmap[val.action]) ? classmap[val.action].class : "";
 			 	 val.content = val.action;
+			 	 val.group =  "/";
+			 	 if (classmap[val.action])
+			 	 {
+					 val.className = (classmap[val.action].class) || "";
+				 	 val.content = (classmap[val.action].content) || val.action;
+				}
+			 	 
 			 	 if (val.action=="GET")
 			 	 {
 			 	 	if (val.message.indexOf("/me/draft/") != -1)
@@ -29,7 +44,10 @@
 			 	 		val.className = "act-view";
 						var gg = val.message.split(/[0-9]+/);
 						if (gg.length>1)
+						{
 							val.content = gg[1];
+							val.group = gg[1];
+						}
 			 	 	}
 			 	 	else if (val.message.indexOf("/me/essay") != -1)
 			 	 	{
@@ -37,23 +55,27 @@
 						if (gg.length>1)
 						{
 							val.content = gg[1];
-							val.className = classmap[gg[0]] || "group-action";
+							val.className = (classmap[gg[0]]) ? classmap[gg[0]].class : "group-action";
+							
 						}
 			 	 	}
 			 	 	else
-			 	 		val.content = "MANAGEMENT";
+			 	 		val.content = "<i class='icon icon-cogs'></i>";
 			 	 	
 			 	 }
 			 	 //if (val.action=="GET" && val.message.indexOf("/me/draft/") == -1) return;
 			 	 if (val.action=="POST" && val.message.indexOf("/tutor/logactivity") != -1) return;
 			 	 val.start = new Date(val.date);
-			 	 
+			 	 if (previtem)
+			 	 	previtem.end = new Date(val.start - 1000);
+			 	 	//previtem.end = new Date(val.start.getTime() + 60000);
 					//grp =  val.username.split(/[0-9]+/);
 					//val.group =  val.action;
 				 items.push( val );
+				 previtem = val;
 			});
 
-			options.cluster = false;
+			
 			options.eventMargin= 10;
 	        // Draw our timeline with the created data and options
 	        timeline.draw(items, options);
@@ -69,14 +91,23 @@
 {{ parent() }}
 <style>
 <!--
+div.timeline-event-content {
+	margin: 0px;
+}
 div.timeline-event.act-login {
-    background-color: #F6D6D6;
-    border-color: #F89898;
+background-color: #D8F6D6;
+    border-color: #98F89E;
 }
 
 div.timeline-event.act-view {
-    background-color: #D8F6D6;
-    border-color: #98F89E;
+    background-color: #F6D6D6;
+    border-color: #F89898;
+    }
+
+div.timeline-event-selected {
+    background-color: #FFF785 !important;
+    border-color: #FFC200;
+    z-index: 999;
 }
 -->
 </style>
