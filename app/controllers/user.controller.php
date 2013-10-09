@@ -1410,6 +1410,49 @@ class UserController extends Controller
 		
 	}
 	
+	private function generateNetworkView($draft,$template)
+	{
+		$dr = $this->getDraft($draft);
+		$tsk = $dr->task()->find_one();
+		
+		$analysis = $dr->getAnalysis(true);
+		$gr = json_decode($analysis['se_sample_graph'],true);
+		
+		$this->render($template,array(
+				'task' => $tsk->as_array(),
+				'draft' => $dr->as_array(),
+				'graph' => $gr
+		));
+		
+	}
+	
+	public function viewLinksNetwork($draft)
+	{
+		$this->generateNetworkView($draft,"drafts/view.lnetwork");
+	}
+	
+	public function viewVivaGraph($draft)
+	{
+		$this->generateNetworkView($draft,"drafts/view.vivagraph");
+		
+	}	
+	
+	public function viewSigmaGraph($draft)
+	{
+		$this->generateNetworkView($draft,"drafts/view.sigma");
+	}
+	
+	public function viewVoronoiGraph($draft)
+	{
+		$this->generateNetworkView($draft,"drafts/view.voronoi");
+	}
+
+	public function viewHivePlot($draft)
+	{
+		$this->generateNetworkView($draft,"drafts/view.hive");
+	}
+	
+	
 	public function viewGraph($draft,$graph=null)
 	{
 		$graphlist = array(
@@ -1714,10 +1757,21 @@ class UserController extends Controller
 		
 		$analysis = $dr->getAnalysis(true);
 		$gr = json_decode($analysis[$config[$graph]],true);
-		
+
+		if ($graph == "graphse")
+		{
+			$parasenttok = $dr->getParasenttok();
+			$result = array();
+			foreach ($parasenttok as $par) {
+				foreach ($par as $sent) {
+					$result[] = $sent;
+				}
+			}
+			$gr['parasenttok'] = $result;
+		}
 		
 		$response = $this->app->response();
-		$response['Content-Type'] = 'application/json';
+		$response['Content-Type'] = 'application/json;charset=UTF-8';
 		$response['X-Powered-By'] = 'openEssayist';
 		$response->status(200);
 		$response->body(json_encode($gr));
