@@ -141,7 +141,7 @@ class AdminController extends Controller
 	
 	public function getLogs()
 	{
-		// read all log files in the logs directory
+		// read all log files in the logs (or remotelogs!) directory
 		$logfiles = glob('../.logs/*.log',GLOB_BRACE);
 		
 		$csvArr = array();
@@ -160,13 +160,14 @@ class AdminController extends Controller
 		});
 		
 		$json['items']=array();
-		foreach ($csvArr as $var)
+		foreach ($csvArr as $key=>$var)
 		{
 			// fix bug with missing user identification in old logs
 			if ($var['action'] == 'ACTION.LOGIN' && $var['message']==null)
 			{
+				$nextevent = $csvArr[$key+1];
 				$var['message'] = $var['user'];
-				$var['user'] = '[admin @ 127.0.0.1]';
+				$var['user'] = ($nextevent)? $nextevent['user'] : '[admin @ 127.0.0.1]';
 			}
 			// get path of view, if relevant log event
 			if ($var['action'] == 'GET' && strpos($var['message'], '/me/draft/')!==FALSE)
