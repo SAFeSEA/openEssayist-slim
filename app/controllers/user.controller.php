@@ -1762,8 +1762,9 @@ class UserController extends Controller
 		{
 			$parasenttok = $dr->getParasenttok();
 			$result = array();
-			foreach ($parasenttok as $par) {
-				foreach ($par as $sent) {
+			foreach ($parasenttok as $key => $par) {
+				foreach ($par as &$sent) {
+					$sent['par'] = "par_id".$key;
 					$result[] = $sent;
 				}
 			}
