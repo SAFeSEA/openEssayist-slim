@@ -8,3 +8,4 @@ app/localconfig.php
 /vendor
 /.cache
 /.logs
+/remotelogs
