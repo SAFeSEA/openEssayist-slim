@@ -173,7 +173,7 @@
 		      	//var gg = timeline.getItem(row);
 		      	var hh = timeline.getData()[row];
 
-		      	if (hh.type=="marker")
+		      	if (hh.type!="dot")
 		      	{
 			      	$('#detail-message').text(hh.content);
 				}
@@ -218,18 +218,26 @@
         $.getJSON("{{ urlFor('admin.data.logs') }}", function( data ) {
 			var items = [];
 			 $.each( data.items, function( key, val ) {
-				 if (val.action!="ACTION.LOGIN") return;
+				 if (val.action!="ACTION.LOGIN" && val.action!="POST") return;
 				 //if (val.username == "admin") return;
+				 if (val.action=="POST" && val.message.indexOf("/submit/")==-1) return;
 				 if (val.username == "anon") return;
 				 if (val.username.indexOf("safesea")!=-1) return;
 				 val.start = new Date(val.date);
-				 //val.end = new Date(val.start.getTime() + 60000);
+				 //
 				 val.content = val.username;
 				 val.className = val.username;
 
 				 grp =  val.username.split(/[0-9]+/);
 				 val.group =  grp[0];
 				 val.group =  val.username;
+				 val.type = "dot";
+
+				 if (val.action=="POST" && val.message.indexOf("/submit/")!=-1)
+				 {
+				 	val.type = "range";
+				 	val.end = new Date(val.start.getTime() + 60000);
+				 }
 
 				 items.push( val );
 				 });
