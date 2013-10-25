@@ -7,6 +7,12 @@
  */
 abstract class Controller extends Application {
 
+	/**
+	 * 
+	 * @var UAS\Parser
+	 */
+	private $UAParser = null;
+	
 	public function __construct()
 	{
 		parent::__construct();
@@ -16,6 +22,17 @@ abstract class Controller extends Application {
 			$this->user = $this->auth->getUser();
 			//var_dump($this->user);
 		}
+		$this->UAParser = new \UAS\Parser("../.cache/.UPA/",null,false,false);
+	}
+	
+	public function getUserAgent($ua=null)
+	{
+		$ret = null;
+		if ($this->UAParser)
+		{
+			$ret = $this->UAParser->parse($ua);
+		}
+		return $ret;
 	}
 	
 	public function timeSince($ptime) {

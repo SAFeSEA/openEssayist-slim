@@ -15,6 +15,7 @@ require_once "../app/application.php";
 require_once "../app/utils/LoggerMiddleware.php";
 require_once "../app/utils/PDOAdmin.php";
 require_once "../app/utils/StrongAuthAdmin.php";
+require_once "../app/utils/UASparser.php";
 
 // Controllers
 require_once "../app/controller.php";
