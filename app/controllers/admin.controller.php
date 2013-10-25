@@ -142,7 +142,7 @@ class AdminController extends Controller
 	public function getLogs()
 	{
 		// read all log files in the logs (or remotelogs!) directory
-		$logfiles = glob('../.logs/*.log',GLOB_BRACE);
+		$logfiles = glob('../remotelogs/*.log',GLOB_BRACE);
 		
 		$csvArr = array();
 		foreach ($logfiles as $logfile)
@@ -189,6 +189,115 @@ class AdminController extends Controller
 		$response->status(200);
 		$response->body(json_encode($json));
 	}
+	
+	public function getLogsCSV()
+	{
+		// read all log files in the logs (or remotelogs!) directory
+		$logfiles = glob('../remotelogs/*.log',GLOB_BRACE);
+	
+		$csvArr = array();
+		foreach ($logfiles as $logfile)
+		{
+			$csvArr = array_merge($csvArr,
+					$this->csv_to_array(file_get_contents($logfile)," | ",
+							array("level","date","action","user","message")));
+		}
+		// Filter non-INFO events (usually ERROR)
+		$csvArr = array_filter($csvArr,function(&$var)
+		{
+			//return ($var['level']=='INFO' &&  strpos($var['message'], '/me/draft/')!==FALSE);
+			//return ($var['level']=='INFO' &&  strpos($var['action'], 'ACTION.LOGIN')!==FALSE);
+			return ($var['level']=='INFO');
+		});
+	
+		$json['items']=array();
+		
+		foreach ($csvArr as $key=>$var)
+		{
+			// filter out logactivity msgs
+			if ($var['action'] == 'POST' && strpos($var['message'], '/tutor/logactivity')!==FALSE) continue;
+			
+			// fix bug with missing user identification in old logs
+			if ($var['action'] == 'ACTION.LOGIN' && $var['message']==null)
+			{
+				$nextevent = $csvArr[$key+1];
+				$var['message'] = $var['user'];
+				$var['user'] = ($nextevent)? $nextevent['user'] : '[admin @ 127.0.0.1]';
+			}
+			// reformat user_agent
+			$ua = null;
+			if ($var['action'] == 'ACTION.LOGIN')
+			{
+				$msg = json_decode($var['message'],true);
+				$var['message'] = $msg['user_agent'];
+				$ua = $this->getUserAgent($var['message']);
+			}
+			
+			$var['TASKID']="";
+			$var['DRAFTID']="";
+			$var['RES']="";
+			// get path of view, if relevant log event
+			if ($var['action'] == 'GET' && strpos($var['message'], '/me/draft/')!==FALSE)
+			{
+				preg_match("/(\/me\/.*)([0-9]+)(.*)/i",$var['message'],$keywords);
+				//var_dump($var['message'],$keywords);die();
+				if ($res)
+				{
+					$var['DRAFTID'] = $keywords[2];
+					$var['RES'] = $keywords[3	];
+				}
+					
+			}
+			// get path of view, if relevant log event
+			else if ($var['action'] == 'GET' && strpos($var['message'], '/me/essay/')!==FALSE)
+			{
+				$res = preg_match("/(\/me\/.*)([0-9]+)(.*)/i",$var['message'],$keywords);
+				//var_dump($var['message'],$keywords);die();
+				if ($res)
+				{
+					$var['TASKID'] = $keywords[2];
+					$var['RES'] = $keywords[3	];
+				}
+				
+			}
+			//extract username
+			$keywords = preg_split("/[\[\@ \]]+/", $var['user'] );
+			$var['user'] = $keywords[1]."\t".$keywords[2];
+
+			// format date for windows (excel!)
+			$date = new DateTime($var['date']);
+			$var['date'] = $date->format('Y/m/d H:i:s');
+			
+			if ($ua)
+			{
+				$var['UA_BROWSER'] = $ua['ua_name'];
+				$var['UA_OS'] = $ua['os_name'];
+				$var['UA_DEVICE'] = $ua['device_type'];
+			}
+				
+			$json['items'][] = $var;
+		}
+		
+		$str="";
+		$headers= array(
+				"LEVEL","DATE","ACTION", "USER","IP","MSG",
+				"TASKID","DRAFTID","RES",
+				"BROWSER","OS","DEVICE"
+			);
+		$str =$str."".join("\t", $headers)."\n";
+		foreach ($json['items'] as $key=>$var)
+		{
+			$str =$str."".join("\t", $var)."\n";
+		}
+		
+		//die();
+		$response = $this->app->response();
+		$response['Content-Type'] = 'text/tab-separated-values';
+		//$response['Content-Type'] = 'text/plain';
+		$response['X-Powered-By'] = 'openEssayist';
+		$response->status(200);
+		$response->body($str);
+	}	
 	
 	public function showLogs()
 	{
