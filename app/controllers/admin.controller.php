@@ -239,8 +239,8 @@ class AdminController extends Controller
 			// get path of view, if relevant log event
 			if ($var['action'] == 'GET' && strpos($var['message'], '/me/draft/')!==FALSE)
 			{
-				preg_match("/(\/me\/.*)([0-9]+)(.*)/i",$var['message'],$keywords);
-				//var_dump($var['message'],$keywords);die();
+				preg_match("/(\/me\/.*\/)([0-9]+)(.*)/i",$var['message'],$keywords);
+				//var_dump($var['message'],$keywords);
 				if ($res)
 				{
 					$var['DRAFTID'] = $keywords[2];
@@ -251,12 +251,12 @@ class AdminController extends Controller
 			// get path of view, if relevant log event
 			else if ($var['action'] == 'GET' && strpos($var['message'], '/me/essay/')!==FALSE)
 			{
-				$res = preg_match("/(\/me\/.*)([0-9]+)(.*)/i",$var['message'],$keywords);
-				//var_dump($var['message'],$keywords);die();
+				$res = preg_match("/(\/me\/.*\/)([0-9]+)(.*)/i",$var['message'],$keywords);
+				//var_dump($var['message'],$keywords);
 				if ($res)
 				{
 					$var['TASKID'] = $keywords[2];
-					$var['RES'] = $keywords[3	];
+					$var['RES'] = $keywords[3];
 				}
 				
 			}
