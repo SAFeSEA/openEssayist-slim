@@ -38,12 +38,27 @@
 	<div class="span4">
 		<div class="widget">
 			<div class="widget-header">
-				<h3>Analyser</h3>
+				<h3>Reports</h3>
 			</div>
 			<div class="widget-content"> 
-				<p><a class="btn" href="{{ urlFor('admin.json') }}">
-					<i class="icon-cog"></i>
-					<span>Show JSON structure</span>
+				<p><a class="btn" href="{{ urlFor('admin.feedback') }}">
+					<i class="icon-desktop"></i>
+					<span>Show all students' feedback</span>
+				</a></p>
+				<p><a class="btn" href="{{ urlFor('admin.logs') }}">
+					<i class="icon-desktop"></i>
+					<span>Show Activity Logs</span>
+				</a></p>
+			</div> 
+		
+			<div class="widget-content"> 
+				<p><a class="btn" href="{{ urlFor('admin.data.csv') }}">
+					<i class="icon-download"></i>
+					<span>Download activity logs (TAB-separated)</span>
+				</a></p>
+				<p><a class="btn" href="{{ urlFor('admin.data.content') }}">
+					<i class="icon-download"></i>
+					<span>Download contents (Excel)</span>
 				</a></p>
 			</div> 
 		</div>
