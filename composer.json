@@ -1,5 +1,5 @@
 {
-    "minimum-stability": "dev",
+    "minimum-stability":"dev",
     "autoload":{
         "psr-0":{
             "Requests":"library/"
@@ -37,6 +37,7 @@
         "jamie/paris":"1.0.*",
         "jamie/idiorm":"1.0.*",
         "respect/validation":"dev-develop",
-        "rmccue/requests":">=1.0"
+        "rmccue/requests":">=1.0",
+        "phpoffice/phpexcel":"*"
     }
 }
