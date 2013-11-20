@@ -30,7 +30,7 @@
         }
     ],
     "require":{
-        "slim/slim":"2.*",
+        "slim/slim":"2.2.*",
         "slim/extras":"dev-develop",
         "slim/strong":"dev-master",
         "twig/twig":"dev-master",

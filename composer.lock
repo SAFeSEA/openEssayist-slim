@@ -1,5 +1,9 @@
 {
-    "hash": "8a084790f05b4b3c6a6a532eaf209013",
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "1304188efeaf45803cfc04bd669e9479",
     "packages": [
         {
             "name": "jamie/idiorm",
@@ -29,17 +33,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Respect/Validation.git",
-                "reference": "21ef9dae33f9c8bca1ad2bd4d703c356ae39a719"
+                "reference": "7002c641ac3f8ad68a1635901b4929f835e7bf78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Respect/Validation/zipball/21ef9dae33f9c8bca1ad2bd4d703c356ae39a719",
-                "reference": "21ef9dae33f9c8bca1ad2bd4d703c356ae39a719",
+                "url": "https://api.github.com/repos/Respect/Validation/zipball/7002c641ac3f8ad68a1635901b4929f835e7bf78",
+                "reference": "7002c641ac3f8ad68a1635901b4929f835e7bf78",
                 "shasum": ""
             },
             "require-dev": {
                 "symfony/validator": "2.*",
                 "zendframework/zend-validator": "2.*"
+            },
+            "suggest": {
+                "ext-bcmath": "*",
+                "ext-mbstring": "*"
             },
             "type": "library",
             "autoload": {
@@ -47,7 +55,7 @@
                     "Respect\\Validation": "library/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD Style"
             ],
@@ -58,12 +66,13 @@
                     "homepage": "http://henriquemoody.com/"
                 },
                 {
-                    "name": "Alexandre Gaigalas",
+                    "name": "Alexandre Gomes Gaigalas",
                     "email": "alexandre@gaigalas.net"
                 },
                 {
                     "name": "Carlos André Ferrari",
-                    "email": "caferrari@gmail.com"
+                    "email": "caferrari@gmail.com",
+                    "homepage": "http://ferrari.eti.br/"
                 },
                 {
                     "name": "Devin Torres",
@@ -118,7 +127,7 @@
                     "email": "t.brodt@gmail.com"
                 },
                 {
-                    "name": "Kinn Coelho Julião",
+                    "name": "Kinn Coelho Julião",
                     "email": "kinncj@gmail.com",
                     "homepage": "http://kinncj.com.br",
                     "role": "Developer"
@@ -129,7 +138,7 @@
                 }
             ],
             "description": "The most awesome validation engine ever created for PHP",
-            "time": "2013-04-30 17:13:14"
+            "time": "2013-09-23 00:55:30"
         },
         {
             "name": "rmccue/requests",
@@ -137,16 +146,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/rmccue/Requests.git",
-                "reference": "cbf5cb60372828f22c33a9563b0fa294323ba69a"
+                "reference": "756374edd59ac69268ed35481a506ebd4e732525"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rmccue/Requests/zipball/cbf5cb60372828f22c33a9563b0fa294323ba69a",
-                "reference": "cbf5cb60372828f22c33a9563b0fa294323ba69a",
+                "url": "https://api.github.com/repos/rmccue/Requests/zipball/756374edd59ac69268ed35481a506ebd4e732525",
+                "reference": "756374edd59ac69268ed35481a506ebd4e732525",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2"
+            },
+            "require-dev": {
+                "satooshi/php-coveralls": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -154,7 +166,7 @@
                     "Requests": "library/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "ISC"
             ],
@@ -175,7 +187,7 @@
                 "iri",
                 "sockets"
             ],
-            "time": "2013-04-29 06:05:08"
+            "time": "2013-10-06 13:30:32"
         },
         {
             "name": "slim/extras",
@@ -184,12 +196,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeguy/Slim-Extras.git",
-                "reference": "3e8f94545b5a6ce7ed90b416c54eb5c732ba5263"
+                "reference": "5bceb3658f77a2b237f5b70ac02a0834fed871f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeguy/Slim-Extras/zipball/3e8f94545b5a6ce7ed90b416c54eb5c732ba5263",
-                "reference": "3e8f94545b5a6ce7ed90b416c54eb5c732ba5263",
+                "url": "https://api.github.com/repos/codeguy/Slim-Extras/zipball/5bceb3658f77a2b237f5b70ac02a0834fed871f9",
+                "reference": "5bceb3658f77a2b237f5b70ac02a0834fed871f9",
                 "shasum": ""
             },
             "require": {
@@ -203,7 +215,7 @@
                     "Slim\\Extras": "."
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -211,7 +223,7 @@
                 {
                     "name": "Andrew Smith",
                     "email": "a.smith@silentworks.co.uk",
-                    "homepage": "http://www.silentworks.co.uk/"
+                    "homepage": "http://thoughts.silentworks.co.uk/"
                 },
                 {
                     "name": "Josh Lockhart",
@@ -226,20 +238,20 @@
                 "middleware",
                 "templating"
             ],
-            "time": "2013-04-29 14:14:12"
+            "time": "2013-05-24 13:41:59"
         },
         {
             "name": "slim/slim",
             "version": "2.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/codeguy/Slim",
-                "reference": "2.2.0"
+                "url": "https://github.com/codeguy/Slim.git",
+                "reference": "b8181de1112a1e2f565b40158b621c34ded38053"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/codeguy/Slim/archive/2.2.0.zip",
-                "reference": "2.2.0",
+                "url": "https://api.github.com/repos/codeguy/Slim/zipball/b8181de1112a1e2f565b40158b621c34ded38053",
+                "reference": "b8181de1112a1e2f565b40158b621c34ded38053",
                 "shasum": ""
             },
             "require": {
@@ -251,7 +263,7 @@
                     "Slim": "."
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -294,7 +306,7 @@
                     "Strong": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -324,12 +336,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Twig.git",
-                "reference": "ba88c755579c06e7ccb5ee73c6e27e88a1fed114"
+                "reference": "cf21274a00b402d9b54b7478bedb040ce6befc56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/ba88c755579c06e7ccb5ee73c6e27e88a1fed114",
-                "reference": "ba88c755579c06e7ccb5ee73c6e27e88a1fed114",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/cf21274a00b402d9b54b7478bedb040ce6befc56",
+                "reference": "cf21274a00b402d9b54b7478bedb040ce6befc56",
                 "shasum": ""
             },
             "require": {
@@ -338,7 +350,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.13-dev"
+                    "dev-master": "1.15-dev"
                 }
             },
             "autoload": {
@@ -346,9 +358,9 @@
                     "Twig_": "lib/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD-3"
+                "BSD-3-Clause"
             ],
             "authors": [
                 {
@@ -365,10 +377,12 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2013-05-17 10:06:31"
+            "time": "2013-11-06 10:15:23"
         }
     ],
-    "packages-dev": null,
+    "packages-dev": [
+
+    ],
     "aliases": [
 
     ],
@@ -378,5 +392,11 @@
         "slim/strong": 20,
         "twig/twig": 20,
         "respect/validation": 20
-    }
+    },
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
 }
