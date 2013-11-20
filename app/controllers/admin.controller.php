@@ -30,21 +30,25 @@ class AdminController extends Controller
 		$groups = Model::factory('Group')->find_many();
 		foreach ($groups as $gr)
 		{
+			$newusers = array();
 			$users = $gr->users()->find_many();
-			foreach ($users as &$user)
+			
+			foreach ($users as $user)
 			{
 				/* @var $dr Draft */
 				$drs = $user->drafts();
-				//$dr = $drs->find_many();
-				//if ($dr)var_dump($dr[0]->as_array());
-				$user->drafts = $drs->count();
+				$tt = $user->as_array();
+				$tt['drafts'] = $drs->count();
+				$newusers[]=$tt;
 			}
+			
 			$data[] = array(
-					'group' => $gr,
-					'users' => $users
+					'group' => $gr->as_array(),
+					'users' => $newusers
 			);
 				
 		}
+		
 		$this->render('admin/users.all',array('data' => $data));
 	
 	}
@@ -55,9 +59,10 @@ class AdminController extends Controller
 		$groups = Model::factory('Group')->find_many();
 		foreach ($groups as $gr)
 		{
-			$tasks = $gr->tasks()->find_many();
+			$tasks = $gr->tasks()->find_array();
+			
 			$data[] = array(
-					'group' => $gr,
+					'group' => $gr->as_array(),
 					'tasks' => $tasks
 			);
 		}
@@ -189,12 +194,159 @@ class AdminController extends Controller
 		$response->status(200);
 		$response->body(json_encode($json));
 	}
-	
+
+	public function getContentExcel()
+	{
+		// get all drafts
+		$drafts = Model::factory('Draft')->find_many();
+		
+		$objPHPExcel = new PHPExcel();
+		$objPHPExcel->getProperties()->setCreator("Nicolas Van Labeke")
+			->setLastModifiedBy("Nicolas Van Labeke")
+			->setTitle("H810 content dump")
+			->setSubject("OpenEssayist study")
+			->setDescription("")
+			->setKeywords("openEssayist h810")
+			->setCategory("openEssayist");
+		
+		// create the overview info
+		$objPHPExcel->setActiveSheetIndex(0)
+			->setTitle('Overview');
+
+		// create the sentences info
+		$objPHPExcel->createSheet()->setTitle('Sentences');
+		
+		// merge the keywords
+		$objPHPExcel->createSheet()
+			->setTitle('Keywords');
+		
+		$keywords = array();
+		$stats = array();
+		$sentences = array();
+
+		//create headers
+		$stat = array(
+				"USER",
+				"TASKID",
+				"DRAFTID",
+				'avfreqsum',
+				'sum_freq_kls_in_ass_q_long',
+				'sum_freq_kls_in_ass_q_short',
+				'sum_freq_kls_in_tb_index',
+				'WORDLIMIT',
+				'paras',
+				'len_body',
+				'len_headings',
+				'all_sents',
+				'countTrueSent',
+				'number_of_words',
+				'countAvSentLen',
+				'countAssQSent',
+				'countTitleSent');
+		$stats[] = $stat;
+		
+		$sent = array();
+		$sent["user"] = "USER";
+		$sent["taskid"] = "TASKID";
+		$sent["draftid"] = "DRAFTID";
+		$sent["pid"] = "PAR";
+		$sent["id"] = "SENT";
+		$sent["tag"] = "TAG";
+		$sent["rank"] = "RANK";
+		$sent["text"] = "TEXT";
+		$sentences[] = $sent;
+		
+		$keyword = array();
+		$keyword["user"] ="USER";
+		$keyword["draftid"] ="TASKID";
+		$keyword["id"] ="DRAFTID";
+		$keyword["source"] ="NGRAM";
+		$keyword["count"] = "COUNT";
+		$keyword["score"] = "SCORE";
+		$keyword = array_merge($keyword,array("D0","D1","D2","D3","D4","D5","D6","D7","D8","D9"));
+		$keywords[] = $keyword;
+		
+		foreach ($drafts as $key =>$draft)
+		{
+			$r = $draft->getAnalysis();
+			$ngrams = $r->nvl_data->keywords;
+			$user = $draft->user()->find_one();
+			$tsk = $draft->task()->find_one();
+			
+			
+			if (strncmp($user->username, "user", strlen("user")) != 0) continue;
+			
+			$stat = array();
+			$stat["user"] = $user->username;
+			$stat["taskid"] = $draft->task_id;
+			$stat["draftid"] = $draft->id;
+			$stat = array_merge($stat,
+					(array)$r->ke_stats,
+					array("wordlimit"=>$tsk->wordcount),
+					(array)$r->se_stats
+			);
+			$stats[]= $stat;
+			
+			foreach ($ngrams as $h)
+			{	
+				$keyword = array();
+				$keyword["user"] = $user->username;
+				$keyword["taskid"] = $draft->task_id;
+				$keyword["draftid"] = $draft->id;
+				$keyword["source"] = $h->source[0];
+				$keyword["count"] = $h->count;
+				$keyword["score"] = $h->score[0];
+				$keyword = array_merge($keyword,$h->trend);
+				
+				
+				$keywords[] = $keyword;
+				
+			}
+			
+			$para= $r->se_data->se_parasenttok;
+			foreach ($para as $key=> $p)
+			{
+				$sent = array();
+				foreach ($p as $s){
+					$sent["user"] = $user->username;
+					$sent["taskid"] = $draft->task_id;
+					$sent["draftid"] = $draft->id;
+					$sent["pid"] = $key;
+					$sent["id"] = $s->id;
+					$sent["tag"] = $s->tag;
+					$sent["rank"] = $s->rank;
+					$sent["text"] = $s->text;
+					$sentences[] = $sent;
+				}
+			}
+		}
+			
+		$objPHPExcel->setActiveSheetIndex(1);
+		$objPHPExcel->getActiveSheet()->fromArray($sentences, NULL, 'A1',true);
+		
+		
+		$objPHPExcel->setActiveSheetIndex(2);
+		$objPHPExcel->getActiveSheet()->fromArray($keywords, NULL, 'A1',true);
+		
+		$objPHPExcel->setActiveSheetIndex(0);
+		$objPHPExcel->getActiveSheet()->fromArray($stats, NULL, 'A1',true);
+		
+		$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+		
+		$response = $this->app->response();
+		$response['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf-8';
+		$response['X-Powered-By'] = 'openEssayist';
+		$response->status(200);
+		//$response->body($str);
+		$objWriter->save("php://output");
+		
+	}
+
 	public function getLogsCSV()
 	{
 		// read all log files in the logs (or remotelogs!) directory
 		$logfiles = glob('../remotelogs/*.log',GLOB_BRACE);
-	
+		
 		$csvArr = array();
 		foreach ($logfiles as $logfile)
 		{
