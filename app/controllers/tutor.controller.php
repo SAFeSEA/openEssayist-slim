@@ -334,7 +334,7 @@ class TutorController extends Controller
 			$report->users_id = $this->user['id'];
 			$report->referer = $post['referer'];
 			$report->text = $post['text'];
-			$draft->date = date('Y-m-d H:i:s e');
+			$report->date = date('Y-m-d H:i:s e');
 			$report->save();
 			$this->app->flash('info', 'Your report has been posted successfully. Thanks for your help.');
 			if (empty($post['referer']))
