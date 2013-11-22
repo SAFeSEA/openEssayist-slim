@@ -49,10 +49,14 @@ class LoggerMiddleWare extends \Slim\Middleware
 		$hack= $this->app->urlFor("ajax.log.activity");
 		if ($path==$hack) return;
 		
-		if ($response->isOk())
+		// log INFO if status < 400
+		if ($response->isSuccessful() || $response->isRedirection())
 			$log->info($message);
 		else
+		{
+			var_dump($response);die();
 			$log->warn($message);
+		}
 		
 		
 	}	
