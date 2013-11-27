@@ -1159,8 +1159,6 @@ class UserController extends Controller
 			$categories[] = "".join($ngram," ");
 		}
 		
-		//var_dump($limit);
-		//die();
 		$series3=array();
 		$series4=array();
 		
@@ -1210,8 +1208,6 @@ class UserController extends Controller
 		foreach ($limit as $item)
 			if ($item['tag']!='#-s:h#')
 				$tags[$item['from']] = $item['tag'];
-		//var_dump($tags);
-		//die();
 		
 		$this->render('drafts/view.dispersion',array(
 				'helpontask' => 'view.dispersion',
@@ -1320,7 +1316,6 @@ class UserController extends Controller
 			}
 		}
 		
-		//var_dump($struct2,$count,$gr);die();
 		$tt = array_unique($struct2);
 		$tt = array_flip($tt);
 		$tt = array_keys($tt);
@@ -1509,7 +1504,6 @@ class UserController extends Controller
 				if ($gg[$node[id]])
 					$node['rank'] = $gg[$node[id]]['rank'];
 			}
-			//var_dump($gg,$gr);die();
 		}
 			
 		$this->render($path,array(

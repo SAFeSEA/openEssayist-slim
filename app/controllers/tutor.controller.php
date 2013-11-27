@@ -282,7 +282,6 @@ class TutorController extends Controller
 		
 	
 		$log->info($message);
-		//var_dump($post);die();
 		
 		$response = $this->app->response();
 		$response['Content-Type'] = 'application/json';

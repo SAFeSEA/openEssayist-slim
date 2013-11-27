@@ -96,6 +96,7 @@ abstract class Controller extends Application {
 		//if ($len = strpos(strrev($template), '.')) {
 		//	$template = substr( $template, 0, -($len+1) );
 		//}
+		
 		$this->app->view()->appendData(array('auth' => $this->auth));
 		$this->app->render($template . EXT, $data, $status);
 	}
