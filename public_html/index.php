@@ -232,6 +232,10 @@ $c->app->get('/admin/data/content', array($adminCtrl, 'getContentExcel'))->name(
 $c->app->get('/admin/logs', array($adminCtrl, 'showLogs'))->name('admin.logs');
 $c->app->get('/admin/logs/:userid/', array($adminCtrl, 'showUserLogs'))->name('admin.logs.user');
 
+$c->app->get('/admin/group/:gid/addusers/(:nb(/:prf))', array($adminCtrl, 'addUsersToGroup'))->name('admin.task.adduser');
+$c->app->post('/admin/group/addusers', array($adminCtrl, 'addUsersToGroup'))->name('admin.task.postadduser');
+
+
 //$c->app->get('/demo/draft/:draft/show/', array($demoCtrl, 'showDraft'))->name('demo.draft.show');
 
 $c->app->error(array($appController, 'error'));
