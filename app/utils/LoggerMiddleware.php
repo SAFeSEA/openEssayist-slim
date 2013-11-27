@@ -18,8 +18,6 @@ class LoggerMiddleWare extends \Slim\Middleware
 		$req = $this->app->request();
 		$response = $this->app->response();
 		
-		//var_dump($response->isOk());die();
-		
 		$auth = \Strong\Strong::getInstance();
 		$usr = $auth->getUser();
 		
@@ -54,7 +52,6 @@ class LoggerMiddleWare extends \Slim\Middleware
 			$log->info($message);
 		else
 		{
-			var_dump($response);die();
 			$log->warn($message);
 		}
 		
