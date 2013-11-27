@@ -93,9 +93,121 @@ class AdminController extends Controller
 			
 		}
 		else
-			$this->render('admin/task.edit',array('task' => $task));
+		{
+		
+			$this->render('admin/task.edit',array('task' => $task->as_array()));
+		}
 		
 	
+	}
+	
+	/**
+	 * Very basic password generator
+	 * @return string
+	 */
+	private function generatePWD()
+	{
+		$letters="abcdefghijklmnopqrstuvwxyz";
+		$numbers ="0123456789";
+		
+		$randomstring = '';
+		for ($i=0;$i<1;$i++)
+		{
+			$rlet = rand(0,strlen($letters));
+			$randomstring = $randomstring . $letters[$rlet];
+		}
+		for ($i=0;$i<2;$i++)
+		{
+			$rlet = rand(0,strlen($numbers));
+			$randomstring = $randomstring . $numbers[$rlet];
+		}
+		for ($i=0;$i<3;$i++)
+		{
+			$rlet = rand(0,strlen($letters));
+			$randomstring = $randomstring . $letters[$rlet];
+		}
+		for ($i=0;$i<2;$i++)
+		{
+			$rlet = rand(0,strlen($numbers));
+			$randomstring = $randomstring . $numbers[$rlet];
+		}
+		
+		return $randomstring;
+	}
+
+	
+	public function addUsersToGroup($id=null,$nb=null,$pattern=null)
+	{
+		$response = $this->app->response();
+		$req = $this->app->request();
+		if ($req && $req->isPost())
+		{
+			$post = $req->post();
+				
+			$id = $post['id'];
+			$nb = $post['nb'];
+			$pattern = $post['pattern'];
+		}
+		
+		/* @var $group Group */
+		$group = Model::factory('Group')->find_one($id);
+		$users = $group->users()->find_array();
+		
+		// get a list of username "stubs", with their last ID
+		$stubs=array();
+		foreach ($users as $u){
+			
+			$result = preg_split('/(\d+)/', $u['username'],-1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+			$stubs[$result[0]]=intval($result[1]);
+		}
+		
+		
+		$nb = (intval($nb))?:20;
+		
+		$pattern = ($pattern)?:array_keys($stubs)[0];
+		$lastid = intval($stubs[$pattern]);
+		
+		$mydata=array();
+		$mydata['groupname'] = $group->name;
+		$mydata['groupid'] = $id;
+		$mydata['countall'] = count($users);
+		$mydata['added'] = $nb;
+		$mydata['stub'] = $pattern;
+		$mydata['lastuser'] = $lastid;
+		for ($i=0;$i<$nb;$i++)
+		{
+			$newuser = array();
+			$ii = str_pad($lastid+$i+1, 3, '0', STR_PAD_LEFT);
+			$username = $pattern . $ii;
+			$pwd = $this->generatePWD();
+			
+			$u = Model::factory('Users')->create();
+			$u->name = $username;
+			$u->username = $username;
+			$u->active = 0;
+			$u->password =  Strong\Strong::getInstance()->getProvider()->hashPassword($pwd);
+			$u->ip_address = $this->app->request()->getIp();
+			$u->group_id = $id;
+			//$u->email = $user['Email'];
+			try {
+				$u->save();
+				$newuser['username'] = $username;
+				$newuser['pwd'] = $pwd;
+				$mydata['users'][] = $newuser;
+			}
+			catch (\PDOException  $e) {
+				//var_dump($e->getMessage());
+			}
+			
+		}
+		
+		
+		$response->status(200);
+		$response['Content-Type'] = 'application/json';
+		$response['X-Powered-By'] = 'openEssayist';
+		
+		$response->body($this->indent(json_encode($mydata)));
+		
 	}
 	
 	public function showEssayData()
@@ -107,7 +219,6 @@ class AdminController extends Controller
 
 		$analysis['se_sample_graph'] = json_decode($analysis['se_sample_graph'],true);
 		$analysis['ke_sample_graph'] = json_decode($analysis['ke_sample_graph'],true);
-		//var_dump($analysis['se_sample_graph']);die();
 		
 		$this->render('admin/data.json',array(
 				'keys' => array_keys($analysis),
@@ -520,7 +631,6 @@ class AdminController extends Controller
 			$str =$str."".join("\t", $var)."\n";
 		}
 		
-		//die();
 		$response = $this->app->response();
 		$response['Content-Type'] = 'text/tab-separated-values';
 		//$response['Content-Type'] = 'text/plain';
