@@ -30,7 +30,7 @@
 			            <input type="number" min="1" max="50" step="1" name="count" id="count" value="20">
           			</p>       			
           			<p>
-            			<label>Username stub</label>
+            			<label>Username seed</label>
 			            <input type="text" name="pattern" id="pattern" value="">
           			</p>
           			</fieldset>
@@ -104,6 +104,10 @@
 
 {% block injectJS %}
 	{{ parent() }}
+<script src="{{ app_base }}/assets/jquery.dataTables/js/jquery.dataTables.js"></script>
+<script src="{{ app_base }}/assets/jquery.dataTables/js/plugin.dataTableExt.js"></script>
+<script src="{{ app_base }}/assets/jquery.dataTables/js/plugin.paging.js"></script>
+
 <script id="script-batchusers">
 var bindBatchUser = function(e) {
 	
@@ -153,9 +157,62 @@ var bindBatchUser = function(e) {
 
 $(document).ready(function() {
 	$("#generate-users").click(bindBatchUser);
+
+	$('table.table').dataTable( {
+		"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+		"bPaginate": true,
+        "bLengthChange": false,
+        "bFilter": true,
+        "bSort": true,
+        "bInfo": true,
+        "bAutoWidth": true,
+        "aaSorting": [[ 2, "asc" ]],
+        "aoColumnDefs": [
+             			{ "bSortable": false, "aTargets": [ 0 ] },
+             			{ "sType": "html", "aTargets": [ 0 ] }
+             		],
+        "sPaginationType": "bootstrap"
+
+	} );
+	$('#data-table tbody').removeAttr("role").removeAttr("aria-live").removeAttr("aria-relevant");
+	
+	
 });
 
 
 </script>
 
+{% endblock %}
+
+{% block injectCSS %}
+	{{ parent() }}
+<style type="text/css">
+			
+
+table.table thead .sorting,
+table.table thead .sorting_asc,
+table.table thead .sorting_desc,
+table.table thead .sorting_asc_disabled,
+table.table thead .sorting_desc_disabled {
+    cursor: pointer;
+    *cursor: hand;
+}
+
+table.table thead .sorting:after,
+table.table thead .sorting_asc:after,
+table.table thead .sorting_desc:after 
+{ float: right;}
+table.table thead .sorting:after { font-family: FontAwesome; content: "   ";}
+table.table thead .sorting_asc:after { font-family: FontAwesome; content: "   ";}
+table.table thead .sorting_desc:after { font-family: FontAwesome; content: "   ";}
+
+table.table thead .sorting_asc_disabled {  }
+table.table thead .sorting_desc_disabled { }	
+
+div.dataTables_paginate, div.dataTables_filter {
+	float: right;
+	margin: 0;
+}
+	
+</style>
 {% endblock %}
