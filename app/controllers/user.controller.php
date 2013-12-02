@@ -348,6 +348,7 @@ class UserController extends Controller
 				$formdata["version"] = $post["version"];
 				try {
 					$url = 'http://localhost:8062/api/analysis';
+					
 					$request = Requests::post($url,
 							array(),
 							array(
@@ -362,13 +363,9 @@ class UserController extends Controller
 					
 					if ($request->status_code === 200)
 					{
-						//var_dump($request->body);
-							
 						$json = $request->body;
 						$ret = json_decode($json,true);
-						//var_dump(array_keys($ret));
-						//var_dump($ret['ke_data']['bigram_keyphrases']);
-							
+
 						/* @var $draft Draft */
 						$draft = Model::factory('Draft')->create();
 						$draft->type = 0;
@@ -379,11 +376,13 @@ class UserController extends Controller
 						
 						$draft->users_id = $this->user['id'];
 						$draft->date = date('Y-m-d H:i:s e');
-						$draft->save();
 						
+						$ret = $draft->save();
+
 						// redirect to the "drafts review" page
 						$this->app->flash('info', 'The analysis of your draft was successful. Check the details below.');
 						$r= $this->app->urlFor("me.draft.action",array("idt" => $taskId));
+						
 						$this->redirect($r,false);
 						
 					}
@@ -400,14 +399,21 @@ class UserController extends Controller
 				{
 					$status = 500;
 					$this->app->flashNow("error", "Cannot connect to the analyser. Try again later.");
-					//var_dump($e);
+					//var_dump($e);die();
 				}
 				catch (\PDOException  $e)
 				{
 					$status = 500;
 					$this->app->flashNow("error", "Problem with the database. Try again later.");
-					//var_dump($e);
+					//var_dump($e);die();
 
+				}
+				catch (Exception $e)
+				{
+					$status = 500;
+					$this->app->flashNow("error", "Problem with the database. Try again later.");
+					//var_dump($e);die();
+				
 				}
 			}
 		}
