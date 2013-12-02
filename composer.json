@@ -5,37 +5,14 @@
             "Requests":"library/"
         }
     },
-    "repositories":[
-        {
-            "type":"package",
-            "package":{
-                "name":"jamie/paris",
-                "version":"1.0.0",
-                "dist":{
-                    "url":"https://github.com/j4mie/paris/zipball/master",
-                    "type":"zip"
-                }
-            }
-        },
-        {
-            "type":"package",
-            "package":{
-                "name":"jamie/idiorm",
-                "version":"1.0.0",
-                "dist":{
-                    "url":"https://github.com/j4mie/idiorm/zipball/master",
-                    "type":"zip"
-                }
-            }
-        }
-    ],
+
     "require":{
         "slim/slim":"2.2.*",
         "slim/extras":"dev-develop",
         "slim/strong":"dev-master",
         "twig/twig":"dev-master",
-        "jamie/paris":"1.0.*",
-        "jamie/idiorm":"1.0.*",
+        "j4mie/paris":"*",
+        "j4mie/paris":"*",
         "respect/validation":"dev-develop",
         "rmccue/requests":">=1.0",
         "phpoffice/phpexcel":"*"
