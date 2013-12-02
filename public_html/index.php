@@ -1,8 +1,6 @@
 <?php
 		
 require_once '../vendor/autoload.php';
-require_once '../vendor/jamie/idiorm/idiorm.php';
-require_once '../vendor/jamie/paris/paris.php';
 
 use \Slim\Slim;
 use \Slim\Extras\Views\Twig as TwigView;
@@ -39,7 +37,7 @@ define('EXT', '.twig');
 $app = new \Slim\Slim(array(
 	'openEssayist.async' => false,
 	'view' => new TwigView,
-	'debug' => false,
+	'debug' => true,
     'log.level' => \Slim\Log::DEBUG,
     'log.enabled' => true,
     'log.writer' => new \Slim\Extras\Log\DateTimeFileWriter(array(
@@ -130,6 +128,8 @@ $config = array(
 				array('path' => '/admin/.+', 'admin' => true),
 		),
 );
+
+ORM::configure('logging', true);
 
 // Define and add the StrongAuth middleware to the framework
 $app->add(new StrongAuthAdmin($config, new Strong\Strong($config)));
