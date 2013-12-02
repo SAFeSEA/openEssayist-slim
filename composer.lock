@@ -3,29 +3,125 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "ac93c85541d859313d9565673ee6260d",
+    "hash": "4339a55e25882457a71a6c86c3193ac1",
     "packages": [
         {
-            "name": "jamie/idiorm",
-            "version": "1.0.0",
+            "name": "j4mie/idiorm",
+            "version": "v1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/j4mie/idiorm.git",
+                "reference": "3be516b440734811b58bb9d0b458a4109b49af71"
+            },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/j4mie/idiorm/zipball/master",
-                "reference": null,
-                "shasum": null
+                "url": "https://api.github.com/repos/j4mie/idiorm/zipball/3be516b440734811b58bb9d0b458a4109b49af71",
+                "reference": "3be516b440734811b58bb9d0b458a4109b49af71",
+                "shasum": ""
             },
-            "type": "library"
+            "require": {
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "idiorm.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause",
+                "BSD-3-Clause",
+                "BSD-4-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Simon Holywell",
+                    "email": "treffynnon@php.net",
+                    "homepage": "http://simonholywell.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Jamie Matthews",
+                    "email": "jamie.matthews@gmail.com",
+                    "homepage": "http://j4mie.org",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Durham Hale",
+                    "email": "me@durhamhale.com",
+                    "homepage": "http://durhamhale.com",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "A lightweight nearly-zero-configuration object-relational mapper and fluent query builder for PHP5",
+            "homepage": "http://j4mie.github.com/idiormandparis",
+            "keywords": [
+                "idiorm",
+                "orm",
+                "query builder"
+            ],
+            "time": "2013-09-05 09:01:18"
         },
         {
-            "name": "jamie/paris",
-            "version": "1.0.0",
+            "name": "j4mie/paris",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/j4mie/paris.git",
+                "reference": "b60d0857d10dec757427b336c427c1f13b6a5e48"
+            },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/j4mie/paris/zipball/master",
-                "reference": null,
-                "shasum": null
+                "url": "https://api.github.com/repos/j4mie/paris/zipball/b60d0857d10dec757427b336c427c1f13b6a5e48",
+                "reference": "b60d0857d10dec757427b336c427c1f13b6a5e48",
+                "shasum": ""
             },
-            "type": "library"
+            "require": {
+                "j4mie/idiorm": "1.4.*",
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "paris.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause",
+                "BSD-3-Clause",
+                "BSD-4-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Simon Holywell",
+                    "email": "treffynnon@php.net",
+                    "homepage": "http://simonholywell.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Jamie Matthews",
+                    "email": "jamie.matthews@gmail.com",
+                    "homepage": "http://j4mie.org",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Durham Hale",
+                    "email": "me@durhamhale.com",
+                    "homepage": "http://durhamhale.com",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "A lightweight Active Record implementation for PHP5, built on top of Idiorm",
+            "homepage": "http://j4mie.github.com/idiormandparis",
+            "keywords": [
+                "Active Record",
+                "model",
+                "orm",
+                "paris"
+            ],
+            "time": "2013-09-05 11:19:15"
         },
         {
             "name": "phpoffice/phpexcel",
@@ -122,7 +218,7 @@
                     "homepage": "http://henriquemoody.com/"
                 },
                 {
-                    "name": "Alexandre Gomes Gaigalas",
+                    "name": "Alexandre Gaigalas",
                     "email": "alexandre@gaigalas.net"
                 },
                 {
@@ -183,7 +279,7 @@
                     "email": "t.brodt@gmail.com"
                 },
                 {
-                    "name": "Kinn Coelho Julião",
+                    "name": "Kinn Coelho Julião",
                     "email": "kinncj@gmail.com",
                     "homepage": "http://kinncj.com.br",
                     "role": "Developer"
@@ -279,7 +375,7 @@
                 {
                     "name": "Andrew Smith",
                     "email": "a.smith@silentworks.co.uk",
-                    "homepage": "http://thoughts.silentworks.co.uk/"
+                    "homepage": "http://www.silentworks.co.uk/"
                 },
                 {
                     "name": "Josh Lockhart",
@@ -392,12 +488,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Twig.git",
-                "reference": "cf21274a00b402d9b54b7478bedb040ce6befc56"
+                "reference": "cab9fd9a100e74aafa201a03ca31aeeb4097c9bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/cf21274a00b402d9b54b7478bedb040ce6befc56",
-                "reference": "cf21274a00b402d9b54b7478bedb040ce6befc56",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/cab9fd9a100e74aafa201a03ca31aeeb4097c9bc",
+                "reference": "cab9fd9a100e74aafa201a03ca31aeeb4097c9bc",
                 "shasum": ""
             },
             "require": {
@@ -433,7 +529,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2013-11-06 10:15:23"
+            "time": "2013-11-24 18:36:20"
         }
     ],
     "packages-dev": [
