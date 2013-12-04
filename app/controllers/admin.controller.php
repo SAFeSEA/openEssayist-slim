@@ -1,5 +1,5 @@
 <?php
-use Respect\Validation\Validator as v;
+
 
 /**
  * 
@@ -164,7 +164,8 @@ class AdminController extends Controller
 		
 		$nb = (intval($nb))?:20;
 		
-		$pattern = ($pattern)?:array_keys($stubs)[0];
+		$tmp = array_keys($stubs);
+		$pattern = ($pattern)?:$tmp[0];
 		$lastid = intval($stubs[$pattern]);
 		
 		$mydata=array();
