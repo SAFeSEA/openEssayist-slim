@@ -71,10 +71,15 @@
 				<thead>
 					<tr>
 						<th width="5%">#</th>
-						<th>ID</th>
-						<th>Name</th>
+						<th>Username</th>
 						<th>Active</th>
 						<th class="td-actions">Drafts</th>
+					</tr>
+					<tr>
+						<td></td>
+						<td><input type="text" name="search_platform" placeholder="Search Username" class="search_init" /></td>
+						<td><input type="checkbox" name="search_version" placeholder="Search Active" value="on" class="search_init" /></td>
+						<td><input type="text" name="search_grade" placeholder="Search Draft Number" class="search_init" /></td>
 					</tr>
 				</thead>
 				<tbody>
@@ -82,9 +87,10 @@
 					<tr class={{ user.isadmin? "info" : ""}}>
 					<td><code>{{ user.id }}</code></td>
 					<td>{{ user.username }}</td>
-					<td>{{ user.name }}</td>
 
-					<td>{% if user.active %}<i class="icon-check"></i>{% endif %}
+					<td>{% if user.active %}<i class="icon-check"></i><span style="display: none;"> True</span>
+						
+					    {% endif %}
 					<td><span class="badge {{ user.drafts?'badge-info' }}">{{ user.drafts?:""}}</span></td>
 				
 					</tr>
@@ -115,6 +121,8 @@ var bindBatchUser = function(e) {
 	var stub = $("form#batchuser #pattern").val();
 	var nb = $("form#batchuser #count").val();
 	console.log(id,stub,nb);
+
+
 	$.ajax({
 		type : "POST",
 		method: "post",
@@ -158,24 +166,62 @@ var bindBatchUser = function(e) {
 $(document).ready(function() {
 	$("#generate-users").click(bindBatchUser);
 
+	jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+	    "num-html-pre": function ( a ) {
+	        var x = String(a).replace( /<[\s\S]*?>/g, "" );
+	        return parseFloat( x );
+	    },
+	 
+	    "num-html-asc": function ( a, b ) {
+	        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	    },
+	 
+	    "num-html-desc": function ( a, b ) {
+	        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+	    }
+	} );
+
 	$('table.table').dataTable( {
 		"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
 		"bPaginate": true,
         "bLengthChange": false,
         "bFilter": true,
-        "bSort": true,
+        "bSortCellsTop": true,
         "bInfo": true,
         "bAutoWidth": true,
-        "aaSorting": [[ 2, "asc" ]],
+        "aaSorting": [[ 1, "asc" ]],
         "aoColumnDefs": [
              			{ "bSortable": false, "aTargets": [ 0 ] },
-             			{ "sType": "html", "aTargets": [ 0 ] }
+             			{ "sType": "html", "aTargets": [ 0 ] },
+             			{ "sType": "num-html", "aTargets": [ 3 ] }
              		],
-        "sPaginationType": "bootstrap"
+        "sPaginationType": "bootstrap",
+        "fnInitComplete": function () {
+        	var that = this;
+   
+        	this.find("input:text").each(function(idx, elt) {
+            	var index = idx+1;
+        		$(elt).keyup( function () {
+	        		// Filter on the column (the index) of this element 
+	        		that.fnFilter( this.value, index);
+        			} );
+            });
+        	this.find("input:checkbox").each(function(idx, elt) {
+            	var index = idx+2;
+        		$(elt).change( function () {
+	        		// Filter on the column (the index) of this element 
+	        		var cbval =  ($(this).is(':checked')) ? "True" : '';
+	        		that.fnFilter( cbval, index,true,false);
+        			} );
+            });
+            
+
+                
+        }
 
 	} );
 	$('#data-table tbody').removeAttr("role").removeAttr("aria-live").removeAttr("aria-relevant");
-	
+
 	
 });
 
@@ -189,30 +235,38 @@ $(document).ready(function() {
 <style type="text/css">
 			
 
-table.table thead .sorting,
-table.table thead .sorting_asc,
-table.table thead .sorting_desc,
-table.table thead .sorting_asc_disabled,
-table.table thead .sorting_desc_disabled {
+table.table thead th .sorting,
+table.table thead th .sorting_asc,
+table.table thead th .sorting_desc,
+table.table thead th .sorting_asc_disabled,
+table.table thead th .sorting_desc_disabled {
     cursor: pointer;
     *cursor: hand;
 }
 
-table.table thead .sorting:after,
-table.table thead .sorting_asc:after,
-table.table thead .sorting_desc:after 
+table.table th.sorting:after,
+table.table th.sorting_asc:after,
+table.table th.sorting_desc:after 
 { float: right;}
-table.table thead .sorting:after { font-family: FontAwesome; content: "   ";}
-table.table thead .sorting_asc:after { font-family: FontAwesome; content: "   ";}
-table.table thead .sorting_desc:after { font-family: FontAwesome; content: "   ";}
+table.table th.sorting:after { font-family: FontAwesome; content: "   ";}
+table.table th.sorting_asc:after { font-family: FontAwesome; content: "   ";}
+table.table th.sorting_desc:after { font-family: FontAwesome; content: "   ";}
 
-table.table thead .sorting_asc_disabled {  }
-table.table thead .sorting_desc_disabled { }	
+table.table th.sorting_asc_disabled {  }
+table.table th.sorting_desc_disabled { }	
 
 div.dataTables_paginate, div.dataTables_filter {
 	float: right;
 	margin: 0;
 }
+
+td input.search_init
+{
+	margin-bottom: 0px;
+	padding: 0 2px;
+	font-size: 11px;
+}
+
 	
 </style>
 {% endblock %}
