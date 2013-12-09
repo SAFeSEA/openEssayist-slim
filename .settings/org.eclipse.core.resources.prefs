@@ -1,5 +1,6 @@
 eclipse.preferences.version=1
 encoding//public_html/assets/openessayist/css/application.css=UTF-8
+encoding//templates/admin/logs.table.twig=UTF-8
 encoding//templates/admin/users.all.twig=UTF-8
 encoding//templates/drafts/draft.keyword.twig=UTF-8
 encoding//templates/drafts/view.cloud.twig=UTF-8

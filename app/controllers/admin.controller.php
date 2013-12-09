@@ -454,7 +454,7 @@ class AdminController extends Controller
 		
 	}
 
-	public function getLogsCSV()
+	public function getLogsCSV($format=null)
 	{
 		// read all log files in the logs (or remotelogs!) directory
 		$logfiles = glob('../remotelogs/*.log',GLOB_BRACE);
@@ -479,6 +479,28 @@ class AdminController extends Controller
 		$session = array();
 		// placeholder for last event, per user
 		$lastevent = array();
+		// placeholder for last submit, per user
+		$lastsubmit = array();
+		$draftlist = array();
+		$taskdraftlist = array();
+		$drafttasklist = array();
+		
+		// get all drafts
+		$drafts = Model::factory('Draft')->find_many();
+		foreach ($drafts as $key =>$draft)
+		{
+			$user = $draft->user()->find_one();
+			$tsk = $draft->task()->find_one();
+			if (!$draftlist[$user->username])
+				$draftlist[$user->username] = array();
+			$draftlist[$user->username][]=$draft->id;
+			if (!$taskdraftlist[$draft->task_id])
+				$taskdraftlist[$draft->task_id] = array();
+			$taskdraftlist[$draft->task_id][]=$draft->id;
+			$drafttasklist[$draft->id]=$draft->task_id;
+				
+		}
+		
 		
 		foreach ($csvArr as $key=>$var)
 		{
@@ -503,7 +525,8 @@ class AdminController extends Controller
 			
 			//extract username and IP address
 			$keywords = preg_split("/[\[\@ \]]+/", $var['user'] );
-			$var['user'] = $keywords[1]."\t".$keywords[2];
+			$var['user'] = $keywords[1];
+			$var['ip'] = $keywords[2];
 			$username = $keywords[1];
 			
 			// build an incremental index for "session" (based on successive login per user)
@@ -529,6 +552,7 @@ class AdminController extends Controller
 			$var['DURATION']=0;
 			
 			// add information parsed from draft/task URLs (if applicable) 			
+			$var['BASE']="";
 			$var['TASKID']="";
 			$var['DRAFTID']="";
 			$var['RES']="";
@@ -538,9 +562,11 @@ class AdminController extends Controller
 				preg_match("/(\/me\/.*\/)([0-9]+)(.*)/i",$var['message'],$keywords);
 				//var_dump($var['message'],$keywords);
 				if ($res)
-				{
+				{	
+					$var['BASE']= "DRAFT";
+					$var['TASKID']=$drafttasklist[$keywords[2]];
 					$var['DRAFTID'] = $keywords[2];
-					$var['RES'] = $keywords[3	];
+					$var['RES'] = $keywords[3];
 				}
 					
 			}
@@ -551,12 +577,30 @@ class AdminController extends Controller
 				//var_dump($var['message'],$keywords);
 				if ($res)
 				{
+					$var['BASE']= "TASK";
 					$var['TASKID'] = $keywords[2];
 					$var['RES'] = $keywords[3];
 				}
 				
 			}
-						
+			// get path of view, if relevant log event
+			else if ($var['action'] == 'POST' && strpos($var['message'], '/submit/')!==FALSE)
+			{
+				if (!$lastsubmit[$username])
+					$lastsubmit[$username] = 0;
+				
+				$g = $draftlist[$username][$lastsubmit[$username]];
+				
+				$res = preg_match("/(\/me\/.*\/)([0-9]+)(.*)/i",$var['message'],$keywords);
+				if ($res)
+				{
+					$var['BASE']= "TASK";
+					$var['TASKID'] = $keywords[2];
+					$var['DRAFTID'] = $g;
+					$var['RES'] = $keywords[3];
+				}
+				$lastsubmit[$username]++;
+			}
 			// add UA fields, if applicable
 			$var['UA_BROWSER']="";
 			$var['UA_OS']="";
@@ -623,10 +667,10 @@ class AdminController extends Controller
 		$headers= array(
 				"LEVEL","DATE","ACTION", "USER","IP","MSG",
 				"SESSION","ENDDATE","DURATION",
-				"TASKID","DRAFTID","RES",
+				"BASE","TASKID","DRAFTID","RES",
 				"BROWSER","OS","DEVICE"
 			);
-		$str =$str."".join("\t", $headers)."\n";
+	/*	$str =$str."".join("\t", $headers)."\n";
 		foreach ($json['items'] as $key=>$var)
 		{
 			$str =$str."".join("\t", $var)."\n";
@@ -637,7 +681,43 @@ class AdminController extends Controller
 		//$response['Content-Type'] = 'text/plain';
 		$response['X-Powered-By'] = 'openEssayist';
 		$response->status(200);
-		$response->body($str);
+		$response->body($str);*/
+		
+		if ($format==="json")
+		{
+			$response = $this->app->response();
+			$response['Content-Type'] = 'application/x-javascript';
+			$response['X-Powered-By'] = 'openEssayist';
+			$response->status(200);
+			$response->body(json_encode($json));
+			
+		}
+		else 
+		{
+			$objPHPExcel = new PHPExcel();
+			$objPHPExcel->getProperties()->setCreator("Nicolas Van Labeke")
+			->setLastModifiedBy("Nicolas Van Labeke")
+			->setTitle("H810 log dump")
+			->setSubject("OpenEssayist study")
+			->setDescription("")
+			->setKeywords("openEssayist H810")
+			->setCategory("openEssayist");
+			
+			// create the overview info
+			$objPHPExcel->setActiveSheetIndex(0)
+				->setTitle('logs')
+				->fromArray($headers, NULL, 'A1',true)
+				->fromArray($json['items'], NULL, 'A2',true);
+			$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+			
+			$response = $this->app->response();
+			$response['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf-8';
+			$response['X-Powered-By'] = 'openEssayist';
+			$response->status(200);
+			//$response->body($str);
+			$objWriter->save("php://output");
+		}
+		
 	}	
 	
 	public function showLogs()
@@ -645,6 +725,13 @@ class AdminController extends Controller
 		$this->render('admin/logs');
 		
 	}
+	
+	public function showLogsTable()
+	{
+		$this->render('admin/logs.table');
+	
+	}
+	
 	public function showUserLogs($user)
 	{
 		$this->render('admin/logs.user',array(
