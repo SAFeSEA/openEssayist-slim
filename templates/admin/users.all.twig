@@ -84,7 +84,8 @@
 				</thead>
 				<tbody>
 					{% for user in item.users %}
-					<tr class={{ user.isadmin? "info" : ""}}>
+					
+					<tr class={{ user.isadmin? (user.isgroup ? "success":"info") : ""}}>
 					<td><code>{{ user.id }}</code></td>
 					<td>{{ user.username }}</td>
 

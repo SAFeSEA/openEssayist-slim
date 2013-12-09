@@ -93,6 +93,7 @@ class PDOAdmin extends \Strong\Provider
             'username' => $user->username,
             'email' => $user->email,
         	'isadmin' => $user->isadmin,
+        	'isgroup' => $user->isgroup,
         	'isdemo' => $user->isdemo,
         	'active' => $user->active,
             'logged_in' => true
