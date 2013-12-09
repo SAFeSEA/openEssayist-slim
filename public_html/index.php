@@ -227,8 +227,11 @@ $c->app->get('/admin/analyser', array($adminCtrl, 'showEssayData'))->name('admin
 $c->app->get('/admin/history', array($adminCtrl, 'showHistory'))->name('admin.history');
 $c->app->get('/admin/feedback', array($adminCtrl, 'showFeedback'))->name('admin.feedback');
 $c->app->get('/admin/data/logs.js', array($adminCtrl, 'getLogs'))->name('admin.data.logs');
-$c->app->get('/admin/data/logs.txt', array($adminCtrl, 'getLogsCSV'))->name('admin.data.csv');
+$c->app->get('/admin/data/logs', array($adminCtrl, 'getLogsCSV'))->name('admin.data.csv');
+$c->app->get('/admin/data/logs(.:format)', array($adminCtrl, 'getLogsCSV'))->name('admin.data.log')
+	->conditions(array('format' => '(xlsx|json)'));
 $c->app->get('/admin/data/content', array($adminCtrl, 'getContentExcel'))->name('admin.data.content');
+$c->app->get('/admin/logs/table', array($adminCtrl, 'showLogsTable'))->name('admin.logs.table');
 $c->app->get('/admin/logs', array($adminCtrl, 'showLogs'))->name('admin.logs');
 $c->app->get('/admin/logs/:userid/', array($adminCtrl, 'showUserLogs'))->name('admin.logs.user');
 
