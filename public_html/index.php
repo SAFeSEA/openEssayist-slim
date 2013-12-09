@@ -23,6 +23,7 @@ require_once "../app/controllers/login.controller.php";
 require_once "../app/controllers/user.controller.php";
 require_once "../app/controllers/demo.controller.php";
 require_once "../app/controllers/tutor.controller.php";
+require_once "../app/controllers/group.controller.php";
 
 // Models
 require_once "../app/models/users.model.php";
@@ -124,6 +125,8 @@ $config = array(
 				array('path' => '/tutor/.+'),
 				array('path' => '/me/'),
 				array('path' => '/me/.+'),
+				array('path' => '/group/'),
+				array('path' => '/group/.+'),
 				array('path' => '/admin/','admin'=> true),
 				array('path' => '/admin/.+', 'admin' => true),
 		),
@@ -145,7 +148,7 @@ $adminCtrl = new AdminController();
 $userCtrl = new UserController();
 $demoCtrl = new DemoController();
 $tutorCtrl = new TutorController();
-
+$groupCtrl = new GroupController();
 
 // Define the routes
 $c->app->get('/', array($appController, 'index'))->name('home');
@@ -238,8 +241,7 @@ $c->app->get('/admin/logs/:userid/', array($adminCtrl, 'showUserLogs'))->name('a
 $c->app->get('/admin/group/:gid/addusers/(:nb(/:prf))', array($adminCtrl, 'addUsersToGroup'))->name('admin.task.adduser');
 $c->app->post('/admin/group/addusers', array($adminCtrl, 'addUsersToGroup'))->name('admin.task.postadduser');
 
-
-//$c->app->get('/demo/draft/:draft/show/', array($demoCtrl, 'showDraft'))->name('demo.draft.show');
+$c->app->get('/group/', array($groupCtrl, 'index'))->name('group.home');
 
 $c->app->error(array($appController, 'error'));
 $c->app->notFound(array($appController, 'NotFound'));

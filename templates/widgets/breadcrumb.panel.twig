@@ -3,6 +3,12 @@
 {% if navsrc=='me.home' %}
 <li class="active"><span class="">Home</span></li>
 
+{% elseif navsrc=='me.group' %}
+<li><a title="Go back to your homepage"
+		href="{{ urlFor('me.home') }}"><span class="">Home </span></a></li>
+
+<li class="active"><span class="">Group</span></li>
+
 {% elseif navsrc=='me.tasks' %}
 <li><a title="Go back to your homepage"
 		href="{{ urlFor('me.home') }}"><span class="">Home </span></a></li>
