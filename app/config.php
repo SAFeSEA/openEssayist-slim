@@ -3,13 +3,25 @@
 /**
  * Database Details
  */
+
+// active database
 $activeGroup = 'local';
 
+// local database
 $db['local']['hostname'] = 'localhost';
 $db['local']['username'] = 'root';
 $db['local']['password'] = 'root';
 $db['local']['database'] = 'openessayist';
 $db['local']['dbProvider'] = 'mysql';
+
+// H810 archive database
+$db['archive']['hostname'] = 'localhost';
+$db['archive']['username'] = 'root';
+$db['archive']['password'] = 'root';
+$db['archive']['database'] = 'openh810';
+$db['archive']['dbProvider'] = 'mysql';
+
+
 
 /**
  * Needed in the RHEL distribution of Apache/PHP for the use of date();
@@ -18,10 +30,10 @@ date_default_timezone_set('Europe/London');
 
 try {
 	//echo "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'DBName'";
-	$host = $db['local']['hostname'];
-	$root = $db['local']['username'];
-	$root_password= $db['local']['password'];
-	$database=$db['local']['database'];
+	$host = $db[$activeGroup]['hostname'];
+	$root = $db[$activeGroup]['username'];
+	$root_password= $db[$activeGroup]['password'];
+	$database= $db[$activeGroup]['database'];
 
 	$dbh = new PDO("mysql:host=$host", $root, $root_password);
 
