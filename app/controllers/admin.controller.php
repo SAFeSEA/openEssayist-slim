@@ -259,7 +259,7 @@ class AdminController extends Controller
 	public function getLogs()
 	{
 		// read all log files in the logs (or remotelogs!) directory
-		$logfiles = glob('../remotelogs/*.log',GLOB_BRACE);
+		$logfiles = glob('../.logs/*.log',GLOB_BRACE);
 		
 		$csvArr = array();
 		foreach ($logfiles as $logfile)
@@ -457,7 +457,7 @@ class AdminController extends Controller
 	public function getLogsCSV($format=null)
 	{
 		// read all log files in the logs (or remotelogs!) directory
-		$logfiles = glob('../remotelogs/*.log',GLOB_BRACE);
+		$logfiles = glob('../.logs/*.log',GLOB_BRACE);
 		
 		$csvArr = array();
 		foreach ($logfiles as $logfile)
