@@ -13,6 +13,7 @@ $db['local']['username'] = 'root';
 $db['local']['password'] = 'root';
 $db['local']['database'] = 'openessayist';
 $db['local']['dbProvider'] = 'mysql';
+$db['local']['logdir'] = '../.logs';
 
 // H810 archive database
 $db['archive']['hostname'] = 'localhost';
@@ -20,6 +21,7 @@ $db['archive']['username'] = 'root';
 $db['archive']['password'] = 'root';
 $db['archive']['database'] = 'openh810';
 $db['archive']['dbProvider'] = 'mysql';
+$db['archive']['logdir'] = '../remotelogs';
 
 
 

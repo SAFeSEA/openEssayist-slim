@@ -240,18 +240,19 @@ class AdminController extends Controller
 	{
 		$reports= Model::factory('Feedback')->order_by_desc('id')->find_many();
 		
-		foreach ($reports as &$feed)
+		$data = array();
+		foreach ($reports as $feed)
 		{
 			$user = $feed->user()->find_one();
+			$newrep = $feed->as_array();
+			$newrep['user'] = $user->as_array();
 			
-			$feed->user = $user;
-			//var_dump($feed->as_array());
-			//var_dump($user->as_array());
+			$data[]=$newrep;
 		}
 		
 		
 		$this->render('admin/reports',array(
-				'reports' => $reports
+				'reports' => $data
 		));
 	
 	}	
@@ -259,7 +260,9 @@ class AdminController extends Controller
 	public function getLogs()
 	{
 		// read all log files in the logs (or remotelogs!) directory
-		$logfiles = glob('../.logs/*.log',GLOB_BRACE);
+		$path = $GLOBALS['db'][$GLOBALS['activeGroup']]['logdir'];
+		$logfiles = glob($path.'/*.log',GLOB_BRACE);
+		
 		
 		$csvArr = array();
 		foreach ($logfiles as $logfile)
@@ -456,8 +459,9 @@ class AdminController extends Controller
 
 	public function getLogsCSV($format=null)
 	{
-		// read all log files in the logs (or remotelogs!) directory
-		$logfiles = glob('../.logs/*.log',GLOB_BRACE);
+		$path = $GLOBALS['db'][$GLOBALS['activeGroup']]['logdir'];
+		$logfiles = glob($path.'/*.log',GLOB_BRACE);
+		var_dump($logfiles);die();
 		
 		$csvArr = array();
 		foreach ($logfiles as $logfile)
