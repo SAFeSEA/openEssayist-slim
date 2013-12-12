@@ -36,6 +36,8 @@ class GroupController extends Controller
 		/* @var $g Group */
 		$g = $u->group()->find_one();
 		
+		$tasks = $g->tasks()->find_array();
+		
 		$all = $g->users()->count();
 		$act = $g->users()->where_equal('active', true)->count();
 		$allusers = $g->users()->where_equal('active', true)->find_many();
@@ -79,12 +81,32 @@ class GroupController extends Controller
 		
 		$this->render('group/dashboard',array(
 				'group' => $g->as_array(),
+				'tasks' => $tasks,
 				'items' => $items,
-				'data' => array(
+				'metrics' => array(
 					'users' => $all,
 					'active' => $act,
 					)
 		));
 	}
 	
+	/**
+	 * @route "/group/tasks"
+	 */
+	public function showTasks()
+	{
+		$this->checkRole();
+		
+		/* @var $u Users */
+		$u = Model::factory('Users')->find_one($this->user['id']);
+		/* @var $g Group */
+		$g = $u->group()->find_one();
+
+		$tasks = $g->tasks()->find_array();
+		
+		$this->render('group/tasks',array(
+				'group' => $g->as_array(),
+				'tasks' => $tasks,
+			));
+	}
 }

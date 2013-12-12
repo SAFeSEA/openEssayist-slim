@@ -13,17 +13,12 @@
     <div class="navbar-inner">
     	<span class="brand" >{{ group.name }}</span>
     	<ul class="nav">
- 			<li><a title="Monitor your students" 
- 					href="{{ urlFor('group.home') }}" rel="tooltip" data-placement="bottom">
-				<i class="icon-search icon-large"></i> 
-				<span class="hidden-phone hidden-tablet">Activity</span>
+ 			<li><a title="Go to your assignments and drafts" 
+ 					href="{{ urlFor('me.tasks') }}" rel="tooltip" data-placement="bottom">
+				<i class="icon-folder-open icon-large"></i> 
+				<span class="hidden-phone hidden-tablet">Assignments</span>
 			</a></li>
- 			<li><a title="Manage your group's tasks" 
- 					href="{{ urlFor('group.task') }}" rel="tooltip" data-placement="bottom">
-				<i class="icon-cogs icon-large"></i> 
-				<span class="hidden-phone hidden-tablet">Tasks</span>
-			</a></li>
-			
+
     	</ul>
     </div>
 </div>

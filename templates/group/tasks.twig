@@ -1,0 +1,105 @@
+{% extends "site.twig" %} 
+
+{% block title %}Group / Task{% endblock %} 
+{% block subheader %}Your Group's Tasks{% endblock %} 
+
+{% block bccontainer %}		
+	{% include "widgets/breadcrumb.panel.twig" with {'navsrc': 'me.group'} %}
+{% endblock %}
+
+
+{% block navsubheader %}
+<div class="navbar">
+    <div class="navbar-inner">
+    	<span class="brand" >{{ group.name }}</span>
+    	<ul class="nav">
+ 			<li><a title="Monitor your students" 
+ 					href="{{ urlFor('group.home') }}" rel="tooltip" data-placement="bottom">
+				<i class="icon-search icon-large"></i> 
+				<span class="hidden-phone hidden-tablet">Activity</span>
+			</a></li>
+ 			<li><a title="Manage your group's tasks" 
+ 					href="{{ urlFor('group.task') }}" rel="tooltip" data-placement="bottom">
+				<i class="icon-cog icon-large"></i> 
+				<span class="hidden-phone hidden-tablet">Tasks</span>
+			</a></li>
+			
+    	</ul>
+    	
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<div class="row-fluid">
+<div class="span12"><div class="widget">
+	<div class="widget-header">
+		<h2>History</h2>
+	</div>
+			
+	<div class="widget-content">
+	
+	<table class="table table-condensed table-striped table-bordered">
+				<thead>
+					<tr>
+						<th width="5%">#</th>
+						<th>Name</th>
+						<th>Assignment Question</th>
+						<th>Word Limit</th>
+						<th>Deadline</th>
+						<th>Open</th>
+					
+					</tr>
+				</thead>
+				<tbody>
+					{% for task in tasks %}
+					
+					<tr>
+					<td><code>{{ task.id }}</code></td>
+					<td><a class="btn"  href="{{ urlFor('admin.task.edit',{"taskid":task.id}) }}">
+							<i class="icon-large icon-pencil"></i>
+							{{ task.name }}</a></td>
+					<td>
+					<p><small>{{ task.assignment|slice(0,250)|escape }} [...]</small></p>
+					</td>
+					<td>{{ task.wordcount }} </td>
+					<td>{{ task.deadline }}</td>
+					<td>
+						<span class="icon-stack icon-large">
+  							<i class="{{ task.isopen? "icon-check-empty icon-stack-base" : "icon-sign-blank icon-stack-base" }}"></i>
+  							<i class="{{ task.isopen? "icon-folder-open" : "icon-folder-close icon-light" }}"></i>
+						</span>
+					<i class="icon-large "></i></td>
+				
+					</tr>
+					{% endfor %}
+				</tbody>
+				</table>
+	
+		<p>
+		<a class="btn"  href="{{ urlFor('admin.task.edit',{"taskid":task.id}) }}">
+							<i class="icon-3x icon-plus-sign"></i><br>
+							Add a new task </a>
+		</p>
+
+	</div>
+	
+</div></div>
+</div>
+
+{% endblock %}
+
+{% block injectJS %}
+	{{ parent() }}
+<script id="keyword-popover">
+$(document).ready(function() {
+});
+</script>
+{% endblock %}
+
+{% block injectCSS %}
+	{{ parent() }}
+<style type="text/css">
+</style>
+{% endblock %}

@@ -242,6 +242,7 @@ $c->app->get('/admin/group/:gid/addusers/(:nb(/:prf))', array($adminCtrl, 'addUs
 $c->app->post('/admin/group/addusers', array($adminCtrl, 'addUsersToGroup'))->name('admin.task.postadduser');
 
 $c->app->get('/group/', array($groupCtrl, 'index'))->name('group.home');
+$c->app->get('/group/tasks/', array($groupCtrl, 'showTasks'))->name('group.task');
 
 $c->app->error(array($appController, 'error'));
 $c->app->notFound(array($appController, 'NotFound'));
