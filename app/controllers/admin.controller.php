@@ -94,7 +94,6 @@ class AdminController extends Controller
 		}
 		else
 		{
-		
 			$this->render('admin/task.edit',array('task' => $task->as_array()));
 		}
 		
