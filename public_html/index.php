@@ -243,6 +243,11 @@ $c->app->post('/admin/group/addusers', array($adminCtrl, 'addUsersToGroup'))->na
 
 $c->app->get('/group/', array($groupCtrl, 'index'))->name('group.home');
 $c->app->get('/group/tasks/', array($groupCtrl, 'showTasks'))->name('group.task');
+$c->app->get('/group/task/:taskid', array($groupCtrl, 'editTask'))
+				->conditions(array('taskid' => '[0-9]+'))
+				->via('GET', 'POST')
+				->name('group.task.edit');
+$c->app->get('/group/task/new', array($groupCtrl, 'newTask'))->via('GET', 'POST')->name('group.task.new');
 
 $c->app->error(array($appController, 'error'));
 $c->app->notFound(array($appController, 'NotFound'));

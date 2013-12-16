@@ -1,250 +1,93 @@
 {% extends "site.twig" %} 
 
-{% block title %}Group{% endblock %} 
-{% block subheader %}Your Group Homepage{% endblock %} 
+{% block title %}Group / {{ task.id ? "Task "~task.name : "New Task" }} {% endblock %} 
+{% block subheader %}Your Group's Tasks{% endblock %} 
 
-{% block bccontainer %}		
-	{% include "widgets/breadcrumb.panel.twig" with {'navsrc': 'me.group'} %}
-{% endblock %}
-
-
-{% block navsubheader %}
-<div class="navbar">
-    <div class="navbar-inner">
-    	<span class="brand" >{{ group.name }}</span>
-    	<ul class="nav">
- 			<li><a title="Go to your assignments and drafts" 
- 					href="{{ urlFor('me.tasks') }}" rel="tooltip" data-placement="bottom">
-				<i class="icon-folder-open icon-large"></i> 
-				<span class="hidden-phone hidden-tablet">Assignments</span>
-			</a></li>
-
-    	</ul>
-    </div>
-</div>
-{% endblock %}
+{% block breadcrumb %}{% endblock %} 
 
 {% block content %}
 
 <div class="row-fluid">
-<div class="span12"><div class="widget">
-	<div class="widget-header">
-		<h2>History</h2>
-	</div>
-			
-	<div class="widget-content">
-	
-	
-			<table class="table table-condensed table-striped table-bordered">
-				<thead>
-					<tr>
-						<th width="15%">Date</th>
-						<th>Username</th>
-						<th>Task</th>
-						<th class="td-actions">Draft</th>
-						<th class="td-actions">Words</th>
-					</tr>
-					<tr>
-						<td></td>
-						<td><input type="text" name="search_platform" placeholder="Search Username" data-column=1 class="search_init" /></td>
-						<td><select data-column=2 class="search_init">
-							<option value="" selected>- All -</option>
-						{% for task in tasks %}
-							<option value="{{ task.name }}">{{ task.name }}</option>
-						{% endfor %}
-						</select>
-						<td><input type="text" name="search_grade" placeholder="Search Draft Number" data-column=3 class="search_init" /></td>
-						<td></td>
-					</tr>
-				</thead>
-				<tbody>
-									
-					{% for item in items %}
-					<tr>
-						<td>{{ item.date }}</td>
-						<td>{{ item.username }}</td>
-						<td>{{ item.task }}</td>
-						<td>{{ item.version }} {{ item.name ? "("~ item.name ~")" }}</td>
-						<td>{{ item.words }}</td>
-					</tr>
-					{% endfor  %}
-				</tbody>
-				</table>
-	
+<div class="span12">
 
+	<div class="widget">
+		<div class="widget-header">
+			{% if task.id %}
+				<h3>Edit the content of task "{{ task.name }}"</h3>
+			{% else %}
+				<h3>Edit the content of a new task</h3>
+			{% endif %}
+		</div>
+					
+		<div class="widget-content">
+		
+		<form name="post_task" method="post" class="form-horizontal">
+		
+		<input type="hidden" id="code" name="code" value="{{ task.code }}">
+		
+		 <div class="control-group">
+			<label class="control-label" for="name">Name</label>
+			<div class="controls">
+				<input type="text" id="name" name="name" placeholder="name" value="{{ task.name }}" required="required">
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="assignment">Assignment</label>
+			<div class="controls">
+				<textarea style="max-width: 90%; width: 90%; resize: vertical;" rows="15" name="assignment" id="assignment" placeholder="description">{{ task.assignment }}</textarea> 
+			</div>
+		</div>
+		<div class="control-group">
+		 	<label class="control-label" for="date">Deadline</label>
+		 	<div class="controls">
+			<div class="input-append  date" id="dp3" data-date="{{ task.deadline }}" data-date-format="yyyy-mm-dd">
+				<input class="" id="date" name="date" type="text" value="{{ task.deadline }}" required="required">
+				<span class="add-on"><i class="icon-calendar"></i></span>
+			  </div>
+		 	</div>
+		</div>
+		 <div class="control-group">
+			<label class="control-label" for="wordcount">Word Limit</label>
+			<div class="controls">
+				<input type="text" id="wordcount" name="wordcount" placeholder="number of words" value="{{ task.wordcount }}" required="required">
+			</div>
+		</div>
+		 <div class="control-group">
+			<label class="control-label" for="isopen">Task Open</label>
+			<div class="controls">
+				<input type="checkbox" id="isopen" name="isopen" value="Yes" {{ task.isopen?"checked" }}>
+				<span class="help-block" id="help-text">
+				Once a task is closed, users can still explore their content (draft, analysis) but cannot
+				make changes or submit a new draft for analysis 
+		</span>
+			</div>
+			
+		</div>
+		<div class="form-actions">
+			<button class="btn btn-primary" type="submit" name="action" value="Submit">Save</button> 
+		</div>
+		</form>
+		</div>
 	</div>
-	
-</div></div>
+</div>
 </div>
 
+{% endblock %} 
+
+{% block injectCSS %}
+	{{ parent() }}
+
+<link href="{{ app_base }}/assets/bootstrap.datepicker/css/datepicker.css" rel="stylesheet">
 {% endblock %}
 
 {% block injectJS %}
 	{{ parent() }}
-<script src="{{ app_base }}/assets/jquery.sparkline/jquery.sparkline.js"></script>
-<script src="{{ app_base }}/assets/jquery.dataTables/js/jquery.dataTables.js"></script>
-<script src="{{ app_base }}/assets/jquery.dataTables/js/plugin.paging.js"></script>
-	
-	<script id="keyword-popover">
-$(document).ready(function() {
-	/*$('.barsparklinedd').sparkline('html', {
-	    type: 'bar',
-	    zeroAxis: false,
-	    height: 50,
-	    barWidth: 25,
-	    chartRangeMin: 0,
-	    zeroColor: '#ffffff',
-	    colorMap: ["red","red","green"]
-	}); */
-
-	$('table.table').dataTable( {
-		//"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
-		"sDom": "<'row-fluid'<'span6'l>r>t<'row-fluid'<'span6'i><'span6'p>>",
-		"bPaginate": true,
-        "bLengthChange": true,
-        "bFilter": true,
-        "bSortCellsTop": true,
-        "bInfo": true,
-        "bAutoWidth": true,
-        "aaSorting": [[ 0, "desc" ]],
-        "aoColumnDefs": [
-			{ 	
-				
-				"aTargets": [ 0 ],
-				"mDataProp": function ( data, type, val ) {
-					if (type === 'set') {
-						var d = new Date(val);
-
-						// Store the base value which is in the format: YYYY/MM/DD
-						data.date = val;
-				
-						// Sorting is done as an integer value
-						data.date_int = d.getTime();
-				
-						// Use date formatting function to build the date
-						data.date_filter  = val +' '+ dateFormat( d );
-						return;
-					}
-					else if (type === 'filter') {
-						return data.date_filter ;
-					}
-					else if (type === 'sort' || type === 'type') {
-						return data.date_int;
-					}
-					// Display type gets the original data
-					return dateFormat(new Date(data.date));
-				}
-            }
-             		],
-        "sPaginationType": "bootstrap",
-        "fnInitComplete": function () {
-        	var that = this;
-   
-        	this.find("input:text").each(function(idx, elt) {
-            	var index = $(elt).data( "column" );
-        		if (index) $(elt).keyup( function () {
-	        		// Filter on the column (the index) of this element 
-	        		that.fnFilter( this.value, index);
-        			} );
-            });
-        	
-           	this.find("select").each(function(idx, elt) {
-            	var index = $(elt).data( "column" );
-        		if (index) $(elt).change( function () {
-	        		// Filter on the column (the index) of this element 
-	        		that.fnFilter( $(this).val(), index);
-        			} );
-            });
-            
-
-                
-        }
+<script src="{{ app_base }}/assets/bootstrap.datepicker/js/bootstrap-datepicker.js"></script>
+<script>
+	$(document).ready(function() {
+		// initialise the code highlighting
+		$('#dp3').datepicker();
 	});
-
-	function dateFormat( d ) {
-		var out = "";
-
-		switch( d.getDay() ) {
-			case 0: out += "Sun "; break;
-			case 1: out += "Mon "; break;
-			case 2: out += "Tue "; break;
-			case 3: out += "Wed "; break;
-			case 4: out += "Thu "; break;
-			case 5: out += "Fri "; break;
-			case 6: out += "Sat "; break;
-			default: break;
-		}
-
-		switch( d.getMonth() ) {
-			case 0: out += "January "; break;
-			case 1: out += "February "; break;
-			case 2: out += "March "; break;
-			case 3: out += "April "; break;
-			case 4: out += "May "; break;
-			case 5: out += "June "; break;
-			case 6: out += "July "; break;
-			case 7: out += "August "; break;
-			case 8: out += "September "; break;
-			case 9: out += "October "; break;
-			case 10: out += "November "; break;
-			case 11: out += "December "; break;
-			default: break;
-		}
-
-		out +=d.getDate();
-		switch( d.getDate() ) {
-			case 1: out += "st "; break;
-			case 2: out += "nd "; break;
-			case 3: out += "rd "; break;
-			default: out += "th "; break;
-		}
-		
-		return out;
-	}
-	
-});
-</script>
-{% endblock %}
-
-{% block injectCSS %}
-	{{ parent() }}
-<style type="text/css">
-			
-
-table.table thead th .sorting,
-table.table thead th .sorting_asc,
-table.table thead th .sorting_desc,
-table.table thead th .sorting_asc_disabled,
-table.table thead th .sorting_desc_disabled {
-    cursor: pointer;
-    *cursor: hand;
-}
-
-table.table th.sorting:after,
-table.table th.sorting_asc:after,
-table.table th.sorting_desc:after 
-{ float: right;}
-table.table th.sorting:after { font-family: FontAwesome; content: "   ";}
-table.table th.sorting_asc:after { font-family: FontAwesome; content: "   ";}
-table.table th.sorting_desc:after { font-family: FontAwesome; content: "   ";}
-
-table.table th.sorting_asc_disabled {  }
-table.table th.sorting_desc_disabled { }	
-
-div.dataTables_paginate, div.dataTables_filter {
-	float: right;
-	margin: 0;
-}
-
-td .search_init
-{
-	margin-bottom: 0px;
-	padding: 0 2px;
-	font-size: 11px;
-	height: inherit;
-	width: inherit;
-}
-
-	
-</style>
-{% endblock %}
+	</script>
+{% endblock %} 

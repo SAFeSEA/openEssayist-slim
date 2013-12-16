@@ -20,7 +20,7 @@
 			</a></li>
  			<li><a title="Manage your group's tasks" 
  					href="{{ urlFor('group.task') }}" rel="tooltip" data-placement="bottom">
-				<i class="icon-cog icon-large"></i> 
+				<i class="icon-cogs icon-large"></i> 
 				<span class="hidden-phone hidden-tablet">Tasks</span>
 			</a></li>
 			
@@ -35,7 +35,7 @@
 <div class="row-fluid">
 <div class="span12"><div class="widget">
 	<div class="widget-header">
-		<h2>History</h2>
+		<h2>Tasks for this group</h2>
 	</div>
 			
 	<div class="widget-content">
@@ -45,7 +45,7 @@
 					<tr>
 						<th width="5%">#</th>
 						<th>Name</th>
-						<th>Assignment Question</th>
+						<th>Description / Question</th>
 						<th>Word Limit</th>
 						<th>Deadline</th>
 						<th>Open</th>
@@ -57,7 +57,7 @@
 					
 					<tr>
 					<td><code>{{ task.id }}</code></td>
-					<td><a class="btn"  href="{{ urlFor('admin.task.edit',{"taskid":task.id}) }}">
+					<td><a class="btn"  href="{{ urlFor('group.task.edit',{"taskid":task.id}) }}">
 							<i class="icon-large icon-pencil"></i>
 							{{ task.name }}</a></td>
 					<td>
@@ -66,10 +66,10 @@
 					<td>{{ task.wordcount }} </td>
 					<td>{{ task.deadline }}</td>
 					<td>
-						<span class="icon-stack icon-large">
-  							<i class="{{ task.isopen? "icon-check-empty icon-stack-base" : "icon-sign-blank icon-stack-base" }}"></i>
-  							<i class="{{ task.isopen? "icon-folder-open" : "icon-folder-close icon-light" }}"></i>
-						</span>
+						<span class="icon-stack  icon-large"  title="{{ task.isopen? 'This task is open' : 'this task is closed' }}">
+		  								<i class="{{ task.isopen? 'icon-circle  icon-stack-base' : 'icon-ban-circle icon-stack-base text-error  icon-flip-vertical' }}"></i>
+		  								<i class="{{ task.isopen? 'icon-pencil icon-light' : 'icon-pencil' }}"></i>
+									</span>	
 					<i class="icon-large "></i></td>
 				
 					</tr>
@@ -78,7 +78,7 @@
 				</table>
 	
 		<p>
-		<a class="btn"  href="{{ urlFor('admin.task.edit',{"taskid":task.id}) }}">
+		<a class="btn"  href="{{ urlFor('group.task.new') }}">
 							<i class="icon-3x icon-plus-sign"></i><br>
 							Add a new task </a>
 		</p>
