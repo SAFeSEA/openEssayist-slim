@@ -112,6 +112,8 @@ class GroupController extends Controller
 	
 	public function editTask($id)
 	{
+		$this->checkRole();
+		
 		$req = $this->app->request();
 		$task = Model::factory('Task')->find_one($id);
 		
@@ -141,7 +143,14 @@ class GroupController extends Controller
 		}
 		else
 		{
-			$this->render('group/task.edit',array('task' => $task->as_array()));
+			/* @var $u Users */
+			$u = Model::factory('Users')->find_one($this->user['id']);
+			/* @var $g Group */
+			$g = $u->group()->find_one();
+		
+			$this->render('group/task.edit',array(
+					'group' => $g->as_array(),
+					'task' => $task->as_array()));
 		}
 	
 	
@@ -183,11 +192,14 @@ class GroupController extends Controller
 		}
 		else
 		{
-			$this->render('group/task.edit',array('task' => array(
-				'code' => 'TMA01',
-				'isopen' => true,
-				'deadline' => date("Y-m-d")
-			)));
+			$this->render('group/task.edit',array(
+				'group' => $g->as_array(),
+				'task' => array(
+					'code' => 'TMA01',
+					'isopen' => true,
+					'deadline' => date("Y-m-d")
+					)
+			));
 		}
 	
 	

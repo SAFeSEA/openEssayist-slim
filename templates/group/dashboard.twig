@@ -51,14 +51,14 @@
 					</tr>
 					<tr>
 						<td></td>
-						<td><input type="text" name="search_platform" placeholder="Search Username" data-column=1 class="search_init" /></td>
+						<td><input type="text" name="search_platform" placeholder="Filter username" data-column=1 class="search_init" /></td>
 						<td><select data-column=2 class="search_init">
 							<option value="" selected>- All -</option>
 						{% for task in tasks %}
 							<option value="{{ task.name }}">{{ task.name }}</option>
 						{% endfor %}
 						</select>
-						<td><input type="text" name="search_grade" placeholder="Search Draft Number" data-column=3 class="search_init" /></td>
+						<td><input type="text" name="search_grade" placeholder="Filter draft number / name" data-column=3 class="search_init" /></td>
 						<td></td>
 					</tr>
 				</thead>
@@ -69,7 +69,7 @@
 						<td>{{ item.date }}</td>
 						<td>{{ item.username }}</td>
 						<td>{{ item.task }}</td>
-						<td>{{ item.version }} {{ item.name ? "("~ item.name ~")" }}</td>
+						<td>{{ item.version }} {{ item.name ? "["~ item.name ~"]" }}</td>
 						<td>{{ item.words }}</td>
 					</tr>
 					{% endfor  %}

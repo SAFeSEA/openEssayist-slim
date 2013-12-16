@@ -3,7 +3,31 @@
 {% block title %}Group / {{ task.id ? "Task "~task.name : "New Task" }} {% endblock %} 
 {% block subheader %}Your Group's Tasks{% endblock %} 
 
-{% block breadcrumb %}{% endblock %} 
+{% block bccontainer %}		
+	{% include "widgets/breadcrumb.panel.twig" with {'navsrc': 'me.group'} %}
+{% endblock %}
+
+
+{% block navsubheader %}
+<div class="navbar">
+    <div class="navbar-inner">
+    	<span class="brand" >{{ group.name }}</span>
+    	<ul class="nav">
+ 			<li><a title="Monitor your students" 
+ 					href="{{ urlFor('group.home') }}" rel="tooltip" data-placement="bottom">
+				<i class="icon-search icon-large"></i> 
+				<span class="hidden-phone hidden-tablet">Activity</span>
+			</a></li>
+ 			<li><a title="Manage your group's tasks" 
+ 					href="{{ urlFor('group.task') }}" rel="tooltip" data-placement="bottom">
+				<i class="icon-cogs icon-large"></i> 
+				<span class="hidden-phone hidden-tablet">Tasks</span>
+			</a></li>
+			
+    	</ul>
+    </div>
+</div>
+{% endblock %}
 
 {% block content %}
 
