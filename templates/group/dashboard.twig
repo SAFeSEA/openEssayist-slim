@@ -48,6 +48,7 @@
 						<th>Task</th>
 						<th class="td-actions">Draft</th>
 						<th class="td-actions">Words</th>
+						<th width="1%">Action</th>
 					</tr>
 					<tr>
 						<td></td>
@@ -60,6 +61,7 @@
 						</select>
 						<td><input type="text" name="search_grade" placeholder="Filter draft number / name" data-column=3 class="search_init" /></td>
 						<td></td>
+						<td></td>
 					</tr>
 				</thead>
 				<tbody>
@@ -69,8 +71,9 @@
 						<td>{{ item.date }}</td>
 						<td>{{ item.username }}</td>
 						<td>{{ item.task }}</td>
-						<td>{{ item.version }} {{ item.name ? "["~ item.name ~"]" }}</td>
+						<td>{{ item.version }}[]{{ item.name }}</td>
 						<td>{{ item.words }}</td>
+						<td><button class="btn btn-small">View</button></td>
 					</tr>
 					{% endfor  %}
 				</tbody>
@@ -113,6 +116,7 @@ $(document).ready(function() {
         "bAutoWidth": true,
         "aaSorting": [[ 0, "desc" ]],
         "aoColumnDefs": [
+			{ "bSortable": false, "aTargets": [ 5 ] },
 			{ 	
 				
 				"aTargets": [ 0 ],
@@ -138,6 +142,31 @@ $(document).ready(function() {
 					}
 					// Display type gets the original data
 					return dateFormat(new Date(data.date));
+				}
+            },
+			{ 	
+				
+				"aTargets": [ 3 ],
+				"mDataProp": function ( data, type, val ) {
+					if (type === 'set') {
+						
+						var str = val.split("[]");
+
+						data.draft = [];
+						data.draft.version = str[0];
+						data.draft.name = str[1];
+						data.draft.filter  = data.draft.version +' '+ data.draft.name;
+						return;
+					}
+					else if (type === 'filter') {
+						return data.draft.filter ;
+					}
+					else if (type === 'sort' || type === 'type') {
+						return data.draft.version;
+					}
+					return '<span class="label label-success">Version <b>'+
+								data.draft.version +'</b></span> <span>'+ 
+								data.draft.name + '</span>';
 				}
             }
              		],
