@@ -12,7 +12,7 @@
         "slim/strong":"dev-master",
         "twig/twig":"dev-master",
         "j4mie/paris":"*",
-        "j4mie/paris":"*",
+        "j4mie/idiorm":"*",
         "respect/validation":"dev-develop",
         "rmccue/requests":">=1.0",
         "phpoffice/phpexcel":"*"

@@ -9,3 +9,4 @@ app/localconfig.php
 /.cache
 /.logs
 /remotelogs
+/log-*
