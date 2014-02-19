@@ -56,13 +56,19 @@
 			</div> 
 		
 			<div class="widget-content"> 
-				<p><a class="btn" href="{{ urlFor('admin.data.csv') }}">
+				<p><a class="btn btn-block" href="{{ urlFor('admin.data.csv') }}">
 					<i class="icon-download"></i>
-					<span>Download activity logs (Excel)</span>
+					<span>Download activity logs <br>(Excel) <span class="label label-important">Slow</span></span>
 				</a></p>
-				<p><a class="btn" href="{{ urlFor('admin.data.content') }}">
+				<p><a class="btn btn-block" href="{{ urlFor('admin.data.log',{"format": "tsv"}) }}">
 					<i class="icon-download"></i>
-					<span>Download contents (Excel)</span>
+					<span>Download activity logs <br>(Tab-Separated) <span class="label label-success">Faster</span></span>
+				</a></p>
+			</div> 
+			<div class="widget-content"> 
+				<p><a class="btn btn-block" href="{{ urlFor('admin.data.content') }}">
+					<i class="icon-download"></i>
+					<span>Download contents <br>(Excel) <span class="label label-important">Slow</span></span>
 				</a></p>
 			</div> 
 		</div>
