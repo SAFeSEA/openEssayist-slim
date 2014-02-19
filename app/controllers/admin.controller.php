@@ -408,11 +408,10 @@ class AdminController extends Controller
 				$keyword["user"] = $user->username;
 				$keyword["taskid"] = $draft->task_id;
 				$keyword["draftid"] = $draft->id;
-				$keyword["source"] = $h->source[0];
+				$keyword["source"] = $h->ngram[0];
 				$keyword["count"] = $h->count;
 				$keyword["score"] = $h->score[0];
 				$keyword = array_merge($keyword,$h->trend);
-				
 				
 				$keywords[] = $keyword;
 				
@@ -430,19 +429,23 @@ class AdminController extends Controller
 					$sent["id"] = $s->id;
 					$sent["tag"] = $s->tag;
 					$sent["rank"] = $s->rank;
-					$sent["text"] = $s->text;
+					// need to prevent '=' as first character (Excel formula) 
+					$sent["text"] = (($s->text[0]=='=') ? " " : "") . $s->text;
+					
 					$sentences[] = $sent;
 				}
 			}
 		}
-			
+		
+		// create 'Overview' content
 		$objPHPExcel->setActiveSheetIndex(1);
 		$objPHPExcel->getActiveSheet()->fromArray($sentences, NULL, 'A1',true);
 		
-		
+		// create 'Sentences' content
 		$objPHPExcel->setActiveSheetIndex(2);
 		$objPHPExcel->getActiveSheet()->fromArray($keywords, NULL, 'A1',true);
 		
+		// create 'keywords' content
 		$objPHPExcel->setActiveSheetIndex(0);
 		$objPHPExcel->getActiveSheet()->fromArray($stats, NULL, 'A1',true);
 		
