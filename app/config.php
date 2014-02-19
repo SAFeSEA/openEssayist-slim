@@ -1,13 +1,19 @@
 <?php
 
 /**
- * Database Details
+	Database Details
+	
+	$activeGroup contains key for current databases
+	$db contains all database sets available 
+	Change $activeGroup value to one of the $db keys, to activate a different database.
+	NOTES:
+	- make sure that the DB defined in 'database' field is created in MySQL
+	- make sure that the directory defined in 'logdir' is created (and contains the log files) 
  */
 
-// active database
 $activeGroup = 'local';
 
-// local database
+// local database and logs
 $db['local']['hostname'] = 'localhost';
 $db['local']['username'] = 'root';
 $db['local']['password'] = 'root';
@@ -15,14 +21,21 @@ $db['local']['database'] = 'openessayist';
 $db['local']['dbProvider'] = 'mysql';
 $db['local']['logdir'] = '../.logs';
 
-// H810 archive database
-$db['archive']['hostname'] = 'localhost';
-$db['archive']['username'] = 'root';
-$db['archive']['password'] = 'root';
-$db['archive']['database'] = 'openh810';
-$db['archive']['dbProvider'] = 'mysql';
-$db['archive']['logdir'] = '../remotelogs';
+// H810 archive database and logs
+$db['H810']['hostname'] = 'localhost';
+$db['H810']['username'] = 'root';
+$db['H810']['password'] = 'root';
+$db['H810']['database'] = 'openh810';
+$db['H810']['dbProvider'] = 'mysql';
+$db['H810']['logdir'] = '../log-h810';
 
+// H817 archive database and logs
+$db['H817']['hostname'] = 'localhost';
+$db['H817']['username'] = 'root';
+$db['H817']['password'] = 'root';
+$db['H817']['database'] = 'openh817';
+$db['H817']['dbProvider'] = 'mysql';
+$db['H817']['logdir'] = '../log-h817';
 
 
 /**
