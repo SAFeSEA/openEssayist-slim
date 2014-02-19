@@ -170,7 +170,8 @@ $(document).ready(function() {
 	jQuery.extend( jQuery.fn.dataTableExt.oSort, {
 	    "num-html-pre": function ( a ) {
 	        var x = String(a).replace( /<[\s\S]*?>/g, "" );
-	        return parseFloat( x );
+	        var f = parseFloat( x );
+	        return isNaN(f)? 0 : f;
 	    },
 	 
 	    "num-html-asc": function ( a, b ) {
@@ -185,7 +186,7 @@ $(document).ready(function() {
 	$('table.table').dataTable( {
 		"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
 		"bPaginate": true,
-        "bLengthChange": false,
+        "bLengthChange": true,
         "bFilter": true,
         "bSortCellsTop": true,
         "bInfo": true,
@@ -201,7 +202,7 @@ $(document).ready(function() {
         	var that = this;
    
         	this.find("input:text").each(function(idx, elt) {
-            	var index = idx+1;
+            	var index = 2*idx+1;
         		$(elt).keyup( function () {
 	        		// Filter on the column (the index) of this element 
 	        		that.fnFilter( this.value, index);
