@@ -14,7 +14,6 @@ class AdminController extends Controller
 	public function index()
 	{
 		$this->render('admin/dashboard');
-	
 	}
 	
 	public function reset()
@@ -275,7 +274,9 @@ class AdminController extends Controller
 		{
 			//return ($var['level']=='INFO' &&  strpos($var['message'], '/me/draft/')!==FALSE);
 			//return ($var['level']=='INFO' &&  strpos($var['action'], 'ACTION.LOGIN')!==FALSE);
-			return ($var['level']=='INFO');
+			//return ($var['level']=='INFO');
+			return ($var['level']=='INFO' || $var['level']=='WARN');
+			
 		});
 		
 		$json['items']=array();
@@ -460,7 +461,7 @@ class AdminController extends Controller
 	{
 		$path = $GLOBALS['db'][$GLOBALS['activeGroup']]['logdir'];
 		$logfiles = glob($path.'/*.log',GLOB_BRACE);
-		var_dump($logfiles);die();
+		//var_dump($logfiles);die();
 		
 		$csvArr = array();
 		foreach ($logfiles as $logfile)
@@ -474,7 +475,8 @@ class AdminController extends Controller
 		{
 			//return ($var['level']=='INFO' &&  strpos($var['message'], '/me/draft/')!==FALSE);
 			//return ($var['level']=='INFO' &&  strpos($var['action'], 'ACTION.LOGIN')!==FALSE);
-			return ($var['level']=='INFO');
+			return ($var['level']=='INFO' || $var['level']=='WARN');
+			//return ($var['level']!='INFO');
 		});
 	
 		$json['items']=array();
@@ -510,13 +512,15 @@ class AdminController extends Controller
 			// filter out logactivity msgs
 			if ($var['action'] == 'POST' && strpos($var['message'], '/tutor/logactivity')!==FALSE) continue;
 			
+			/*
 			// fix bug with missing user identification in old logs
 			if ($var['action'] == 'ACTION.LOGIN' && $var['message']==null)
 			{
 				$nextevent = $csvArr[$key+1];
 				$var['message'] = $var['user'];
 				$var['user'] = ($nextevent)? $nextevent['user'] : '[admin @ 127.0.0.1]';
-			}
+			}*/
+			
 			// reformat user_agent
 			$ua = null;
 			if ($var['action'] == 'ACTION.LOGIN')
@@ -528,9 +532,9 @@ class AdminController extends Controller
 			
 			//extract username and IP address
 			$keywords = preg_split("/[\[\@ \]]+/", $var['user'] );
-			$var['user'] = $keywords[1];
+			unset($var['user']);
+			$username = $var['user'] = $keywords[1];
 			$var['ip'] = $keywords[2];
-			$username = $keywords[1];
 			
 			// build an incremental index for "session" (based on successive login per user)
 			$var['SESSION']="";
@@ -662,62 +666,93 @@ class AdminController extends Controller
 				$var['DURATION']=0;
 			}
 				
-		
+			
 			$json['items'][] = $var;
 		}
 		
-		$str="";
+		// Define the labels for the header
 		$headers= array(
-				"LEVEL","DATE","ACTION", "USER","IP","MSG",
-				"SESSION","ENDDATE","DURATION",
-				"BASE","TASKID","DRAFTID","RES",
-				"BROWSER","OS","DEVICE"
+				"LEVEL","DATE","ACTION", "MSG",		// event basic info
+				"USER", "IP",						// user identification
+				"SESSION","ENDDATE","DURATION",		// session and timespan
+				"BASE","TASKID","DRAFTID","RES",	// task and draft identification
+				"BROWSER","OS","DEVICE"				// user agent
 			);
-	/*	$str =$str."".join("\t", $headers)."\n";
-		foreach ($json['items'] as $key=>$var)
+		
+		// format output as tab-separated values
+		if ($format==="tsv")
 		{
-			$str =$str."".join("\t", $var)."\n";
+			$str="";
+			$str =$str."".join("\t", $headers)."\n";
+			foreach ($json['items'] as $key=>$var)
+			{
+				$str =$str."".join("\t", $var)."\n";
+			}
+			
+			$response = $this->app->response();
+			$response['Content-Type'] = 'text/tab-separated-values';
+			//$response['Content-Type'] = 'text/plain';
+			$response['X-Powered-By'] = 'openEssayist';
+			$response->status(200);
+			$response->body($str);
+			
 		}
-		
-		$response = $this->app->response();
-		$response['Content-Type'] = 'text/tab-separated-values';
-		//$response['Content-Type'] = 'text/plain';
-		$response['X-Powered-By'] = 'openEssayist';
-		$response->status(200);
-		$response->body($str);*/
-		
-		if ($format==="json")
+		// format output as JSON object
+		else if ($format==="json")
 		{
 			$response = $this->app->response();
 			$response['Content-Type'] = 'application/x-javascript';
 			$response['X-Powered-By'] = 'openEssayist';
 			$response->status(200);
 			$response->body(json_encode($json));
-			
 		}
+		// format output as Excel document
 		else 
 		{
+			// Hack for excel-compliant date format
+			foreach ($json['items'] as &$var)
+			{
+				$date1 = new DateTime($var['date']);
+				$date2 = new DateTime($var['ENDDATE']);
+				$var['date'] = PHPExcel_Shared_Date::PHPToExcel($date1);//->format('d/m/Y  H:i:s');
+				$var['ENDDATE']=PHPExcel_Shared_Date::PHPToExcel($date2);;//->format('d/m/Y  H:i:s');
+			}
+		
 			$objPHPExcel = new PHPExcel();
 			$objPHPExcel->getProperties()->setCreator("Nicolas Van Labeke")
-			->setLastModifiedBy("Nicolas Van Labeke")
-			->setTitle("H810 log dump")
-			->setSubject("OpenEssayist study")
-			->setDescription("")
-			->setKeywords("openEssayist H810")
-			->setCategory("openEssayist");
+				->setLastModifiedBy("Nicolas Van Labeke")
+				->setTitle("OpenEssayist log dump")
+				->setSubject("OpenEssayist study")
+				->setDescription("")
+				->setKeywords("openEssayist activity log")
+				->setCategory("openEssayist");
 			
-			// create the overview info
-			$objPHPExcel->setActiveSheetIndex(0)
+			$objPHPExcel->setActiveSheetIndex(0);
+			
+			// Set date format for the two column 'DATE' and 'ENDDATE'
+			$objPHPExcel->getActiveSheet()
+				->getStyle('B')
+				->getNumberFormat()
+				->setFormatCode("dd mmm yy");
+			$objPHPExcel->getActiveSheet()
+				->getStyle('H')
+				->getNumberFormat()
+				->setFormatCode("dd mmm yy");
+						
+			// create the 'logs' spreadsheet
+			$objPHPExcel->getActiveSheet()
 				->setTitle('logs')
 				->fromArray($headers, NULL, 'A1',true)
 				->fromArray($json['items'], NULL, 'A2',true);
+			
+			// create an Excel writer
 			$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
 			
+			// write the content to the ouptput as a file
 			$response = $this->app->response();
 			$response['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf-8';
 			$response['X-Powered-By'] = 'openEssayist';
 			$response->status(200);
-			//$response->body($str);
 			$objWriter->save("php://output");
 		}
 		
