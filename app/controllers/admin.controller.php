@@ -344,6 +344,8 @@ class AdminController extends Controller
 				"USER",
 				"TASKID",
 				"DRAFTID",
+				"VERSION",
+				"NAME",
 				'avfreqsum',
 				'sum_freq_kls_in_ass_q_long',
 				'sum_freq_kls_in_ass_q_short',
@@ -391,10 +393,17 @@ class AdminController extends Controller
 			
 			if (strncmp($user->username, "user", strlen("user")) != 0) continue;
 			
+			
+			
 			$stat = array();
 			$stat["user"] = $user->username;
 			$stat["taskid"] = $draft->task_id;
 			$stat["draftid"] = $draft->id;
+			$stat["version"] = $draft->version;
+			$stat["name"] = $draft->name;
+			
+			
+			
 			$stat = array_merge($stat,
 					(array)$r->ke_stats,
 					array("wordlimit"=>$tsk->wordcount),
