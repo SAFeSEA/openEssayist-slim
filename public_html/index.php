@@ -38,7 +38,7 @@ define('EXT', '.twig');
 $app = new \Slim\Slim(array(
 	'openEssayist.async' => false,
 	'view' => new TwigView,
-	'debug' => false,
+	'debug' => true,
     'log.level' => \Slim\Log::DEBUG,
     'log.enabled' => true,
     'log.writer' => new \Slim\Extras\Log\DateTimeFileWriter(array(
@@ -105,10 +105,12 @@ if ($view instanceof TwigView)
 // Create a hook to add the root URI to all views
 $app->hook('slim.before.dispatch', function() use ($app) {
 	$app->view()->appendData(array(
-			'app_base' => $app->request()->getRootUri()
+			'app_base' 	=> $app->request()->getRootUri(),
+			'assets' 		=> $app->request()->getRootUri() . '/assets/openessayist/',
+			'img' 		  => $app->request()->getRootUri() . '/assets/openessayist/img/',
+			'js' 				=> $app->request()->getRootUri() . '/assets/openessayist/js/'
 	));
 });
-
 
 /**
  * @var $config
@@ -144,7 +146,6 @@ $adminCtrl = new AdminController();
 $userCtrl = new UserController();
 $demoCtrl = new DemoController();
 $tutorCtrl = new TutorController();
-
 
 // Define the routes
 $c->app->get('/', array($appController, 'index'))->name('home');
@@ -186,6 +187,7 @@ $c->app->get('/me/draft/:draft/view/cytoscape/se', array($userCtrl, 'viewCytoSca
 
 
 $c->app->get('/me/draft/:draft/view/dispersion', array($userCtrl, 'viewDispersion'))->name('me.draft.view.dispersion');
+$c->app->get('/me/draft/:draft/view/rainbow', array($userCtrl, 'viewRainbow'))->name('me.draft.view.rainbow');
 $c->app->get('/me/draft/:draft/view/structure', array($userCtrl, 'viewStructure'))->name('me.draft.view.structure');
 $c->app->get('/me/draft/:draft/view/target', array($userCtrl, 'viewTarget'))->name('me.draft.view.target');
 $c->app->get('/me/draft/:draft/view/matrix', array($userCtrl, 'viewMatrix'))->name('me.draft.view.matrix');

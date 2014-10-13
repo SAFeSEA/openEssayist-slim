@@ -20,6 +20,7 @@
 					<i class="icon-large icon-desktop"></i>
 					<span class="hidden-phone "> Essay</span>
 			</a>
+		</li>
 
 		<li class="{{ navsrc == 'me.draft.group.texts' ? 'active' }} dropdown-split-left">
 			<a	title="Explore the summaries of the draft"
@@ -28,6 +29,7 @@
 					<i class="icon-beaker icon-large"></i>
 					<span class="hidden-phone "> Analysis</span>
 			</a>
+		</li>
           
 		<li class="{{ navsrc == 'me.draft.group.graphics' ? 'active' }}">
 			<a	title="Explore various graphics of the draft"
@@ -36,7 +38,17 @@
 					<i class="icon-large icon-bar-chart"></i>
 					<span class="hidden-phone "> Graphics</span>
 			</a>
+		</li>
 					
+		<li class="{{ navsrc == 'me.draft.view.rainbow' ? 'active' }}">
+			<a	title="View and compare rainbow diagrams for this draft"
+				rel="tooltip" data-placement="bottom"
+				href="{{ urlFor('me.draft.view.rainbow',{"draft":draft.id}) }}">
+					<i class="icon-large icon-picture"></i>
+					<span class="hidden-phone "> Rainbow Diagram</span>
+			</a>
+		</li>
+
 	{% elseif navigation == "menu" %}		
 		<li class="{{ navsrc == 'me.draft.show' ? 'active' }}">
 			<a	title="Explore the text of the draft"
@@ -45,6 +57,7 @@
 					<i class="icon-large icon-desktop"></i>
 					<span class="hidden-phone "> Essay</span>
 			</a>
+		</li>
 			
 			{#<li class="dropdown dropdown-split-right active">
             <a data-toggle="dropdown" class="dropdown-toggle" href="#">

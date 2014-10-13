@@ -90,3 +90,19 @@ openEssayist.showSRTool = function()
 
 
 
+
+
+
+
+$('#rd-comparisons img').click(function() {
+    var thmb = this;
+    var src = this.src;
+    var versionName = this.getAttribute('data-version-name');
+    $('.rd-comparison-image').fadeOut(200,function(){
+        $(this).fadeIn(200)[0].src = src;
+    });
+    if (versionName.length > 0) {
+    	versionName = " - '" + versionName + "'";
+    }
+    $('.version-number-comparison').html(this.id + ' ' + versionName);
+});

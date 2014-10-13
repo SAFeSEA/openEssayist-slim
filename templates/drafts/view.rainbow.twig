@@ -1,0 +1,96 @@
+{% extends "site.twig" %} 
+
+{% block title %}{{ task.name }} v{{ draft.version }} - Rainbow Diagram{% endblock %} 
+{% block subheader %}Your Draft : Rainbow Diagram{% endblock %} 
+
+{% block bccontainer %}		
+	{% include "widgets/breadcrumb.task.twig" %}
+{% endblock %}
+
+{% block navsubheader %}
+	{% include "widgets/navbar.drafts.twig" with {'navsrc': 'me.draft.view.rainbow'} %}
+{% endblock %}
+
+
+{% block content %}
+
+
+
+<div class="row-fluid"><div class="span12">
+
+<div class="widget">
+
+			<div class="widget-header" data-toggle="collapse" data-target="#demo">
+				<h2>{{ task.name }} v<span class="version-number-original">{{ draft.version }}</span> - Rainbow Diagram</h2>
+			</div>
+
+			<!-- Main Rainbow Diagram for this version -->
+			<div class="widget-content" id='rd-container'>
+					<div class="row-fluid">
+							<div class="span6">
+								<img src="{{img ~ 'rd/' ~ rd_filename}}" class="rd-original">
+								<div>
+									<span class="label label-info">
+										Rainbow Diagram for {{task.name}}
+									</span> 
+									<span class="badge badge-info version-number-original">
+										<strong>Version {{draft.version}} - '{{draft.name}}'</strong>
+									</span>
+								</div>
+							</div>
+							<div class="span6">
+								{% if output_comparisions %}
+									<!--<img src="{{img ~ 'rd/' ~ rd_filename}}" class="rd-comparison-image">-->
+									<img src="{{img ~ 'rd/' ~ rd_filenames[1]}}" class="rd-comparison-image thumbnailz" id="{{versions[1]}}">
+									<div><span class="label label-success">Rainbow Diagram for {{task.name}} <strong></span>  <span class="badge badge-success">Version <span class="version-number-comparison">{{versions[1]}} - '{{names[1]}}'</span></strong></span></div>
+								{% endif %}
+							</div>
+					</div>
+			</div>
+
+			<hr>
+
+			<!-- Rainbow diagram comparison section -->
+			<div id="rd-comparisons">
+				<h3>{{ task.name }} - Essay Version Rainbow Diagram Comparison</h3>
+				<!-- Creat Bootstrap row -->
+				{% for current_row in 1..output_row_total %}
+					<div class="row-fluid">
+
+						
+
+						<!-- Output 6 pictures per row -->
+						{% for picture_in_row in 0..5 %}
+							<div class="span2 rd-container-item">
+								<!-- Set variable to access the correct image to display for current essay version -->
+								{% set rd_element_position = ((current_row-1) * 6) + picture_in_row %}
+								{% if rd_filenames[rd_element_position] %}
+									<!-- Version number -->
+									<span class="label label-default"><strong>Version</strong> {{versions[rd_element_position]}} </span>
+									<!-- Display Rainbow Diagram for version -->
+				        	<img src="{{img ~ 'rd/' ~ rd_filenames[rd_element_position]}}" class="rd thumbnail" data-version-name="{{names[rd_element_position]}}" id="{{versions[rd_element_position]}}">
+				        	<span class="label label-default rd-name-caption"><strong>Version</strong> {{versions[rd_element_position]}} </span>
+			        	{% endif %}
+			        </div>
+			    	{% endfor %}
+					</div>
+						
+					<hr>
+
+				{% endfor %}
+
+				<p>Hover over an image to enlarge. Click image to view above.</p>
+
+			</div>
+
+</div>
+			
+</div>
+
+{% endblock %}
+
+{% block injectJS %}
+	{{ parent() }}
+
+</script>
+{% endblock %}

@@ -330,7 +330,7 @@ class UserController extends Controller
 		/* @var $d Draft */
 		$ap = Model::factory('Task')->find_one($taskId);
 		$g = $ap->group()->find_one();
-		
+
 		$formdata=null;
 		$status=200;
 		
@@ -338,8 +338,9 @@ class UserController extends Controller
 		{
 			$post = $req->post();
 
-			if ($async)
+			if ($async) {
 				$this->submitAsync($ap, $taskId, $post);
+			}
 			else
 			{
 				$formdata["text"] = $post["text"];
@@ -351,9 +352,12 @@ class UserController extends Controller
 					$request = Requests::post($url,
 							array(),
 							array(
-									'text' => $post["text"],
-									'module' => $post["module"],
-									'task' => $post["task"],
+									'text' 				=> $post["text"],
+									'module' 			=> $post["module"],
+									'task' 				=> $post["task"],
+									'task_id' 		=> $taskId,
+									'version_id' 	=> $post["version"],
+									'user_id' 		=> $this->user['id']
 								),
 							array(
 									'timeout' => 300,
@@ -968,6 +972,58 @@ class UserController extends Controller
 
 		));
 			
+	}
+
+	public function viewRainbow($draft)
+	{
+
+		$output_comparisions = false;
+
+		//Get Current Draft
+		$dr = $this->getDraft($draft);
+		
+		//Get Current Task
+		$tsk = $dr->task()->find_one();
+
+		//Get all drafts for this user for this task
+		$u = Model::factory('Users')->find_one($this->user['id']);
+		$drafts = $u->drafts()->where_equal('task_id',$tsk->id)->order_by_desc('id')->find_array();
+		
+		var_dump(count($drafts));
+		if (count($drafts) > 1) {
+			$output_comparisions = true;
+		}
+
+		//Calculate number of rows required for number of drafts (3 images per row)
+		$output_row_total = ceil(count($drafts)/6);
+
+		//Set rainbow diagram image names and version numbers
+		foreach ($drafts as $draft) {
+			$rd_filenames[] = 'rd_'  .  $this->user['id']  .  '_'  .  $tsk->id  .  '_'  .  $draft['version'] .'.png';
+			$versions[] 		= $draft['version'];
+			$names[] 				= $draft['name'];
+		}
+
+
+
+		//Set main rainbow diagram image name
+		$rd_filename = 'rd_'  .  $this->user['id']  .  '_'  .  $tsk->id  .  '_'  .  $dr->version .'.png'; 
+		
+		//var_dump($names);
+
+		$this->render('drafts/view.rainbow',array(
+				'helpontask' 						=> 'view.rainbow',
+				'task' 									=> $tsk->as_array(),
+				'draft' 								=> $dr->as_array(),
+				'drafts' 								=> $drafts,
+				'user' 									=> $this->user,
+				'rd_filename' 					=> $rd_filename,
+				'rd_filenames' 					=> $rd_filenames,
+				'versions'							=> $versions,
+				'names'									=> $names,
+				'output_row_total' 			=> $output_row_total,
+				'output_comparisions' 	=> $output_comparisions
+		));
 	}
 
 	public function viewDispersion($draft)
