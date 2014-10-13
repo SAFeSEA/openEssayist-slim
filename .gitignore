@@ -8,3 +8,5 @@ app/localconfig.php
 /vendor
 /.cache
 /.logs
+
+public_html/assets/openessayist/img/rd
