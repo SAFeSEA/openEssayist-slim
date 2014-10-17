@@ -1,0 +1,26 @@
+INFO | 2013-11-06T11:20:06+00:00 | GET | [anon @ 137.108.145.39] | /
+INFO | 2013-11-06T13:51:14+00:00 | GET | [anon @ 137.108.49.9] | /
+INFO | 2013-11-06T13:51:18+00:00 | GET | [anon @ 137.108.49.9] | /login
+INFO | 2013-11-06T13:51:21+00:00 | POST | [anon @ 137.108.49.9] | /login
+INFO | 2013-11-06T14:09:11+00:00 | GET | [anon @ 137.108.49.9] | /
+INFO | 2013-11-06T14:09:13+00:00 | GET | [anon @ 137.108.49.9] | /about
+INFO | 2013-11-06T14:09:22+00:00 | GET | [anon @ 137.108.49.9] | /
+INFO | 2013-11-06T14:09:23+00:00 | GET | [anon @ 137.108.49.9] | /login
+INFO | 2013-11-06T14:09:37+00:00 | POST | [anon @ 137.108.49.9] | /login
+INFO | 2013-11-06T14:09:37+00:00 | ACTION.LOGIN | [safesea1 @ 137.108.49.9] | {"user_agent":"Mozilla\/5.0 (Windows NT 6.1; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/30.0.1599.69 Safari\/537.36"}
+INFO | 2013-11-06T14:09:37+00:00 | GET | [safesea1 @ 137.108.49.9] | /me/
+INFO | 2013-11-06T14:09:37+00:00 | GET | [safesea1 @ 137.108.49.9] | /me/consent
+INFO | 2013-11-06T14:09:49+00:00 | POST | [safesea1 @ 137.108.49.9] | /me/consent
+INFO | 2013-11-06T14:09:49+00:00 | GET | [safesea1 @ 137.108.49.9] | /me/
+INFO | 2013-11-06T14:09:54+00:00 | GET | [safesea1 @ 137.108.49.9] | /me/essay/
+INFO | 2013-11-06T14:09:56+00:00 | GET | [safesea1 @ 137.108.49.9] | /me/essay/4/drafts/
+INFO | 2013-11-06T14:09:58+00:00 | GET | [safesea1 @ 137.108.49.9] | /me/essay/4/submit/
+INFO | 2013-11-06T14:14:17+00:00 | POST | [safesea1 @ 137.108.49.9] | /me/essay/4/submit/
+INFO | 2013-11-06T14:14:35+00:00 | GET | [safesea1 @ 137.108.49.9] | /me/essay/4/drafts/
+INFO | 2013-11-06T14:15:48+00:00 | GET | [safesea1 @ 137.108.49.9] | /me/draft/11/show/
+INFO | 2013-11-06T14:15:49+00:00 | POST | [safesea1 @ 137.108.49.9] | /tutor/logactivity
+INFO | 2013-11-06T14:15:49+00:00 | ACTION.MASHUP.INIT | [safesea1 @ 137.108.49.9] | [{"name":"structure","value":"#-s:t#"},{"name":"structure","value":"#-s:h#"},{"name":"structure","value":"#+s:i#"},{"name":"structure","value":"#+s#"},{"name":"structure","value":"#+s:c#"},{"name":"structure","value":"#-s:q#;#-s:n#;#-s:p#;#dummy#;#+s:p#"},{"name":"task","value":"show"}]
+INFO | 2013-11-06T14:19:01+00:00 | GET | [safesea1 @ 137.108.49.9] | /
+INFO | 2013-11-06T14:19:04+00:00 | GET | [safesea1 @ 137.108.49.9] | /about
+INFO | 2013-11-06T14:25:00+00:00 | GET | [safesea1 @ 137.108.49.9] | /
+INFO | 2013-11-06T14:25:03+00:00 | GET | [safesea1 @ 137.108.49.9] | /about

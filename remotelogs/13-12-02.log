@@ -1,0 +1,8 @@
+INFO | 2013-12-02T10:22:18+00:00 | GET | [anon @ 137.108.48.196] | /
+INFO | 2013-12-02T10:23:12+00:00 | GET | [anon @ 137.108.48.196] | /login
+INFO | 2013-12-02T10:23:16+00:00 | POST | [anon @ 137.108.48.196] | /login
+INFO | 2013-12-02T10:23:22+00:00 | POST | [anon @ 137.108.48.196] | /login
+INFO | 2013-12-02T10:23:22+00:00 | ACTION.LOGIN | [admin @ 137.108.48.196] | {"user_agent":"Mozilla\/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko\/20100101 Firefox\/25.0"}
+INFO | 2013-12-02T10:23:22+00:00 | GET | [admin @ 137.108.48.196] | /me/
+INFO | 2013-12-02T10:23:25+00:00 | GET | [admin @ 137.108.48.196] | /admin/tasks
+INFO | 2013-12-02T10:23:27+00:00 | GET | [admin @ 137.108.48.196] | /admin/users

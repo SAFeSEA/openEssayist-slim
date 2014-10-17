@@ -38,12 +38,37 @@
 	<div class="span4">
 		<div class="widget">
 			<div class="widget-header">
-				<h3>Analyser</h3>
+				<h3>Reports</h3>
 			</div>
 			<div class="widget-content"> 
-				<p><a class="btn" href="{{ urlFor('admin.json') }}">
-					<i class="icon-cog"></i>
-					<span>Show JSON structure</span>
+				<p><a class="btn" href="{{ urlFor('admin.feedback') }}">
+					<i class="icon-desktop"></i>
+					<span>Show all students' feedback</span>
+				</a></p>
+				<p><a class="btn" href="{{ urlFor('admin.logs.table') }}">
+					<i class="icon-table"></i>
+					<span>Show Activity Logs (table)</span>
+				</a></p>
+				<p><a class="btn" href="{{ urlFor('admin.logs') }}">
+					<i class="icon-desktop"></i>
+					<span>Show Activity Logs (graph)</span>
+				</a></p>
+			</div> 
+		
+			<div class="widget-content"> 
+				<p><a class="btn btn-block" href="{{ urlFor('admin.data.csv') }}">
+					<i class="icon-download"></i>
+					<span>Download activity logs <br>(Excel) <span class="label label-important">Slow</span></span>
+				</a></p>
+				<p><a class="btn btn-block" href="{{ urlFor('admin.data.log',{"format": "tsv"}) }}">
+					<i class="icon-download"></i>
+					<span>Download activity logs <br>(Tab-Separated) <span class="label label-success">Faster</span></span>
+				</a></p>
+			</div> 
+			<div class="widget-content"> 
+				<p><a class="btn btn-block" href="{{ urlFor('admin.data.content') }}">
+					<i class="icon-download"></i>
+					<span>Download contents <br>(Excel) <span class="label label-important">Slow</span></span>
 				</a></p>
 			</div> 
 		</div>

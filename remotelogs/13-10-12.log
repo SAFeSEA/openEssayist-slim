@@ -1,0 +1,10 @@
+INFO | 2013-10-12T10:53:51+01:00 | GET | [anon @ 86.179.148.7] | /
+INFO | 2013-10-12T10:53:54+01:00 | GET | [anon @ 86.179.148.7] | /login
+INFO | 2013-10-12T10:53:58+01:00 | POST | [anon @ 86.179.148.7] | /login
+INFO | 2013-10-12T10:53:58+01:00 | ACTION.LOGIN | [admin @ 86.179.148.7] | {"user_agent":"Mozilla\/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko\/20100101 Firefox\/24.0"}
+INFO | 2013-10-12T10:53:58+01:00 | GET | [admin @ 86.179.148.7] | /me/
+INFO | 2013-10-12T10:54:04+01:00 | GET | [admin @ 86.179.148.7] | /admin/tasks
+INFO | 2013-10-12T10:54:11+01:00 | GET | [admin @ 86.179.148.7] | /admin/users
+INFO | 2013-10-12T10:54:26+01:00 | GET | [admin @ 86.179.148.7] | /admin/feedback
+INFO | 2013-10-12T15:15:10+01:00 | GET | [admin @ 86.179.148.7] | /
+INFO | 2013-10-12T15:15:13+01:00 | GET | [admin @ 86.179.148.7] | /admin/users

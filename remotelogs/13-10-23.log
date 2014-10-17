@@ -1,0 +1,18 @@
+INFO | 2013-10-23T00:31:31+01:00 | GET | [anon @ 86.179.148.7] | /login
+INFO | 2013-10-23T00:31:46+01:00 | POST | [anon @ 86.179.148.7] | /login
+INFO | 2013-10-23T00:31:46+01:00 | ACTION.LOGIN | [admin @ 86.179.148.7] | {"user_agent":"Mozilla\/5.0 (Linux; U; Android 4.1.1; en-gb; Transformer Prime TF201 Build\/JRO03C) AppleWebKit\/534.30 (KHTML, like Gecko) Version\/4.0 Safari\/534.30"}
+INFO | 2013-10-23T00:31:47+01:00 | GET | [admin @ 86.179.148.7] | /me/
+INFO | 2013-10-23T00:31:53+01:00 | GET | [admin @ 86.179.148.7] | /admin/users
+INFO | 2013-10-23T00:32:05+01:00 | GET | [admin @ 86.179.148.7] | /admin/feedback
+INFO | 2013-10-23T18:06:28+01:00 | GET | [anon @ 86.179.148.7] | /
+INFO | 2013-10-23T18:06:30+01:00 | GET | [anon @ 86.179.148.7] | /login
+INFO | 2013-10-23T18:06:36+01:00 | POST | [anon @ 86.179.148.7] | /login
+INFO | 2013-10-23T18:06:36+01:00 | ACTION.LOGIN | [admin @ 86.179.148.7] | {"user_agent":"Mozilla\/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko\/20100101 Firefox\/24.0"}
+INFO | 2013-10-23T18:06:36+01:00 | GET | [admin @ 86.179.148.7] | /me/
+INFO | 2013-10-23T18:06:39+01:00 | GET | [admin @ 86.179.148.7] | /admin/users
+INFO | 2013-10-23T18:13:31+01:00 | GET | [admin @ 86.179.148.7] | /logout
+INFO | 2013-10-23T18:13:31+01:00 | GET | [anon @ 86.179.148.7] | /
+INFO | 2013-10-23T18:13:32+01:00 | GET | [anon @ 86.179.148.7] | /login
+INFO | 2013-10-23T18:13:39+01:00 | POST | [anon @ 86.179.148.7] | /login
+INFO | 2013-10-23T18:13:39+01:00 | ACTION.LOGIN | [admin @ 86.179.148.7] | {"user_agent":"Mozilla\/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko\/20100101 Firefox\/24.0"}
+INFO | 2013-10-23T18:13:39+01:00 | GET | [admin @ 86.179.148.7] | /me/

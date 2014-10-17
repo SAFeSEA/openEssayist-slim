@@ -19,129 +19,176 @@
 			<div class="widget-header" data-toggle="collapse" data-target="#demo">
 				<h2>Sentence Graph</h2>
 			</div>
-			<div class="widget-content" id='svg-container'></div>
+			<div class="widget-content" id="graph-container">
+				<div id='svg-container'></div>
 			</div>
+</div>
+
 </div></div>
 
 {% endblock %}
 
 {% block injectJS %}
 	{{ parent() }}
+<script src="{{ app_base }}/assets/d3.js/d3.v3.min.js"></script>
 <script src="{{ app_base }}/assets/cytoscape.js-2.0.1/cytoscape.min.js"></script>
 <script src="{{ app_base }}/assets/cytoscape.js-2.0.1/arbor.js"></script>
 <script type="text/javascript">
 
-$('#svg-container').cytoscape({
-	  style: cytoscape.stylesheet()
-	    .selector("node[rank = '-1']")
-	      .css({
-	        'content': 'data(name)' ,
-	        'text-valign': 'center',
-	        'color': 'white',
-	        'text-outline-width': 2,
-	        'text-outline-color': '#888'
-	      })
-	      
-	     .selector("node[rank != '-1']")
-	      .css({
-	        'content': 'data(name)' ,
-	        'text-valign': 'center',
-	        'color': 'white',
-	        'background-color': 'red',
-	        'text-outline-width': 2,
-	        'text-outline-color': '#888'
-	      }) 
-	    .selector('edge')
-	      .css({
-	        /*'target-arrow-shape': 'triangle'*/
-	      })
-	    .selector(':selected')
-	      .css({
-	        'background-color': 'black',
-	        'line-color': 'black',
-	        /*'target-arrow-color': 'black',
-	        'source-arrow-color': 'black'*/
-	      })
-	    .selector('.faded')
-	      .css({
-	        'opacity': 0.05,
-	        'text-opacity': 0
-	      }),
+$(document).ready(function()
+{
+	// load graph JSON data
+	var url = "{{ urlFor('ajax.graph.json',{'draft':draft.id,'graph':'graphse'}) }}";
+	$.getJSON(url,setupGraph);
+});
 
-	  /*layout: {
-		    name: 'random',
-		    ready: undefined, // callback on layoutready
-		    stop: undefined, // callback on layoutstop
-		    fit: true // whether to fit to viewport
-		},*/
-		layout: {
+function setupGraph(data)
+{
+	var dnodes = [];
+	var dlinks = [];
 
-			name: 'arbor',
-		    liveUpdate: true, // whether to show the layout as it's running
-		    ready: undefined, // callback on layoutready 
-		    stop: undefined, // callback on layoutstop
-		    maxSimulationTime: 10000, // max length in ms to run the layout
-		    fit: true, // fit to viewport
-		    padding: [ 50, 50, 50, 50 ], // top, right, bottom, left
-		    ungrabifyWhileSimulating: true, // so you can't drag nodes during layout
-
-		    // forces used by arbor (use arbor default on undefined)
-		    repulsion: undefined,
-		    stiffness: undefined,
-		    friction: undefined,
-		    gravity: false,
-		    fps: undefined,
-		    precision: undefined,
-
-		    // static numbers or functions that dynamically return what these
-		    // values should be for each element
-		    nodeMass: undefined, 
-		    edgeLength: undefined,
-
-		    stepSize: 1, // size of timestep in simulation
-
-		    // function that returns true if the system is stable to indicate
-		    // that the layout can be stopped
-		    stableEnergy: function( energy ){
-		        var e = energy; 
-		        return (e.max <= 0.5) || (e.mean <= 0.3);
-		    }
-		},
-	  elements: {
-	    nodes: [
-			{% for node in graph.nodes %}
-            { data: { id: "{{ node.id }}", name: "{{ node.id }}", rank:{{ node.rank?:-1 }}} },
-            {% endfor %}
-	    ],
-	    edges: [
-			{% for link in graph.links %}
-	        { data: {source: '{{ graph.nodes[link.source].id }}', target: '{{ graph.nodes[link.target].id }}' }},
-	        {% endfor %}
-	    ]
-	  },
-	  
-	  ready: function(){
-	    window.cy = this;
-	    
-	    // giddy up...
-	    
-	    cy.elements().unselectify();
-	    
-	    cy.on('tap', 'node', function(e){
-	      var node = e.cyTarget; 
-	      var neighborhood = node.neighborhood().add(node);
-	      
-	      cy.elements().addClass('faded');
-	      neighborhood.removeClass('faded');
-	    });
-	    
-	    cy.on('tap', function(e){
-	      if( e.cyTarget === cy ){
-	        cy.elements().removeClass('faded');
-	      }
-	    });
-	  }
+	var n = data.nodes.length;
+	var color = d3.scale.linear()
+    .domain([0,n/2,n])
+    .range(["#d7191c", "#ffffbf", "#2c7bb6"])
+    //.domain([0,n])
+    //.range(["hsl(62,100%,90%)", "hsl(228,30%,20%)"]);
+    .interpolate(d3.interpolateHcl);
+	console.log(color(0));
+	
+	//console.log(data.nodes);
+	$.each( data.nodes, function( key, val ) {
+        dnodes.push(
+                { data: { id: String(val.id), 
+                    	  name: String(val.id), 
+                    	  rank:0,
+                    	  favColor: color(key)
+                    	}
+           });
 	});
+	$.each( data.links, function( key, val ) {
+        dlinks.push(
+			{ data: {
+				source: String(data.nodes[val.source].id), 
+				target: String(data.nodes[val.target].id) 
+			}});
+	});
+	
+	$('#svg-container').cytoscape({
+		  style: cytoscape.stylesheet()
+		    .selector("node")
+		      .css({
+		        'content': 'data(name)' ,
+		        'text-valign': 'center',
+		        'color': 'white',
+		        
+		        'background-color' : 'data(favColor)' ,
+		      })
+		      
+		     /*.selector("node[rank != '-1']")
+		      .css({
+		        'content': 'data(name)' ,
+		        'text-valign': 'center',
+		        'color': 'white',
+		        'background-color': 'red',
+		        'text-outline-width': 2,
+		        'text-outline-color': '#888'
+		      })*/ 
+		    .selector('edge')
+		      .css({
+		        /*'target-arrow-shape': 'triangle'*/
+		      })
+		    .selector(':selected')
+		      .css({
+		        'background-color': 'black',
+		        'line-color': 'black',
+		        /*'target-arrow-color': 'black',
+		        'source-arrow-color': 'black'*/
+		      })
+		    .selector('.faded')
+		      .css({
+		        'opacity': 0.05,
+		        'text-opacity': 0
+		      }),
+
+		  /*layout: {
+			    name: 'random',
+			    ready: undefined, // callback on layoutready
+			    stop: undefined, // callback on layoutstop
+			    fit: true // whether to fit to viewport
+			},*/
+			layout: {
+
+				name: 'arbor',
+			    liveUpdate: true, // whether to show the layout as it's running
+			    ready: undefined, // callback on layoutready 
+			    stop: undefined, // callback on layoutstop
+			    maxSimulationTime: 6000, // max length in ms to run the layout
+			    fit: true, // fit to viewport
+			    padding: [ 50, 50, 50, 50 ], // top, right, bottom, left
+			    ungrabifyWhileSimulating: true, // so you can't drag nodes during layout
+
+			    // forces used by arbor (use arbor default on undefined)
+			    repulsion: undefined,
+			    stiffness: undefined,
+			    friction: undefined,
+			    gravity: true,
+			    fps: undefined,
+			    precision: undefined,
+
+			    // static numbers or functions that dynamically return what these
+			    // values should be for each element
+			    nodeMass: undefined, 
+			    edgeLength: undefined,
+
+			    stepSize: 1, // size of timestep in simulation
+
+			    // function that returns true if the system is stable to indicate
+			    // that the layout can be stopped
+			    stableEnergy: function( energy ){
+			        var e = energy; 
+			        return (e.max <= 0.5) || (e.mean <= 0.3);
+			    }
+			},
+		  elements: {
+		    nodes: dnodes 
+			    /*[
+				{% for node in graph.nodes %}
+	            { data: { id: "{{ node.id }}", name: "{{ node.id }}", rank:{{ node.rank?:-1 }}} },
+	            {% endfor %}
+		    ]*/,
+		    edges: dlinks /*[
+				{% for link in graph.links %}
+		        { data: {source: '{{ graph.nodes[link.source].id }}', target: '{{ graph.nodes[link.target].id }}' }},
+		        {% endfor %}
+		    ]*/
+		  },
+		  
+		  ready: function(){
+		    window.cy = this;
+		    
+		    // giddy up...
+		    
+		    cy.elements().unselectify();
+		    
+		    cy.on('tap', 'node', function(e){
+		      var node = e.cyTarget; 
+		      var neighborhood = node.neighborhood().add(node);
+		      
+		      cy.elements().addClass('faded');
+		      neighborhood.removeClass('faded');
+		    });
+		    
+		    cy.on('tap', function(e){
+		      if( e.cyTarget === cy ){
+		        cy.elements().removeClass('faded');
+		      }
+		    });
+		  }
+		});	
+}
+	
+
 
 
 </script>
@@ -151,10 +198,14 @@ $('#svg-container').cytoscape({
 	{{ parent() }}
 <style type="text/css">
 
-#svg-container {
+#graph-container {
   height: 600px;
-  width: 800px;
   
+}
+
+#svg-container {
+  height: 100%;
+	width: 100%;
 }
 </style>
 {% endblock %}

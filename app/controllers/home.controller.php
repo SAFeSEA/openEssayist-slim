@@ -30,7 +30,13 @@ class HomeController extends Controller
 		$this->app->flashNow('error', $e->getMessage());
 		$this->render('pages/error',array(
 			'path' => $this->app->request()->headers(),
-			'error' => $e
+			'error' => array(
+					'MESSAGE'	=> $e->getMessage(),
+					'CODE'		=> $e->getCode(),
+					'LINE'		=> $e->getLine(),
+					'FILE'		=> $e->getFile()
+
+					)
 		));
 	
 	}	

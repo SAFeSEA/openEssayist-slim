@@ -7,6 +7,15 @@
  */
 abstract class Controller extends Application {
 
+	/**
+	 * Reference to the User Agent parser
+	 * @var UAS\Parser
+	 */
+	private $UAParser = null;
+
+	/**
+	 * Default constructor
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -16,8 +25,29 @@ abstract class Controller extends Application {
 			$this->user = $this->auth->getUser();
 			//var_dump($this->user);
 		}
+		$this->UAParser = new \UAS\Parser("../.cache/.UPA/",null,false,false);
 	}
 	
+	/**
+	 * Parse the User Agent string and return a formatted array
+	 * @param string $ua
+	 * @return Ambigous <NULL, multitype:, multitype:string , multitype:NULL string unknown , multitype:string NULL unknown >
+	 */
+	public function getUserAgent($ua=null)
+	{
+		$ret = null;
+		if ($this->UAParser)
+		{
+			$ret = $this->UAParser->parse($ua);
+		}
+		return $ret;
+	}
+	
+	/**
+	 * Generate a human-readable elapsed time
+	 * @param unknown $ptime
+	 * @return string
+	 */
 	public function timeSince($ptime) {
 		$etime = time() - $ptime;
 	
@@ -42,15 +72,29 @@ abstract class Controller extends Application {
 		}
 	}
 
+	/**
+	 * Redirect to the given path, given either as an URL or a route name
+	 * @param string $name
+	 * @param boolean $routeName
+	 */
 	public function redirect($name, $routeName = true)
 	{
 		$url = $routeName ? $this->app->urlFor($name) : $name;
 		$this->app->redirect($url);
 	}
 
-	public function get($value = null)
+    /**
+     * Fetch GET data
+     *
+     * This method returns a key-value array of data sent in the HTTP request query string, or
+     * the value of the array key if requested; if the array key does not exist, NULL is returned.
+     *
+     * @param  string           $key
+     * @return array|mixed|null
+     */
+	public function get($key = null)
 	{
-		return $this->app->request()->get($value);
+		return $this->app->request()->get($key);
 	}
 
 	public function post($value = null)
@@ -76,9 +120,6 @@ abstract class Controller extends Application {
 
 	public function render($template, $data = array(), $status = null)
 	{
-		//if ($len = strpos(strrev($template), '.')) {
-		//	$template = substr( $template, 0, -($len+1) );
-		//}
 		$this->app->view()->appendData(array('auth' => $this->auth));
 		$this->app->render($template . EXT, $data, $status);
 	}

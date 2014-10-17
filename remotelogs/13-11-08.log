@@ -1,0 +1,14 @@
+INFO | 2013-11-08T21:25:24+00:00 | GET | [anon @ 86.176.117.181] | /
+INFO | 2013-11-08T21:25:26+00:00 | GET | [anon @ 86.176.117.181] | /login
+INFO | 2013-11-08T21:25:30+00:00 | POST | [anon @ 86.176.117.181] | /login
+INFO | 2013-11-08T21:25:30+00:00 | ACTION.LOGIN | [admin @ 86.176.117.181] | {"user_agent":"Mozilla\/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko\/20100101 Firefox\/25.0"}
+INFO | 2013-11-08T21:25:30+00:00 | GET | [admin @ 86.176.117.181] | /me/
+INFO | 2013-11-08T21:25:41+00:00 | GET | [admin @ 86.176.117.181] | /admin/users
+INFO | 2013-11-08T21:26:10+00:00 | GET | [admin @ 86.176.117.181] | /admin/feedback
+INFO | 2013-11-08T21:26:11+00:00 | GET | [admin @ 86.176.117.181] | /me/report
+INFO | 2013-11-08T21:26:15+00:00 | GET | [admin @ 86.176.117.181] | /profile/data/notes
+INFO | 2013-11-08T21:26:17+00:00 | POST | [admin @ 86.176.117.181] | /profile/data/notes
+INFO | 2013-11-08T21:26:17+00:00 | GET | [admin @ 86.176.117.181] | /me/
+INFO | 2013-11-08T21:26:19+00:00 | GET | [admin @ 86.176.117.181] | /
+INFO | 2013-11-08T21:26:24+00:00 | GET | [admin @ 86.176.117.181] | /logout
+INFO | 2013-11-08T21:26:24+00:00 | GET | [anon @ 86.176.117.181] | /

@@ -56,6 +56,7 @@ class Application {
 				  `group_id` int(11) NOT NULL,
 				  `active` int(11) DEFAULT '0',
 				  `isadmin` int(11) DEFAULT '0',
+				  `isgroup` int(11) DEFAULT '0',
 				  `isdemo` int(11) DEFAULT '0',
 				  PRIMARY KEY (`id`),
 				  UNIQUE (`username`)

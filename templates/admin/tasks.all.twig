@@ -56,8 +56,7 @@ code
 					<td><a class="btn"  href="{{ urlFor('admin.task.edit',{"taskid":task.id}) }}">
 							{{ task.name }} (<code>{{ task.code }}</code>)</a></td>
 					<td>
-					<p data-toggle="collapse" data-target="#long{{ task.id }}">{{ task.short()|escape }} ...</p>
-					<p id="long{{ task.id }}" class="collapse">{{ task.long()|escape }}</p>
+					<p><small>{{ task.assignment|slice(0,250)|escape }} [...]</small></p>
 					</td>
 					<td>{{ task.wordcount }} </td>
 					<td>{{ task.deadline }}</td>

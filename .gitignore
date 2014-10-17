@@ -3,7 +3,6 @@ LICENSE.txt
 README.txt
 demos/
 extras/documentation
-app/localconfig.php
 
 /vendor
 /.cache

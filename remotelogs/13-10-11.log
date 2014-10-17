@@ -1,0 +1,6 @@
+INFO | 2013-10-11T16:38:50+01:00 | GET | [anon @ 137.108.145.39] | /
+INFO | 2013-10-11T16:38:52+01:00 | GET | [anon @ 137.108.145.39] | /login
+INFO | 2013-10-11T16:38:57+01:00 | POST | [anon @ 137.108.145.39] | /login
+INFO | 2013-10-11T16:38:57+01:00 | ACTION.LOGIN | [admin @ 137.108.145.39] | {"user_agent":"Mozilla\/5.0 (Windows NT 6.1; rv:24.0) Gecko\/20100101 Firefox\/24.0"}
+INFO | 2013-10-11T16:38:57+01:00 | GET | [admin @ 137.108.145.39] | /me/
+INFO | 2013-10-11T16:39:01+01:00 | GET | [admin @ 137.108.145.39] | /admin/users

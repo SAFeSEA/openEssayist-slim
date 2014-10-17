@@ -1,0 +1,284 @@
+{% extends "site.twig" %} 
+
+{% block title %}Group{% endblock %} 
+{% block subheader %}Your Group Homepage{% endblock %} 
+
+{% block bccontainer %}		
+	{% include "widgets/breadcrumb.panel.twig" with {'navsrc': 'me.group'} %}
+{% endblock %}
+
+
+{% block navsubheader %}
+<div class="navbar">
+    <div class="navbar-inner">
+    	<span class="brand" >{{ group.name }}</span>
+    	<ul class="nav">
+ 			<li><a title="Monitor your students" 
+ 					href="{{ urlFor('group.home') }}" rel="tooltip" data-placement="bottom">
+				<i class="icon-search icon-large"></i> 
+				<span class="hidden-phone hidden-tablet">Activity</span>
+			</a></li>
+ 			<li><a title="Manage your group's tasks" 
+ 					href="{{ urlFor('group.task') }}" rel="tooltip" data-placement="bottom">
+				<i class="icon-cogs icon-large"></i> 
+				<span class="hidden-phone hidden-tablet">Tasks</span>
+			</a></li>
+			
+    	</ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<div class="row-fluid">
+<div class="span12"><div class="widget">
+	<div class="widget-header">
+		<h2>History of activity in group</h2>
+	</div>
+			
+	<div class="widget-content">
+	
+	
+			<table class="table table-condensed table-striped table-bordered">
+				<thead>
+					<tr>
+						<th width="15%">Date</th>
+						<th>Username</th>
+						<th>Task</th>
+						<th class="td-actions">Draft</th>
+						<th class="td-actions">Words</th>
+						<th width="1%">Action</th>
+					</tr>
+					<tr>
+						<td></td>
+						<td><input type="text" name="search_platform" placeholder="Filter username" data-column=1 class="search_init" /></td>
+						<td><select data-column=2 class="search_init">
+							<option value="" selected>- All -</option>
+						{% for task in tasks %}
+							<option value="{{ task.name }}">{{ task.name }}</option>
+						{% endfor %}
+						</select>
+						<td><input type="text" name="search_grade" placeholder="Filter draft number / name" data-column=3 class="search_init" /></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</thead>
+				<tbody>
+									
+					{% for item in items %}
+					<tr>
+						<td>{{ item.date }}</td>
+						<td>{{ item.username }}</td>
+						<td>{{ item.task }}</td>
+						<td>{{ item.version }}[]{{ item.name }}</td>
+						<td>{{ item.words }}</td>
+						<td><button class="btn btn-small">View</button></td>
+					</tr>
+					{% endfor  %}
+				</tbody>
+				</table>
+	
+
+	</div>
+	
+</div></div>
+</div>
+
+{% endblock %}
+
+{% block injectJS %}
+	{{ parent() }}
+<script src="{{ app_base }}/assets/jquery.sparkline/jquery.sparkline.js"></script>
+<script src="{{ app_base }}/assets/jquery.dataTables/js/jquery.dataTables.js"></script>
+<script src="{{ app_base }}/assets/jquery.dataTables/js/plugin.paging.js"></script>
+	
+	<script id="keyword-popover">
+$(document).ready(function() {
+	/*$('.barsparklinedd').sparkline('html', {
+	    type: 'bar',
+	    zeroAxis: false,
+	    height: 50,
+	    barWidth: 25,
+	    chartRangeMin: 0,
+	    zeroColor: '#ffffff',
+	    colorMap: ["red","red","green"]
+	}); */
+
+	$('table.table').dataTable( {
+		//"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+		"sDom": "<'row-fluid'<'span6'l>r>t<'row-fluid'<'span6'i><'span6'p>>",
+		"bPaginate": true,
+        "bLengthChange": true,
+        "bFilter": true,
+        "bSortCellsTop": true,
+        "bInfo": true,
+        "bAutoWidth": true,
+        "aaSorting": [[ 0, "desc" ]],
+        "aoColumnDefs": [
+			{ "bSortable": false, "aTargets": [ 5 ] },
+			{ 	
+				
+				"aTargets": [ 0 ],
+				"mDataProp": function ( data, type, val ) {
+					if (type === 'set') {
+						var d = new Date(val);
+
+						// Store the base value which is in the format: YYYY/MM/DD
+						data.date = val;
+				
+						// Sorting is done as an integer value
+						data.date_int = d.getTime();
+				
+						// Use date formatting function to build the date
+						data.date_filter  = val +' '+ dateFormat( d );
+						return;
+					}
+					else if (type === 'filter') {
+						return data.date_filter ;
+					}
+					else if (type === 'sort' || type === 'type') {
+						return data.date_int;
+					}
+					// Display type gets the original data
+					return dateFormat(new Date(data.date));
+				}
+            },
+			{ 	
+				
+				"aTargets": [ 3 ],
+				"mDataProp": function ( data, type, val ) {
+					if (type === 'set') {
+						
+						var str = val.split("[]");
+
+						data.draft = [];
+						data.draft.version = str[0];
+						data.draft.name = str[1];
+						data.draft.filter  = data.draft.version +' '+ data.draft.name;
+						return;
+					}
+					else if (type === 'filter') {
+						return data.draft.filter ;
+					}
+					else if (type === 'sort' || type === 'type') {
+						return data.draft.version;
+					}
+					return '<span class="label label-success">Version <b>'+
+								data.draft.version +'</b></span> <span>'+ 
+								data.draft.name + '</span>';
+				}
+            }
+             		],
+        "sPaginationType": "bootstrap",
+        "fnInitComplete": function () {
+        	var that = this;
+   
+        	this.find("input:text").each(function(idx, elt) {
+            	var index = $(elt).data( "column" );
+        		if (index) $(elt).keyup( function () {
+	        		// Filter on the column (the index) of this element 
+	        		that.fnFilter( this.value, index);
+        			} );
+            });
+        	
+           	this.find("select").each(function(idx, elt) {
+            	var index = $(elt).data( "column" );
+        		if (index) $(elt).change( function () {
+	        		// Filter on the column (the index) of this element 
+	        		that.fnFilter( $(this).val(), index);
+        			} );
+            });
+            
+
+                
+        }
+	});
+
+	function dateFormat( d ) {
+		var out = "";
+
+		switch( d.getDay() ) {
+			case 0: out += "Sun "; break;
+			case 1: out += "Mon "; break;
+			case 2: out += "Tue "; break;
+			case 3: out += "Wed "; break;
+			case 4: out += "Thu "; break;
+			case 5: out += "Fri "; break;
+			case 6: out += "Sat "; break;
+			default: break;
+		}
+
+		switch( d.getMonth() ) {
+			case 0: out += "January "; break;
+			case 1: out += "February "; break;
+			case 2: out += "March "; break;
+			case 3: out += "April "; break;
+			case 4: out += "May "; break;
+			case 5: out += "June "; break;
+			case 6: out += "July "; break;
+			case 7: out += "August "; break;
+			case 8: out += "September "; break;
+			case 9: out += "October "; break;
+			case 10: out += "November "; break;
+			case 11: out += "December "; break;
+			default: break;
+		}
+
+		out +=d.getDate();
+		switch( d.getDate() ) {
+			case 1: out += "st "; break;
+			case 2: out += "nd "; break;
+			case 3: out += "rd "; break;
+			default: out += "th "; break;
+		}
+		
+		return out;
+	}
+	
+});
+</script>
+{% endblock %}
+
+{% block injectCSS %}
+	{{ parent() }}
+<style type="text/css">
+			
+
+table.table thead th .sorting,
+table.table thead th .sorting_asc,
+table.table thead th .sorting_desc,
+table.table thead th .sorting_asc_disabled,
+table.table thead th .sorting_desc_disabled {
+    cursor: pointer;
+    *cursor: hand;
+}
+
+table.table th.sorting:after,
+table.table th.sorting_asc:after,
+table.table th.sorting_desc:after 
+{ float: right;}
+table.table th.sorting:after { font-family: FontAwesome; content: "   ";}
+table.table th.sorting_asc:after { font-family: FontAwesome; content: "   ";}
+table.table th.sorting_desc:after { font-family: FontAwesome; content: "   ";}
+
+table.table th.sorting_asc_disabled {  }
+table.table th.sorting_desc_disabled { }	
+
+div.dataTables_paginate, div.dataTables_filter {
+	float: right;
+	margin: 0;
+}
+
+td .search_init
+{
+	margin-bottom: 0px;
+	padding: 0 2px;
+	font-size: 11px;
+	height: inherit;
+	width: inherit;
+}
+
+	
+</style>
+{% endblock %}

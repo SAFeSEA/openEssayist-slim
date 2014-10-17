@@ -1,0 +1,41 @@
+INFO | 2013-09-25T09:53:25+01:00 | GET | [anon @ 109.148.230.93] | /
+INFO | 2013-09-25T09:54:02+01:00 | GET | [anon @ 109.148.230.93] | /login
+INFO | 2013-09-25T09:54:06+01:00 | POST | [anon @ 109.148.230.93] | /login
+INFO | 2013-09-25T09:54:06+01:00 | ACTION.LOGIN | {"user_agent":"Mozilla\/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko\/20100101 Firefox\/24.0"}
+INFO | 2013-09-25T09:54:06+01:00 | GET | [admin @ 109.148.230.93] | /me/
+INFO | 2013-09-25T09:54:15+01:00 | GET | [admin @ 109.148.230.93] | /admin/
+INFO | 2013-09-25T09:54:16+01:00 | GET | [admin @ 109.148.230.93] | /admin/users
+INFO | 2013-09-25T16:10:30+01:00 | GET | [admin @ 109.148.230.93] | /
+INFO | 2013-09-25T16:10:36+01:00 | GET | [admin @ 109.148.230.93] | /admin/users
+INFO | 2013-09-25T16:10:56+01:00 | GET | [admin @ 109.148.230.93] | /
+INFO | 2013-09-25T16:11:00+01:00 | GET | [admin @ 109.148.230.93] | /logout
+INFO | 2013-09-25T16:11:00+01:00 | GET | [anon @ 109.148.230.93] | /
+INFO | 2013-09-25T16:11:02+01:00 | GET | [anon @ 109.148.230.93] | /login
+INFO | 2013-09-25T16:11:06+01:00 | POST | [anon @ 109.148.230.93] | /login
+INFO | 2013-09-25T16:11:06+01:00 | ACTION.LOGIN | {"user_agent":"Mozilla\/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko\/20100101 Firefox\/24.0"}
+INFO | 2013-09-25T16:11:06+01:00 | GET | [demo @ 109.148.230.93] | /me/
+INFO | 2013-09-25T16:11:12+01:00 | GET | [demo @ 109.148.230.93] | /me/draft/1/show/
+INFO | 2013-09-25T16:11:13+01:00 | POST | [demo @ 109.148.230.93] | /tutor/logactivity
+INFO | 2013-09-25T16:11:13+01:00 | ACTION.MASHUP.INIT | [demo @ 109.148.230.93] | [{"name":"structure","value":"#-s:t#"},{"name":"structure","value":"#-s:h#"},{"name":"structure","value":"#+s:i#"},{"name":"structure","value":"#+s#"},{"name":"structure","value":"#+s:c#"},{"name":"structure","value":"#-s:q#;#-s:n#;#-s:p#;#dummy#;#+s:p#"},{"name":"task","value":"show"}]
+INFO | 2013-09-25T16:11:16+01:00 | GET | [demo @ 109.148.230.93] | /help/on/draft.show.text/hints
+INFO | 2013-09-25T16:11:29+01:00 | GET | [demo @ 109.148.230.93] | /me/draft/1/show/keyword
+INFO | 2013-09-25T16:11:30+01:00 | POST | [demo @ 109.148.230.93] | /tutor/logactivity
+INFO | 2013-09-25T16:11:30+01:00 | ACTION.MASHUP.INIT | [demo @ 109.148.230.93] | [{"name":"structure","value":"#-s:t#"},{"name":"structure","value":"#-s:h#"},{"name":"structure","value":"#+s:i#"},{"name":"structure","value":"#+s#"},{"name":"structure","value":"#+s:c#"},{"name":"structure","value":"#-s:q#;#-s:n#;#-s:p#;#dummy#;#+s:p#"},{"name":"keywords","value":"category_all"},{"name":"keywords","value":"category_1"},{"name":"keywords","value":"category_2"},{"name":"task","value":"show"}]
+INFO | 2013-09-25T16:11:34+01:00 | GET | [demo @ 109.148.230.93] | /me/draft/1/group/texts
+INFO | 2013-09-25T16:11:38+01:00 | GET | [demo @ 109.148.230.93] | /me/draft/1/keyword/
+INFO | 2013-09-25T16:11:45+01:00 | GET | [demo @ 109.148.230.93] | /me/draft/1/show/
+INFO | 2013-09-25T16:11:46+01:00 | POST | [demo @ 109.148.230.93] | /tutor/logactivity
+INFO | 2013-09-25T16:11:46+01:00 | ACTION.MASHUP.INIT | [demo @ 109.148.230.93] | [{"name":"structure","value":"#-s:t#"},{"name":"structure","value":"#-s:h#"},{"name":"structure","value":"#+s:i#"},{"name":"structure","value":"#+s#"},{"name":"structure","value":"#+s:c#"},{"name":"structure","value":"#-s:q#;#-s:n#;#-s:p#;#dummy#;#+s:p#"},{"name":"task","value":"show"}]
+INFO | 2013-09-25T16:11:48+01:00 | GET | [demo @ 109.148.230.93] | /me/draft/1/group/graphics
+INFO | 2013-09-25T16:11:51+01:00 | GET | [demo @ 109.148.230.93] | /me/draft/1/view/target
+INFO | 2013-09-25T16:11:56+01:00 | GET | [demo @ 109.148.230.93] | /me/draft/1/group/texts
+INFO | 2013-09-25T16:11:57+01:00 | GET | [demo @ 109.148.230.93] | /me/draft/1/action/keyword
+INFO | 2013-09-25T17:27:33+01:00 | GET | [demo @ 109.148.230.93] | /
+INFO | 2013-09-25T17:27:37+01:00 | GET | [demo @ 109.148.230.93] | /logout
+INFO | 2013-09-25T17:27:37+01:00 | GET | [anon @ 109.148.230.93] | /
+INFO | 2013-09-25T17:27:39+01:00 | GET | [anon @ 109.148.230.93] | /login
+INFO | 2013-09-25T17:27:44+01:00 | POST | [anon @ 109.148.230.93] | /login
+INFO | 2013-09-25T17:27:44+01:00 | ACTION.LOGIN | {"user_agent":"Mozilla\/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko\/20100101 Firefox\/24.0"}
+INFO | 2013-09-25T17:27:44+01:00 | GET | [admin @ 109.148.230.93] | /me/
+INFO | 2013-09-25T17:27:47+01:00 | GET | [admin @ 109.148.230.93] | /admin/users
+INFO | 2013-09-25T20:39:40+01:00 | GET | [admin @ 109.148.230.93] | /admin/users

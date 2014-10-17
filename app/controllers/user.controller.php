@@ -348,6 +348,7 @@ class UserController extends Controller
 				$formdata["version"] = $post["version"];
 				try {
 					$url = 'http://localhost:8062/api/analysis';
+					
 					$request = Requests::post($url,
 							array(),
 							array(
@@ -362,13 +363,9 @@ class UserController extends Controller
 					
 					if ($request->status_code === 200)
 					{
-						//var_dump($request->body);
-							
 						$json = $request->body;
 						$ret = json_decode($json,true);
-						//var_dump(array_keys($ret));
-						//var_dump($ret['ke_data']['bigram_keyphrases']);
-							
+
 						/* @var $draft Draft */
 						$draft = Model::factory('Draft')->create();
 						$draft->type = 0;
@@ -379,11 +376,13 @@ class UserController extends Controller
 						
 						$draft->users_id = $this->user['id'];
 						$draft->date = date('Y-m-d H:i:s e');
-						$draft->save();
 						
+						$ret = $draft->save();
+
 						// redirect to the "drafts review" page
 						$this->app->flash('info', 'The analysis of your draft was successful. Check the details below.');
 						$r= $this->app->urlFor("me.draft.action",array("idt" => $taskId));
+						
 						$this->redirect($r,false);
 						
 					}
@@ -400,14 +399,21 @@ class UserController extends Controller
 				{
 					$status = 500;
 					$this->app->flashNow("error", "Cannot connect to the analyser. Try again later.");
-					//var_dump($e);
+					//var_dump($e);die();
 				}
 				catch (\PDOException  $e)
 				{
 					$status = 500;
 					$this->app->flashNow("error", "Problem with the database. Try again later.");
-					//var_dump($e);
+					//var_dump($e);die();
 
+				}
+				catch (Exception $e)
+				{
+					$status = 500;
+					$this->app->flashNow("error", "Problem with the database. Try again later.");
+					//var_dump($e);die();
+				
 				}
 			}
 		}
@@ -1159,8 +1165,6 @@ class UserController extends Controller
 			$categories[] = "".join($ngram," ");
 		}
 		
-		//var_dump($limit);
-		//die();
 		$series3=array();
 		$series4=array();
 		
@@ -1210,8 +1214,6 @@ class UserController extends Controller
 		foreach ($limit as $item)
 			if ($item['tag']!='#-s:h#')
 				$tags[$item['from']] = $item['tag'];
-		//var_dump($tags);
-		//die();
 		
 		$this->render('drafts/view.dispersion',array(
 				'helpontask' => 'view.dispersion',
@@ -1320,7 +1322,6 @@ class UserController extends Controller
 			}
 		}
 		
-		//var_dump($struct2,$count,$gr);die();
 		$tt = array_unique($struct2);
 		$tt = array_flip($tt);
 		$tt = array_keys($tt);
@@ -1410,6 +1411,49 @@ class UserController extends Controller
 		
 	}
 	
+	private function generateNetworkView($draft,$template)
+	{
+		$dr = $this->getDraft($draft);
+		$tsk = $dr->task()->find_one();
+		
+		$analysis = $dr->getAnalysis(true);
+		$gr = json_decode($analysis['se_sample_graph'],true);
+		
+		$this->render($template,array(
+				'task' => $tsk->as_array(),
+				'draft' => $dr->as_array(),
+				'graph' => $gr
+		));
+		
+	}
+	
+	public function viewLinksNetwork($draft)
+	{
+		$this->generateNetworkView($draft,"drafts/view.lnetwork");
+	}
+	
+	public function viewVivaGraph($draft)
+	{
+		$this->generateNetworkView($draft,"drafts/view.vivagraph");
+		
+	}	
+	
+	public function viewSigmaGraph($draft)
+	{
+		$this->generateNetworkView($draft,"drafts/view.sigma");
+	}
+	
+	public function viewVoronoiGraph($draft)
+	{
+		$this->generateNetworkView($draft,"drafts/view.voronoi");
+	}
+
+	public function viewHivePlot($draft)
+	{
+		$this->generateNetworkView($draft,"drafts/view.hive");
+	}
+	
+	
 	public function viewGraph($draft,$graph=null)
 	{
 		$graphlist = array(
@@ -1466,7 +1510,6 @@ class UserController extends Controller
 				if ($gg[$node[id]])
 					$node['rank'] = $gg[$node[id]]['rank'];
 			}
-			//var_dump($gg,$gr);die();
 		}
 			
 		$this->render($path,array(
@@ -1714,10 +1757,22 @@ class UserController extends Controller
 		
 		$analysis = $dr->getAnalysis(true);
 		$gr = json_decode($analysis[$config[$graph]],true);
-		
+
+		if ($graph == "graphse")
+		{
+			$parasenttok = $dr->getParasenttok();
+			$result = array();
+			foreach ($parasenttok as $key => $par) {
+				foreach ($par as &$sent) {
+					$sent['par'] = "par_id".$key;
+					$result[] = $sent;
+				}
+			}
+			$gr['parasenttok'] = $result;
+		}
 		
 		$response = $this->app->response();
-		$response['Content-Type'] = 'application/json';
+		$response['Content-Type'] = 'application/json;charset=UTF-8';
 		$response['X-Powered-By'] = 'openEssayist';
 		$response->status(200);
 		$response->body(json_encode($gr));

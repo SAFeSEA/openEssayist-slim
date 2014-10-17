@@ -1,0 +1,17 @@
+INFO | 2013-11-05T10:29:32+00:00 | GET | [anon @ 137.108.145.39] | /
+INFO | 2013-11-05T10:29:41+00:00 | GET | [anon @ 137.108.145.39] | /login
+INFO | 2013-11-05T11:58:54+00:00 | GET | [anon @ 137.108.49.161] | /
+INFO | 2013-11-05T11:58:56+00:00 | GET | [anon @ 137.108.49.161] | /login
+INFO | 2013-11-05T11:59:14+00:00 | POST | [anon @ 137.108.49.161] | /login
+INFO | 2013-11-05T11:59:14+00:00 | ACTION.LOGIN | [safesea6 @ 137.108.49.161] | {"user_agent":"Mozilla\/5.0 (Windows NT 6.1; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/30.0.1599.101 Safari\/537.36"}
+INFO | 2013-11-05T11:59:15+00:00 | GET | [safesea6 @ 137.108.49.161] | /me/
+INFO | 2013-11-05T11:59:15+00:00 | GET | [safesea6 @ 137.108.49.161] | /me/consent
+INFO | 2013-11-05T12:01:04+00:00 | GET | [safesea6 @ 137.108.49.161] | /me/consent
+INFO | 2013-11-05T16:18:01+00:00 | GET | [safesea6 @ 137.108.49.161] | /me/
+INFO | 2013-11-05T16:18:01+00:00 | GET | [safesea6 @ 137.108.49.161] | /me/consent
+INFO | 2013-11-05T16:21:04+00:00 | POST | [safesea6 @ 137.108.49.161] | /me/consent
+INFO | 2013-11-05T16:21:04+00:00 | GET | [safesea6 @ 137.108.49.161] | /me/
+INFO | 2013-11-05T16:21:32+00:00 | GET | [safesea6 @ 137.108.49.161] | /me/essay/
+INFO | 2013-11-05T16:22:02+00:00 | GET | [safesea6 @ 137.108.49.161] | /help/
+INFO | 2013-11-05T16:22:07+00:00 | GET | [safesea6 @ 137.108.49.161] | /me/
+INFO | 2013-11-05T16:25:21+00:00 | GET | [safesea6 @ 137.108.49.161] | /me/
