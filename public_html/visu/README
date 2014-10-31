@@ -1,0 +1,17 @@
+These notes concern the generation of rainbow diagrams. There are a number of issues to take into account when generating a rainbow diagram. These include the following.
+
+- The code for determining the nature of the drawing is in se_batch.py. A version of the same code is reproduced in a separate stand-alone file draw_graph_example_1.py which I prepared as a favour for a friend.
+
+- Note that you can choose for the nodes at the beginning of the essay to appear in red, and the end to appear as violet. Or vice versa.  
+
+- Whether the graph is undirected or directed affects the diagrams. Better drawings are produced by undirected graphs. Better essay linguistic results are produced using directed graphs. The Work Package 5 diagrams were produced using undirected graphs. To switch between directed and undirected you need to search for 'directed' in file se_graph.py and comment in/out the appropriate lines of code.
+
+- Whether the graph is generated from all the nodes (sentences) of the essay or from a subset of the essay's nodes may be of interest. Where a subgraph (subset of nodes) is used, a rule at the bottom of se_graph.py selects the nodes for the subgraph according to principles which can be changed easily. The first batch of WP5 rainbow diagrams drew only those nodes that had more than two edges. The second batch of WP5 diagrams drew all the nodes regardless of how many edges they had. (There is some additional code for selecting a subgraph in the subgraph generation routine in Main, but I think this was for a different purpose, and it's commented out.)
+
+
+
+
+
+
+
+

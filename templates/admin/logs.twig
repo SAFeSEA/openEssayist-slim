@@ -13,7 +13,9 @@
 		<div class="widget-content" id="activity-log">
 		 
 		</div> 
-		<div class="widget-content" id="event-details"> 
+		<div class="widget-content" id="event-details">
+			<div class="info"><div class="data header">Time</div><div class="data" id="detail-time"></div></div> 
+			<div class="info"><div class="data header">Msg</div><div class="data" id="detail-message"></div></div> 
 		</div> 
 	</div></div>
 </div>
@@ -27,6 +29,115 @@
 	<script src="{{ app_base }}/assets/links.timeline/timeline.js"></script>
 		
 	<script id="exhibit-init" type="text/javascript">
+	 /**
+     * @constructor links.Timeline.ItemMarker
+     * @extends links.Timeline.Item
+     * User defined item type "marker".
+     */
+    var ItemMarker = function (data, options) {
+        links.Timeline.Item.call(this, data, options);
+    };
+
+    ItemMarker.prototype = new links.Timeline.Item();
+
+    ItemMarker.prototype.createDOM = function () {
+        var _this = this;
+        var divLine = document.createElement("DIV");
+        divLine.style.position = "absolute";
+        divLine.style.width = "5px";
+        
+        this.dom = divLine;
+        this.updateDOM();
+
+        return divLine;
+    };
+
+    ItemMarker.prototype.showDOM = function (container) {
+        var dom = this.dom;
+        if (!dom) {
+            dom = this.createDOM();
+        }
+
+        if (dom.parentNode != container) {
+            if (dom.parentNode) {
+                this.hideDOM();
+            }
+
+            container.insertBefore(dom, container.firstChild);
+            this.rendered = true;
+        }
+    };
+
+    ItemMarker.prototype.hideDOM = function () {
+        var dom = this.dom;
+        if (dom) {
+            var parent = dom.parentNode;
+            if (parent) {
+                parent.removeChild(dom);
+                this.rendered = false;
+            }
+        }
+    };
+
+    ItemMarker.prototype.updateDOM = function () {
+        var divLine = this.dom;
+        if (divLine) {
+
+            // update class
+            divLine.className = "timeline-event item-marker";
+
+            if (this.isCluster) {
+                links.Timeline.addClassName(divLine, 'timeline-event-cluster');
+            }
+
+            // add item specific class name when provided
+            if (this.className) {
+                links.Timeline.addClassName(divLine, this.className);
+            }
+        }
+    };
+
+    ItemMarker.prototype.updatePosition = function (timeline) {
+        var dom = this.dom;
+        if (dom) {
+            var left = timeline.timeToScreen(this.start),
+            	right = (this.end)? timeline.timeToScreen(this.end) : left+5,	
+                axisOnTop = timeline.options.axisOnTop,
+                axisTop = timeline.size.axis.top,
+                axisHeight = timeline.size.axis.height
+
+            dom.style.left = (left - this.lineWidth / 2) + "px";
+            dom.style.right = (right - this.lineWidth / 2) + "px";
+            dom.style.width = (right - left) + "px";
+            dom.style.top = axisHeight + "px";
+            dom.style.height = timeline.size.contentHeight + "px";
+        }
+    };
+
+    ItemMarker.prototype.isVisible = function (start, end) {
+        if (this.cluster) {
+            return false;
+        }
+		if (this.end)
+	        return (((this.start > start) && (this.start < end)) ||
+	        		((this.end > start) && (this.end < end)));
+		else
+	        return (this.start > start)
+            && (this.start < end);
+		
+    };
+
+    ItemMarker.prototype.setPosition = function (left, right) {
+        var dom = this.dom;
+        dom.style.left = (left - this.lineWidth / 2) + "px";
+    };
+
+    ItemMarker.prototype.getRight = function (timeline) {
+        return timeline.timeToScreen(this.start);
+    };
+
+
+	
 	var timeline = null;
 	links.Timeline.prototype._do_base = links.Timeline.prototype.unselectItem;
 	links.Timeline.prototype.unselectItem = function() {
@@ -35,21 +146,23 @@
 	};
 
 	    
-	// specify options
+	// specify options for timeline
+	// TODO: min/max dates are hard-coded; try to get them from the tasks
 	var options = {
 		width:  "100%",
-		height: "500px",
-		style: "box",
+		height: "auto",
+		style: "dot",
 		showNavigation: true,
-		showButtonNew: true,
-		eventMargin: 30,  // minimal margin between events
+		showButtonNew: false,
+		//eventMargin: 30,  // minimal margin between events
 		enableKeys: true,
-		min: new Date(2013, 02, 01),
-		max: new Date(2013, 11, 31),
-		cluster: true,
+		min: new Date(2013, 08, 01),
+		max: new Date(2014, 05, 31),
+		cluster: false,
 		axisOnTop: true,
 	};
 
+	{% block config %}
 	function onselect() {
 		if (!timeline) return;
 		var sel = timeline.getSelection();
@@ -57,44 +170,96 @@
 		if (sel.length) {
 			if (sel[0].row != undefined) {
 		    	var row = sel[0].row;
-		      	var gg = timeline.getItem(row);
+
+		      	//var gg = timeline.getItem(row);
 		      	var hh = timeline.getData()[row];
-		      	$('#event-details').text(JSON.stringify(hh));
+
+		      	if (hh.type!="dot")
+		      	{
+			      	$('#detail-message').text(hh.content);
+				}
+		      	else
+		      	{
+			      	var msg = $.parseJSON(hh.message);
+			      	$('#detail-message').text(msg.user_agent);
+		      	}
+		      	$('#detail-time').text(hh.start);
 		      	$('#event-details').show();
 		    }
 		}
 	}
 
-	{% block config %}
+	function updateUserLinks()
+	{
+		$(".timeline-groups-text").each(function(i,e) {
+			var username = $(this).text();
+			$(this).empty().append(
+					$('<a/>', {
+						href: "{{ urlFor('admin.logs') }}/" + username + "/" ,
+						title: 'Become a Googler',
+						text: username
+					}));
+		});
+	}
+
+	function onReady() {
+		console.log("READY");
+		updateUserLinks();
+	}
+	
+	
+	function onTimeChanged() {
+		updateUserLinks();
+	}
+	
 	$(document).ready(function() {
         // Instantiate our timeline object.
         timeline =new links.Timeline(document.getElementById('activity-log'));
-
+        timeline.addItemType('marker', ItemMarker);
         $.getJSON("{{ urlFor('admin.data.logs') }}", function( data ) {
 			var items = [];
 			 $.each( data.items, function( key, val ) {
-				 if (val.action!="ACTION.LOGIN") return;
-				 
+				 if (val.action!="ACTION.LOGIN" && val.action!="POST") return;
+				 //if (val.username == "admin") return;
+				 if (val.action=="POST" && val.message.indexOf("/submit/")==-1) return;
+				 if (val.username == "anon") return;
+				 if (val.username.indexOf("safesea")!=-1) return;
 				 val.start = new Date(val.date);
+				 //
 				 val.content = val.username;
 				 val.className = val.username;
 
 				 grp =  val.username.split(/[0-9]+/);
-				 //val.group =  grp[0];
+				 val.group =  grp[0];
+				 val.group =  val.username;
+				 val.type = "dot";
+
+				 if (val.action=="POST" && val.message.indexOf("/submit/")!=-1)
+				 {
+				 	val.type = "range";
+				 	val.end = new Date(val.start.getTime() + 60000);
+				 }
 
 				 items.push( val );
 				 });
-
+			items.push(  {
+				'start': new Date(2013,09,12,0,0,1),
+				'end': new Date(2013,09,21,23,59,59),
+				'content': 'TMA01',
+				'type' : 'marker'
+				} );
+			items.push(  {
+				'start': new Date(2013,10,23,0,0,1),
+				'end': new Date(2013,11,02,23,59,59),
+				'content': 'TMA02',
+				'type' : 'marker'
+				} );
+				
 			// Draw our timeline with the created data and options
 	        timeline.draw(items, options);
 	        links.events.addListener(timeline, 'select', onselect);	
-	        /*$( "#activity-log" ).resizable({ 
-		        ghost: true, 
-		        handles: "s",
-		        stop: function( event, ui ) {
-		        	timeline.checkResize();
-			        }
-			});*/
+	        links.events.addListener(timeline, 'rangechanged', onTimeChanged);
+	        updateUserLinks();
 		});
 	
 	});
@@ -117,6 +282,36 @@ div.timeline-event.demo {
     background-color: #D8F6D6;
     border-color: #98F89E;
 }
+
+.timeline-event.item-marker
+{
+	 background-color: rgba(213,221,246,0.2);
+}
+
+div.timeline-event-dot-container > .timeline-event-content
+{
+	width: 0px;
+}
+
+div.timeline-event-dot-container.timeline-event-cluster > .timeline-event-content
+{
+	width: inherit;
+}
+.widget-content .info
+{
+	display: table-row;
+}
+.widget-content .info .data
+{
+	display: table-cell;
+}
+
+.widget-content .info .header
+{
+	font-weight: bold;
+	 padding-right: 10px;
+}
+
 -->
 </style>
 {% endblock %} 

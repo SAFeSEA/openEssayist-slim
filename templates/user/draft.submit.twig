@@ -142,16 +142,29 @@ $(document).ready(function() {
 			}
 		},
 		submitHandler: function(form) {
-			$.blockUI({ message: '<div class="ajax alert alert-info">Starting Analysis. Please Wait, it will take 15 to 30 seconds...</div>' }); 
-		form.submit();
-			 }, highlight: function(element) {
+			var essay = $("textarea#text").val();
+			var wcount = essay.match(/[^\s]+/g).length;
+			var time = wcount / 100;
+			var msg = "";
+			if (time < 30)
+				msg = "it will take 15 to 30 seconds...";
+			else if (time < 60)
+				msg = "it will take up to one minute ...";
+			else
+				msg = "it will take one or two minutes ...";
+				
+			$.blockUI({ message: '<div class="ajax alert alert-info">Starting Analysis. Please wait, ' + msg + '</div>' });
+			form.submit();
+			
+			 }, 
+		highlight: function(element) {
 				 $(element).closest('.control-group').not(".help-block").removeClass('success').addClass('error');
 			 },
-			 success: function(element) {
+		success: function(element) {
 			 element
 			 .text('OK!').addClass('valid')
 			 .closest('.control-group').not(".help-block").removeClass('error').addClass('success');
-			 }
+		}
 		 
 	});
 

@@ -1,0 +1,161 @@
+
+{% extends "site.twig" %} 
+
+{% block title %}Admin / Feedback{% endblock %} 
+
+{% block content %}
+<div class="row-fluid">
+
+	<div class="span12"><div class="widget">
+		<div class="widget-header">
+			<h3>History</h3>
+		</div>
+		<div class="widget-content" id="activity-log">
+		 
+<table class="table table-condensed table-striped table-bordered" id="example">
+	<thead>
+		<tr>
+			<th width="20%">Date</th>
+			<th >Username</th>
+			<th >action</th>
+			<th >BASE</th>
+			<th >TASK</th>
+			<th >DRAFT</th>
+			<th >RES</th>
+		</tr>
+		<tr>
+						<td></td>
+						<td><input type="text" name="search_platform" placeholder="Filter by Username" class="search_init" /></td>
+						<td><input type="text" name="search_grade" placeholder="Filter by Action" class="search_init" /></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+		</tr>
+	</thead>
+	<tbody>
+		
+	</tbody>
+	<tfoot>
+		<tr>
+			<th width="20%">Date</th>
+			<th >Username</th>
+			<th >action</th>
+			<th >BASE</th>
+			<th >TASK</th>
+			<th >DRAFT</th>
+			<th >RES</th>
+		</tr>
+	</tfoot>
+</table>		 
+		 
+		</div> 
+	</div></div>
+</div>
+
+
+
+{% endblock %}
+
+{% block injectJS %}
+	{{ parent() }}
+<script src="{{ app_base }}/assets/jquery.dataTables/js/jquery.dataTables.js"></script>
+<script src="{{ app_base }}/assets/jquery.dataTables/js/plugin.dataTableExt.js"></script>
+<script src="{{ app_base }}/assets/jquery.dataTables/js/plugin.paging.js"></script>
+<script src="{{ app_base }}/assets/jquery-ui-1.9.2.custom/js/jquery.blockUI.js"></script>
+<script id="script-logtable">
+$(document).ready(function() {
+	//initialise the blockUI widget on AJAX calls
+	$.blockUI.defaults.baseZ = 1100; 
+	$(document).ajaxStop($.unblockUI);
+
+	$.blockUI({ message: '<div class="ajax alert alert-info"><img src="{{ app_base }}/assets/openessayist/img/ajax-loader.gif" /> Loading Activity Logs ...</div>' }); 
+	
+	var oTable = $('#example').dataTable( {
+		"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+		"bPaginate": true,
+        "bLengthChange": true,
+        "bFilter": true,
+        "bSortCellsTop": true,
+        "bInfo": true,
+        "bAutoWidth": true,
+			"bProcessing": true,
+			 "sPaginationType": "bootstrap",
+		"sAjaxSource": "{{ urlFor('admin.data.log',{"format": "json"}) }}",
+		"sAjaxDataProp": "items",
+		"aoColumns": [
+			{ "mData": "date" },
+			{ "mData": "user" },
+			{ "mData": "action" },
+			{ "mData": "BASE" },
+			{ "mData": "TASKID" },
+			{ "mData": "DRAFTID" },
+			{ "mData": "RES" }
+		],
+		"fnServerData": function ( sSource, aoData, fnCallback ) {
+			console.log(fnCallback);
+			/* Add some extra data to the sender */
+			$.getJSON( sSource, aoData, function (json) { 
+				/* Do whatever additional processing you want on the callback, then tell DataTables */
+				json.items = $.grep(json.items,function (item,index) { 
+	                  //return item.id !=  "1"; 
+	                  return (item.user.match("^user") || item.user.match("^tutor")) && 
+	                  	(item.action.match("^ACTION.LOGIN") || 
+	                  			(item.action.match("^POST") && item.RES.match("^/submit")
+	    	                  			))
+	                });
+				fnCallback(json);
+			} );
+		}
+	} );
+	
+});
+</script>
+{% endblock %} 
+
+
+{% block injectCSS %}
+<style type="text/css">
+			
+
+table.table thead th .sorting,
+table.table thead th .sorting_asc,
+table.table thead th .sorting_desc,
+table.table thead th .sorting_asc_disabled,
+table.table thead th .sorting_desc_disabled {
+    cursor: pointer;
+    *cursor: hand;
+}
+
+table.table th.sorting:after,
+table.table th.sorting_asc:after,
+table.table th.sorting_desc:after 
+{ float: right;}
+table.table th.sorting:after { font-family: FontAwesome; content: "   ";}
+table.table th.sorting_asc:after { font-family: FontAwesome; content: "   ";}
+table.table th.sorting_desc:after { font-family: FontAwesome; content: "   ";}
+
+table.table th.sorting_asc_disabled {  }
+table.table th.sorting_desc_disabled { }	
+
+div.dataTables_paginate, div.dataTables_filter {
+	float: right;
+	margin: 0;
+}
+
+td input.search_init
+{
+	margin-bottom: 0px;
+	padding: 0 2px;
+	font-size: 11px;
+}
+
+.ajax.alert
+{
+	margin-bottom: 0px;
+	font-weight: bolder;
+}	
+</style>
+
+{% endblock %} 
+

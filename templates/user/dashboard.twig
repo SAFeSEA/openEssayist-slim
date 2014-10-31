@@ -13,11 +13,7 @@
     <div class="navbar-inner">
     	<span class="brand" href="#">&nbsp;</span>
     	<ul class="nav">
- 			<li><a title="Go to your assignments and drafts" 
- 					href="{{ urlFor('me.tasks') }}" rel="tooltip" data-placement="bottom">
-				<i class="icon-folder-open icon-large"></i> 
-				<span class="hidden-phone hidden-tablet">Assignments</span>
-			</a></li>
+ 			
 
     	</ul>
     </div>
@@ -35,15 +31,26 @@
 	
 	
 	<div class="row-fluid">	
+		{% if auth.user.isgroup %}
+				<div>
+				<a class="quick-button metro span2" title="Go to this group administration" 
+ 						rel="tooltip" data-placement="bottom"
+ 						href="{{ urlFor('group.home') }}">
+							<i class="icon-cog"></i>
+							<p>Group Admin</p>
 
-
+				</a></div>
+		{% endif %}
+				
+				<div>
 					<a class="quick-button span2" title="Go to your assignments and drafts" 
  						rel="tooltip" data-placement="bottom"
  						href="{{ urlFor('me.tasks') }}">
 							<i class="icon-folder-open"></i>
 							<p>Assignments</p>
+				</a></div>
+				
 
-				</a>
 				
 				{#<a class="quick-button metro black span2">
 					<i class="icon-pencil"></i>
@@ -307,7 +314,7 @@
     display: block;
     font-size: 14px;
     margin-bottom: -1px;
-    padding: 30px 0 10px;
+    padding: 10px 0 10px;
     position: relative;
     text-align: center;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
@@ -315,9 +322,16 @@
     
 }
 
+.quick-button.metro {
+    background-color: #FA603D;
+    background-image: -moz-linear-gradient(center top , #FB9C87, #FA5F3D);
+    border-color: #FA5833;
+    color: white;
+}
+
 .quick-button:active,.quick-button:hover,.quick-button:focus 
 {
-text-decoration: none;
+	
 } 
 
 
@@ -334,7 +348,7 @@ text-decoration: none;
     transition: all 0.3s ease 0s;
 }
 .quick-button i {
-    font-size: 32px;
+    font-size: 48px;
 }
 
 

@@ -1,0 +1,246 @@
+{% extends "site.twig" %} 
+
+{% block title %}Draft - Sentence Hive Plot (D3.js){% endblock %} 
+{% block subheader %}Draft - Sentence Hive Plot (D3.js){% endblock %} 
+
+
+{% block bccontainer %}		
+	{% include "widgets/breadcrumb.task.twig" %}
+{% endblock %}
+
+
+{% block content %}
+
+<div class="row-fluid"><div class="span12">
+
+<div class="widget">
+			<div class="widget-header" data-toggle="collapse" data-target="#demo">
+				<h2>Graph</h2>
+		
+			</div>
+			<div class="widget-content" id="svg-container">
+				<div class="row-fluid">
+				<p class='precis'>Loading demo_2.</p>
+				</div>
+			
+				<div class="row-fluid">
+					
+					<div class="chart span8">
+					</div>
+					<div class='notes span4'></div>
+				
+				</div>
+				
+				
+			</div>
+</div>
+
+</div></div>
+
+{% endblock %}
+
+{% block injectJS %}
+	{{ parent() }}
+<script src="{{ app_base }}/assets/d3.js/d3.v3.min.js"></script>
+<script src="{{ app_base }}/assets/openessayist/js/hive_data.js"></script>
+<script src="{{ app_base }}/assets/openessayist/js/hive_link.js"></script>
+<script src="{{ app_base }}/assets/openessayist/js/hive_mouse.js"></script>
+<script src="{{ app_base }}/assets/openessayist/js/hive_plot.js"></script>
+<script type="text/javascript">
+
+var node_type = function(node) {
+    if (node.source && node.target) {
+      node.type         = node.source.type = 'target-source';
+      node.target.type  = 'source-target';
+    } else if (node.source) {
+      node.type         = node.source.type = 'source';
+    } else if (node.target) {
+      node.type         = node.target.type = 'target';
+    } else {
+      node.connectors   = [{ node: node }];
+      node.type         = 'source';
+    }
+  };	
+
+  var node_type2 = function(node) {
+	  if (node.tag =="#+s:i#")
+	  {
+		  node.type = 'target';
+		  if (node.target) node.target.type = 'target';
+	  }
+	  else if (node.tag =="#+s:c#")
+	  {
+		  node.type = 'source';
+		  if (node.source) node.source.type = 'target';
+}
+	  else
+	  {
+	      node.type     = 'target-source';
+		  if (node.source) node.source.type = 'target-source';
+		  if (node.target) node.target.type = 'source-target';
+} 
+	  };
+  
+$(document).ready(function()
+{
+	  var snap      = function(i) { return function() { return i; }; }
+
+	  var get_info  = function(data_set, format) {
+
+	    var degree  = Math.PI / 180,
+	        x_max   = 700,    x_off   = x_max * 0.25,
+	        y_max   = 700,    y_off   = y_max * 0.5;
+
+	    if (format === 'conv') {  // "conventional"
+	      var a_off   =   20,
+	          a_so    =    0,     a_st    = (120 - a_off),
+	          a_to    = -120,     a_ts    = (120 + a_off),
+	          i_rad   =   25,     o_rad   = 300;
+
+	    } else {                  // "rectangular"
+	      var a_so    =  -45,     a_st    = 45,
+	          a_to    = -135,     a_ts    = 135,
+	          i_rad   =   25,     o_rad   = 350;
+	    }
+
+	    var info  = {
+	      'global': {
+	        'selector':       ( snap(data_set) )(),
+	        'x_max':          x_max,      'x_off':          x_off,
+	        'y_max':          y_max,      'y_off':          y_off,
+	        'inner_radius':   i_rad,      'outer_radius':   o_rad
+	      },
+
+	      'axes': {
+	        'source':         { 'angle':  degree * a_so },
+	        'source-target':  { 'angle':  degree * a_st },
+	        'target-source':  { 'angle':  degree * a_ts },
+	        'target':         { 'angle':  degree * a_to }
+	      }
+	    };
+
+	    return info;
+	  };
+	
+	// load graph JSON data
+	var url = "{{ urlFor('ajax.graph.json',{'draft':draft.id,'graph':'graphse'}) }}";
+	//d3.json(url,setupGraph);
+  	var data_sets     = { '#svg-container':   url};
+  	//var data_sets     = { '#svg-container':   '{{ app_base }}/assets/openessayist/js/ze_test.json' };
+  	
+  var info_sets     = {};
+
+  for (var data_set in data_sets) {
+
+    info_sets[data_set]  = get_info(data_set, 'conv');
+
+    var func_f = function() {
+      var info_set  = info_sets[data_set];
+
+      var func  = function(data) {
+
+        var nodes = [];
+        var lnodes = data.nodes;
+        var llinks = data.links;
+
+        lnodes.forEach(function(node, i) {
+            var dpar = data.parasenttok[node.id];
+            var name = "sentence." + dpar.par + "." +	 node.id;
+            var tt = name.split('.')[1];
+        	nodes.push({
+            	name: name,
+            	tag: dpar.tag,
+            	text: dpar.text,
+            	imports: []
+			});
+        })
+          
+        llinks.forEach(function(link, i) {
+            var src = link.source;
+            var trg = link.target;
+
+            //console.log(link.weight);
+			//if (link.weight >= 0.3)
+            	nodes[src].imports.push(nodes[trg].name);
+        })
+        
+        prep_data(info_set, nodes);
+        setup_mouse(info_set);
+        display_plot(info_set);
+      };
+      return func;
+    };
+
+    setup_plot(info_sets[data_set]);
+    d3.json(data_sets[data_set], func_f() );
+  }
+});
+
+function setupGraph(err, data)
+{
+	var width = $('#svg-container').width(),
+	    height = $('#svg-container').height(),
+    	innerRadius = 40,
+    	outerRadius = 640,
+    	majorAngle = 2 * Math.PI / 3,
+    	minorAngle = 1 * Math.PI / 12;
+
+	var angle = d3.scale.ordinal()
+    	.domain(["source", "source-target", "target-source", "target"])
+    	.range([0, majorAngle - minorAngle, majorAngle + minorAngle, 2 * majorAngle]);
+
+	var radius = d3.scale.linear()
+	    .range([innerRadius, outerRadius]);
+
+	var color = d3.scale.category10();
+	
+	
+};
+
+</script>
+{% endblock %}
+
+{% block injectCSS %}
+	{{ parent() }}
+<style type="text/css">
+
+
+
+.axis {
+  stroke:               #000;
+  stroke-width:         1.5px;
+}
+
+
+#demo_1 svg, #demo_2 svg          { border:         solid 1px #ccc; }
+
+
+.node ellipse                     { stroke:         #000;   }
+.nod2e ellipse[class^="active_"]   { stroke-width:   6px;    }
+.node ellipse.active_ib           { stroke:         blue;   }
+.node ellipse.active_im           { stroke:         green;  }
+.node ellipse.active_mo           { stroke:         red;    }
+
+
+.link {
+  fill:                           none;
+  stroke:                         #ccc;
+  stroke-opacity:                 0.3;
+  stroke-width:                   1px;
+}
+
+.link.active_ib, .link.active_im, .link.active_mo {
+  stroke-opacity:                 1;
+  stroke-width:                   3px;
+}
+
+.link.active_ib                   { stroke:       blue;  z-index: 5000; }
+.link.active_im                   { stroke:       green; z-index: 5000; }
+.link.active_mo                   { stroke:       red;    }
+
+
+.notes .ib                        { color:        blue;   }
+.notes .im                        { color:        green;  }
+.notes .mo                        { color:        red;    }
+</style>
+{% endblock %}

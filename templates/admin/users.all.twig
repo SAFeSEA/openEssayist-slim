@@ -10,7 +10,41 @@
 		<h3>User Action</h3>
 		</div>
 		<div class="widget-content"> 
-				<p> </p>
+		
+		
+		
+				<form id="batchuser">
+					
+				<fieldset>
+         			<legend>Add batch of users</legend>
+         			 <p>
+            			<label>Select Group</label>
+			            <select id="group" name="group">
+			            	{% for item in data %}
+               					<option value = "{{ item.group.id }}">{{ item.group.name }}</option>
+               				{% endfor %}
+             			</select>
+          			</p>
+          			<p>
+            			<label>Count</label>
+			            <input type="number" min="1" max="50" step="1" name="count" id="count" value="20">
+          			</p>       			
+          			<p>
+            			<label>Username seed</label>
+			            <input type="text" name="pattern" id="pattern" value="">
+          			</p>
+          			</fieldset>
+          			<p>
+          			
+          			</p>
+				</form>
+				<button class="btn" id="generate-users">Generate</button>
+				
+		</div>
+		<div class="widget-content"> 				
+				<table id="generate-output" style="width: 100%">
+				</table>
+				
 			</div> 
 	</div>
 	
@@ -37,23 +71,27 @@
 				<thead>
 					<tr>
 						<th width="5%">#</th>
-						<th>ID</th>
-						<th>Name</th>
-						<th>Email</th>
-						<th>IP Address</th>
+						<th>Username</th>
 						<th>Active</th>
 						<th class="td-actions">Drafts</th>
+					</tr>
+					<tr>
+						<td></td>
+						<td><input type="text" name="search_platform" placeholder="Search Username" class="search_init" /></td>
+						<td><input type="checkbox" name="search_version" placeholder="Search Active" value="on" class="search_init" /></td>
+						<td><input type="text" name="search_grade" placeholder="Search Draft Number" class="search_init" /></td>
 					</tr>
 				</thead>
 				<tbody>
 					{% for user in item.users %}
-					<tr class={{ user.isadmin? "info" : ""}}>
+					
+					<tr class={{ user.isadmin? "info" : (user.isgroup ? "success": "") }}>
 					<td><code>{{ user.id }}</code></td>
 					<td>{{ user.username }}</td>
-					<td>{{ user.name }}</td>
-					<td>{{ user.email }}</td>
-					<td>{{ user.ip_address }}</td>
-					<td>{% if user.active %}<i class="icon-check"></i>{% endif %}
+
+					<td>{% if user.active %}<i class="icon-check"></i><span style="display: none;"> True</span>
+						
+					    {% endif %}
 					<td><span class="badge {{ user.drafts?'badge-info' }}">{{ user.drafts?:""}}</span></td>
 				
 					</tr>
@@ -68,4 +106,169 @@
 </div>
 
 
+{% endblock %}
+
+
+{% block injectJS %}
+	{{ parent() }}
+<script src="{{ app_base }}/assets/jquery.dataTables/js/jquery.dataTables.js"></script>
+<script src="{{ app_base }}/assets/jquery.dataTables/js/plugin.dataTableExt.js"></script>
+<script src="{{ app_base }}/assets/jquery.dataTables/js/plugin.paging.js"></script>
+
+<script id="script-batchusers">
+var bindBatchUser = function(e) {
+	
+	var id = $("form#batchuser #group").val();
+	var stub = $("form#batchuser #pattern").val();
+	var nb = $("form#batchuser #count").val();
+	console.log(id,stub,nb);
+
+
+	$.ajax({
+		type : "POST",
+		method: "post",
+		url : "{{ urlFor('admin.task.postadduser')}}", // URL and function to call
+		data : {
+			"id":id,
+			"nb":nb,
+			"pattern":stub
+			}, 
+		//contentType : "application/json; charset=utf-8",
+		//processData : true,
+		dataType : "json",
+		success : function(msg, status) {
+			// Set Response outcome
+			
+			
+			
+			$.each(msg.users, function(index, element) {
+				var placeholder = $("<tr/>");
+
+				$("<td/>",{ "text": msg.groupname, "style" : "width:25%"})
+					.appendTo(placeholder);				
+				$("<td/>",{ "text": element.username, "style" : "width:50%"})
+					.appendTo(placeholder);
+				$("<td/>",{ "text": element.pwd, "style" : "width:50%"})
+					.appendTo(placeholder);
+					
+				placeholder.appendTo($("#generate-output"));
+				
+				});
+		},
+		error : function(xhr, msg, e) {
+			// this should only fire if the ajax call did not happen or
+			// there was an unhandled exception
+			console.log(msg);
+		}
+	});	
+	
+};
+
+$(document).ready(function() {
+	$("#generate-users").click(bindBatchUser);
+
+	jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+	    "num-html-pre": function ( a ) {
+	        var x = String(a).replace( /<[\s\S]*?>/g, "" );
+	        var f = parseFloat( x );
+	        return isNaN(f)? 0 : f;
+	    },
+	 
+	    "num-html-asc": function ( a, b ) {
+	        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	    },
+	 
+	    "num-html-desc": function ( a, b ) {
+	        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+	    }
+	} );
+
+	$('table.table').dataTable( {
+		"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+		"bPaginate": true,
+        "bLengthChange": true,
+        "bFilter": true,
+        "bSortCellsTop": true,
+        "bInfo": true,
+        "bAutoWidth": true,
+        "aaSorting": [[ 1, "asc" ]],
+        "aoColumnDefs": [
+             			{ "bSortable": false, "aTargets": [ 0 ] },
+             			{ "sType": "html", "aTargets": [ 0 ] },
+             			{ "sType": "num-html", "aTargets": [ 3 ] }
+             		],
+        "sPaginationType": "bootstrap",
+        "fnInitComplete": function () {
+        	var that = this;
+   
+        	this.find("input:text").each(function(idx, elt) {
+            	var index = 2*idx+1;
+        		$(elt).keyup( function () {
+	        		// Filter on the column (the index) of this element 
+	        		that.fnFilter( this.value, index);
+        			} );
+            });
+        	this.find("input:checkbox").each(function(idx, elt) {
+            	var index = idx+2;
+        		$(elt).change( function () {
+	        		// Filter on the column (the index) of this element 
+	        		var cbval =  ($(this).is(':checked')) ? "True" : '';
+	        		that.fnFilter( cbval, index,true,false);
+        			} );
+            });
+            
+
+                
+        }
+
+	} );
+	$('#data-table tbody').removeAttr("role").removeAttr("aria-live").removeAttr("aria-relevant");
+
+	
+});
+
+
+</script>
+
+{% endblock %}
+
+{% block injectCSS %}
+	{{ parent() }}
+<style type="text/css">
+			
+
+table.table thead th .sorting,
+table.table thead th .sorting_asc,
+table.table thead th .sorting_desc,
+table.table thead th .sorting_asc_disabled,
+table.table thead th .sorting_desc_disabled {
+    cursor: pointer;
+    *cursor: hand;
+}
+
+table.table th.sorting:after,
+table.table th.sorting_asc:after,
+table.table th.sorting_desc:after 
+{ float: right;}
+table.table th.sorting:after { font-family: FontAwesome; content: "   ";}
+table.table th.sorting_asc:after { font-family: FontAwesome; content: "   ";}
+table.table th.sorting_desc:after { font-family: FontAwesome; content: "   ";}
+
+table.table th.sorting_asc_disabled {  }
+table.table th.sorting_desc_disabled { }	
+
+div.dataTables_paginate, div.dataTables_filter {
+	float: right;
+	margin: 0;
+}
+
+td input.search_init
+{
+	margin-bottom: 0px;
+	padding: 0 2px;
+	font-size: 11px;
+}
+
+	
+</style>
 {% endblock %}

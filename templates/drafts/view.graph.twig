@@ -1,6 +1,7 @@
 {% extends "site.twig" %} 
 
-{% block title %}Draft - Visualisation ({{ views[view].name }}){% endblock %} 
+{% block title %}Draft - Sentence Network (D3.js){% endblock %} 
+{% block subheader %}Draft - Sentence Network (D3.js){% endblock %} 
 
 
 {% block bccontainer %}		
@@ -17,7 +18,7 @@
 				<h2>Graph</h2>
 		
 			</div>
-			<div class="widget-content" id='svg-container'></div>
+			<div class="widget-content" id='svg-container' style="height: 600px;"></div>
 			</div>
 </div></div>
 
@@ -28,55 +29,71 @@
 <script src="{{ app_base }}/assets/d3.js/d3.v3.min.js"></script>
 <script src="{{ app_base }}/assets/d3.js/colorbrewer.js"></script>
 <script type="text/javascript">
-
-var nodes = {{ graph.nodes|json_encode|raw  }};
-var links = {{ graph.links|json_encode|raw  }};
-var maxn = nodes.length;
-
-//var ramp=d3.scale.ordinal().domain([0,maxn]).range(colorbrewer.RdYlGn[3]);
-var ramp=d3.scale.linear().domain([0,maxn/2,maxn]).range(colorbrewer.PiYG[3]);
-//var ramp=d3.scale.linear().domain([0,maxn/2,maxn]).range(["red","green","violet"]);
-//var ramp=d3.scale.linear().domain([0,maxn/2,maxn]).range(colorbrewer.Spectral[3]);
-var gg1 = ramp(0);
-var gg4 = ramp(1);
-var gg2 = ramp(maxn);
-var gg3 = ramp(20);
-
-var w = 960,
-    h = 500;
-
-var force = d3.layout.force()
-    .nodes(d3.values(nodes))
-    .links(links)
-    .size([w, h])
-    .gravity(0.35)
-    .friction(0.2)
-		.charge(-50)
-		.linkDistance( 150 )
-    .on("tick", tick)
-    .start();
-    
-$("#svg-container").dblclick(function() {
-	force.stop();
+$(document).ready(function()
+{
+	// load graph JSON data
+	var url = "{{ urlFor('ajax.graph.json',{'draft':draft.id,'graph':'graphse'}) }}";
+	d3.json(url,setupGraph);
 });
 
-var svg = d3.select("#svg-container").append("svg:svg")
-    .attr("width", w)
-    .attr("height", h);
+function setupGraph(err, data)
+{
+	var w = 960,
+    	h = 500;
 
-// Per-type markers, as they don't inherit styles.
-svg.append("svg:defs").selectAll("marker")
-    .data(["suit", "licensing", "resolved"])
-  .enter().append("svg:marker")
-    .attr("id", String)
-    .attr("viewBox", "0 -5 10 10")
-    .attr("refX", 15)
-    .attr("refY", -1.5)
-    .attr("markerWidth", 6)
-    .attr("markerHeight", 6)
-    .attr("orient", "auto")
-  .append("svg:path")
-    .attr("d", "M0,-5L10,0L0,5");
+	w = $('#svg-container').width();
+	h = $('#svg-container').height();
+	
+	data.nodes.forEach(function(d, i) {
+        d.key = i;
+        d.x= Math.random() * w;
+        d.y= Math.random() * h; 
+    });
+
+
+    var nodes = data.nodes;
+    var links = data.links;
+    var maxn = nodes.length;
+
+    var n = data.nodes.length;
+	var colordd = d3.scale.linear()
+			.domain([0,n/2,n])
+		    .range(["#d7191c", "#ffffbf", "#2c7bb6"])
+  		    //.domain([0,n])
+			//.range(["hsl(62,100%,90%)", "hsl(228,30%,20%)"]);
+			.interpolate(d3.interpolateHcl);
+    
+
+ 
+    var force = d3.layout.force()
+        .nodes(nodes)
+        .links(links)
+        .size([w, h])
+        .gravity(0.8)
+        .friction(0.2)
+    		.charge(-50)
+    		.linkDistance( 250 )
+        .on("tick", tick)
+        .start()
+        ;
+
+
+        
+    
+    
+    var svg = d3.select("#svg-container").append("svg:svg")
+    .attr({
+        "width": "100%",
+        "height": "100%"
+      })
+      .attr("viewBox", "0 0 " + w + " " + h )
+      .attr("preserveAspectRatio", "xMidYMid meet")
+      .attr("pointer-events", "all")
+    	//.call(d3.behavior.zoom().on("zoom", redraw))
+    	;
+
+  
+
 
 var path = svg.append("svg:g").selectAll("path")
     .data(force.links())
@@ -89,10 +106,10 @@ var path = svg.append("svg:g").selectAll("path")
 var circle = svg.append("svg:g").selectAll("circle")
     .data(force.nodes())
   .enter().append("svg:circle")
-  	.style("fill",function(d,n) {  return ramp(d.index); })
+  	.style("fill",function(d,n) {  return colordd(d.index); })
   	.style("stroke-width", function(d) { return (d.rank) ? 1.5 : 0.1; })
-  	.style("stroke", function(d) { console.log(ramp(d.index) + " " + d3.rgb(ramp(d.index)).darker(1)); return (d.rank) ? d3.rgb(ramp(d.index)).darker(1) : null; })
-  	.attr("r", 8)
+  	.style("stroke", function(d) { return (d.rank) ? d3.rgb(ramp(d.index)).darker(1) : null; })
+  	.attr("r", 10)
     .call(force.drag);
 
 var text = svg.append("svg:g").selectAll("g")
@@ -111,23 +128,41 @@ text.append("svg:text")
     .attr("y", ".31em")
     .text(function(d) { return d.id; });
 
-// Use elliptical arc path segments to doubly-encode directionality.
-function tick() {
-  path.attr("d", function(d) {
-    var dx = d.target.x - d.source.x,
-        dy = d.target.y - d.source.y,
-        dr = Math.sqrt(dx * dx + dy * dy);
-    return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
-  });
 
-  circle.attr("transform", function(d) {
-    return "translate(" + d.x + "," + d.y + ")";
-  });
 
-  text.attr("transform", function(d) {
-    return "translate(" + d.x + "," + d.y + ")";
-  });
-}
+	//Use elliptical arc path segments to doubly-encode directionality.
+	function tick() {
+  		path.attr("d", function(d) {
+    		var dx = d.target.x - d.source.x,
+        		dy = d.target.y - d.source.y,
+        		dr = Math.sqrt(dx * dx + dy * dy);
+    		return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+  		});
+
+  		circle.attr("transform", function(d) {
+    		return "translate(" + d.x + "," + d.y + ")";
+  		});
+
+  		text.attr("transform", function(d) {
+    		return "translate(" + d.x + "," + d.y + ")";
+  		});
+	}
+
+	function redraw() {
+		  svg.attr("transform",
+		      "translate(" + d3.event.translate + ")"
+		      + " scale(" + d3.event.scale + ")");
+		}
+
+	$("#svg-container").dblclick(function() {
+		force.stop();
+	});
+};
+
+
+
+
+
 
     </script>
 {% endblock %}

@@ -108,6 +108,62 @@ different parts of your essay (introduction, discussion, conclusion, ...).
 	
 </div>
 
+{% if auth.user.isadmin %}
+<div class="row-fluid">
+
+	<div class="span6"><div class="widget">
+		<div class="widget-header">
+			<h2>Sentence Networks</h2>
+		</div>
+		<div class="widget-content">
+			<p><a class="btn btn-large"
+					href="{{ urlFor('me.draft.view.segraph',{"draft":draft.id}) }}">
+					<i class="icon-large icon-sitemap"></i> D3.js</a>
+			</p>
+			<p><a class="btn btn-large"
+					href="{{ urlFor('me.draft.view.cytoscape',{"draft":draft.id}) }}">
+					<i class="icon-large icon-sitemap"></i> Cytoscape.js</a>
+			</p>
+			<p><a class="btn btn-large"
+					href="{{ urlFor('me.draft.view.linksgraph',{"draft":draft.id}) }}">
+					<i class="icon-large icon-sitemap"></i> CHAP Links Network</a>
+			</p>
+			<p><a class="btn btn-large"
+					href="{{ urlFor('me.draft.view.vivagraph',{"draft":draft.id}) }}">
+					<i class="icon-large icon-sitemap"></i> VivaGraph.js</a>
+			</p>
+			<p><a class="btn btn-large"
+					href="{{ urlFor('me.draft.view.sigma',{"draft":draft.id}) }}">
+					<i class="icon-large icon-sitemap"></i> Sigma.js</a>
+			</p>
+			<hr>
+			<p><a class="btn btn-large"
+					href="{{ urlFor('me.draft.view.voronoi',{"draft":draft.id}) }}">
+					<i class="icon-large icon-sitemap"></i> Voronoi D3.js</a>
+			</p>
+			<p><a class="btn btn-large"
+					href="{{ urlFor('me.draft.view.hive',{"draft":draft.id}) }}">
+					<i class="icon-large icon-sitemap"></i> HivePlot D3.js</a>
+			</p>
+			<hr>
+			<p><a class="btn btn-large"
+					href="{{ urlFor('me.draft.view.matrix',{"draft":draft.id}) }}">
+					<i class="icon-large icon-sitemap"></i> Adjacency Matrix (D3.js)</a>
+			</p>
+						<p><a class="btn btn-large"
+					href="{{ urlFor('me.draft.view.chord',{"draft":draft.id}) }}">
+					<i class="icon-large icon-sitemap"></i> Chord (D3.js)</a>
+			</p>
+			
+		
+	</div></div></div>
+{% endif %}
+	
+	
+	
+	
+</div>
+
 {% endblock %}
 
 {% block injectJS %}

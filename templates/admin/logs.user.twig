@@ -2,26 +2,96 @@
 
 {% block config %}
 	$(document).ready(function() {
+		options.style= "dot";
+		options.cluster= true;
+		options.eventMargin = 0;
+		options.eventMarginAxis = 0;
+		
+		function onselect() {
+		if (!timeline) return;
+		var sel = timeline.getSelection();
+		  
+		if (sel.length) {
+			if (sel[0].row != undefined) {
+		    	var row = sel[0].row;
+
+		      	//var gg = timeline.getItem(row);
+		      	var hh = timeline.getData()[row];
+
+		      	if (hh.type=="marker")
+		      	{
+			      	$('#detail-message').text(hh.content);
+				}
+		      	else
+		      	{
+			      	$('#detail-message').text(hh.message);
+		      	}
+		      	$('#detail-time').text(hh.start);
+		      	$('#event-details').show();
+		    }
+		}
+		}
+	
         // Instantiate our timeline object.
         timeline =new links.Timeline(document.getElementById('activity-log'));
         
         classmap = {
-        	"ACTION.LOGIN" 	: "act-login",
-            "ACTION.MASHUP.SELECT" 	: "act-login",
-        	"ACTION.MASHUP.INIT"	: "act-action",
-        	"ACTION.KEYWORD.GROUP"		: "act-login",
-        	"REPORT.USEFULNESS"		: "act-login",
-        	"/me/essay/"			: "group-action"
+        	"ACTION.LOGIN" 			: { class: "act-login", group:"#login", content:"<i class='icon icon-off'></i>"},
+            "ACTION.MASHUP.SELECT" 	: { class: "act-action", content:""},
+        	"ACTION.MASHUP.INIT"	: { class: "act-action", content:""},
+        	"ACTION.KEYWORD.GROUP"	: { class: "act-action", content:""},
+        	"REPORT.USEFULNESS"		: { class: "act-action", content:""}
         };
 	
 		$.getJSON("{{ urlFor('admin.data.logs') }}", function( data ) {
 			var items = [];
+			var previtem = null;
 			 $.each( data.items, function( key, val ) {
+			 
+			 	 val.start = new Date(val.date);
+			 	 if (previtem)
+			 	 	previtem.end = new Date(val.start - 1000);
+			 	 	//previtem.end = new Date(val.start.getTime() + 60000);
+					//grp =  val.username.split(/[0-9]+/);
+					//val.group =  val.action;
+				 previtem = val;
+				 			 
+			 
 			 	 if (val.username!="{{ userlog }}") return;
-			 	 if (val.action=="ACTION.MASHUP.INIT") return;
+			 	 //if (val.action=="ACTION.MASHUP.INIT") return;
+			 	 
+			 	 if (classmap[val.action])
+			 	 {
+					 val.className = (classmap[val.action].class) || "";
+				 	 val.content = ".";//(classmap[val.action].content) || val.action;
+				 	 val.group = val.action;//(classmap[val.action].group) || "action";
+				 	 val.type = "dot";
+				 	 
+				 }
+				 else if (val.action=="GET")
+			 	 {
+			 	 	if (val.message.indexOf("/me/draft/") != -1)
+			 	 	{
+			 	 		val.className = "act-view";
+						var gg = val.message.split(/[0-9]+/);
+						if (gg.length>1)
+						{
+							val.content = ".";//gg[1];
+							val.group = gg[1];
+						}
+						//val.type = "dot";
+			 	 	}
+			 	 	else return;
+			 	 }
+			 	 else return;
+				 items.push( val );
+				 return;
 				 
-				 val.className = classmap[val.action] || "";
+				 //val.className = (classmap[val.action]) ? classmap[val.action].class : "";
+			 	 //val.content = (classmap[val.action]) ? classmap[val.action].class : "";
 			 	 val.content = val.action;
+			 	 val.group =  "/";
+			 	 
 			 	 if (val.action=="GET")
 			 	 {
 			 	 	if (val.message.indexOf("/me/draft/") != -1)
@@ -29,7 +99,10 @@
 			 	 		val.className = "act-view";
 						var gg = val.message.split(/[0-9]+/);
 						if (gg.length>1)
+						{
 							val.content = gg[1];
+							val.group = gg[1];
+						}
 			 	 	}
 			 	 	else if (val.message.indexOf("/me/essay") != -1)
 			 	 	{
@@ -37,23 +110,19 @@
 						if (gg.length>1)
 						{
 							val.content = gg[1];
-							val.className = classmap[gg[0]] || "group-action";
+							val.className = (classmap[gg[0]]) ? classmap[gg[0]].class : "group-action";
+							
 						}
 			 	 	}
-			 	 	else
-			 	 		val.content = "MANAGEMENT";
-			 	 	
+			 	 	else return;
+			 	 		//val.content = "<i class='icon icon-cogs'></i>";
+			 	 	//console.log(val.message," - ",val.content);
 			 	 }
 			 	 //if (val.action=="GET" && val.message.indexOf("/me/draft/") == -1) return;
 			 	 if (val.action=="POST" && val.message.indexOf("/tutor/logactivity") != -1) return;
-			 	 val.start = new Date(val.date);
-			 	 
-					//grp =  val.username.split(/[0-9]+/);
-					//val.group =  val.action;
-				 items.push( val );
 			});
 
-			options.cluster = false;
+			
 			options.eventMargin= 10;
 	        // Draw our timeline with the created data and options
 	        timeline.draw(items, options);
@@ -69,14 +138,33 @@
 {{ parent() }}
 <style>
 <!--
+div.timeline-event .timeline-event-content {
+	font-size: 0px;
+}
+div.timeline-event.timeline-event-cluster .timeline-event-content {
+	font-size: inherit;
+}
+
+
+
+
+div.timeline-event-content {
+	margin: 0px;
+}
 div.timeline-event.act-login {
-    background-color: #F6D6D6;
-    border-color: #F89898;
+background-color: #D8F6D6;
+    border-color: #98F89E;
 }
 
 div.timeline-event.act-view {
-    background-color: #D8F6D6;
-    border-color: #98F89E;
+    background-color: #F6D6D6;
+    border-color: #F89898;
+    }
+
+div.timeline-event-selected {
+    background-color: #FFF785 !important;
+    border-color: #FFC200;
+    z-index: 999;
 }
 -->
 </style>

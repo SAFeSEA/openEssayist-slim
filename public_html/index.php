@@ -1,8 +1,6 @@
 <?php
 		
 require_once '../vendor/autoload.php';
-require_once '../vendor/jamie/idiorm/idiorm.php';
-require_once '../vendor/jamie/paris/paris.php';
 
 use \Slim\Slim;
 use \Slim\Extras\Views\Twig as TwigView;
@@ -15,6 +13,7 @@ require_once "../app/application.php";
 require_once "../app/utils/LoggerMiddleware.php";
 require_once "../app/utils/PDOAdmin.php";
 require_once "../app/utils/StrongAuthAdmin.php";
+require_once "../app/utils/UASparser.php";
 
 // Controllers
 require_once "../app/controller.php";
@@ -24,6 +23,7 @@ require_once "../app/controllers/login.controller.php";
 require_once "../app/controllers/user.controller.php";
 require_once "../app/controllers/demo.controller.php";
 require_once "../app/controllers/tutor.controller.php";
+require_once "../app/controllers/group.controller.php";
 
 // Models
 require_once "../app/models/users.model.php";
@@ -31,15 +31,15 @@ require_once "../app/models/draft.model.php";
 
 // System's constants
 define('APPLICATION', 'openEssayist');
-define('VERSION', '2.6 beta');
+define('VERSION', '2.7 beta');
 define('EXT', '.twig');
 
 // Create main Slim application
 $app = new \Slim\Slim(array(
 	'openEssayist.async' => false,
 	'view' => new TwigView,
-	'rd_save_path' => substr($_SERVER['SCRIPT_FILENAME'], 0, -21) .'public_html/assets/openessayist/img/rd/',
 	'debug' => true,
+	'rd_save_path' => substr($_SERVER['SCRIPT_FILENAME'], 0, -21) .'public_html/assets/openessayist/img/rd/',
     'log.level' => \Slim\Log::DEBUG,
     'log.enabled' => true,
     'log.writer' => new \Slim\Extras\Log\DateTimeFileWriter(array(
@@ -128,10 +128,14 @@ $config = array(
 				array('path' => '/tutor/.+'),
 				array('path' => '/me/'),
 				array('path' => '/me/.+'),
+				array('path' => '/group/'),
+				array('path' => '/group/.+'),
 				array('path' => '/admin/','admin'=> true),
 				array('path' => '/admin/.+', 'admin' => true),
 		),
 );
+
+ORM::configure('logging', true);
 
 // Define and add the StrongAuth middleware to the framework
 $app->add(new StrongAuthAdmin($config, new Strong\Strong($config)));
@@ -147,6 +151,7 @@ $adminCtrl = new AdminController();
 $userCtrl = new UserController();
 $demoCtrl = new DemoController();
 $tutorCtrl = new TutorController();
+$groupCtrl = new GroupController();
 
 // Define the routes
 $c->app->get('/', array($appController, 'index'))->name('home');
@@ -185,8 +190,12 @@ $c->app->get('/me/draft/:draft/group/actions', array($demoCtrl, 'groupActions'))
 $c->app->get('/me/draft/:draft/view/network/ke', array($userCtrl, 'viewKeGraph'))->name('me.draft.view.kegraph');
 $c->app->get('/me/draft/:draft/view/network/se', array($userCtrl, 'viewSeGraph'))->name('me.draft.view.segraph');
 $c->app->get('/me/draft/:draft/view/cytoscape/se', array($userCtrl, 'viewCytoScape'))->name('me.draft.view.cytoscape');
+$c->app->get('/me/draft/:draft/view/links/se', array($userCtrl, 'viewLinksNetwork'))->name('me.draft.view.linksgraph');
+$c->app->get('/me/draft/:draft/view/vivagraph/se', array($userCtrl, 'viewVivaGraph'))->name('me.draft.view.vivagraph');
+$c->app->get('/me/draft/:draft/view/sigma/se', array($userCtrl, 'viewSigmaGraph'))->name('me.draft.view.sigma');
+$c->app->get('/me/draft/:draft/view/voronoi/se', array($userCtrl, 'viewVoronoiGraph'))->name('me.draft.view.voronoi');
+$c->app->get('/me/draft/:draft/view/hive/se', array($userCtrl, 'viewHivePlot'))->name('me.draft.view.hive');
 
-$c->app->get('/rainbow/batch', array($userCtrl, 'batchRainbow'))->name('rainbow.batch');
 
 $c->app->get('/me/draft/:draft/view/dispersion', array($userCtrl, 'viewDispersion'))->name('me.draft.view.dispersion');
 $c->app->get('/me/draft/:draft/view/rainbow', array($userCtrl, 'viewRainbow'))->name('me.draft.view.rainbow');
@@ -225,10 +234,24 @@ $c->app->get('/admin/analyser', array($adminCtrl, 'showEssayData'))->name('admin
 $c->app->get('/admin/history', array($adminCtrl, 'showHistory'))->name('admin.history');
 $c->app->get('/admin/feedback', array($adminCtrl, 'showFeedback'))->name('admin.feedback');
 $c->app->get('/admin/data/logs.js', array($adminCtrl, 'getLogs'))->name('admin.data.logs');
+$c->app->get('/admin/data/logs', array($adminCtrl, 'getLogsCSV'))->name('admin.data.csv');
+$c->app->get('/admin/data/logs(.:format)', array($adminCtrl, 'getLogsCSV'))->name('admin.data.log')
+	->conditions(array('format' => '(xlsx|json|tsv)'));
+$c->app->get('/admin/data/content', array($adminCtrl, 'getContentExcel'))->name('admin.data.content');
+$c->app->get('/admin/logs/table', array($adminCtrl, 'showLogsTable'))->name('admin.logs.table');
 $c->app->get('/admin/logs', array($adminCtrl, 'showLogs'))->name('admin.logs');
 $c->app->get('/admin/logs/:userid/', array($adminCtrl, 'showUserLogs'))->name('admin.logs.user');
 
-//$c->app->get('/demo/draft/:draft/show/', array($demoCtrl, 'showDraft'))->name('demo.draft.show');
+$c->app->get('/admin/group/:gid/addusers/(:nb(/:prf))', array($adminCtrl, 'addUsersToGroup'))->name('admin.task.adduser');
+$c->app->post('/admin/group/addusers', array($adminCtrl, 'addUsersToGroup'))->name('admin.task.postadduser');
+
+$c->app->get('/group/', array($groupCtrl, 'index'))->name('group.home');
+$c->app->get('/group/tasks/', array($groupCtrl, 'showTasks'))->name('group.task');
+$c->app->get('/group/task/:taskid', array($groupCtrl, 'editTask'))
+				->conditions(array('taskid' => '[0-9]+'))
+				->via('GET', 'POST')
+				->name('group.task.edit');
+$c->app->get('/group/task/new', array($groupCtrl, 'newTask'))->via('GET', 'POST')->name('group.task.new');
 
 $c->app->error(array($appController, 'error'));
 $c->app->notFound(array($appController, 'NotFound'));
@@ -239,3 +262,4 @@ $c->run();
 
 
 	
+
