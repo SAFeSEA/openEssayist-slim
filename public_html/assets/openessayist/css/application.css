@@ -655,6 +655,10 @@ li.bc_debug > .btn-group > .btn {
 #rd-container .rd {
   margin-bottom: 15px;
 }
+#rd-container .rd-no-image {
+  box-shadow: none;
+  border: 0;
+}
 #rd-container img {
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -671,6 +675,25 @@ li.bc_debug > .btn-group > .btn {
   cursor: pointer;
   margin-top: 3px;
   box-shadow: 2px 2px 3px #ccc;
+}
+#rd-comparisons .rd-no-image {
+  margin-top: 10px;
+  cursor: pointer;
+}
+#rd-comparisons .rd-no-image:hover {
+  -webkit-transform: scale(1.1);
+  /* Safari and Chrome */
+
+  -moz-transform: scale(1.1);
+  /* Firefox */
+
+  -ms-transform: scale(1.1);
+  /* IE 9 */
+
+  -o-transform: scale(1.1);
+  /* Opera */
+
+  transform: scale(1.1);
 }
 #rd-comparisons .rd-container-item {
   text-align: center;
@@ -692,4 +715,61 @@ li.bc_debug > .btn-group > .btn {
 }
 #rd-comparisons .rd-name-caption {
   display: none;
+}
+.rd-help-example {
+  margin: 0 auto;
+  display: block;
+}
+body .modal {
+  /* new custom width */
+
+  width: 1000px;
+  /* must be half of the width, minus scrollbar on the left (30px) */
+
+  margin-left: -500px;
+  min-height: 600px;
+}
+.tab-content.openessayist-help {
+  max-height: 800px;
+}
+.extract {
+  display: block;
+  margin: 35px auto;
+  width: 65%;
+}
+.extract h2 {
+  font-size: 14px;
+}
+.extract cite {
+  font-family: courier;
+}
+.purpletext {
+  color: purple;
+}
+.redtext {
+  color: red;
+}
+.bluetext {
+  color: #4F81BD;
+}
+#the-solution {
+  height: 200px;
+}
+#the-solution-answers {
+  border: 1px solid #bbb;
+  margin: 25px auto;
+  padding: 25px;
+  border-radius: 15px;
+  background-color: #D1E8FA;
+  box-shadow: 2px 2px 2px #aaa;
+  width: 40%;
+  display: none;
+  text-align: center;
+}
+#reveal-solution {
+  display: block;
+  margin: 0 auto;
+}
+#rd-essay-list {
+  font-family: courier new;
 }

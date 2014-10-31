@@ -28,7 +28,11 @@
 			<div class="widget-content" id='rd-container'>
 					<div class="row-fluid">
 							<div class="span6">
-								<img src="{{img ~ 'rd/' ~ rd_filename}}" class="rd-original">
+								{% if rd_filename and rd_filename != 'empty' %}
+										<img src="{{img ~ 'rd/' ~ rd_filename}}" class="rd-original">
+								{% else %}
+										<img src="{{img ~ 'rd/no-image.png'}}" class="rd-no-image">
+								{% endif %}
 								<div>
 									<span class="label label-info">
 										Rainbow Diagram for {{task.name}}
@@ -38,11 +42,15 @@
 									</span>
 								</div>
 							</div>
-							<div class="span6">
-								{% if output_comparisions %}
-									<!--<img src="{{img ~ 'rd/' ~ rd_filename}}" class="rd-comparison-image">-->
-									<img src="{{img ~ 'rd/' ~ rd_filenames[1]}}" class="rd-comparison-image thumbnailz" id="{{versions[1]}}">
-									<div><span class="label label-success">Rainbow Diagram for {{task.name}} <strong></span>  <span class="badge badge-success">Version <span class="version-number-comparison">{{versions[1]}} - '{{names[1]}}'</span></strong></span></div>
+								<div class="span6">
+									{% if output_comparisions %}
+										<!--<img src="{{img ~ 'rd/' ~ rd_filename}}" class="rd-comparison-image">-->
+									{% if rd_filenames[1] != 'empty' %}
+											<img src="{{img ~ 'rd/' ~ rd_filenames[1]}}" class="rd-comparison-image thumbnailz" id="{{versions[1]}}">
+									<div><span class="label label-success">Rainbow Diagram for {{task.name}} <strong></span>  <span class="badge badge-success">Version <span class="version-number-comparison">{{versions[1]}} - '{{names[1]}}'</span></strong></span></div>											
+									{% else %}
+											<!--<img src="{{img ~ 'rd/no-image.png'}}" class="rd-no-image rd-comparison-image" id="{{versions[1]}}">-->
+									{% endif %}
 								{% endif %}
 							</div>
 					</div>
@@ -64,11 +72,18 @@
 							<div class="span2 rd-container-item">
 								<!-- Set variable to access the correct image to display for current essay version -->
 								{% set rd_element_position = ((current_row-1) * 6) + picture_in_row %}
-								{% if rd_filenames[rd_element_position] %}
-									<!-- Version number -->
-									<span class="label label-default"><strong>Version</strong> {{versions[rd_element_position]}} </span>
-									<!-- Display Rainbow Diagram for version -->
-				        	<img src="{{img ~ 'rd/' ~ rd_filenames[rd_element_position]}}" class="rd thumbnail" data-version-name="{{names[rd_element_position]}}" id="{{versions[rd_element_position]}}">
+								{% if ((rd_filenames[rd_element_position] != '')) %}
+
+									
+									{% if rd_filenames[rd_element_position] != 'empty' %}
+											<!-- Version number -->
+											<span class="label label-default"><strong>Version</strong> {{versions[rd_element_position]}} </span>
+											<!-- Display Rainbow Diagram for version -->
+											<img src="{{img ~ 'rd/' ~ rd_filenames[rd_element_position]}}" class="rd thumbnail" data-version-name="{{names[rd_element_position]}}" id="{{versions[rd_element_position]}}">
+									{% else %}
+											<!--<img src="{{img ~ 'rd/no-image.png'}}" class="rd-no-image" data-version-name="{{names[rd_element_position]}}" id="{{versions[rd_element_position]}}">-->
+									{% endif %}
+
 				        	<span class="label label-default rd-name-caption"><strong>Version</strong> {{versions[rd_element_position]}} </span>
 			        	{% endif %}
 			        </div>

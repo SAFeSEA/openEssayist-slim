@@ -357,7 +357,8 @@ class UserController extends Controller
 									'task' 				=> $post["task"],
 									'task_id' 		=> $taskId,
 									'version_id' 	=> $post["version"],
-									'user_id' 		=> $this->user['id']
+									'user_id' 		=> $this->user['id'],
+									'rd_save_path'=> $this->app->config('rd_save_path')
 								),
 							array(
 									'timeout' => 300,
@@ -578,7 +579,7 @@ class UserController extends Controller
 	 * @param string $draft
 	 */
 	public function showDraft($draft,$cmd=null)
-	{
+	{ 
 		if ($cmd==null) $cmd='text';
 		$dr = $this->getDraft($draft);
 		$tsk = $dr->task()->find_one();
@@ -974,6 +975,70 @@ class UserController extends Controller
 			
 	}
 
+	public function batchRainbow()
+	{
+
+		$output_comparisions = false;
+		//var_dump($_SERVER);
+		$users = Model::factory('Users')->find_many();
+		//var_dump($users);
+		foreach ($users as $user) {
+			$drafts = $user->drafts()->find_many();
+			print($user->id .'<br>');
+			foreach ($drafts as $draft) {
+				print('&nbsp;&nbsp;&nbsp;' .$draft->id .',' .$draft->version .',' .$draft->task_id .'<br>');
+			}
+			//var_dump($drafts);
+		}
+		exit;
+
+		//Get Current Draft
+		$dr = $this->getDraft($draft);
+		
+		//Get Current Task
+		$tsk = $dr->task()->find_one();
+
+		//Get all drafts for this user for this task
+		$u = Model::factory('Users')->find_one($this->user['id']);
+		$drafts = $u->drafts()->where_equal('task_id',$tsk->id)->order_by_desc('id')->find_array();
+		
+		if (count($drafts) > 1) {
+			$output_comparisions = true;
+		}
+
+		//Calculate number of rows required for number of drafts (3 images per row)
+		$output_row_total = ceil(count($drafts)/6);
+                    
+    //Set rainbow diagram image names and version numbers
+    foreach ($drafts as $draft) {
+      $rd_filename_temp   = 'rd_'  .  $this->user['id']  .  '_'  .  $tsk->id  .  '_'  .  $draft['version'] .'.png';
+      $rd_filename_test   = $this->app->config('rd_save_path') .$rd_filename_temp;  
+      $rd_filenames[]     = file_exists($rd_filename_test) ? $rd_filename_temp : 'empty';
+      $versions[]         = $draft['version'];
+      $names[]            = $draft['name'];
+    }
+
+		//Set main rainbow diagram image name
+		$rd_filename = 'rd_'  .  $this->user['id']  .  '_'  .  $tsk->id  .  '_'  .  $dr->version .'.png'; 
+		$rd_filename_test = $this->app->config('rd_save_path') .$rd_filename;	
+		$rd_filename = file_exists($rd_filename_test) ? $rd_filename : '';
+
+		$this->render('drafts/view.rainbow',array(
+				'helpontask' 						=> 'view.rainbow',
+				'task' 									=> $tsk->as_array(),
+				'draft' 								=> $dr->as_array(),
+				'drafts' 								=> $drafts,
+				'user' 									=> $this->user,
+				'rd_filename' 					=> $rd_filename,
+				'rd_filenames' 					=> $rd_filenames,
+				'versions'							=> $versions,
+				'names'									=> $names,
+				'output_row_total' 			=> $output_row_total,
+				'output_comparisions' 	=> $output_comparisions
+		));
+	}
+
+
 	public function viewRainbow($draft)
 	{
 
@@ -989,27 +1054,26 @@ class UserController extends Controller
 		$u = Model::factory('Users')->find_one($this->user['id']);
 		$drafts = $u->drafts()->where_equal('task_id',$tsk->id)->order_by_desc('id')->find_array();
 		
-		var_dump(count($drafts));
 		if (count($drafts) > 1) {
 			$output_comparisions = true;
 		}
 
 		//Calculate number of rows required for number of drafts (3 images per row)
 		$output_row_total = ceil(count($drafts)/6);
-
-		//Set rainbow diagram image names and version numbers
-		foreach ($drafts as $draft) {
-			$rd_filenames[] = 'rd_'  .  $this->user['id']  .  '_'  .  $tsk->id  .  '_'  .  $draft['version'] .'.png';
-			$versions[] 		= $draft['version'];
-			$names[] 				= $draft['name'];
-		}
-
-
+                    
+    //Set rainbow diagram image names and version numbers
+    foreach ($drafts as $draft) {
+      $rd_filename_temp   = 'rd_'  .  $this->user['id']  .  '_'  .  $tsk->id  .  '_'  .  $draft['version'] .'.png';
+      $rd_filename_test   = $this->app->config('rd_save_path') .$rd_filename_temp;  
+      $rd_filenames[]     = file_exists($rd_filename_test) ? $rd_filename_temp : 'empty';
+      $versions[]         = $draft['version'];
+      $names[]            = $draft['name'];
+    }
 
 		//Set main rainbow diagram image name
 		$rd_filename = 'rd_'  .  $this->user['id']  .  '_'  .  $tsk->id  .  '_'  .  $dr->version .'.png'; 
-		
-		//var_dump($names);
+		$rd_filename_test = $this->app->config('rd_save_path') .$rd_filename;	
+		$rd_filename = file_exists($rd_filename_test) ? $rd_filename : '';
 
 		$this->render('drafts/view.rainbow',array(
 				'helpontask' 						=> 'view.rainbow',

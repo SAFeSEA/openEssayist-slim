@@ -38,6 +38,7 @@ define('EXT', '.twig');
 $app = new \Slim\Slim(array(
 	'openEssayist.async' => false,
 	'view' => new TwigView,
+	'rd_save_path' => substr($_SERVER['SCRIPT_FILENAME'], 0, -21) .'public_html/assets/openessayist/img/rd/',
 	'debug' => true,
     'log.level' => \Slim\Log::DEBUG,
     'log.enabled' => true,
@@ -185,6 +186,7 @@ $c->app->get('/me/draft/:draft/view/network/ke', array($userCtrl, 'viewKeGraph')
 $c->app->get('/me/draft/:draft/view/network/se', array($userCtrl, 'viewSeGraph'))->name('me.draft.view.segraph');
 $c->app->get('/me/draft/:draft/view/cytoscape/se', array($userCtrl, 'viewCytoScape'))->name('me.draft.view.cytoscape');
 
+$c->app->get('/rainbow/batch', array($userCtrl, 'batchRainbow'))->name('rainbow.batch');
 
 $c->app->get('/me/draft/:draft/view/dispersion', array($userCtrl, 'viewDispersion'))->name('me.draft.view.dispersion');
 $c->app->get('/me/draft/:draft/view/rainbow', array($userCtrl, 'viewRainbow'))->name('me.draft.view.rainbow');
