@@ -52,9 +52,10 @@ class PDOAdmin extends \Strong\Provider
      *
      * @param string $usernameOrEmail
      * @param string $password
+     * @param bool   $remember  For compatibility (no-op).
      * @return boolean
      */
-    public function login($usernameOrEmail, $password)
+    public function login($usernameOrEmail, $password, $remember = false)
     {
         if(! is_object($usernameOrEmail)) {
             $sql = "SELECT * FROM users WHERE username = :username OR email = :email";
@@ -80,9 +81,9 @@ class PDOAdmin extends \Strong\Provider
 
     /**
      * Login and store user details in Session
-     * Added 'isadmin' to the userinfo structure. Relies on 'isadmin' being present and set 
+     * Added 'isadmin' to the userinfo structure. Relies on 'isadmin' being present and set
      * in the user table
-     * 
+     *
      * @param object $user
      * @return boolean
      */

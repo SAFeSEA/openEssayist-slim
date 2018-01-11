@@ -3,9 +3,9 @@
 
 # openEssayist-slim
 
-Web frontend to the essay analyser & summariser ([pyEssayAnalyser][py]).
+Web frontend to the essay analyser and summariser — [pyEssayAnalyser][py].
 
-to check
+To check:
 
 * https://github.com/silentworks/sharemyideas
 * https://github.com/Tieno/SlimPackage

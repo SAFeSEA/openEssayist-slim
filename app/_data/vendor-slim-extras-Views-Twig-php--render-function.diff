@@ -1,0 +1,18 @@
+--- vendor/slim/extras/Slim/Extras/Views/Twig_ORIG.php	2018-01-11 16:38:32.000000000 +0000
++++ vendor/slim/extras/Slim/Extras/Views/Twig.php	2018-01-11 16:36:23.000000000 +0000
+@@ -94,11 +94,14 @@
+     public function render($template)
+     {
+         $env = $this->getEnvironment();
+         $template = $env->loadTemplate($template);
+
+-        return $template->render($this->data);
++//ou-specific
++        // Was: return $template->render($this->data);
++        return $template->render((array) $this->data);
++//ou-specific ends.
+     }
+
+     /**
+      * Creates new TwigEnvironment if it doesn't already exist, and returns it.
+      *
