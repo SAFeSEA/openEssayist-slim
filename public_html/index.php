@@ -1,6 +1,11 @@
 <?php
-		
-require_once '../vendor/autoload.php';
+/**
+ * OpenEssayist-slim - Front controller.
+ *
+ * @copyright © 2013-2018 The Open University. (Institute of Educational Technology)
+ */
+
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use \Slim\Slim;
 use \Slim\Extras\Views\Twig as TwigView;
@@ -70,7 +75,7 @@ if ($view instanceof TwigView)
 {
 	/* @var $twig Twig_Environment */
 	$twig = $view->getEnvironment();
-	
+
 	/**
 	 * Create a TWIG filter for Boolean values
 	 * @param 	$var	The variable to render
@@ -79,11 +84,11 @@ if ($view instanceof TwigView)
 	 */
 	$filter = new Twig_SimpleFilter('boolean', function ($var) {
 		if (is_bool($var))
-			return ($var) ? "True":"False"; 
-		else 
+			return ($var) ? "True":"False";
+		else
 			return $var;
 	});
-	
+
 	/**
 	 * Create a TWIG test for checking the existence of a value in an array
 	 * @param 	$val	The value to search for
@@ -95,10 +100,10 @@ if ($view instanceof TwigView)
 	$test = new Twig_SimpleTest('inOption', function ($val,$arr,$def=true) {
 		if (!isset($arr)) return $def;
 		if (isset($arr) && in_array($val, $arr) )
-			return true; 
+			return true;
 		return false;
 	});
-	
+
 	$twig->addFilter($filter);
 	$twig->addTest($test);
 }
@@ -120,7 +125,7 @@ $app->hook('slim.before.dispatch', function() use ($app) {
 $config = array(
 		'provider' => 'PDOAdmin',
 		'pdo' => ORM::get_db(),
-		'auth.type' => 'form',				// identification by form 
+		'auth.type' => 'form',				// identification by form
 		'login.url' => '/login',			// URL for login form
 		'consent.url' => '/me/consent',		// URL for consent form
 		'security.urls' => array(			// URLs for secured access
@@ -258,8 +263,3 @@ $c->app->notFound(array($appController, 'NotFound'));
 
 // Run the application
 $c->run();
-
-
-
-	
-

@@ -1,4 +1,9 @@
 <?php
+/**
+ * OpenEssayist-slim.
+ *
+ * @copyright © 2013-2018 The Open University. (Institute of Educational Technology)
+ */
 
 /**
  * Abstract class for all controllers
@@ -27,7 +32,7 @@ abstract class Controller extends Application {
 		}
 		$this->UAParser = new \UAS\Parser("../.cache/.UPA/",null,false,false);
 	}
-	
+
 	/**
 	 * Parse the User Agent string and return a formatted array
 	 * @param string $ua
@@ -42,7 +47,7 @@ abstract class Controller extends Application {
 		}
 		return $ret;
 	}
-	
+
 	/**
 	 * Generate a human-readable elapsed time
 	 * @param unknown $ptime
@@ -50,11 +55,11 @@ abstract class Controller extends Application {
 	 */
 	public function timeSince($ptime) {
 		$etime = time() - $ptime;
-	
+
 		if ($etime < 1) {
 			return '0 seconds';
 		}
-	
+
 		$a = array( 12 * 30 * 24 * 60 * 60  =>  'year',
 				30 * 24 * 60 * 60       =>  'month',
 				24 * 60 * 60            =>  'day',
@@ -62,7 +67,7 @@ abstract class Controller extends Application {
 				60                      =>  'minute',
 				1                       =>  'second'
 		);
-	
+
 		foreach ($a as $secs => $str) {
 			$d = $etime / $secs;
 			if ($d >= 1) {
@@ -123,7 +128,7 @@ abstract class Controller extends Application {
 		$this->app->view()->appendData(array('auth' => $this->auth));
 		$this->app->render($template . EXT, $data, $status);
 	}
-	
+
 	public function indent($json)
 	{
 		$result      = '';
@@ -133,16 +138,16 @@ abstract class Controller extends Application {
 		$newLine     = "\n";
 		$prevChar    = '';
 		$outOfQuotes = true;
-	
+
 		for ($i=0; $i<=$strLen; $i++) {
-	
+
 			// Grab the next character in the string.
 			$char = substr($json, $i, 1);
-	
+
 			// Are we inside a quoted string?
 			if ($char == '"' && $prevChar != '\\') {
 				$outOfQuotes = !$outOfQuotes;
-	
+
 				// If this character is the end of an element,
 				// output a new line and indent the next line.
 			} else if(($char == '}' || $char == ']') && $outOfQuotes) {
@@ -152,10 +157,10 @@ abstract class Controller extends Application {
 					$result .= $indentStr;
 				}
 			}
-	
+
 			// Add the character to the result string.
 			$result .= $char;
-	
+
 			// If the last character was the beginning of an element,
 			// output a new line and indent the next line.
 			if (($char == ',' || $char == '{' || $char == '[') && $outOfQuotes) {
@@ -163,15 +168,15 @@ abstract class Controller extends Application {
 				if ($char == '{' || $char == '[') {
 					$pos ++;
 				}
-	
+
 				for ($j = 0; $j < $pos; $j++) {
 					$result .= $indentStr;
 				}
 			}
-	
+
 			$prevChar = $char;
 		}
-	
+
 		return $result;
 	}
 }

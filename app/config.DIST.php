@@ -1,41 +1,42 @@
 <?php
 
 /**
-	Database Details
-	
-	$activeGroup contains key for current databases
-	$db contains all database sets available 
-	Change $activeGroup value to one of the $db keys, to activate a different database.
-	NOTES:
-	- make sure that the DB defined in 'database' field is created in MySQL
-	- make sure that the directory defined in 'logdir' is created (and contains the log files) 
+ * OpenEssayist database details.
+ *
+ * $activeGroup contains key for current databases
+ * $db contains all database sets available
+ * Change $activeGroup value to one of the $db keys, to activate a different database.
+ *
+ * NOTES:
+ *  - make sure that the DB defined in 'database' field is created in MySQL
+ *  - make sure that the directory defined in 'logdir' is created (and contains the log files)
  */
 
 $activeGroup = 'local';
 
 // local database and logs
 $db['local']['hostname'] = 'localhost';
-$db['local']['username'] = 'root';
-$db['local']['password'] = 'root';
+$db['local']['username'] = '** EDIT ME **';
+$db['local']['password'] = '** EDIT ME **';
 $db['local']['database'] = 'openessayist';
 $db['local']['dbProvider'] = 'mysql';
-$db['local']['logdir'] = '../.logs';
+$db['local']['logdir'] = __DIR__ . '/../.logs';
 
 // H810 archive database and logs
 $db['H810']['hostname'] = 'localhost';
-$db['H810']['username'] = 'root';
-$db['H810']['password'] = 'root';
+$db['H810']['username'] = '** EDIT ME **';
+$db['H810']['password'] = '** EDIT ME **';
 $db['H810']['database'] = 'openh810';
 $db['H810']['dbProvider'] = 'mysql';
-$db['H810']['logdir'] = '../log-h810';
+$db['H810']['logdir'] = __DIR__ . '/../log-h810';
 
 // H817 archive database and logs
 $db['H817']['hostname'] = 'localhost';
-$db['H817']['username'] = 'root';
-$db['H817']['password'] = 'root';
+$db['H817']['username'] = '** EDIT ME **';
+$db['H817']['password'] = '** EDIT ME **';
 $db['H817']['database'] = 'openh817';
 $db['H817']['dbProvider'] = 'mysql';
-$db['H817']['logdir'] = '../log-h817';
+$db['H817']['logdir'] = __DIR__ . '/../log-h817';
 
 
 /**

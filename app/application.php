@@ -1,23 +1,25 @@
 <?php
 /**
- * 
- * @author Nicolas Van Labeke (https://github.com/vanch3d)
+ * OpenEssayist-slim.
  *
+ * @copyright © 2013-2018 The Open University. (Institute of Educational Technology)
+ * @author Nicolas Van Labeke (https://github.com/vanch3d)
  */
+
 class Application {
-	
+
 	/**
-	 * 
+	 *
 	 * @var \Slim\Slim
-	 */	
+	 */
 	public $app;
 
 	/**
-	 * 
+	 *
 	 * @var PDO
 	 */
 	public $db;
-	
+
 	public function __construct(\Slim\Slim $slim = null)
 	{
 		$this->app = !empty($slim) ? $slim : \Slim\Slim::getInstance();
@@ -28,21 +30,21 @@ class Application {
 	{
 		//$log = $this->app->getLog();
 		//$log->debug("SETUP PROCEDURE CALLED");
-		
+
 		// Create .logs dir if it does not exists
 		if (!is_dir('../.logs')) {
 			mkdir('../.logs');
 		}
-		
+
 		// check DB
 		$this->db = ORM::get_db();
-		
+
 		if ($reset)
 		{
 			$this->db->exec('DROP DATABASE `openessayist`');
 			$this->db->exec('CREATE DATABASE `openessayist`');
 		}
-		
+
 		// Create Users Table
 		try {
 			$ret = $this->db->exec("
@@ -62,8 +64,8 @@ class Application {
 				  UNIQUE (`username`)
 				) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 			");
-			
-			
+
+
 		}
 		catch (\PDOException $e)
 		{
@@ -100,7 +102,7 @@ class Application {
 			)  AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 		");
 		//var_dump("Table 'task' created");
-		
+
 		// Draft Table
 		$this->db->exec("
 			CREATE TABLE IF NOT EXISTS `draft` (
@@ -126,7 +128,7 @@ class Application {
 				PRIMARY KEY (`id`)
 			)  AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 		");
-		
+
 		// Notes Table
 		$this->db->exec("
 			CREATE TABLE IF NOT EXISTS `note` (
@@ -144,11 +146,11 @@ class Application {
 				`users_id` int(11) NOT NULL,
 			    `referer` varchar(255) DEFAULT NULL,
 				`text` TEXT,
-				`date` DATETIME,				
+				`date` DATETIME,
 				PRIMARY KEY (`id`)
 			)  AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 		");
-		
+
 		$exist = file_exists('../app/localconfig.php');
 		if($exist)
 		{
@@ -158,34 +160,33 @@ class Application {
 			$conf->setupDB();
 		}
 	}
-	
+
 	protected function csv_to_array($input, $delimiter=',',$header=null)
 	{
 		//$header = null;
 		$data = array();
 		$csvData = str_getcsv($input, "\n");
-			
+
 		foreach($csvData as $csvLine){
 			if(is_null($header)) $header = explode($delimiter, $csvLine);
 			else{
-					
+
 				$items = explode($delimiter, $csvLine);
-					
+
 				for($n = 0, $m = count($header); $n < $m; $n++){
 					$prepareData[$header[$n]] = $items[$n];
 				}
-					
+
 				$data[] = $prepareData;
 			}
 		}
-			
+
 		return $data;
 	}
-	
+
 
 	public function run()
 	{
 		$this->app->run();
 	}
 }
-

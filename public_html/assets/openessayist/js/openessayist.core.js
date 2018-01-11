@@ -1,16 +1,17 @@
-/**
- * 
- */
+/*!
+  OpenEssayist javascript | © The Open University (IET).
+*/
+
 var openEssayist = function(){
-	
+
 	this._selfreport = null;
-	
-	
+
+
 };
 
 openEssayist.LOG_URL = null;
 /**
- * 
+ *
  * @param msg
  * @returns {myClass.doSomething}
  */
@@ -20,10 +21,10 @@ openEssayist.log4j = function(action,data) {
 		type : "POST",
 		method: "post",
 		url : openEssayist.LOG_URL, // URL and function to call
-		data : {	
+		data : {
 				"action": action,
 				"data" : data
-		}, 
+		},
 		//contentType : "application/json; charset=utf-8",
 		//processData : true,
 		dataType : "json",
@@ -36,13 +37,13 @@ openEssayist.log4j = function(action,data) {
 			// this should only fire if the ajax call did not happen or
 			// there was an unhandled exception
 			console.log(msg);
-			//$('body').modalmanager('loading'); 
+			//$('body').modalmanager('loading');
 		}
-	});		    
+	});
 };
 
 /**
- * 
+ *
  */
 openEssayist.prototype = {
 };
@@ -52,16 +53,16 @@ openEssayist.showSRTool = function()
 	$.pnotify.defaults.history = false;
 	optsQ1 = {
 			title: 'Self-reflective tool',
-			text: 	"Do you think this page is helping you to revise your draft?" + 
+			text: 	"Do you think this page is helping you to revise your draft?" +
 					"<p style='margin-top:6px;'>"+
 					"<button class='btn btn-small' id='reflect1-yes'><i class='icon icon-ok'></i> Yes</button>"+
 					"<button class='btn btn-small' id='reflect1-no'><i class='icon icon-remove'></i> No</button></p>",
 			addclass: "stack-bottomright",
-	        stack: $.pnotify.defaults.openessayist, 
+	        stack: $.pnotify.defaults.openessayist,
 	        hide: false,
 	        closer_hover: false,
 	        sticker_hover: false,
-	        sticker: false, 
+	        sticker: false,
 	        icon: 'icon-large  icon-comments',
 	        before_open: function(pnotify) {
 		        $(pnotify.text_container).attr('role', 'alert');
@@ -69,7 +70,7 @@ openEssayist.showSRTool = function()
 		        $(pnotify.closer).attr('tabindex', '0');
 		        $(pnotify.closer).attr('title', 'Close this notice');
 		        $(pnotify.closer).addClass('btn btn-mini');
-		        
+
 	        },
 	        after_open: function(pnotify) {
 	        	$("#reflect1-yes").click(function() {
@@ -81,8 +82,8 @@ openEssayist.showSRTool = function()
 	        		pnotify.pnotify_remove();
 				});
 	        }
-		}; 
- 
+		};
+
 	if (this._selfreport)
 		this._selfreport.pnotify_remove();
 	this._selfreport = $.pnotify(optsQ1);

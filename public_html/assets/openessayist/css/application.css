@@ -1,4 +1,8 @@
 @import url('//fonts.googleapis.com/css?family=Droid+Sans:400,700');
+/*!
+  OpenEssayist styles | © The Open University (IET).
+*/
+
 /* Add additional stylesheets below
  -------------------------------------------------- */
 .tooltip-inner {
@@ -10,7 +14,7 @@
     color: #0000ee;
     text-decoration: none;
 
-} 
+}
  .breadcrumb a, .footer a {
    color: #00547D;
 }*/
@@ -568,7 +572,7 @@ li.bc_debug > .btn-group > .btn {
 /* Desktop large
  ------------------------- */
 @media (min-width: 1200px) {
-  
+
 }
 /* Desktop
  ------------------------- */

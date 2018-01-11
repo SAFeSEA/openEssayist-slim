@@ -1,3 +1,6 @@
+
+app/config.php
+
 INSTALL.txt
 LICENSE.txt
 README.txt
@@ -7,3 +10,11 @@ extras/documentation
 /vendor
 /.cache
 /.logs
+
+.DS_Store
+*BAK*
+*.sql
+*.sql.zip
+composer.phar
+
+# End.
