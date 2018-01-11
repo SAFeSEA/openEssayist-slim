@@ -4,7 +4,8 @@
     "time": "2013-02-08",
     "license": "proprietary",
     "support": {
-        "source": "https://github.com/SAFeSEA/openEssayist-slim"
+        "source": "https://github.com/SAFeSEA/openEssayist-slim",
+        "email": "openessayist-techsupport@open.ac.uk"
     },
     "authors": [
         { "name": "Nicolas Van Labeke (vanch3d)" },
@@ -50,9 +51,8 @@
         "jamie/idiorm":"1.0.*",
         "respect/validation":"dev-develop",
         "rmccue/requests":">=1.0"
-    }
-
-    , "require-dev": {
+    },
+    "require-dev": {
         "jakub-onderka/php-parallel-lint": "^0.9.2"
     },
     "suggest": {
@@ -61,7 +61,7 @@
         "respect/validation": "??"
     },
     "scripts": {
-        "test": "parallel-lint -vvv --exclude vendor ."
+        "test": "parallel-lint --exclude vendor ."
     },
     "extra": {
         "//": [

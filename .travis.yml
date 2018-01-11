@@ -10,4 +10,6 @@ install: composer install
 
 script: composer test
 
+after_script: composer validate
+
 # End.
