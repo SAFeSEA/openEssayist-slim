@@ -1,0 +1,13 @@
+
+language: php
+
+php: 7.0
+
+git:
+  depth: 8
+
+install: composer install
+
+script: composer test
+
+# End.

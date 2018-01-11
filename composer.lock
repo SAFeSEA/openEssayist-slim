@@ -1,5 +1,10 @@
 {
-    "hash": "8d82d3406c477f143f246c6e886f2f7f",
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "8b390edc48231664e6b56527b9e7aa50",
     "packages": [
         {
             "name": "Respect/Validation",
@@ -40,7 +45,7 @@
                     "email": "alexandre@gaigalas.net"
                 },
                 {
-                    "name": "Carlos Andr\u00e9 Ferrari",
+                    "name": "Carlos André Ferrari",
                     "email": "caferrari@gmail.com"
                 },
                 {
@@ -52,7 +57,7 @@
                     "email": "emerson.broga@gmail.com"
                 },
                 {
-                    "name": "Fa\u0301bio da Silva Ribeiro",
+                    "name": "Fábio da Silva Ribeiro",
                     "email": "fabiorphp@gmail.com"
                 },
                 {
@@ -96,7 +101,7 @@
                     "email": "t.brodt@gmail.com"
                 },
                 {
-                    "name": "Kinn Coelho Juli\u00e3o",
+                    "name": "Kinn Coelho Julião",
                     "email": "kinncj@gmail.com",
                     "homepage": "http://kinncj.com.br",
                     "role": "Developer"
@@ -107,7 +112,54 @@
                 }
             ],
             "description": "The most awesome validation engine ever created for PHP",
-            "time": "2013-02-26 00:46:46"
+            "time": "2013-02-26T00:46:46+00:00"
+        },
+        {
+            "name": "jakub-onderka/php-parallel-lint",
+            "version": "v0.9.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JakubOnderka/PHP-Parallel-Lint.git",
+                "reference": "2ead2e4043ab125bee9554f356e0a86742c2d4fa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JakubOnderka/PHP-Parallel-Lint/zipball/2ead2e4043ab125bee9554f356e0a86742c2d4fa",
+                "reference": "2ead2e4043ab125bee9554f356e0a86742c2d4fa",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "jakub-onderka/php-console-highlighter": "~0.3",
+                "nette/tester": "~1.3"
+            },
+            "suggest": {
+                "jakub-onderka/php-console-highlighter": "Highlight syntax in code snippet"
+            },
+            "bin": [
+                "parallel-lint"
+            ],
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "./"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Jakub Onderka",
+                    "email": "jakub.onderka@gmail.com"
+                }
+            ],
+            "description": "This tool check syntax of PHP files about 20x faster than serial check.",
+            "homepage": "https://github.com/JakubOnderka/PHP-Parallel-Lint",
+            "time": "2015-12-15T10:42:16+00:00"
         },
         {
             "name": "jamie/idiorm",
@@ -175,7 +227,7 @@
                 "iri",
                 "sockets"
             ],
-            "time": "2013-02-14 02:20:35"
+            "time": "2013-02-14T02:20:35+00:00"
         },
         {
             "name": "slim/extras",
@@ -226,19 +278,19 @@
                 "middleware",
                 "templating"
             ],
-            "time": "2013-02-28 23:49:02"
+            "time": "2013-02-28T23:49:02+00:00"
         },
         {
             "name": "slim/slim",
             "version": "2.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/codeguy/Slim",
+                "url": "https://github.com/slimphp/Slim.git",
                 "reference": "2.2.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/codeguy/Slim/archive/2.2.0.zip",
+                "url": "https://api.github.com/repos/slimphp/Slim/zipball/2.2.0",
                 "reference": "2.2.0",
                 "shasum": ""
             },
@@ -269,7 +321,7 @@
                 "rest",
                 "router"
             ],
-            "time": "2012-12-13 02:15:50"
+            "time": "2012-12-13T02:15:50+00:00"
         },
         {
             "name": "slim/strong",
@@ -316,19 +368,20 @@
                 "Authentication",
                 "extensions"
             ],
-            "time": "2012-12-31 10:57:13"
+            "abandoned": true,
+            "time": "2012-12-31T10:57:13+00:00"
         },
         {
             "name": "twig/twig",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/fabpot/Twig.git",
+                "url": "https://github.com/twigphp/Twig.git",
                 "reference": "399916916533589c95dc04e1afd4aeefa34928ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/399916916533589c95dc04e1afd4aeefa34928ad",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/399916916533589c95dc04e1afd4aeefa34928ad",
                 "reference": "399916916533589c95dc04e1afd4aeefa34928ad",
                 "shasum": ""
             },
@@ -365,15 +418,11 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2013-04-01 08:27:18"
+            "time": "2013-04-01T08:27:18+00:00"
         }
     ],
-    "packages-dev": [
-
-    ],
-    "aliases": [
-
-    ],
+    "packages-dev": [],
+    "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
         "slim/extras": 20,
@@ -381,10 +430,8 @@
         "twig/twig": 20,
         "respect/validation": 20
     },
-    "platform": [
-
-    ],
-    "platform-dev": [
-
-    ]
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
 }

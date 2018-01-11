@@ -1,4 +1,16 @@
 {
+    "name": "iet-ou/openessayist-slim",
+    "description": "Web frontend to the essay analyser & summariser (pyEssayAnalyser). © 2013-2018 The Open University (IET).",
+    "time": "2013-02-08",
+    "license": "proprietary",
+    "support": {
+        "source": "https://github.com/SAFeSEA/openEssayist-slim"
+    },
+    "authors": [
+        { "name": "Nicolas Van Labeke (vanch3d)" },
+        { "name": "Richard Lovelock" },
+        { "name": "LTI-LTT team / Institute of Educational Technology", "homepage": "https://iet.open.ac.uk/" }
+    ],
     "minimum-stability": "dev",
     "autoload":{
         "psr-0":{
@@ -38,5 +50,24 @@
         "jamie/idiorm":"1.0.*",
         "respect/validation":"dev-develop",
         "rmccue/requests":">=1.0"
+    }
+
+    , "require-dev": {
+        "jakub-onderka/php-parallel-lint": "^0.9.2"
+    },
+    "suggest": {
+        "slim/strong": "dev-develop",
+        "twig/twig": "^2.4",
+        "respect/validation": "??"
+    },
+    "scripts": {
+        "test": "parallel-lint -vvv --exclude vendor ."
+    },
+    "extra": {
+        "//": [
+            "https://github.com/SAFeSEA/openEssayist-slim/commits/master?after=e3aefad1af887e2e57bebc174fdae8778e7bf3be+349",
+            "https://github.com/SAFeSEA/openEssayist-slim/commit/5f0a7c374c",
+            "https://github.com/SAFeSEA/pyEssayAnalyser"
+        ]
     }
 }
