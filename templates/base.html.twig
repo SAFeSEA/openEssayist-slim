@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
 {% block head %}
-	<title>{% block title %}{% endblock %} - openEssayist</title> 
-	
+	<title>{% block title %}{% endblock %} - openEssayist</title>
+
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="">
 	<meta name="author" content="Nicolas Van Labeke (IET - Open University)">
-	
+
 	<!-- Le styles -->
 	{#
 	<link href="{{ app_base }}/assets/bootstrap/css/bootstrap.css" rel="stylesheet">
@@ -20,11 +20,12 @@
 	#}
 	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
 	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet">
 	<link href="{{ app_base }}/assets/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" />
 	<link href="{{ app_base }}/assets/openessayist/css/application.css" rel="stylesheet">
 	{% block injectCSS %}
 	{% endblock %}
-	
+
 	<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 	<!--[if lt IE 9]>
       	<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -53,11 +54,11 @@
       #push {
         height: 30px;
       }
-      
+
       footer.footer {
         height: 31px;
       }
-      
+
       /* Custom page CSS
       -------------------------------------------------- */
       /* Not required for template or sticky footer method. */
@@ -65,7 +66,7 @@
       .container .credit {
         margin: 20px 0;
       }
-     
+
 </style>
 {% endblock %}
 </head>
@@ -76,11 +77,11 @@
 		{% include "widgets/navbar.panel.twig" %}
 	{% endblock %}
 
-	
+
 	<!-- Content ================================================== -->
 	<div class="container" id="main">
-	
-		
+
+
 		{% block breadcrumb %}
 		<div class="breadcrumb">
 			<ul class="breadcrumb" role="navigation" aria-label="breadcrumb">{% block bccontainer %}{% endblock %}</ul>
@@ -88,10 +89,10 @@
 			<div class="navbarhead" role="navigation" aria-label="page navigation">{% block navsubheader %}{% endblock %}</div>
 			</div>
 		{% endblock %}
-		
+
 		<div class="row-fluid anchor" id="ou-content" role="main">
 			<div class="span12" style="min-height: 150px;">
-			
+
 			{% block notification %}
 				<div class="row-fluid">
 					{% if flash.info %}
@@ -114,42 +115,42 @@
 					{% endif %}
 				</div>
 			{% endblock %}
-			
+
 			{% block content %}{% endblock %}
 			</div>
-			
-			
+
+
 		</div>
-		
+
 		{% block debug %}{% endblock %}
-		
+
 	</div>
 	<div id="push"></div>
 </div>
 	{% block toolcontainer %}
 	{% endblock %}
-	
-	
+
+
 	<!-- Footer ================================================== -->
 	<footer class="footer" role="contentinfo">
 		<div class="container">
 		{% block footer %}
-			<p><span class="brand openessayist">openEssayist v{{ constant('VERSION') }}</span>  - 
+			<p><span class="brand openessayist">openEssayist v{{ constant('VERSION') }}</span>  -
 				<span class="hidden-phone hidden-tablet">Designed and built by </span>
 				<a href="https://github.com/vanch3d" target="_blank"><i class="icon-github icon-large icon-dark"></i> vanch3d</a>
-				for the 
+				for the
 				<a href="http://www.open.ac.uk/researchprojects/safesea/" target="_blank">SAFeSEA</a>
 				project.
 			</p>
 			<p class="pull-right">
 				<a href="#"><i class="icon-chevron-sign-up"></i> Back to top</a>
 			</p>
-			{% endblock %}			
+			{% endblock %}
 		</div>
 	</footer>
-	
-	
-	
+
+
+
 	<!-- Le javascript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
@@ -170,14 +171,14 @@
 	{#<script src="{{ app_base }}/assets/bootstrap-modal/js/bootstrap-modal.js"></script>#}
 	<script src="{{ app_base }}/assets/dotdotdot-1.6.3/jquery.dotdotdot.min.js"></script>
 	<script src="{{ app_base }}/assets/openessayist/js/openessayist.core.js"></script>
-	
+
 	<script id="openessayist-init" type="text/javascript">
 	$(document).ready(function() {
 		// Set the URL for the AJAX-based activity logging
 		openEssayist.LOG_URL = "{{ urlFor('ajax.log.activity') }}";
 
-	
-		    
+
+
 		// Activate the Bootstrap's tooltips
 		if ($("[rel=tooltip]").length) {
 		        $("[rel=tooltip]").tooltip({container: 'body'});
@@ -194,7 +195,7 @@
 				 console.log("collapse : " + clp);
 				 $(this).attr('aria-expanded',!clp);
 		 });
-		 
+
 		// Fix for preventing scrolling behind the overlay, when in modals.
 	    $(".modal").on('show', function () {
 	    	$('body').css('overflow', 'hidden');
@@ -203,25 +204,25 @@
 	    	$('.modal-body :input').focus(function() {
 	    		$(this).parent("label.checkbox").css('outline', 'thin dotted #333333');
 	    		$(this).parent("label.checkbox").css('outline-offset', '2px');
-	    		
-		    }); 
+
+		    });
 	    	$('.modal-body :input').blur(function() {
 	    		$(this).parents("label.checkbox").css('background-color', 'inherit');
 	    		$(this).parents("label.checkbox").css('outline', 'none');
-			}); 
-	    		
+			});
+
 	    	$('input:text:visible:first').focus();
 
 
-	    	
+
 	    });
 		$(".modal").on('hidden', function () {
 	    	$('body').css('overflow', 'auto');
 	    });
-	});	
+	});
 	</script>
 	{% block injectJS %}
 	{% endblock %}
-	
+
 </body>
 </html>
