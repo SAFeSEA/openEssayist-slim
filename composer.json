@@ -14,11 +14,12 @@
     ],
     "prefer-stable": true,
     "minimum-stability": "dev",
-    "autoload": {
-    },
-    "repositories": [
-    ],
+    "autoload": { },
+    "repositories": [ ],
     "require": {
+        "php": ">=5.5.9",
+        "ext-zip": "*",
+        "ext-mycrypt": "*",
         "slim/slim": "2.3.*",
         "slim/extras": "^2.0.3",
         "slim/strong": "dev-develop",
@@ -37,6 +38,7 @@
         "twig/twig": "1.19.*"
     },
     "scripts": {
+        "copy-config": "cp -n app/config.DIST.php app/config.php",
         "test": "parallel-lint --exclude vendor ."
     },
     "extra": {

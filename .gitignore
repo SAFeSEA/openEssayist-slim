@@ -13,7 +13,7 @@ extras/documentation
 
 .DS_Store
 *BAK*
-*.sql
+/*.sql
 *.sql.zip
 composer.phar
 
