@@ -11,7 +11,7 @@ install: composer install
 before_script:
   - composer copy-conf
   - composer mkdir
-  - composer chown
+  #- composer chown  # chown: invalid user: ‘nginx:nginx’
   - composer patch
 
 script: composer test
