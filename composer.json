@@ -38,7 +38,10 @@
         "twig/twig": "1.19.*"
     },
     "scripts": {
-        "copy-config": "cp -n app/config.DIST.php app/config.php",
+        "mkdir": [ "mkdir ./.cache", "mkdir ./.logs" ],
+        "chown": [ "chown -R nginx:nginx ./.cache", "chown -R nginx:nginx ./.logs" ],
+        "patch": "patch -ub --verbose vendor/slim/extras/Slim/Extras/Views/Twig.php app/_data/vendor-slim-extras-Views-Twig-php--render-function.diff",
+        "copy-conf": "cp -n app/config.DIST.php app/config.php",
         "test": "parallel-lint --exclude vendor ."
     },
     "extra": {

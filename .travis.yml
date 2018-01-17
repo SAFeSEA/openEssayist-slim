@@ -8,8 +8,16 @@ git:
 
 install: composer install
 
+before_script:
+  - composer copy-conf
+  - composer mkdir
+  - composer chown
+  - composer patch
+
 script: composer test
 
-after_script: composer validate
+after_script:
+  - composer validate
+  - ls -alh
 
 # End.
